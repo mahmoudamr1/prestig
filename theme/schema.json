@@ -1,0 +1,194 @@
+[
+  {
+    "name": "footer_quick_links",
+    "type": "string",
+    "description": "Footer: column title above categories.",
+    "default": "Shop"
+  },
+  {
+    "name": "footer_customer_support",
+    "type": "string",
+    "description": "Footer: column title above pages.",
+    "default": "Pages"
+  },
+  {
+    "name": "footer_contact_us",
+    "type": "string",
+    "description": "Footer: column title above contact.",
+    "default": "Contact us"
+  },
+  {
+    "name": "footer_phone_label",
+    "type": "string",
+    "description": "Footer: label above phone.",
+    "default": "Phone"
+  },
+  {
+    "name": "footer_email_label",
+    "type": "string",
+    "description": "Footer: label above email.",
+    "default": "Email"
+  },
+  {
+    "name": "footer_address_label",
+    "type": "string",
+    "description": "Footer: label above address.",
+    "default": "Address"
+  },
+  {
+    "name": "footer_subscribe_emails",
+    "type": "string",
+    "description": "Footer: newsletter heading.",
+    "default": "Subscribe to Our Newsletter"
+  },
+  {
+    "name": "footer_email_placeholder",
+    "type": "string",
+    "description": "Footer: newsletter input placeholder.",
+    "default": "Enter your email address"
+  },
+  {
+    "name": "footer_subscribe_newsletter_btn",
+    "type": "string",
+    "description": "Footer: newsletter button.",
+    "default": "Subscribe to Newsletter"
+  },
+  {
+    "name": "footer_powered_by",
+    "type": "string",
+    "description": "Footer: text before powered-by link.",
+    "default": "Powered By"
+  },
+  {
+    "name": "footer_payment_custom_image",
+    "type": "string",
+    "description": "Footer: optional payment strip image URL. Empty uses store payment image.",
+    "default": ""
+  },
+  {
+    "name": "reviews_heading_fallback",
+    "type": "string",
+    "description": "Reviews: section heading fallback.",
+    "default": "All Reviews"
+  },
+  {
+    "name": "reviews_share_cta_fallback",
+    "type": "string",
+    "description": "Reviews: write-review button fallback.",
+    "default": "Share your review"
+  },
+  {
+    "name": "reviews_count_word",
+    "type": "string",
+    "description": "Reviews: word after the count.",
+    "default": "reviews"
+  },
+  {
+    "name": "reviews_load_more_label",
+    "type": "string",
+    "description": "Reviews: load-more button.",
+    "default": "Load more reviews"
+  },
+  {
+    "name": "reviews_empty_message",
+    "type": "string",
+    "description": "Reviews: empty state.",
+    "default": "No reviews yet."
+  },
+  {
+    "name": "reviews_anonymous_name",
+    "type": "string",
+    "description": "Reviews: name when missing.",
+    "default": "Customer"
+  },
+  {
+    "name": "reviews_avatar_placeholder",
+    "type": "string",
+    "description": "Reviews: avatar letter fallback.",
+    "default": "?"
+  },
+  {
+    "name": "reviews_read_more_label",
+    "type": "string",
+    "description": "Reviews: expand long text.",
+    "default": "...Read more"
+  },
+  {
+    "name": "reviews_show_less_label",
+    "type": "string",
+    "description": "Reviews: collapse expanded text.",
+    "default": "Show less"
+  },
+  {
+    "name": "categories_header_subtitle",
+    "type": "string",
+    "description": "Categories block: eyebrow when subtitle is empty.",
+    "default": "best seller collections"
+  },
+  {
+    "name": "categories_header_title",
+    "type": "string",
+    "description": "Categories block: heading when title is empty.",
+    "default": "Shop by Category"
+  },
+  {
+    "name": "list_products_header_subtitle",
+    "type": "string",
+    "description": "Product list carousel: eyebrow when shop_label is empty.",
+    "default": "Best seller product"
+  },
+  {
+    "name": "list_products_header_title",
+    "type": "string",
+    "description": "Product list carousel: heading when section_title is empty.",
+    "default": "New Arrivals"
+  },
+  {
+    "name": "grid_products_header_subtitle",
+    "type": "string",
+    "description": "Home grid (single category): eyebrow when shop_label is empty.",
+    "default": ""
+  },
+  {
+    "name": "grid_products_header_title",
+    "type": "string",
+    "description": "Home grid (single category): heading when section_title is empty.",
+    "default": ""
+  },
+  {
+    "name": "sale_badge_label",
+    "type": "string",
+    "description": "Sale badge: word before discount %. Empty uses platform default.",
+    "default": "Save"
+  },
+  {
+    "name": "featured_products_header_subtitle",
+    "type": "string",
+    "description": "Featured section: eyebrow when shop_label is empty.",
+    "default": "Shop"
+  },
+  {
+    "name": "featured_products_banner_description",
+    "type": "string",
+    "description": "Featured section: banner paragraph on large screens.",
+    "default": "Discover our handpicked products designed for everyday style and comfort."
+  },
+  {
+    "name": "thanks_title_fallback",
+    "type": "string",
+    "description": "Thank-you page: heading fallback.",
+    "default": "Thank you!"
+  },
+  {
+    "name": "thanks_subtitle_fallback",
+    "type": "string",
+    "description": "Thank-you page: subtitle fallback.",
+    "default": "Your order has been received."
+  },
+  {
+    "name": "thanks_confirmation_prefix",
+    "type": "string",
+    "description": "Thank-you page: text before customer email.",
+    "default": "The order confirmation has been sent to"
+  }
+]

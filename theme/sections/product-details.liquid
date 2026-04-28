@@ -1,0 +1,125 @@
+<div class="ab-pd" data-ps-pdp-details>
+  {% if theme_data.brand_name %}
+    <p class="ab-pd-brand">
+      <span class="ab-pd-brand-label">Brand:</span>
+      <span class="ab-pd-brand-value">{{ theme_data.brand_name }}</span>
+    </p>
+  {% endif %}
+
+  <h1 class="ab-pd-name">{{ product_name }}</h1>
+
+  {% assign pd_list_price = price | plus: 0 %}
+  {% assign pd_deal_price = sale_price | plus: 0 %}
+  <div class="ab-pd-price-rating-row">
+    <div class="ab-pd-price-group">
+      {% if pd_deal_price > 0 and pd_list_price > 0 and pd_deal_price < pd_list_price %}
+        <span class="ab-pd-price ab-pd-price-current">{{ sale_price }} {{ currency }}</span>
+        <span class="ab-pd-price-old">{{ price }} {{ currency }}</span>
+        {% assign discount = pd_list_price | minus: pd_deal_price | times: 100 | divided_by: pd_list_price | floor %}
+        <span class="ab-pd-discount-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
+      {% else %}
+        <span class="ab-pd-price ab-pd-price-current">{{ price }} {{ currency }}</span>
+      {% endif %}
+    </div>
+
+    {% if rating > 0 %}
+      {% assign r_stars = rating | plus: 0 %}
+      {% if r_stars > 5 %}{% assign r_stars = 5 %}{% endif %}
+      {% if r_stars < 0 %}{% assign r_stars = 0 %}{% endif %}
+      <div class="ab-pd-rating-group" role="img" aria-label="Rating {{ rating | round: 1 }} out of 5">
+        <div class="ab-pd-stars" aria-hidden="true">
+          {% for i in (1..5) %}
+            {% assign prev = i | minus: 1 %}
+            {% if r_stars >= i %}
+              <svg
+                class="ab-pd-star-icon ab-pd-star-icon--on"
+                aria-hidden="true"
+                focusable="false"
+                width="12"
+                height="11"
+                viewBox="0 0 12 11"
+              >
+                <path
+                  d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                  fill="currentColor"
+                />
+              </svg>
+            {% elsif r_stars > prev %}
+              {% assign frac = r_stars | minus: prev %}
+              <span class="ab-pd-star-slot">
+                <svg
+                  class="ab-pd-star-icon ab-pd-star-icon--off"
+                  aria-hidden="true"
+                  focusable="false"
+                  width="12"
+                  height="11"
+                  viewBox="0 0 12 11"
+                >
+                  <path
+                    d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="ab-pd-star-fill" style="width: calc(100% * {{ frac }});">
+                  <svg
+                    class="ab-pd-star-icon ab-pd-star-icon--on"
+                    aria-hidden="true"
+                    focusable="false"
+                    width="12"
+                    height="11"
+                    viewBox="0 0 12 11"
+                  >
+                    <path
+                      d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
+              </span>
+            {% else %}
+              <svg
+                class="ab-pd-star-icon ab-pd-star-icon--off"
+                aria-hidden="true"
+                focusable="false"
+                width="12"
+                height="11"
+                viewBox="0 0 12 11"
+              >
+                <path
+                  d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                  fill="currentColor"
+                />
+              </svg>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <span class="ab-pd-rating-paren">({{ rating | round: 1 }})</span>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if description and description != "" %}
+    <p class="ab-pd-description">{{ description }}</p>
+  {% endif %}
+
+  {% comment %} Wishlist & Compare buttons on the product detail page — dispatch toggle events handled by the storefront JS layer
+  <div class="ab-pd-actions">
+    <button
+      class="ab-pd-wishlist-btn"
+      type="button"
+      aria-label="Add to wishlist"
+      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-wishlist',{bubbles:true,detail:{productId:'{{ product_id }}'}}));"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button
+      class="ab-pd-compare-btn"
+      type="button"
+      aria-label="Compare"
+      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-compare',{bubbles:true,detail:{productId:'{{ product_id }}'}}));"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 8 16 13"/><line x1="21" y1="8" x2="9" y2="8"/><polyline points="8 21 3 16 8 11"/><line x1="3" y1="16" x2="15" y2="16"/></svg>
+    </button>
+  </div>
+  {% endcomment %}
+</div>

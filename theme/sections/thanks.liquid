@@ -1,0 +1,41 @@
+{% assign _thanks_check_icon = thanks_done_icon_url | default: "https://files.easy-orders.net/1775775058192802203.webp" %}
+<section class="ps-thanks" data-liquid-thanks data-ps-thanks data-thanks-client-fetch="0">
+  <div class="ps-thanks-content">
+    {% if content and content != "" %}
+      <div class="ps-thanks-custom-content">{{ content }}</div>
+    {% else %}
+      <div class="ps-thanks-default">
+        <div class="ps-thanks-icon" aria-hidden="true">
+          <img
+            class="ps-thanks-icon-img"
+            src="{{ _thanks_check_icon }}"
+            alt=""
+            width="80"
+            height="80"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <h1 class="ps-thanks-title">{{ thanks_title | default: t_thank_you }}</h1>
+        <p class="ps-thanks-message">{{ thanks_message | default: t_order_received }}</p>
+        {% if phone_message and phone_message != "" %}
+          <p class="ps-thanks-phone-msg">{{ phone_message }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if show_home_button %}
+      <button
+        class="ps-thanks-home-btn"
+        type="button"
+        onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
+      >
+        {{ go_home_text | default: "Go home" }}
+      </button>
+    {% endif %}
+
+    {% if offers_text and offers_text != "" %}
+      <p class="ps-thanks-offers">{{ offers_text }}</p>
+    {% endif %}
+  </div>
+</section>

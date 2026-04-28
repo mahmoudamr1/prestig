@@ -1,0 +1,93 @@
+<div class="ab-gallery" data-ps-pdp-gallery>
+  <div class="ab-gallery-main">
+    <div class="ab-gallery-slider" data-ab-gallery-slider tabindex="0">
+      <div class="ab-gallery-slides">
+        {% for image in images %}
+        <div
+          class="ab-gallery-slide{% if image == mainImage %} is-active{% endif %}"
+          data-src="{{ image }}"
+          data-slide-index="{{ forloop.index0 }}"
+        >
+          {% if image contains '.mp4' %}
+            <video
+              src="{{ image }}"
+              class="ab-gallery-main-media"
+              controls
+              playsinline
+              muted
+              preload="metadata"
+              {% if image == mainImage %}autoplay{% endif %}
+            ></video>
+          {% else %}
+            <img
+              {% if image == mainImage %}id="gallery-main-image"{% endif %}
+              src="{{ image }}"
+              alt="{{ product_name }}"
+              class="ab-gallery-main-media"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              data-gallery-open
+            />
+          {% endif %}
+          <button class="ab-gallery-zoom" type="button" aria-label="Zoom image" data-gallery-open>
+            <span class="ab-gallery-zoom-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% if images.size > 1 %}
+    <div class="ab-gallery-dots" data-ab-gallery-dots role="tablist" aria-label="Product images">
+      {% for image in images %}
+        <button
+          type="button"
+          class="ab-gallery-dot{% if image == mainImage %} is-active{% endif %}"
+          data-dot-index="{{ forloop.index0 }}"
+          role="tab"
+          aria-selected="{% if image == mainImage %}true{% else %}false{% endif %}"
+          aria-label="Image {{ forloop.index }}"
+        ></button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if images.size > 0 %}
+  <div class="ab-gallery-thumbs">
+    {% for image in images %}
+      <button
+        class="ab-gallery-thumb{% if image == mainImage %} ab-active{% endif %}"
+        data-src="{{ image }}"
+        data-thumb-index="{{ forloop.index0 }}"
+        type="button"
+        aria-label="View image {{ forloop.index }}"
+      >
+        {% if image contains '.mp4' %}
+          <video src="{{ image }}" muted playsinline preload="metadata"></video>
+        {% else %}
+          <img src="{{ image }}" alt="{{ product_name }}" loading="lazy" />
+        {% endif %}
+      </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="ab-lightbox" data-lightbox>
+    <div class="ab-lightbox-backdrop" data-lightbox-close></div>
+    <button class="ab-lightbox-close" type="button" data-lightbox-close aria-label="Close">
+      <span class="ab-lightbox-close__icon" aria-hidden="true">&times;</span>
+    </button>
+    {% if images.size > 1 %}
+      <button class="ab-lightbox-arrow ab-lightbox-prev" data-lightbox-prev aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="ab-lightbox-arrow ab-lightbox-next" data-lightbox-next aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+      <div class="ab-lightbox-counter" data-lightbox-counter></div>
+    {% endif %}
+    <div class="ab-lightbox-body">
+      <img src="" alt="" class="ab-lightbox-img" data-lightbox-img />
+    </div>
+  </div>
+</div>

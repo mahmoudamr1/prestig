@@ -1,0 +1,47 @@
+<section class="ps-slider ps-slider--under-nav" data-autoplay="5000">
+  <div class="ps-slider-track">
+    {% for slide in slides %}
+      <div class="ps-slider-slide{% if forloop.first %} ps-active{% endif %}">
+        <div class="ps-slider-slide-media">
+          {% if slide.url != blank %}
+            <a href="{{ slide.url }}" class="ps-slider-slide-link">
+              <picture>
+                {% if slide.mobile_image != blank %}
+                  <source media="(max-width: 768px)" srcset="{{ slide.mobile_image }}" />
+                {% endif %}
+                <img src="{{ slide.image }}" alt="{{ slide.alt }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
+              </picture>
+            </a>
+          {% else %}
+            <div class="ps-slider-slide-link ps-slider-slide-link--static">
+              <picture>
+                {% if slide.mobile_image != blank %}
+                  <source media="(max-width: 768px)" srcset="{{ slide.mobile_image }}" />
+                {% endif %}
+                <img src="{{ slide.image }}" alt="{{ slide.alt }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
+              </picture>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if slides.size > 1 %}
+    <div class="ps-slider-indicators">
+      {% for slide in slides %}
+        <button
+          class="ps-slider-indicator{% if forloop.first %} ps-active{% endif %}"
+          type="button"
+          data-slide-index="{{ forloop.index0 }}"
+          aria-label="Go to slide {{ forloop.index }}"
+        >
+          <span class="ps-slider-ind-num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+          <span class="ps-slider-ind-line">
+            <span class="ps-slider-ind-progress"></span>
+          </span>
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>

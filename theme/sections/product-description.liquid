@@ -1,0 +1,46 @@
+<div class="lq-desc-accordion">
+  {% if description != "" %}
+    <div class="lq-desc-item" data-open="true">
+      <button class="lq-desc-toggle" type="button" aria-expanded="true">
+        <span>{{ description_label }}</span>
+        <span class="lq-desc-chevron"></span>
+      </button>
+      <div class="lq-desc-panel" style="display:block">
+        <div class="lq-desc-content product_description">
+          <div class="ql-editor leading-10" style="text-align:start" dir="auto">{{ description }}</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% for policy in policies %}
+    <div class="lq-desc-item">
+      <button class="lq-desc-toggle" type="button" aria-expanded="false">
+        <span class="lq-desc-toggle-label">
+          {% if policy.icon and policy.icon != '' %}
+            <img src="{{ policy.icon }}" alt="" class="lq-desc-icon" />
+          {% endif %}
+          <span>{{ policy.title }}</span>
+        </span>
+        <span class="lq-desc-chevron"></span>
+      </button>
+      <div class="lq-desc-panel" style="display:none">
+        <div class="lq-desc-content">{{ policy.content }}</div>
+      </div>
+    </div>
+  {% endfor %}
+
+  {% for desc in product_theme_data.desc %}
+    <div class="lq-desc-item">
+      <button class="lq-desc-toggle" type="button" aria-expanded="false">
+        <span class="lq-desc-toggle-label">
+          <span>{{ desc.title_headline }}</span>
+        </span>
+        <span class="lq-desc-chevron"></span>
+      </button>
+      <div class="lq-desc-panel" style="display:none">
+        <div class="lq-desc-content">{{ desc.title_desc }}</div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

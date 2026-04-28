@@ -1,0 +1,66 @@
+{
+  "icon": "https://api.iconify.design/lucide:grid-3x3.svg",
+  "label": "Category mosaic",
+  "section_schema": [
+    {
+      "name": "title",
+      "type": "string",
+      "default": "Shop by mood",
+      "description": "Section heading"
+    },
+    {
+      "name": "subtitle",
+      "type": "string",
+      "default": "Curated drops for work, weekend, and everything between.",
+      "description": "Subheading under the title"
+    },
+    {
+      "name": "columns",
+      "type": "select",
+      "default": "3",
+      "description": "Columns on large screens",
+      "options": [
+        { "label": "Two columns", "value": "2" },
+        { "label": "Three columns", "value": "3" },
+        { "label": "Four columns", "value": "4" }
+      ]
+    },
+    {
+      "name": "gap_tight",
+      "type": "boolean",
+      "default": false,
+      "description": "Use tighter spacing between tiles"
+    },
+    {
+      "name": "tiles",
+      "type": "object_array",
+      "description": "Category or collection tiles",
+      "fields": [
+        {
+          "name": "image",
+          "type": "string",
+          "default": "",
+          "description": "Tile image URL"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "Dresses",
+          "description": "Tile title"
+        },
+        {
+          "name": "tagline",
+          "type": "string",
+          "default": "Fluid lines",
+          "description": "Short line under the title"
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "default": "/products",
+          "description": "Tile link URL"
+        }
+      ]
+    }
+  ]
+}

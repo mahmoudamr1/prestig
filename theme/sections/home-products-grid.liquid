@@ -1,0 +1,291 @@
+{% if filter_groups and filter_groups.size > 0 %}
+
+<section class="ps-cl-section">
+  {% if section_title %}
+    <header class="ps-cl-hero">
+      <div class="ps-cl-hero-inner">
+        <h1 class="ps-cl-title">{{ section_title | upcase }}</h1>
+        {% if category_description and category_description != "" %}
+          <p class="ps-cl-desc">{{ category_description }}</p>
+        {% endif %}
+      </div>
+    </header>
+  {% endif %}
+
+  <div class="ps-cl-toolbar">
+    <div class="ps-cl-toolbar-start">
+      <div class="ps-cl-toolbar-spacer" aria-hidden="true"></div>
+      <div class="ps-cl-layout-switch" aria-hidden="true">
+        <span class="ps-cl-layout-dot"></span>
+        <span class="ps-cl-layout-dot is-active"></span>
+        <span class="ps-cl-layout-dot"></span>
+      </div>
+    </div>
+    <p class="ps-cl-count">{{ products_count_text }}</p>
+    <details class="ps-cl-sort" aria-label="{{ sort_aria_label }}">
+      <summary class="ps-cl-sort-btn">
+        <span class="ps-cl-sort-label">{{ sort_label }}</span>
+        <span class="ps-cl-sort-arrow" aria-hidden="true"></span>
+      </summary>
+      <div class="ps-cl-sort-menu">
+        {% for sort_option in sort_options %}
+          <button
+            type="button"
+            class="ps-cl-sort-option {% if sort_option.value == active_sort_value %}is-active{% endif %}"
+            data-ps-sort-option
+            data-sort-value="{{ sort_option.value }}"
+          >
+            {{ sort_option.label }}
+          </button>
+        {% endfor %}
+      </div>
+    </details>
+  </div>
+
+  <div class="ps-cl-layout">
+    <aside class="ps-cl-filters" aria-label="Product filters">
+      <details class="ps-cl-filters-shell" data-ps-filters-shell open>
+        <summary class="ps-cl-filters-shell-summary">
+          <span class="ps-cl-filters-shell-label">{{ filters_label }}</span>
+        </summary>
+        <div class="ps-cl-filters-shell-inner">
+          <div class="ps-cl-filters-head">
+            <h3 class="ps-cl-filters-title">{{ filters_label }}</h3>
+            {% if has_active_filters %}
+              <button type="button" class="ps-cl-clear-filters" data-ps-filter-clear>{{ clear_filters_label }}</button>
+            {% endif %}
+          </div>
+          {% for group in filter_groups %}
+            <details class="ps-cl-filter-group" data-ps-filter-group>
+              <summary class="ps-cl-filter-summary">{{ group.label }}</summary>
+              <div class="ps-cl-filter-options">
+                {% for option in group.options %}
+                  <button
+                    type="button"
+                    class="ps-cl-filter-option {% if option.selected %}is-active{% endif %}"
+                    data-ps-filter-option
+                    data-filter-key="{{ group.key }}"
+                    data-filter-value="{{ option.value }}"
+                  >
+                    <span>{{ option.label }}</span>
+                    <span class="ps-cl-filter-count">{{ option.count }}</span>
+                  </button>
+                {% endfor %}
+              </div>
+            </details>
+          {% endfor %}
+        </div>
+      </details>
+    </aside>
+
+    <div class="ps-cl-products" data-ps-cl-grid>
+      <div class="ps-cl-grid">
+        {% for product in products %}
+          {% assign color_variation = product.variations | where: "type", "color" | first %}
+          {% assign image_variation = product.variations | where: "type", "image" | first %}
+          {% assign swatch_total = 0 %}
+          {% if color_variation and color_variation.props %}
+            {% assign swatch_total = color_variation.props.size %}
+          {% elsif image_variation and image_variation.props %}
+            {% assign swatch_total = image_variation.props.size %}
+          {% endif %}
+
+          <article class="ps-plist-card" data-ps-plist-card>
+            <a href="/products/{{ product.slug }}" class="ps-plist-media-link">
+              <div class="ps-plist-media">
+                {% if product.sale_price and product.sale_price < product.price %}
+                  {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+                  <span class="ps-plist-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
+                {% endif %}
+                {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
+                  <span class="ps-plist-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+                {% endif %}
+                <img class="ps-plist-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+                {% if product.images[0] %}
+                  <img class="ps-plist-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+                {% endif %}
+                <button
+                  type="button"
+                  class="ps-plist-add ps-product-quick-add"
+                  aria-label="Add to cart"
+                  onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="ps-product-plus-icon"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0.75 6.75H6.75M6.75 6.75H12.75M6.75 6.75V0.75M6.75 6.75V12.75"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </a>
+
+            <div class="ps-plist-info">
+              <div class="ps-plist-swatches">
+                {% if color_variation and color_variation.props %}
+                  {% for prop in color_variation.props limit: 6 %}
+                    <span class="ps-plist-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                  {% endfor %}
+                {% elsif image_variation and image_variation.props %}
+                  {% for prop in image_variation.props limit: 6 %}
+                    <span class="ps-plist-swatch ps-plist-swatch-image" title="{{ prop.name }}">
+                      <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                    </span>
+                  {% endfor %}
+                {% endif %}
+                {% if swatch_total > 6 %}
+                  <span class="ps-hpgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
+                {% endif %}
+              </div>
+
+              <a href="/products/{{ product.slug }}" class="ps-plist-name">{{ product.name }}</a>
+
+              <div class="ps-plist-price-row">
+                {% if product.sale_price and product.sale_price < product.price %}
+                  <span class="ps-plist-price-current">{{ product.sale_price }} {{ currency }}</span>
+                  <span class="ps-plist-price-old">{{ product.price }} {{ currency }}</span>
+                {% else %}
+                  <span class="ps-plist-price-current">{{ product.price }} {{ currency }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% if total_pages > 1 %}
+    <nav class="ps-cl-pagination" aria-label="Pagination">
+      <button type="button" class="ps-cl-page-nav {% if current_page <= 1 %}is-disabled{% endif %}" data-ps-cl-page="{{ current_page | minus: 1 }}">‹</button>
+      {% for i in (1..total_pages) %}
+        <button type="button" class="ps-cl-page-num {% if i == current_page %}is-active{% endif %}" data-ps-cl-page="{{ i }}">{{ i }}</button>
+      {% endfor %}
+      <button type="button" class="ps-cl-page-nav {% if current_page >= total_pages %}is-disabled{% endif %}" data-ps-cl-page="{{ current_page | plus: 1 }}">›</button>
+    </nav>
+  {% endif %}
+</section>
+
+{% else %}
+
+{% assign _pg_sub = theme_data.grid_products_header_subtitle | default: shop_label | strip %}
+{% assign _pg_title = theme_data.grid_products_header_title | default: section_title | strip %}
+<section class="ps-pgrid-section" data-ps-pgrid>
+  <div class="ps-pgrid-inner">
+    {% if _pg_sub != blank or _pg_title != blank %}
+      <header class="ps-pgrid-header">
+        {% if _pg_sub != blank %}
+          <p class="ps-pgrid-label">{{ _pg_sub }}</p>
+        {% endif %}
+        {% if _pg_title != blank %}
+          <h2 class="ps-pgrid-title">{{ _pg_title }}</h2>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    <div class="ps-pgrid-main">
+      <div class="ps-pgrid-grid">
+        {% for product in products limit: 6 %}
+          {% assign color_variation = product.variations | where: "type", "color" | first %}
+          {% assign image_variation = product.variations | where: "type", "image" | first %}
+          {% assign swatch_total = 0 %}
+          {% if color_variation and color_variation.props %}
+            {% assign swatch_total = color_variation.props.size %}
+          {% elsif image_variation and image_variation.props %}
+            {% assign swatch_total = image_variation.props.size %}
+          {% endif %}
+
+          <a href="/products/{{ product.slug }}" class="ps-pgrid-card">
+            <div class="ps-pgrid-media">
+              {% if product.sale_price and product.sale_price < product.price %}
+                {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+                <span class="ps-pgrid-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
+              {% endif %}
+              {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
+                <span class="ps-pgrid-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+              {% endif %}
+              <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+              {% if product.images[0] %}
+                <img class="ps-pgrid-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+              {% endif %}
+              <button
+                type="button"
+                class="ps-pgrid-add ps-product-quick-add"
+                aria-label="Add to cart"
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="ps-product-plus-icon"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0.75 6.75H6.75M6.75 6.75H12.75M6.75 6.75V0.75M6.75 6.75V12.75"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div class="ps-pgrid-info">
+              <div class="ps-pgrid-swatches">
+                {% if color_variation and color_variation.props %}
+                  {% for prop in color_variation.props limit: 6 %}
+                    <span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                  {% endfor %}
+                {% elsif image_variation and image_variation.props %}
+                  {% for prop in image_variation.props limit: 6 %}
+                    <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                      <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                    </span>
+                  {% endfor %}
+                {% endif %}
+                {% if swatch_total > 6 %}
+                  <span class="ps-hpgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
+                {% endif %}
+              </div>
+              <span class="ps-pgrid-name">{{ product.name }}</span>
+
+              <div class="ps-pgrid-price-row">
+                {% if product.sale_price and product.sale_price < product.price %}
+                  <span class="ps-pgrid-price-current">{{ product.sale_price }} {{ currency }}</span>
+                  <span class="ps-pgrid-price-old">{{ product.price }} {{ currency }}</span>
+                {% else %}
+                  <span class="ps-pgrid-price-current">{{ product.price }} {{ currency }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if category.slug %}
+        <div class="ps-pgrid-footer">
+          <a href="/collections/{{ category.slug }}" class="ps-pgrid-view-all gap-2">
+            <span>{{ shop_now }}</span>
+            <img src="https://files.easy-orders.net/1773832247629050805.webp" alt="" class="ps-viewall-arrow" width="20" height="20" loading="lazy" />
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}

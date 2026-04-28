@@ -1,0 +1,148 @@
+<section
+  class="ps-rev-section"
+  data-ps-reviews
+  data-reviews-read-more="{{ theme_data.reviews_read_more_label | escape }}"
+  data-reviews-show-less="{{ theme_data.reviews_show_less_label | escape }}"
+>
+  <div class="ps-rev-inner product_container">
+    {% if reviews and reviews.size > 0 %}
+      <div class="ps-rev-head">
+        <h2 class="ps-rev-title">
+          <span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span>
+          <span class="ps-rev-title-count">({{ reviews_count_display | default: reviews_count | default: reviews.size }})</span>
+        </h2>
+        <div class="ps-rev-head-actions">
+          <button
+            type="button"
+            class="ps-rev-write-btn"
+            data-review-open
+            onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}));"
+          >
+            {{ t_share_your_review | default: theme_data.reviews_share_cta_fallback }}
+          </button>
+        </div>
+      </div>
+
+      <div class="ps-rev-summary">
+        <div class="ps-rev-summary-left">
+          <div class="ps-rev-score-ring" aria-hidden="true">
+            <span class="ps-rev-score-ring-value">{{ average_rating_display | default: average_rating | default: "—" }}</span>
+          </div>
+          <div class="ps-rev-stars-meta">
+            <div class="ps-rev-summary-stars">
+              {% for i in (1..5) %}
+                {% if average_rating != blank and i <= average_rating %}
+                  <span class="ab-pd-star ab-pd-star-filled ps-rev-star"></span>
+                {% else %}
+                  <span class="ab-pd-star ab-pd-star-empty ps-rev-star"></span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <p class="ps-rev-count-line">
+              {{ average_rating_display | default: average_rating }}
+              ({{ reviews_count_display | default: reviews_count | default: reviews.size }}
+              {{ t_reviews | default: theme_data.reviews_count_word }})
+            </p>
+          </div>
+        </div>
+        <div class="ps-rev-bars" role="list">
+          {% if rating_rows and rating_rows.size > 0 %}
+            {% for row in rating_rows %}
+              <div class="ps-rev-bar-row" role="listitem">
+                <div class="ps-rev-bar-label">
+                  <span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">{{ row.stars }}</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span>
+                </div>
+                <div class="ps-rev-bar-track">
+                  <div class="ps-rev-bar-fill" style="width: {{ row.percent | round: 1 }}%;"></div>
+                </div>
+                <span class="ps-rev-bar-pct">{{ row.percent | round: 1 }}%</span>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="ps-rev-bar-row" role="listitem">
+              <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">5</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
+              <span class="ps-rev-bar-pct">0%</span>
+            </div>
+            <div class="ps-rev-bar-row" role="listitem">
+              <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">4</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
+              <span class="ps-rev-bar-pct">0%</span>
+            </div>
+            <div class="ps-rev-bar-row" role="listitem">
+              <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">3</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
+              <span class="ps-rev-bar-pct">0%</span>
+            </div>
+            <div class="ps-rev-bar-row" role="listitem">
+              <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">2</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
+              <span class="ps-rev-bar-pct">0%</span>
+            </div>
+            <div class="ps-rev-bar-row" role="listitem">
+              <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">1</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
+              <span class="ps-rev-bar-pct">0%</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="ps-rev-grid">
+        {% for review in reviews %}
+          <article class="ps-rev-card">
+            <div class="ps-rev-card-head">
+              {% if review.image and review.image != "" %}
+                <img src="{{ review.image }}" alt="" class="ps-rev-avatar ps-rev-avatar-img" loading="lazy" width="80" height="80" />
+              {% else %}
+                <span class="ps-rev-avatar ps-rev-avatar-fallback" aria-hidden="true">
+                  {{ review.avatar_initial | default: review.user_name | default: review.name | slice: 0, 1 | default: theme_data.reviews_avatar_placeholder }}
+                </span>
+              {% endif %}
+              <div class="ps-rev-meta">
+                <span class="ps-rev-name">{{ review.user_name | default: review.name | default: theme_data.reviews_anonymous_name }}</span>
+                {% if review.location and review.location != "" %}
+                  <span class="ps-rev-location">{{ review.location }}</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="ps-rev-card-stars">
+              {% for i in (1..5) %}
+                {% if i <= review.rating | default: 5 %}
+                  <span class="ab-pd-star ab-pd-star-filled ps-rev-star"></span>
+                {% else %}
+                  <span class="ab-pd-star ab-pd-star-empty ps-rev-star"></span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <p class="ps-rev-comment ab-review-comment" data-review-comment>{{ review.comment }}</p>
+          </article>
+        {% endfor %}
+      </div>
+
+      {% if show_load_more %}
+        <div class="ps-rev-load-wrap">
+          <button type="button" class="ps-rev-load-more" data-ps-rev-load-more>{{ t_load_more_reviews | default: theme_data.reviews_load_more_label }}</button>
+        </div>
+      {% endif %}
+
+    {% else %}
+
+      <div class="ps-rev-empty-state">
+        <h2 class="ps-rev-title">
+          <span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span>
+        </h2>
+        <p class="ps-rev-empty">{{ t_no_reviews | default: theme_data.reviews_empty_message }}</p>
+        <button
+          type="button"
+          class="ps-rev-write-btn"
+          data-review-open
+          onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}));"
+        >
+          {{ t_share_your_review | default: theme_data.reviews_share_cta_fallback }}
+        </button>
+      </div>
+
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,98 @@
+<section class="ps-plist" data-ps-plist>
+  {% if section_title %}
+    <header class="ps-plist-header">
+      <h2 class="ps-plist-title">{{ section_title }}</h2>
+    </header>
+  {% endif %}
+
+  <div class="ps-plist-viewport" data-ps-plist-viewport>
+    <div class="ps-plist-track" data-ps-plist-track>
+      {% for product in products %}
+        {% assign color_variation = product.variations | where: "type", "color" | first %}
+        {% assign image_variation = product.variations | where: "type", "image" | first %}
+
+        <a href="/products/{{ product.slug }}" class="ps-plist-card" data-ps-plist-card>
+          {% if product.sale_price and product.sale_price < product.price %}
+            {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+            <span class="ps-plist-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
+          {% endif %}
+          {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
+            <span class="ps-plist-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+          {% endif %}
+
+          <div class="ps-plist-media">
+            <img class="ps-plist-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+            {% if product.images[0] %}
+              <img class="ps-plist-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+            {% endif %}
+            <button
+              type="button"
+              class="ps-plist-add ps-product-quick-add"
+              aria-label="Add to cart"
+              onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="ps-product-plus-icon"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0.75 6.75H6.75M6.75 6.75H12.75M6.75 6.75V0.75M6.75 6.75V12.75"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div class="ps-plist-info">
+            <div class="ps-plist-swatches">
+              {% if color_variation and color_variation.props %}
+                {% for prop in color_variation.props limit: 4 %}
+                  <span class="ps-plist-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                {% endfor %}
+              {% elsif image_variation and image_variation.props %}
+                {% for prop in image_variation.props limit: 4 %}
+                  <span class="ps-plist-swatch ps-plist-swatch-image" title="{{ prop.name }}">
+                    <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                  </span>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <p class="ps-plist-name">{{ product.name }}</p>
+            <div class="ps-plist-price-row">
+              {% if product.sale_price and product.sale_price < product.price %}
+                <span class="ps-plist-price-current">{{ product.sale_price }} {{ currency }}</span> 
+                <span class="ps-plist-price-old">{{ product.price }} {{ currency }}</span>
+              {% else %}
+                <span class="ps-plist-price-current">{{ product.price }} {{ currency }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if products and products.size > 1 %}
+    <div class="ps-plist-footer">
+      <div class="ps-plist-progress" aria-hidden="true">
+        <span class="ps-plist-progress-fill" data-ps-plist-progress-fill></span>
+      </div>
+      <div class="ps-plist-arrows">
+        <button type="button" class="ps-plist-arrow ps-plist-arrow-prev" data-ps-plist-prev aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button type="button" class="ps-plist-arrow ps-plist-arrow-next" data-ps-plist-next aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+    </div>
+  {% endif %}
+</section>

@@ -1,0 +1,14 @@
+{% if categories and categories.size > 0 %}
+<div class="ps-categories-section">
+  <div class="ps-categories-grid">
+    {% for category in categories %}
+      <a href="/collections/{{ category.slug }}" class="ps-category-card">
+        <img src="{{ category.thumb }}" alt="{{ category.name }}" class="ps-category-bg" loading="lazy" />
+        <div class="ps-category-content">
+          <h3 class="ps-category-title">{{ category.name }}</h3>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

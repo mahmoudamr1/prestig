@@ -1,0 +1,93 @@
+{
+  "icon": "https://api.iconify.design/lucide:sparkles.svg",
+  "label": "Runway hero",
+  "section_schema": [
+    {
+      "name": "image",
+      "type": "string",
+      "default": "",
+      "description": "Full-width background image URL"
+    },
+    {
+      "name": "kicker",
+      "type": "string",
+      "default": "New season",
+      "description": "Small line above the headline"
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "The spring edit",
+      "description": "Main headline"
+    },
+    {
+      "name": "subheadline",
+      "type": "string",
+      "default": "Silhouettes, textures, and tones curated for everyday luxury.",
+      "description": "Supporting line under the headline"
+    },
+    {
+      "name": "primary_label",
+      "type": "string",
+      "default": "Shop collection",
+      "description": "Primary button label"
+    },
+    {
+      "name": "primary_url",
+      "type": "string",
+      "default": "/products",
+      "description": "Primary button URL"
+    },
+    {
+      "name": "secondary_label",
+      "type": "string",
+      "default": "Lookbook",
+      "description": "Secondary button label (hidden if empty)"
+    },
+    {
+      "name": "secondary_url",
+      "type": "string",
+      "default": "/pages/lookbook",
+      "description": "Secondary button URL"
+    },
+    {
+      "name": "overlay_strength",
+      "type": "number",
+      "default": 42,
+      "description": "Dark overlay strength (0–100)"
+    },
+    {
+      "name": "accent_color",
+      "type": "color",
+      "default": "#C9A962",
+      "description": "Accent for buttons and kicker when no image"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#FAF7F2",
+      "description": "Hero text color"
+    },
+    {
+      "name": "alignment",
+      "type": "select",
+      "default": "center",
+      "description": "Content alignment",
+      "options": [
+        { "label": "Center", "value": "center" },
+        { "label": "Left", "value": "left" }
+      ]
+    },
+    {
+      "name": "min_height",
+      "type": "select",
+      "default": "tall",
+      "description": "Minimum height",
+      "options": [
+        { "label": "Compact", "value": "compact" },
+        { "label": "Tall", "value": "tall" },
+        { "label": "Near full screen", "value": "screen" }
+      ]
+    }
+  ]
+}

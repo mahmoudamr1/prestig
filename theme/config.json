@@ -1,0 +1,110 @@
+{
+  "footer": {
+    "logo": "",
+    "pages": [
+      {
+        "slug": "terms-and-conditions",
+        "title": "شروط الاستخدام"
+      },
+      {
+        "slug": "shipping-policy",
+        "title": "سياسة الشحن"
+      },
+      {
+        "slug": "refund-policy",
+        "title": "سياسة الاستبدال و الاسترجاع"
+      },
+      {
+        "slug": "privacy-policy",
+        "title": "سياسات الخصوصية"
+      }
+    ],
+    "social": [
+      {
+        "url": "https://facebook.com",
+        "type": "facebook"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "instagram"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "twitter"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "linkedin"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "tiktok"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "youtube"
+      }
+    ],
+    "categories": [],
+    "payment_img": "https://easyorders.fra1.digitaloceanspaces.com/1773958283329740254payment_icons.svg",
+    "is_use_config": false
+  },
+  "header": {
+    "logo": "",
+    "links": [],
+    "is_use_config": false
+  },
+  "palette": {
+    "ft_bg": "",
+    "hd_bg": "#a4e6b6",
+    "ann_bg": "#000000",
+    "ft_text": "",
+    "hd_text": "",
+    "ann_text": "",
+    "buy_btn_bg": "",
+    "crt_btn_bg": "",
+    "buy_btn_text": "",
+    "crt_btn_text": "",
+    "buy_btn_border": "",
+    "crt_btn_border": ""
+  },
+  "theme_data": {
+    "footer_quick_links": "Shop",
+    "footer_customer_support": "Pages",
+    "footer_contact_us": "Contact us",
+    "footer_phone_label": "Phone",
+    "footer_email_label": "Email",
+    "footer_address_label": "Address",
+    "footer_subscribe_emails": "Subscribe to Our Newsletter",
+    "footer_email_placeholder": "Enter your email address",
+    "footer_subscribe_newsletter_btn": "Subscribe to Newsletter",
+    "footer_powered_by": "Powered By",
+    "footer_payment_custom_image": "",
+    "reviews_heading_fallback": "All Reviews",
+    "reviews_share_cta_fallback": "Share your review",
+    "reviews_count_word": "reviews",
+    "reviews_load_more_label": "Load more reviews",
+    "reviews_empty_message": "No reviews yet.",
+    "reviews_anonymous_name": "Customer",
+    "reviews_avatar_placeholder": "?",
+    "reviews_read_more_label": "...Read more",
+    "reviews_show_less_label": "Show less",
+    "categories_header_subtitle": "best seller collections",
+    "categories_header_title": "Shop by Category",
+    "list_products_header_subtitle": "Best seller product",
+    "list_products_header_title": "New Arrivals",
+    "grid_products_header_subtitle": "",
+    "grid_products_header_title": "",
+    "sale_badge_label": "Save",
+    "featured_products_header_subtitle": "Shop",
+    "featured_products_banner_description": "Discover our handpicked products designed for everyday style and comfort.",
+    "thanks_title_fallback": "Thank you!",
+    "thanks_subtitle_fallback": "Your order has been received.",
+    "thanks_confirmation_prefix": "The order confirmation has been sent to"
+  },
+  "announcement_config": {
+    "text": ["it works", "Free shipping for 1000 EGP", "Genuine Quality"],
+    "type": "marquee",
+    "is_use_config": true
+  }
+}

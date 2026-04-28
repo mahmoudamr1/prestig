@@ -1,0 +1,97 @@
+<section class="ps-pgrid-section" data-ps-pgrid>
+  <div class="ps-pgrid-inner">
+    <div class="ps-pgrid-main">
+      <div class="ps-pgrid-grid">
+        {% for product in products %}
+          {% assign color_variation = product.variations | where: "type", "color" | first %}
+          {% assign image_variation = product.variations | where: "type", "image" | first %}
+          {% assign swatch_total = 0 %}
+          {% if color_variation and color_variation.props %}
+            {% assign swatch_total = color_variation.props.size %}
+          {% elsif image_variation and image_variation.props %}
+            {% assign swatch_total = image_variation.props.size %}
+          {% endif %}
+
+          <a href="/products/{{ product.slug }}" class="ps-pgrid-card">
+            <div class="ps-pgrid-media">
+              {% if product.sale_price and product.sale_price < product.price %}
+                {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+                <span class="ps-pgrid-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
+              {% endif %}
+              {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
+                <span class="ps-pgrid-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+              {% endif %}
+              <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+              {% if product.images[0] %}
+                <img class="ps-pgrid-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+              {% endif %}
+              <button
+                type="button"
+                class="ps-pgrid-add ps-product-quick-add"
+                aria-label="Add to cart"
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="ps-product-plus-icon"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0.75 6.75H6.75M6.75 6.75H12.75M6.75 6.75V0.75M6.75 6.75V12.75"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div class="ps-pgrid-info">
+              <div class="ps-pgrid-swatches">
+                {% if color_variation and color_variation.props %}
+                  {% for prop in color_variation.props limit: 6 %}
+                    <span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                  {% endfor %}
+                {% elsif image_variation and image_variation.props %}
+                  {% for prop in image_variation.props limit: 6 %}
+                    <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                      <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                    </span>
+                  {% endfor %}
+                {% endif %}
+
+                {% if swatch_total > 6 %}
+                  <span class="ps-hpgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
+                {% endif %}
+              </div>
+              <span class="ps-pgrid-name">{{ product.name }}</span>
+
+              <div class="ps-pgrid-price-row">
+                {% if product.sale_price and product.sale_price < product.price %}
+                  <span class="ps-pgrid-price-old">{{ product.price }} {{ currency }}</span>
+                  <span class="ps-pgrid-price-current">{{ product.sale_price }} {{ currency }}</span>
+                {% else %}
+                  <span class="ps-pgrid-price-current">{{ product.price }} {{ currency }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if category and category.slug %}
+        <div class="ps-pgrid-footer">
+          <a href="/collections/{{ category.slug }}" class="ps-pgrid-view-all gap-2">
+            <span>{{ shop_now }}</span>
+            <img src="https://files.easy-orders.net/1773832247629050805.webp" alt="" class="ps-viewall-arrow" width="20" height="20" loading="lazy" />
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

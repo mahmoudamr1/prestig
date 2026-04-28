@@ -1,0 +1,131 @@
+{% assign _sale_badge_label = theme_data.sale_badge_label | strip %}
+{% if _sale_badge_label == blank %}
+  {% assign _sale_badge_label = sale | strip %}
+{% endif %}
+{% if _sale_badge_label == blank %}
+  {% assign _sale_badge_label = save_label | strip %}
+{% endif %}
+{% if _sale_badge_label == blank %}
+  {% assign _sale_badge_label = "Save" %}
+{% endif %}
+
+{% assign products_count = products | size %}
+{% if products_count < 1 %}
+{% comment %} No products — omit section {% endcomment %}
+{% else %}
+<section class="ps-featured">
+  {% if section_title %}
+    <h2 class="ps-featured-section-heading">{{ section_title }}</h2>
+  {% endif %}
+  <div class="ps-featured-desktop">
+    <a
+      href="{% if category and category.slug %}/collections/{{ category.slug }}{% else %}#{% endif %}"
+      class="ps-featured-banner ps-featured-banner--link ps-featured-hero"
+    >
+      <img
+        class="ps-featured-banner-bg-img"
+        src="{% if category and category.thumb %}{{ category.thumb }}{% elsif products and products[0] and products[0].thumb %}{{ products[0].thumb }}{% endif %}"
+        alt="{% if category and category.name %}{{ category.name }}{% else %}{{ section_title }}{% endif %}"
+        loading="lazy"
+      />
+      <span class="ps-featured-hero-overlay" aria-hidden="true"></span>
+      <div class="ps-featured-hero-content">
+        {% if category and category.name %}
+          <p class="ps-featured-banner-title">{{ category.name }}</p>
+        {% endif %}
+      </div>
+      {% unless hide_view_all %}
+        <span class="ps-featured-banner-cta">{{ shop_now }}</span>
+      {% endunless %}
+    </a>
+
+    <div class="ps-featured-grid">
+      {% for product in products limit: 4 %}
+        {% assign color_variation = product.variations | where: "type", "color" | first %}
+        {% assign image_variation = product.variations | where: "type", "image" | first %}
+        {% assign hover_image = "" %}
+        {% if product.gallery and product.gallery.size > 1 %}
+          {% assign hover_image = product.gallery[1].thumbnail %}
+        {% elsif product.gallery and product.gallery.size > 0 %}
+          {% if product.gallery[0].thumbnail != product.thumb %}
+            {% assign hover_image = product.gallery[0].thumbnail %}
+          {% endif %}
+        {% endif %}
+        {% if hover_image == "" and product.images and product.images.size > 1 %}
+          {% assign hover_image = product.images[1] %}
+        {% elsif hover_image == "" and product.images and product.images.size > 0 and product.images[0] != product.thumb %}
+          {% assign hover_image = product.images[0] %}
+        {% endif %}
+        {% assign list_price = product.price | plus: 0 %}
+        {% assign deal_price = product.sale_price | plus: 0 %}
+
+        <a href="/products/{{ product.slug }}" class="ps-pgrid-card">
+          <div class="ps-pgrid-media">
+            {% if deal_price > 0 and list_price > 0 and deal_price < list_price %}
+              {% assign discount = list_price | minus: deal_price | times: 100 | divided_by: list_price | floor %}
+              <span class="ps-pgrid-badge ps-sale-badge">{{ _sale_badge_label }} {{ discount }}%</span>
+            {% endif %}
+            {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
+              <span class="ps-pgrid-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+            {% endif %}
+            <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+            {% if hover_image != "" and hover_image != product.thumb %}
+              <img class="ps-pgrid-img-hover" src="{{ hover_image }}" alt="{{ product.name }}" loading="lazy" />
+            {% endif %}
+            <button
+              type="button"
+              class="ps-pgrid-add ps-product-quick-add"
+              aria-label="Add to cart"
+              onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="ps-product-plus-icon"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0.75 6.75H6.75M6.75 6.75H12.75M6.75 6.75V0.75M6.75 6.75V12.75"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div class="ps-pgrid-info">
+            <div class="ps-pgrid-swatches">
+              {% if color_variation and color_variation.props %}
+                {% for prop in color_variation.props limit: 4 %}
+                  <span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                {% endfor %}
+              {% elsif image_variation and image_variation.props %}
+                {% for prop in image_variation.props limit: 4 %}
+                  <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                    <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                  </span>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <span class="ps-pgrid-name">{{ product.name }}</span>
+
+            <div class="ps-pgrid-price-row">
+              {% if deal_price > 0 and list_price > 0 and deal_price < list_price %}
+                <span class="ps-pgrid-price-current">{{ deal_price }} {{ currency }}</span>
+                <span class="ps-pgrid-price-old">{{ list_price }} {{ currency }}</span>
+              {% else %}
+                <span class="ps-pgrid-price-current">{{ list_price }} {{ currency }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

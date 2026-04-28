@@ -1,0 +1,143 @@
+<section
+  class="runway-hero runway-hero--{{ section_data.alignment | default: 'center' }}"
+  style="
+    --runway-text: {{ section_data.text_color | default: '#FAF7F2' }};
+    --runway-accent: {{ section_data.accent_color | default: '#C9A962' }};
+    --runway-overlay: {{ section_data.overlay_strength | default: 42 | divided_by: 100.0 }};
+    --runway-min-h: {% if section_data.min_height == 'compact' %}52vh{% elsif section_data.min_height == 'screen' %}92vh{% else %}72vh{% endif %};
+    {% if section_data.image != blank %}background-image: url('{{ section_data.image }}');{% endif %}
+  "
+>
+  <div class="runway-hero__overlay" aria-hidden="true"></div>
+  <div class="runway-hero__inner">
+    {% if section_data.kicker != blank %}
+      <p class="runway-hero__kicker">{{ section_data.kicker }}</p>
+    {% endif %}
+    {% if section_data.headline != blank %}
+      <h1 class="runway-hero__title">{{ section_data.headline }}</h1>
+    {% endif %}
+    {% if section_data.subheadline != blank %}
+      <p class="runway-hero__lede">{{ section_data.subheadline }}</p>
+    {% endif %}
+    <div class="runway-hero__actions">
+      {% if section_data.primary_label != blank %}
+        <a class="runway-hero__btn runway-hero__btn--primary" href="{{ section_data.primary_url | default: '/products' }}">
+          {{ section_data.primary_label }}
+        </a>
+      {% endif %}
+      {% if section_data.secondary_label != blank %}
+        <a class="runway-hero__btn runway-hero__btn--ghost" href="{{ section_data.secondary_url | default: '#' }}">
+          {{ section_data.secondary_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .runway-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: var(--runway-min-h, 72vh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(2rem, 6vw, 5rem) 1.5rem;
+    background-color: #141218;
+    background-size: cover;
+    background-position: center;
+    color: var(--runway-text, #faf7f2);
+    text-align: center;
+  }
+  .runway-hero--left {
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .runway-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      105deg,
+      rgba(8, 6, 10, calc(var(--runway-overlay, 0.45) + 0.12)) 0%,
+      rgba(8, 6, 10, var(--runway-overlay, 0.45)) 45%,
+      rgba(8, 6, 10, calc(var(--runway-overlay, 0.45) * 0.55)) 100%
+    );
+  }
+  .runway-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .runway-hero--left .runway-hero__inner {
+    margin-right: auto;
+  }
+  .runway-hero__kicker {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--runway-accent, #c9a962);
+    font-weight: 600;
+  }
+  .runway-hero__title {
+    margin: 0;
+    font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-weight: 500;
+    font-size: clamp(2.25rem, 6vw, 3.75rem);
+    line-height: 1.05;
+  }
+  .runway-hero__lede {
+    margin: 0;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    line-height: 1.65;
+    opacity: 0.92;
+    max-width: 36rem;
+  }
+  .runway-hero--left .runway-hero__lede {
+    margin-left: 0;
+  }
+  .runway-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    justify-content: center;
+  }
+  .runway-hero--left .runway-hero__actions {
+    justify-content: flex-start;
+  }
+  .runway-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 1.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+  .runway-hero__btn--primary {
+    background: var(--runway-accent, #c9a962);
+    color: #141218;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  }
+  .runway-hero__btn--primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  }
+  .runway-hero__btn--ghost {
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: inherit;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .runway-hero__btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+</style>

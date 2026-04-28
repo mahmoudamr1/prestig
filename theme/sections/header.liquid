@@ -1,0 +1,277 @@
+<div class="ps-theme">
+  {% comment %}
+    Platform sends `announcement_config`; some previews / config stubs use `announcement_bar`.
+  {% endcomment %}
+  {% assign ann_cfg = announcement_config %}
+  {% if ann_cfg == nil or ann_cfg.text == nil or ann_cfg.text.size == 0 %}
+    {% if announcement_bar and announcement_bar.text %}
+      {% assign ann_cfg = announcement_bar %}
+    {% endif %}
+  {% endif %}
+
+  {% assign ann_count = 0 %}
+  {% if ann_cfg and ann_cfg.text %}
+    {% assign ann_count = ann_cfg.text | size %}
+  {% endif %}
+
+  {% if ann_count > 0 %}
+    <div
+      class="ps-announce"
+      data-ps-announce
+      data-ann-type="{{ ann_cfg.type }}"
+      role="region"
+      aria-label="Announcement"
+      {% if palette %}
+        {% assign panb = palette.ann_bg %}
+        {% assign pant = palette.ann_text %}
+        {% if panb != blank or pant != blank %}
+          style="{% if panb != blank %}--ann-bg: {{ panb }};{% endif %}{% if pant != blank %}--ann-text: {{ pant }};{% endif %}"
+        {% endif %}
+      {% endif %}
+    >
+      {% if ann_cfg.type == "marquee" %}
+        <div class="ps-announce-inner ps-announce-marquee">
+          <div class="ps-announce-marquee-track">
+            {% for item in ann_cfg.text %}
+              <span class="ps-announce-marquee-item">{{ item }}</span>
+            {% endfor %}
+            {% for item in ann_cfg.text %}
+              <span class="ps-announce-marquee-item" aria-hidden="true">{{ item }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      {% elsif ann_cfg.type == "slider" %}
+        <div class="ps-announce-inner ps-announce-slider">
+          {% for item in ann_cfg.text %}
+            <div class="ps-announce-slide{% if forloop.first %} ps-active{% endif %}">{{ item }}</div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="ps-announce-inner ps-announce-simple">
+          {% for item in ann_cfg.text %}
+            <span>{{ item }}</span>
+            {% unless forloop.last %}<span class="ps-announce-sep">&mdash;</span>{% endunless %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% elsif announcement_text and announcement_text != "" %}
+    <div
+      class="ps-announce"
+      data-ps-announce
+      role="region"
+      aria-label="Announcement"
+      {% if palette %}
+        {% assign panb = palette.ann_bg %}
+        {% assign pant = palette.ann_text %}
+        {% if panb != blank or pant != blank %}
+          style="{% if panb != blank %}--ann-bg: {{ panb }};{% endif %}{% if pant != blank %}--ann-text: {{ pant }};{% endif %}"
+        {% endif %}
+      {% endif %}
+    >
+      <div class="ps-announce-inner">
+        {{ announcement_text }}
+      </div>
+    </div>
+  {% endif %}
+
+  <header
+    id="eo-header"
+    class="ps-header"
+    {% if palette %}
+      {% assign phdb = palette.hd_bg %}
+      {% assign phdt = palette.hd_text %}
+      {% if phdb != blank or phdt != blank %}
+        style="{% if phdb != blank %}--hd-bg: {{ phdb }};{% endif %}{% if phdt != blank %}--hd-text: {{ phdt }};{% endif %}"
+      {% endif %}
+    {% endif %}
+  >
+    <div class="ps-header-inner">
+      <div class="ps-left-group">
+        <button id="eo-menu-btn" class="ps-menu-btn" type="button" aria-label="Open menu">
+          <img
+            src="https://files.easy-orders.net/1773672562651251535hamburger.svg"
+            alt=""
+            class="ps-menu-icon"
+          />
+        </button>
+
+        <nav class="ps-desktop-nav" aria-label="Main navigation">
+          {% for category in categories %}
+            {% assign cat_href = category.url %}
+            {% if cat_href == blank %}
+              {% if category.slug != blank %}
+                {% assign cat_href = "/collections/" | append: category.slug %}
+              {% else %}
+                {% assign cat_href = "#" %}
+              {% endif %}
+            {% endif %}
+            {% assign cat_children_n = category.children | size %}
+            {% if cat_children_n > 0 %}
+              <div class="ps-nav-dropdown">
+                <a href="{{ cat_href }}" class="ps-desktop-nav-link ps-nav-dropdown-trigger">{{ category.name }}</a>
+                <div class="ps-nav-dropdown-panel">
+                  {% for child in category.children %}
+                    {% assign child_href = child.url %}
+                    {% if child_href == blank %}
+                      {% if child.slug != blank %}
+                        {% assign child_href = "/collections/" | append: child.slug %}
+                      {% else %}
+                        {% assign child_href = "#" %}
+                      {% endif %}
+                    {% endif %}
+                    <a href="{{ child_href }}">{{ child.name }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            {% else %}
+              <a href="{{ cat_href }}" class="ps-desktop-nav-link">{{ category.name }}</a>
+            {% endif %}
+          {% endfor %}
+        </nav>
+      </div>
+
+      <a href="/" class="ps-logo" aria-label="{{ store_name }}">
+        {% if logo != blank %}
+          <img src="{{ logo }}" alt="{{ store_name }}" />
+        {% else %}
+          <span>{{ store_name }}</span>
+        {% endif %}
+      </a>
+
+      <div class="ps-right-group">
+        <a href="/search" class="ps-icon-btn search-btn" aria-label="Search" data-eo="search-btn">
+          <img
+            src="https://files.easy-orders.net/1773672173685851777search.svg"
+            alt=""
+            class="ps-icon-image"
+          />
+        </a>
+
+        <button
+          type="button"
+          id="header-lang-btn"
+          class="ps-icon-btn lang-btn"
+          aria-label="Change language"
+          onclick="this.dispatchEvent(new CustomEvent('lang-click',{bubbles:true}))"
+        >
+          <svg class="ps-icon-image ps-lang-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="ps-icon-btn cart-btn"
+          aria-label="Cart"
+          onclick="this.dispatchEvent(new CustomEvent('cart-click',{bubbles:true}))"
+        >
+          <img
+            src="https://files.easy-orders.net/1773672173697877890card.svg"
+            alt=""
+            class="ps-icon-image"
+          />
+          <span
+            id="header-cart-count"
+            class="ps-cart-count"
+            {% if cart_count == 0 %}hidden{% endif %}
+            aria-hidden="true"
+          >{{ cart_count }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ps-theme-layout-spacer" aria-hidden="true"></div>
+
+  <div id="eo-mobile-overlay" class="ps-mobile-overlay"></div>
+  <aside id="eo-mobile-menu" class="ps-mobile-menu" aria-label="Mobile menu">
+    <div class="ps-mobile-top">
+      <button id="eo-mobile-close" class="ps-mobile-close" type="button" aria-label="Close menu">
+        <img
+          src="https://files.easy-orders.net/1773672706842218072x.svg"
+          alt=""
+          class="ps-close-icon"
+        />
+      </button>
+      <a href="/" class="ps-logo ps-mobile-logo" aria-label="{{ store_name }}">
+        {% if logo != blank %}
+          <img src="{{ logo }}" alt="{{ store_name }}" />
+        {% else %}
+          <span>{{ store_name }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    <nav class="ps-mobile-nav" aria-label="Mobile navigation">
+      {% for category in categories %}
+        {% assign cat_href = category.url %}
+        {% if cat_href == blank %}
+          {% if category.slug != blank %}
+            {% assign cat_href = "/collections/" | append: category.slug %}
+          {% else %}
+            {% assign cat_href = "#" %}
+          {% endif %}
+        {% endif %}
+        {% assign cat_children_n = category.children | size %}
+        {% if cat_children_n > 0 %}
+          <div class="ps-mobile-accordion">
+            <button class="ps-mobile-link ps-accordion-trigger" type="button">
+              <span>{{ category.name }}</span>
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                fill="none"
+                width="12"
+                height="12"
+                class="ps-arrow-icon"
+                viewBox="0 0 10 10"
+              >
+                <path d="m3 9 4-4-4-4" stroke="currentColor" stroke-linecap="square"></path>
+              </svg>
+            </button>
+            <div class="ps-accordion-panel">
+              <a href="{{ cat_href }}" class="ps-mobile-sublink">All {{ category.name }}</a>
+              {% for child in category.children %}
+                {% assign child_href = child.url %}
+                {% if child_href == blank %}
+                  {% if child.slug != blank %}
+                    {% assign child_href = "/collections/" | append: child.slug %}
+                  {% else %}
+                    {% assign child_href = "#" %}
+                  {% endif %}
+                {% endif %}
+                <a href="{{ child_href }}" class="ps-mobile-sublink">{{ child.name }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ cat_href }}" class="ps-mobile-link">
+            <span>{{ category.name }}</span>
+          </a>
+        {% endif %}
+      {% endfor %}
+
+      <a href="/search" class="ps-mobile-link ps-mobile-link--iconrow" data-eo="search-btn">
+        <span>Search</span>
+        <svg class="ps-mobile-row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </a>
+
+      <a
+        id="header-lang-mobile"
+        href="#"
+        class="ps-mobile-link ps-mobile-link--iconrow lang-btn"
+        onclick="this.dispatchEvent(new CustomEvent('lang-click',{bubbles:true}));return false;"
+      >
+        <span>Language</span>
+        <svg class="ps-mobile-row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </a>
+    </nav>
+  </aside>
+</div>

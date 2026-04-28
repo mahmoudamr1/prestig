@@ -1,0 +1,141 @@
+{% comment %}
+  Order invoice (Prestige `ps-invoice`). Platform passes `order`, `order_notes`, `tracking_link`, `currency`, `t_*`.
+  Tracking: `copy-tracking-link` CustomEvent, `bubbles: true`.
+{% endcomment %}
+{% assign _tracking = tracking_link | default: "" %}
+{% if order and order.tracking_link and order.tracking_link != "" %}
+  {% assign _tracking = order.tracking_link %}
+{% endif %}
+{% assign _created = "" %}
+{% if order %}
+  {% assign _created = order.created_at | default: order.placed_at | default: order.date | default: order.created_at_display %}
+{% endif %}
+{% assign _status_val = "" %}
+{% if order %}
+  {% assign _status_val = order.status_label | default: order.status %}
+{% endif %}
+
+{% if order %}
+  <div class="ps-invoice" data-liquid-order-invoice>
+    {% if _tracking != blank %}
+      <div class="ps-invoice-header">
+        <button
+          class="ps-invoice-track-btn"
+          type="button"
+          title="{{ _tracking }}"
+          data-ps-tracking-link="{{ _tracking }}"
+          onclick="this.dispatchEvent(new CustomEvent('copy-tracking-link',{bubbles:true,detail:{link:(this.getAttribute('data-ps-tracking-link')||'')}}));"
+        >
+          {{ t_copy_tracking_link | default: "Copy tracking link" }}
+        </button>
+      </div>
+    {% endif %}
+
+    <div class="ps-invoice-body">
+      <div class="ps-invoice-main">
+        {% if _created != blank or order_notes and order_notes.size > 0 %}
+          <div class="ps-invoice-timeline">
+            <ul class="ps-invoice-notes-list">
+              {% if _created != blank %}
+                <li>
+                  <span>{{ t_order_created }}</span>
+                  <span class="ps-invoice-note-date">{{ _created }}</span>
+                </li>
+              {% endif %}
+              {% if order_notes and order_notes.size > 0 %}
+                {% for note in order_notes %}
+                  <li>
+                    <span>{{ note.note }}</span>
+                    <span class="ps-invoice-note-date">{{ note.created_at }}</span>
+                  </li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if order.cart_items and order.cart_items.size > 0 %}
+          <div class="ps-invoice-items">
+            {% for item in order.cart_items %}
+              <div class="ps-invoice-item">
+                {% assign _thumb = item.thumb | default: item.product_thumb | default: item.image %}
+                {% if _thumb and _thumb != "" %}
+                  <img class="ps-invoice-item-img" src="{{ _thumb }}" alt="{{ item.name }}" loading="lazy" />
+                {% endif %}
+                <div class="ps-invoice-item-details">
+                  <h4 class="ps-invoice-item-name">{{ item.name }}</h4>
+                  {% assign _vars = item.variants | default: item.variant_string | default: "" | strip %}
+                  {% if _vars != blank %}
+                    <p class="ps-invoice-item-variants">{{ _vars }}</p>
+                  {% endif %}
+                  <p class="ps-invoice-item-qty">{{ t_items_count }}: {{ item.quantity }}</p>
+                  <p class="ps-invoice-item-unit-price">{{ t_piece_price }}: {{ item.price }} {{ currency }}</p>
+                </div>
+                <span class="ps-invoice-item-total">{{ t_total }} {{ item.total }} {{ currency }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="ps-invoice-shipping">
+          <h3 class="ps-invoice-section-title">{{ t_shipping_details }}</h3>
+          <dl class="ps-invoice-dl">
+            <div class="ps-invoice-dl-row">
+              <dt>{{ t_name }}:</dt>
+              <dd>{{ order.full_name }}</dd>
+            </div>
+            <div class="ps-invoice-dl-row">
+              <dt>{{ t_phone }}:</dt>
+              <dd>{{ order.phone }}</dd>
+            </div>
+            {% if order.email and order.email != "" %}
+              <div class="ps-invoice-dl-row">
+                <dt>{{ t_email }}:</dt>
+                <dd>{{ order.email }}</dd>
+              </div>
+            {% endif %}
+            <div class="ps-invoice-dl-row">
+              <dt>{{ t_address }}:</dt>
+              <dd>{{ order.address }}</dd>
+            </div>
+            <div class="ps-invoice-dl-row">
+              <dt>{{ t_payment_details }}:</dt>
+              <dd>{{ order.payment_method | default: order.payment_type | default: order.gateway }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="ps-invoice-totals">
+          <div class="ps-invoice-dl-row">
+            <dt>{{ t_product_total }}:</dt>
+            <dd>{{ order.cost | default: order.subtotal }} {{ currency }}</dd>
+          </div>
+          {% unless order.is_digital %}
+            {% assign _ship_cost = order.shipping_cost %}
+            <div class="ps-invoice-dl-row">
+              <dt>{{ t_shipping_cost }}:</dt>
+              <dd>
+                {% if _ship_cost == blank or _ship_cost == "0" or _ship_cost == 0 or _ship_cost == "0.0" %}
+                  {{ t_free_shipping }}
+                {% else %}
+                  {{ _ship_cost }} {{ currency }}
+                {% endif %}
+              </dd>
+            </div>
+          {% endunless %}
+          <div class="ps-invoice-dl-row ps-invoice-total-row">
+            <dt>{{ t_total }}:</dt>
+            <dd>{{ order.total_cost | default: order.total }} {{ currency }}</dd>
+          </div>
+        </div>
+
+        {% if _status_val != blank %}
+          <div class="ps-invoice-status-row">
+            <span class="ps-invoice-status-label">{{ t_order_status }}:</span>
+            <span class="ps-invoice-status-value">{{ _status_val }}</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
