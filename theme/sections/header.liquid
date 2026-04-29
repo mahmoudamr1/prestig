@@ -1,3 +1,62 @@
+{% comment %} Dynamic Google Fonts + --ps-ff-* from theme_data — see schema (font_google_families / font_google_weights / font_family_*). {% endcomment %}
+{% assign _fgw = theme_data.font_google_weights | default: '400;500;600;700' | strip %}
+{% assign _fgs = theme_data.font_google_families | default: 'Instrument Sans' | strip %}
+{% assign _fam_parts = _fgs | split: ',' %}
+{% assign _q = '' %}
+{% for _seg in _fam_parts %}
+  {% assign _one = _seg | strip | replace: '"', '' | replace: "'", '' %}
+  {% if _one != blank %}
+    {% assign _enc = _one | replace: ' ', '+' %}
+    {% assign _piece = 'family=' | append: _enc | append: ':wght@' | append: _fgw %}
+    {% if _q == '' %}
+      {% assign _q = _piece %}
+    {% else %}
+      {% assign _q = _q | append: '&' | append: _piece %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+{% if _q == '' %}
+  {% assign _q = 'family=Instrument+Sans:wght@' | append: _fgw %}
+{% endif %}
+{% assign prestig_google_font_url = 'https://fonts.googleapis.com/css2?' | append: _q | append: '&display=swap' %}
+
+{% assign _pf = theme_data.font_family_primary | strip | replace: '"', '' | replace: "'", '' %}
+{% assign _fu = theme_data.font_family_ui | strip | replace: '"', '' | replace: "'", '' %}
+{% assign _fa = theme_data.font_family_alt | strip | replace: '"', '' | replace: "'", '' %}
+{% assign _fd = theme_data.font_family_display | strip | replace: '"', '' | replace: "'", '' %}
+{% assign _fb = theme_data.font_family_arabic | strip | replace: '"', '' | replace: "'", '' %}
+{% if _pf == blank %}
+  {% assign _pf = 'Instrument Sans' %}
+{% endif %}
+{% if _fu == blank %}
+  {% assign _fu = 'Manrope' %}
+{% endif %}
+{% if _fa == blank %}
+  {% assign _fa = 'Nunito' %}
+{% endif %}
+{% if _fd == blank %}
+  {% assign _fd = 'Playfair Display' %}
+{% endif %}
+{% if _fb == blank %}
+  {% assign _fb = 'Almarai' %}
+{% endif %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="{{ prestig_google_font_url }}" />
+<style id="prestige-theme-font-vars">
+  :root {
+    --ps-ff-primary: "{{ _pf }}";
+    --ps-ff-ui: "{{ _fu }}";
+    --ps-ff-alt: "{{ _fa }}";
+    --ps-ff-display: "{{ _fd }}";
+    --ps-ff-arabic: "{{ _fb }}";
+  }
+  html[lang="ar"] .ps-theme,
+  .ps-theme[lang="ar"] {
+    font-family: var(--ps-ff-arabic), var(--ps-ff-primary), sans-serif;
+  }
+</style>
 <div class="ps-theme">
   {% comment %}
     Platform sends `announcement_config`; some previews / config stubs use `announcement_bar`.

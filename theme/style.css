@@ -1,9 +1,13 @@
-﻿/* @import must stay first. Fonts: Instrument Sans, Almarai, Manrope, Montserrat, Nunito, Playfair. */
-@import url("https://fonts.googleapis.com/css2?family=Almarai:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap");
+/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
 
 /* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host â€” saves editing this + Liquid without extra tools. */
 
 :root {
+  --ps-ff-primary: "Instrument Sans";
+  --ps-ff-ui: "Manrope";
+  --ps-ff-alt: "Nunito";
+  --ps-ff-display: "Playfair Display";
+  --ps-ff-arabic: "Almarai";
   --ps-page-bg: #efefef;
   --ps-ink: #101010;
   --ps-ink-secondary: #1c1c1c;
@@ -102,7 +106,7 @@ dt {
   background: var(--ann-bg, var(--ab-ann-bg, var(--ps-ink, #101010)));
   color: var(--ann-text, var(--ab-ann-text, var(--ps-surface, #ffffff)));
   padding: 8px 20px;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -968,7 +972,7 @@ main.container_class {
 }
 
 .ps-slider-ind-num {
-  font-family: "Manrope", sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: clamp(16px, 1.8vw, 24px);
   font-weight: 700;
   letter-spacing: 0;
@@ -1240,7 +1244,7 @@ main.container_class {
   width: 100%;
   margin-bottom: clamp(24px, 4vw, 40px);
   box-sizing: border-box;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   color: #1c1c1c;
   color: var(--ps-ink-secondary, #1c1c1c);
@@ -1394,7 +1398,7 @@ main.container_class {
 .ps-plist-label {
   margin: 0;
   max-width: 36rem;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -1406,7 +1410,7 @@ main.container_class {
 .ps-plist-title {
   margin: 0;
   max-width: 100%;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: clamp(22px, 4.2vw, 28px);
   line-height: 1.4;
@@ -1550,7 +1554,7 @@ main.container_class {
 
 .ps-hpgrid-hero-cat {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.18em;
@@ -1560,7 +1564,7 @@ main.container_class {
 
 .ps-hpgrid-hero-title {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: clamp(18px, 3vw, 24px);
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -1573,7 +1577,7 @@ main.container_class {
   left: clamp(16px, 4vw, 28px);
   bottom: clamp(16px, 3vw, 24px);
   z-index: 2;
-  font-family: Nunito, sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1598,7 +1602,7 @@ main.container_class {
   min-width: 22px;
   height: 22px;
   padding: 0 6px;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 10px;
   font-weight: 600;
   color: var(--ps-ink-secondary, #1c1c1c);
@@ -1725,7 +1729,7 @@ main.container_class {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.35;
@@ -1737,7 +1741,7 @@ main.container_class {
 .ps-sale-badge,
 .ps-product-custom-badge {
   color: var(--ps-surface, #fff);
-  font-family: "Instrument Sans", Manrope, sans-serif;
+  font-family: var(--ps-ff-primary), var(--ps-ff-ui), sans-serif;
   font-weight: 700;
   font-size: 12px;
   line-height: 1.35;
@@ -1826,7 +1830,7 @@ main.container_class {
   color: var(--ps-charcoal, #0d0d12);
   text-decoration: none;
   text-align: center;
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 700;
   font-size: 20px;
   line-height: 1.3;
@@ -1848,7 +1852,7 @@ main.container_class {
 
 .ps-plist-price-current {
   color: var(--product-price-text, var(--ps-card-ink, #1d242d));
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 700;
   font-size: 20px;
   line-height: 1.3;
@@ -1857,7 +1861,7 @@ main.container_class {
 
 .ps-plist-price-old {
   color: var(--ps-price-strike, var(--ps-ink-secondary-muted, rgba(28, 28, 28, 0.65)));
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 1.4;
@@ -1951,7 +1955,7 @@ main.container_class {
 .ps-featured-grid .ps-pgrid-name {
   margin: 0;
   color: var(--product-name-text, var(--ps-ink-secondary, #1c1c1c));
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -1981,7 +1985,7 @@ main.container_class {
 .ps-related-products .ps-pgrid-price-current,
 .ps-featured-grid .ps-pgrid-price-current {
   color: var(--product-price-text, var(--ps-ink-secondary, #1c1c1c));
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -2008,7 +2012,7 @@ main.container_class {
 .ps-related-products .ps-pgrid-price-old,
 .ps-featured-grid .ps-pgrid-price-old {
   color: var(--ps-price-strike, var(--ps-ink-secondary-muted, rgba(28, 28, 28, 0.65)));
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -2300,7 +2304,7 @@ div:has(> .ps-related-products) {
 .ps-rp-title {
   margin: 0;
   color: var(--ps-ink, #101010);
-  font-family: "Instrument Sans", "SF Mono", Manrope, sans-serif;
+  font-family: var(--ps-ff-primary), "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: clamp(22px, 2.6vw, 28px);
   font-weight: 400;
   line-height: 1.4;
@@ -2319,7 +2323,7 @@ div:has(> .ps-related-products) {
   justify-content: center;
   gap: 10px;
   text-decoration: none;
-  font-family: "Instrument Sans", "SF Mono", Manrope, sans-serif;
+  font-family: var(--ps-ff-primary), "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
@@ -2429,7 +2433,7 @@ div:has(> .ps-related-products) {
   text-decoration: none;
   text-align: center;
   width: 100%;
-  font-family: "Instrument Sans", "SF Mono", Manrope, sans-serif;
+  font-family: var(--ps-ff-primary), "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.7;
@@ -2450,7 +2454,7 @@ div:has(> .ps-related-products) {
 
 .ps-rp-price-current {
   color: var(--product-price-text, var(--ps-ink-secondary, #1c1c1c));
-  font-family: "Instrument Sans", "SF Mono", Manrope, sans-serif;
+  font-family: var(--ps-ff-primary), "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.7;
@@ -2464,7 +2468,7 @@ div:has(> .ps-related-products) {
 
 .ps-rp-price-old {
   color: var(--ps-price-strike, var(--ps-ink-secondary-muted, rgba(28, 28, 28, 0.65)));
-  font-family: "Instrument Sans", "SF Mono", Manrope, sans-serif;
+  font-family: var(--ps-ff-primary), "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.7;
@@ -2580,7 +2584,7 @@ div:has(> .ps-related-products) {
 .ps-pgrid-label {
   margin: 0;
   max-width: 36rem;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -2592,7 +2596,7 @@ div:has(> .ps-related-products) {
 .ps-pgrid-title {
   margin: 0;
   max-width: 100%;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: clamp(22px, 4.2vw, 28px);
   line-height: 1.4;
@@ -2652,7 +2656,7 @@ div:has(> .ps-related-products) {
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  font-family: Nunito, sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-weight: 400;
   font-size: 13px;
   line-height: 1.65;
@@ -2714,7 +2718,7 @@ div:has(> .ps-related-products) {
   margin: 0 0 clamp(8px, 2vw, 16px);
   width: 100%;
   text-align: center;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: clamp(22px, 4.2vw, 28px);
   line-height: 1.4;
@@ -2871,7 +2875,7 @@ div:has(> .ps-related-products) {
 
 .ps-featured-banner-title {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: clamp(22px, 2.2vw, 28px);
   line-height: 1.4;
@@ -2882,7 +2886,7 @@ div:has(> .ps-related-products) {
 
 .ps-featured-banner-text {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 1.5;
@@ -2914,7 +2918,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-featured-banner-cta-label {
-  font-family: Nunito, sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-weight: 400;
   font-size: 13px;
   line-height: 1.65;
@@ -2973,7 +2977,7 @@ div:has(> .ps-related-products) {
 .ps-featured-label {
   margin: 0;
   max-width: 36rem;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -2985,7 +2989,7 @@ div:has(> .ps-related-products) {
 .ps-featured-title {
   margin: 0;
   max-width: 100%;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: clamp(22px, 4.2vw, 28px);
   line-height: 1.4;
@@ -3199,7 +3203,7 @@ div:has(> .ps-related-products) {
 
 .ps-featured-card-name {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -3221,7 +3225,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-featured-price-current {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -3235,7 +3239,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-featured-price-old {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.7;
@@ -3260,7 +3264,7 @@ div:has(> .ps-related-products) {
   border-radius: 0;
   color: var(--ps-surface, #fff) !important;
   -webkit-text-fill-color: var(--ps-surface, #fff);
-  font-family: Nunito, sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.65;
@@ -3586,7 +3590,7 @@ div:has(> .ps-related-products) {
   border: 0;
   background: transparent;
   color: var(--ps-footer-fg);
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
@@ -3606,7 +3610,7 @@ div:has(> .ps-related-products) {
   padding: 12px 16px;
   background: var(--ps-surface, #ffffff);
   color: #1c1c1c;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
@@ -3633,7 +3637,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-footer-logo-text {
-  font-family: "Playfair Display", "Times New Roman", Times, serif;
+  font-family: var(--ps-ff-display), "Times New Roman", Times, serif;
   font-size: clamp(24px, 3.3vw, 42px);
   line-height: 1;
   letter-spacing: 0.03em;
@@ -3644,7 +3648,7 @@ div:has(> .ps-related-products) {
 /* Column titles: match readable footer links tier (links use rgba white); --ft-text alone often clashes when footer bg is dark */
 .ps-footer-heading {
   margin: 0 0 26px;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -3664,7 +3668,7 @@ div:has(> .ps-related-products) {
 .ps-footer-links a {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.6);
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
@@ -3683,7 +3687,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-footer-contact-k {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
@@ -3692,7 +3696,7 @@ div:has(> .ps-related-products) {
 
 .ps-footer-contact-block a,
 .ps-footer-contact-block span {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -3811,7 +3815,7 @@ div:has(> .ps-related-products) {
 .ps-footer-copy {
   margin: 0;
   color: var(--ps-footer-muted);
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -3821,7 +3825,7 @@ div:has(> .ps-related-products) {
 .ps-footer-powered {
   margin: 0;
   color: var(--ps-footer-muted);
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -3933,7 +3937,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-cart-drawer {
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   background: var(--ps-surface, #fff);
   display: flex;
   flex-direction: column;
@@ -3961,7 +3965,7 @@ div:has(> .ps-related-products) {
 
 .ps-cart-drawer-title {
   margin: 0;
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 700;
   font-size: 20px;
   line-height: 1.3;
@@ -4022,7 +4026,7 @@ div:has(> .ps-related-products) {
 
 .ps-cart-drawer-empty-text {
   margin: 0 0 8px;
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 700;
   font-size: 24px;
   color: #000;
@@ -4030,7 +4034,7 @@ div:has(> .ps-related-products) {
 
 .ps-cart-drawer-empty-sub {
   margin: 0;
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 16px;
   color: #6d6d74;
 }
@@ -4100,7 +4104,7 @@ div:has(> .ps-related-products) {
 
 .ps-cart-item-title {
   margin: 0;
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 1.4;
@@ -4122,7 +4126,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-cart-item-option-label {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.4;
@@ -4132,7 +4136,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-cart-item-option-value {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-weight: 600;
   font-size: 14px;
   line-height: 1.4;
@@ -4226,7 +4230,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-cart-item-price-current {
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 700;
   font-size: 15px;
   line-height: 1.3;
@@ -4238,7 +4242,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-cart-item-price-old {
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-weight: 600;
   font-size: 12px;
   line-height: 1.3;
@@ -4283,7 +4287,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-cart-item-qty-num {
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   line-height: 1.4;
   color: var(--ps-ink, #101010);
@@ -4416,7 +4420,7 @@ div:has(> .ps-related-products) {
     section.checkout_order_summary
   )
   dt {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 1.4;
@@ -4431,7 +4435,7 @@ div:has(> .ps-related-products) {
     section.checkout_order_summary
   )
   dd {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 1.4;
@@ -4539,7 +4543,7 @@ div:has(> .ps-related-products) {
   flex: 1 1 120px;
   min-width: 0;
   margin: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 16px;
   line-height: 1.4;
   color: #6d6d74;
@@ -4565,7 +4569,7 @@ div:has(> .ps-related-products) {
   border-color: var(--ps-ink, #101010) !important;
   color: var(--ps-ink, #101010) !important;
   background: var(--ps-surface, #fff) !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-weight: 600 !important;
   font-size: 16px !important;
 }
@@ -4584,7 +4588,7 @@ div:has(> .ps-related-products) {
   display: block;
   content: "Discount Coupon";
   margin: 0 0 4px;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.3;
@@ -4929,7 +4933,7 @@ html:lang(it)
   box-shadow: none !important;
   background: transparent !important;
   border-radius: 0 !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 16px !important;
   font-weight: 400 !important;
   line-height: 1.4 !important;
@@ -5043,7 +5047,7 @@ html:lang(it)
   border-radius: 0 !important;
   background: var(--ps-surface-subtle-2, #f7f7f7) !important;
   color: var(--ps-ink, #101010) !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-weight: 700 !important;
   font-size: 16px !important;
   line-height: 1.4 !important;
@@ -5102,7 +5106,7 @@ html:lang(it)
   margin: 0 !important;
   align-self: center;
   padding: 0 8px 0 0;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 16px !important;
   font-weight: 400 !important;
   line-height: 1.4 !important;
@@ -5133,7 +5137,7 @@ html:lang(it)
   border-radius: 0 !important;
   background: var(--ps-surface-subtle-2, #f7f7f7) !important;
   color: var(--ps-ink, #101010) !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-weight: 700 !important;
   font-size: 16px !important;
   line-height: 1.4 !important;
@@ -5188,7 +5192,7 @@ html:lang(it)
   min-width: 0;
   margin: 0 !important;
   align-self: center;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 16px !important;
   line-height: 1.4 !important;
   color: #6d6d74 !important;
@@ -5219,7 +5223,7 @@ html:lang(it)
   color: var(--ps-ink, #101010) !important;
   border: none !important;
   border-left: 0.5px solid #c8c9d0 !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-weight: 700 !important;
   font-size: 16px !important;
   padding: 0 24px !important;
@@ -5243,7 +5247,7 @@ html:lang(it)
   label,
 .ps-cart-drawer-invoice .checkout-coupon label {
   color: var(--ps-ink, #101010) !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 16px !important;
   font-weight: 500 !important;
 }
@@ -5331,7 +5335,7 @@ html:lang(it)
   dl
   > div:last-of-type
   dt {
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-weight: 600 !important;
   font-size: 18px !important;
   line-height: 1.4 !important;
@@ -5347,7 +5351,7 @@ html:lang(it)
   > div:last-of-type
   dd.text-xl,
 .ps-cart-drawer-invoice dl > div:last-of-type dd.text-xl {
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-weight: 600 !important;
   font-size: 18px !important;
   line-height: 1.4 !important;
@@ -5370,7 +5374,7 @@ html:lang(it)
   dl
   > div
   dd.line-through {
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   color: #a1a1aa !important;
   font-weight: 500 !important;
   font-size: 15px !important;
@@ -5393,7 +5397,7 @@ html:lang(it)
   min-height: 48px !important;
   background: var(--ps-ink, #101010) !important;
   color: var(--ps-surface, #fff) !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-weight: 500 !important;
   font-size: 16px !important;
   letter-spacing: 0;
@@ -5504,7 +5508,7 @@ html:lang(it)
 .collection_container > div:first-child > p {
   margin: 0 0 clamp(16px, 3vw, 24px);
   max-width: 42rem;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
@@ -5527,7 +5531,7 @@ html:lang(it)
   margin: 0;
   padding-bottom: 4px;
   border-bottom: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: clamp(22px, 3.2vw, 28px) !important;
   font-weight: 400 !important;
   line-height: 1.35;
@@ -5550,7 +5554,7 @@ html:lang(it)
   gap: 0;
   min-height: 40px;
   padding: 8px 16px !important;
-  font-family: "Instrument Sans", sans-serif !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
@@ -5756,7 +5760,7 @@ html:lang(it)
 .ps-cl-title {
   margin: 0;
   color: var(--ps-ink, #101010);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 40px;
   font-weight: 700;
   line-height: 1.25;
@@ -5767,7 +5771,7 @@ html:lang(it)
 .ps-cl-desc {
   margin: 0;
   color: rgba(16, 16, 16, 0.5);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
@@ -5831,7 +5835,7 @@ html:lang(it)
 .ps-cl-count {
   margin: 0;
   color: rgba(16, 16, 16, 0.65);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.4;
@@ -5864,7 +5868,7 @@ html:lang(it)
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.4;
@@ -5905,7 +5909,7 @@ html:lang(it)
   text-align: left;
   padding: 8px 10px;
   color: rgba(16, 16, 16, 0.8);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -5963,7 +5967,7 @@ html:lang(it)
   min-height: 56px;
   padding: 0 0 4px;
   margin: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.35;
@@ -6053,7 +6057,7 @@ html:lang(it)
 .ps-cl-filters-title {
   margin: 0;
   color: var(--ps-ink, #101010);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
@@ -6064,7 +6068,7 @@ html:lang(it)
   border: 0;
   background: transparent;
   color: #5f5f5f;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -6084,7 +6088,7 @@ html:lang(it)
   align-items: center;
   justify-content: space-between;
   color: rgba(16, 16, 16, 0.65);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.35;
@@ -6129,7 +6133,7 @@ html:lang(it)
   align-items: center;
   justify-content: space-between;
   color: var(--ps-ink, #101010);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -6207,7 +6211,7 @@ html:lang(it)
 
 .ps-cl-grid .ps-plist-name {
   color: var(--product-name-text, var(--ps-ink, #101010));
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -6221,7 +6225,7 @@ html:lang(it)
 
 .ps-cl-grid .ps-plist-price-row .ps-plist-price-current {
   color: var(--product-price-text, var(--ps-ink, #101010));
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
@@ -6235,7 +6239,7 @@ html:lang(it)
 
 .ps-cl-grid .ps-plist-price-old {
   color: var(--ps-price-strike, var(--ps-ink-secondary-muted, rgba(28, 28, 28, 0.65)));
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.4;
@@ -6355,7 +6359,7 @@ html:lang(it)
   margin: 0;
   color: var(--ps-ink, #101010);
   text-decoration: none;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -6370,7 +6374,7 @@ html:lang(it)
 
 .ps-cl-price-current {
   color: var(--product-price-text, var(--ps-ink, #101010));
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
@@ -6383,7 +6387,7 @@ html:lang(it)
 .ps-cl-price-old {
   color: var(--ps-price-strike, var(--ps-ink-secondary-muted, rgba(28, 28, 28, 0.65)));
   text-decoration: line-through;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 10px;
   font-weight: 500;
   line-height: 1.4;
@@ -6408,7 +6412,7 @@ html:lang(it)
   height: 28px;
   padding: 0 6px;
   cursor: pointer;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -6596,7 +6600,7 @@ html:lang(it)
 }
 
 .ab-pd {
-  font-family: Manrope, "Instrument Sans", "Nunito", sans-serif;
+  font-family: var(--ps-ff-ui), var(--ps-ff-primary), var(--ps-ff-alt), sans-serif;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -6609,7 +6613,7 @@ html:lang(it)
 
 .ab-pd-name {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 22px;
   font-weight: 400;
   line-height: 33px;
@@ -6642,7 +6646,7 @@ html:lang(it)
 }
 
 .ab-pd-price {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.5;
@@ -6660,7 +6664,7 @@ html:lang(it)
 }
 
 .ab-pd-price-old {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.5;
@@ -6730,7 +6734,7 @@ html:lang(it)
 }
 
 .ab-pd-rating-paren {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
@@ -6763,7 +6767,7 @@ html:lang(it)
 .ab-pd-description {
   margin: 0;
   max-width: 100%;
-  font-family: Nunito, Manrope, sans-serif;
+  font-family: var(--ps-ff-alt), var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 23.1px;
@@ -7048,7 +7052,7 @@ html:lang(it)
   flex-wrap: wrap;
   align-items: baseline;
   gap: 8px 14px;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
   line-height: 1.25;
   color: var(--ps-rev-text);
@@ -7121,7 +7125,7 @@ html:lang(it)
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   list-style: none;
   transition:
     border-color 0.2s ease,
@@ -7202,7 +7206,7 @@ html:lang(it)
   font-weight: 500;
   line-height: 1.35;
   color: rgba(16, 16, 16, 0.88);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   cursor: pointer;
   border-radius: 2px;
   transition:
@@ -7256,7 +7260,7 @@ html:lang(it)
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   color-scheme: light;
 }
 
@@ -7280,7 +7284,7 @@ html:lang(it)
   min-width: min(100%, 200px);
   min-height: 48px;
   padding: 14px 20px;
-  font-family: Manrope, "Nunito", sans-serif;
+  font-family: var(--ps-ff-ui), var(--ps-ff-alt), sans-serif;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.18em;
@@ -7326,7 +7330,7 @@ html:lang(it)
 }
 
 .ps-rev-score-ring-value {
-  font-family: Manrope, Montserrat, sans-serif;
+  font-family: var(--ps-ff-ui), "Montserrat", sans-serif;
   font-size: 24px;
   font-weight: 500;
   color: var(--ps-ink-secondary, #1c1c1c);
@@ -7392,7 +7396,7 @@ html:lang(it)
 
 .ps-rev-count-line {
   margin: 0;
-  font-family: Manrope, Montserrat, sans-serif;
+  font-family: var(--ps-ff-ui), "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.4;
@@ -7419,7 +7423,7 @@ html:lang(it)
   align-items: center;
   min-width: 4.5rem;
   white-space: nowrap;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
@@ -7470,7 +7474,7 @@ html:lang(it)
 }
 
 .ps-rev-bar-pct {
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: rgba(28, 28, 28, 0.6);
@@ -7563,7 +7567,7 @@ html:lang(it)
 }
 
 .ps-rev-name {
-  font-family: Manrope, sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--ps-ink-secondary, #1c1c1c);
@@ -7715,7 +7719,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 }
 
 div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) h2.text-lg {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 1.125rem;
   font-weight: 600;
   line-height: 1.35;
@@ -7772,7 +7776,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 
 div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   label.block.text-sm {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 16px;
   font-weight: 500;
   color: var(--checkout-heading-text, var(--ps-ink, #101010));
@@ -7820,7 +7824,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   margin-top: 8px !important;
   min-height: 48px;
   border-radius: 0;
-  font-family: Manrope, "Almarai", sans-serif;
+  font-family: var(--ps-ff-ui), var(--ps-ff-arabic), sans-serif;
   font-weight: 600;
   font-size: 15px;
   letter-spacing: 0.02em;
@@ -7941,7 +7945,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   background: none;
   border: none;
   cursor: pointer;
-  font-family: Nunito, Manrope, sans-serif;
+  font-family: var(--ps-ff-alt), var(--ps-ff-ui), sans-serif;
   font-size: 11px;
   font-weight: 400;
   text-transform: uppercase;
@@ -8005,7 +8009,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 
 .lq-desc-content {
   padding: 0 0 20px;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
@@ -8092,7 +8096,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   flex: 0 1 auto;
   min-width: 0;
   max-width: 48%;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -8131,7 +8135,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   border-radius: 0;
   background: rgba(255, 51, 51, 0.05);
   box-shadow: none;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 24px;
   font-weight: 500;
   line-height: 1.5;
@@ -8142,7 +8146,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 .ab-fc-label {
   width: 100%;
   text-align: center;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 10px;
   font-weight: 400;
   line-height: 1.5;
@@ -8155,7 +8159,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   margin-top: 0;
   white-space: nowrap;
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
@@ -8179,7 +8183,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 
 .p_details_container .variation_name {
   margin-top: 2px;
-  font-family: Nunito, sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.4;
@@ -8194,7 +8198,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   border-radius: 0;
   background: var(--ps-surface, #fff);
   color: var(--ps-ink, #101010);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   font-weight: 500;
 }
@@ -8276,7 +8280,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-family: Nunito, sans-serif !important;
+  font-family: var(--ps-ff-alt), sans-serif !important;
   font-size: 16px !important;
   font-weight: 500 !important;
   line-height: 0 !important;
@@ -8346,7 +8350,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   border-left: 1px solid var(--ps-border-e0, #e0e0e0) !important;
   border-right: 1px solid var(--ps-border-e0, #e0e0e0) !important;
   background: var(--ps-surface-muted, #f2f2f2) !important;
-  font-family: Nunito, sans-serif !important;
+  font-family: var(--ps-ff-alt), sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
   line-height: 1 !important;
@@ -8819,7 +8823,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 
 .ab-pd-brand {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 12px;
   line-height: 1.5;
   font-weight: 400;
@@ -8848,7 +8852,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   border-radius: 0px;
   background: rgba(255, 51, 51, 0.1);
   color: #f33;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 12px;
   line-height: 1.5;
   font-weight: 500;
@@ -8899,7 +8903,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   margin: 0;
   flex: 1;
   min-width: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
@@ -8935,7 +8939,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
   align-self: center;
   padding: 0;
   margin: 0;
-  font-family: Jost, Manrope, sans-serif;
+  font-family: Jost, var(--ps-ff-ui), sans-serif;
   font-size: 22px;
   font-weight: 400;
   line-height: 33px;
@@ -9043,7 +9047,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 }
 
 .p_details_container .bundles_title {
-  font-family: "Instrument Sans", sans-serif !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
   font-size: 16px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
@@ -9054,7 +9058,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 }
 
 .p_details_container .bundles_description {
-  font-family: "Instrument Sans", sans-serif !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
   font-size: 12px !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
@@ -9165,7 +9169,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 }
 
 .p_details_container .bundles_item p.text-xl {
-  font-family: "Instrument Sans", sans-serif !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
@@ -9174,7 +9178,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 }
 
 .p_details_container .bundles_item p.w-fit.text-xs {
-  font-family: "Instrument Sans", sans-serif !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
@@ -9192,7 +9196,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 }
 
 .p_details_container .bundles_item .text-base.font-bold.text-gray-700 {
-  font-family: "Instrument Sans", sans-serif !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
@@ -9200,7 +9204,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
 }
 
 .p_details_container .bundles_item .text-base.text-gray-500.line-through {
-  font-family: "Instrument Sans", sans-serif !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
@@ -9261,7 +9265,7 @@ h2.variation_name .ps-variation-name-value {
 }
 
 .p_details_container .bundles_item h2.variation_name.text-base.text-gray-900 {
-  font-family: Nunito, sans-serif !important;
+  font-family: var(--ps-ff-alt), sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   line-height: 1.4 !important;
@@ -9361,7 +9365,7 @@ h2.variation_name .ps-variation-name-value {
  * `-------------------------------------------------------------------------' */
 
 .ps-prestige-qv {
-  font-family: "Instrument Sans", "Almarai", Nunito, Manrope, sans-serif;
+  font-family: var(--ps-ff-primary), var(--ps-ff-arabic), var(--ps-ff-alt), var(--ps-ff-ui), sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -9428,7 +9432,7 @@ h2.variation_name .ps-variation-name-value {
 }
 
 .ps-prestige-qv .grid a[href*="/collections/"] {
-  font-family: "Instrument Sans", "Almarai", sans-serif;
+  font-family: var(--ps-ff-primary), var(--ps-ff-arabic), sans-serif;
   font-size: 11px;
   font-weight: 500;
   line-height: 1.4;
@@ -9444,7 +9448,7 @@ h2.variation_name .ps-variation-name-value {
 
 .ps-prestige-qv h1 {
   margin: 8px 0 0;
-  font-family: "Instrument Sans", "Almarai", sans-serif;
+  font-family: var(--ps-ff-primary), var(--ps-ff-arabic), sans-serif;
   font-size: 22px;
   font-weight: 400;
   line-height: 1.35;
@@ -9461,7 +9465,7 @@ h2.variation_name .ps-variation-name-value {
 }
 
 .ps-prestige-qv h1 + div {
-  font-family: Nunito, "Almarai", Manrope, sans-serif;
+  font-family: var(--ps-ff-alt), var(--ps-ff-arabic), var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.6;
@@ -9477,7 +9481,7 @@ h2.variation_name .ps-variation-name-value {
 }
 
 .ps-prestige-qv h1 ~ div.flex.items-center > span {
-  font-family: "Instrument Sans", "Almarai", sans-serif;
+  font-family: var(--ps-ff-primary), var(--ps-ff-arabic), sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.5;
@@ -9492,7 +9496,7 @@ h2.variation_name .ps-variation-name-value {
 
 .ps-prestige-qv h1 ~ div.flex.items-center del {
   margin: 0;
-  font-family: "Instrument Sans", "Almarai", sans-serif;
+  font-family: var(--ps-ff-primary), var(--ps-ff-arabic), sans-serif;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.5;
@@ -9503,7 +9507,7 @@ h2.variation_name .ps-variation-name-value {
 
 .ps-prestige-qv h2.variation_name {
   margin-top: 2px;
-  font-family: Nunito, "Almarai", sans-serif;
+  font-family: var(--ps-ff-alt), var(--ps-ff-arabic), sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.4;
@@ -9559,7 +9563,7 @@ h2.variation_name .ps-variation-name-value {
   background: var(--ps-surface, #fff) !important;
   color: var(--ps-ink-muted, #303030) !important;
   font-family:
-    "Instrument Sans", "Almarai", "SF Mono", Manrope, ui-monospace, sans-serif;
+    var(--ps-ff-primary), var(--ps-ff-arabic), "SF Mono", var(--ps-ff-ui), ui-monospace, sans-serif;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.4;
@@ -9614,7 +9618,7 @@ h2.variation_name .ps-variation-name-value {
   min-height: 48px;
   padding: 0.65rem 1.25rem !important;
   border-radius: 0 !important;
-  font-family: Nunito, "Almarai", sans-serif !important;
+  font-family: var(--ps-ff-alt), var(--ps-ff-arabic), sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   letter-spacing: 0.14em !important;
@@ -9655,7 +9659,7 @@ h2.variation_name .ps-variation-name-value {
   min-height: 48px;
   margin-top: 0;
   border-radius: 0 !important;
-  font-family: Nunito, "Almarai", sans-serif !important;
+  font-family: var(--ps-ff-alt), var(--ps-ff-arabic), sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   letter-spacing: 0.14em !important;
@@ -9690,7 +9694,7 @@ h2.variation_name .ps-variation-name-value {
 
 .ps-prestige-qv a[href^="/products/"] {
   margin-top: 1.25rem;
-  font-family: "Instrument Sans", "Almarai", sans-serif;
+  font-family: var(--ps-ff-primary), var(--ps-ff-arabic), sans-serif;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -9840,7 +9844,7 @@ h2.variation_name .ps-variation-name-value {
   text-shadow: none;
   text-align: center;
   cursor: pointer;
-  font-family: Nunito, sans-serif !important;
+  font-family: var(--ps-ff-alt), sans-serif !important;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -9923,7 +9927,7 @@ h2.variation_name .ps-variation-name-value {
   text-shadow: none !important;
   text-align: center !important;
   cursor: pointer !important;
-  font-family: Nunito, sans-serif !important;
+  font-family: var(--ps-ff-alt), sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   letter-spacing: 0.14em !important;
@@ -10127,7 +10131,7 @@ section.checkout_order_summary > .mx-auto {
 /* Ø¹Ù†Ø§ÙˆÙŠÙ† Ø¨Ù†ÙØ³ Ø£Ø³Ù„ÙˆØ¨ ÙÙˆØ±Ù… Ø§Ù„Ù…Ù†ØªØ¬ (SF Mono + ÙˆØ²Ù† Ù‡Ø§Ø¯Ø¦) */
 section.checkout_order_summary h2#summary-heading,
 form.checkout_form.checkout_container h2#contact-info-heading {
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 18px !important;
   font-weight: 500 !important;
   line-height: 1.4 !important;
@@ -10155,7 +10159,7 @@ form.checkout_form.checkout_container .contact-info-heading {
     form.checkout_form.checkout_container
   )
   label.block {
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 16px !important;
   font-weight: 500 !important;
   letter-spacing: 0 !important;
@@ -10173,7 +10177,7 @@ button.checkout_buy_now,
   color: var(--buy-btn-text, var(--ps-surface, #fff)) !important;
   border-color: var(--buy-btn-border, transparent) !important;
   border-radius: 0 !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 16px !important;
   font-weight: 500 !important;
   letter-spacing: 0.06em !important;
@@ -10248,7 +10252,7 @@ form.checkout_form.checkout_container .fixed.bottom-0 button.checkout_buy_now {
 }
 
 .checkout_cart_items_container .cart-item h3 {
-  font-family: "Manrope", "SF Mono", sans-serif !important;
+  font-family: var(--ps-ff-ui), "SF Mono", sans-serif !important;
   font-weight: 600 !important;
   font-size: 15px !important;
   line-height: 1.35 !important;
@@ -10257,7 +10261,7 @@ form.checkout_form.checkout_container .fixed.bottom-0 button.checkout_buy_now {
 
 .checkout_cart_items_container .cart-item .text-sm.text-gray-500,
 .checkout_cart_items_container .cart-item p.text-sm {
-  font-family: "Manrope", sans-serif !important;
+  font-family: var(--ps-ff-ui), sans-serif !important;
   font-size: 13px !important;
   color: var(--ps-gray-500, #6d6d74) !important;
 }
@@ -10278,13 +10282,13 @@ section.checkout_order_summary dl.space-y-6 {
 
 section.checkout_order_summary dl dt.text-gray-600 {
   color: var(--ps-gray-500, #6d6d74) !important;
-  font-family: "Manrope", sans-serif !important;
+  font-family: var(--ps-ff-ui), sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
 }
 
 section.checkout_order_summary dl dd {
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
   color: var(--ps-ink, #101010) !important;
@@ -10292,7 +10296,7 @@ section.checkout_order_summary dl dd {
 
 section.checkout_order_summary dl .shipping_cost.font-bold,
 section.checkout_order_summary .shipping_cost_container dd {
-  font-family: "Manrope", sans-serif !important;
+  font-family: var(--ps-ff-ui), sans-serif !important;
   font-weight: 700 !important;
   color: var(--ps-ink, #101010) !important;
 }
@@ -10425,7 +10429,7 @@ ul.checkout_cart_items_container.divide-y > li,
   margin: 0 0 22px;
   padding-bottom: 16px;
   border-bottom: 0.5px solid var(--ps-zinc-200-border, #e4e4e7);
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 18px;
   font-weight: 500;
   line-height: 1.35;
@@ -10523,7 +10527,7 @@ ul.checkout_cart_items_container.divide-y > li,
 
 .ps-checkout-liquid__title {
   margin: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 20px;
   font-weight: 500;
   line-height: 1.3;
@@ -10550,7 +10554,7 @@ ul.checkout_cart_items_container.divide-y > li,
   --ps-co-muted: color-mix(in srgb, var(--input-text, #707070) 72%, transparent);
   --ps-co-radius: 8px;
   --ps-co-shipping-bg: color-mix(in srgb, var(--checkout-form-bg, #f5f5f5) 94%, var(--body-text, #101010) 6%);
-  font-family: Manrope, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--ps-ff-ui), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 .p_details_container
@@ -11470,7 +11474,7 @@ ul.checkout_cart_items_container.divide-y > li,
 
 .ps-sticky-buy__title {
   margin: 0;
-  font-family: "Manrope", "SF Mono", sans-serif;
+  font-family: var(--ps-ff-ui), "SF Mono", sans-serif;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
@@ -11490,7 +11494,7 @@ ul.checkout_cart_items_container.divide-y > li,
 
 .ps-sticky-buy__price-only,
 .ps-sticky-buy__price-current {
-  font-family: "Manrope", "SF Mono", sans-serif;
+  font-family: var(--ps-ff-ui), "SF Mono", sans-serif;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.35;
@@ -11503,7 +11507,7 @@ ul.checkout_cart_items_container.divide-y > li,
 }
 
 .ps-sticky-buy__price-old {
-  font-family: "Manrope", "SF Mono", sans-serif;
+  font-family: var(--ps-ff-ui), "SF Mono", sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.35;
@@ -11546,7 +11550,7 @@ ul.checkout_cart_items_container.divide-y > li,
   text-shadow: none !important;
   text-align: center !important;
   cursor: pointer !important;
-  font-family: Nunito, sans-serif !important;
+  font-family: var(--ps-ff-alt), sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   letter-spacing: 0.14em !important;
@@ -11887,7 +11891,7 @@ ul.checkout_cart_items_container.divide-y > li,
 
 .ps-upsell__title {
   margin: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.35;
@@ -11902,7 +11906,7 @@ ul.checkout_cart_items_container.divide-y > li,
 
 .ps-upsell__subtitle {
   margin: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.4;
@@ -11969,7 +11973,7 @@ ul.checkout_cart_items_container.divide-y > li,
   background: #f33;
   color: var(--ps-surface, #fff);
   padding: 8px 12px 7px 12px;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 13px;
   font-weight: 500;
   line-height: 1.35;
@@ -12096,7 +12100,7 @@ ul.checkout_cart_items_container.divide-y > li,
 
 .ps-upsell__offer-text {
   margin: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 15px;
   font-weight: 600;
   line-height: 1.4;
@@ -12115,7 +12119,7 @@ ul.checkout_cart_items_container.divide-y > li,
   max-width: 100%;
   padding: 0;
   margin: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.45;
@@ -12185,7 +12189,7 @@ ul.checkout_cart_items_container.divide-y > li,
   clip-path: none;
   white-space: normal;
   border: 0;
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.4;
@@ -12195,7 +12199,7 @@ ul.checkout_cart_items_container.divide-y > li,
 }
 
 .ps-upsell__price-value {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
@@ -12216,7 +12220,7 @@ ul.checkout_cart_items_container.divide-y > li,
 }
 
 .ps-upsell__price-old {
-  font-family: "SF Mono", Manrope, sans-serif;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
@@ -12264,7 +12268,7 @@ ul.checkout_cart_items_container.divide-y > li,
   margin-bottom: 8px !important;
   font-size: 14px !important;
   font-weight: 500 !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   color: var(--ps-ink, #101010) !important;
 }
 
@@ -12305,7 +12309,7 @@ ul.checkout_cart_items_container.divide-y > li,
   border-radius: 0 !important;
   font-size: 14px !important;
   font-weight: 500 !important;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
 }
 
 @media (min-width: 768px) {
@@ -12385,7 +12389,7 @@ ul.checkout_cart_items_container.divide-y > li,
 .ps-upsell__variation .border-skin-primary > p.font-bold {
   margin: 0 !important;
   padding-top: 0;
-  font-family: "SF Mono", Manrope, sans-serif !important;
+  font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   color: var(--ps-ink, #101010) !important;
@@ -12474,7 +12478,7 @@ ul.checkout_cart_items_container.divide-y > li,
 
 .ps-thanks-title {
   margin: 0;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: clamp(28px, 6vw, 44px);
   font-weight: 700;
   line-height: 1.2;
@@ -12485,7 +12489,7 @@ ul.checkout_cart_items_container.divide-y > li,
 .ps-thanks-phone-msg,
 .ps-thanks-offers {
   margin: 0;
-  font-family: "Manrope", sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 15px;
   line-height: 1.55;
   color: var(--ps-ink-muted, #303030);
@@ -12498,7 +12502,7 @@ ul.checkout_cart_items_container.divide-y > li,
   justify-content: center;
   min-height: 48px;
   padding: 12px 28px;
-  font-family: "Nunito", sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-size: 14px;
   border: 1px solid var(--ps-ink, #101010);
   background: transparent;
@@ -12557,7 +12561,7 @@ div:has(> .ps-invoice) {
   max-width: 100%;
   min-height: 44px;
   padding: 10px 16px;
-  font-family: "Nunito", sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -12612,7 +12616,7 @@ div:has(> .ps-invoice) {
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px 12px;
-  font-family: "Manrope", sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 13px;
   line-height: 1.45;
   font-weight: 500;
@@ -12667,7 +12671,7 @@ div:has(> .ps-invoice) {
 
 .ps-invoice-item-name {
   margin: 0 0 6px;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 15px;
   font-weight: 700;
   line-height: 1.25;
@@ -12678,7 +12682,7 @@ div:has(> .ps-invoice) {
 .ps-invoice-item-variants {
   margin: 0 0 10px;
   padding: 6px 8px;
-  font-family: "Manrope", sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   line-height: 1.4;
   color: var(--ps-ink-muted, #404040);
@@ -12690,14 +12694,14 @@ div:has(> .ps-invoice) {
 .ps-invoice-item-qty,
 .ps-invoice-item-unit-price {
   margin: 0 0 3px;
-  font-family: "Manrope", sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 12px;
   line-height: 1.45;
   color: var(--ps-ink-soft, #5c5c5c);
 }
 
 .ps-invoice-item-total {
-  font-family: "Nunito", sans-serif;
+  font-family: var(--ps-ff-alt), sans-serif;
   font-size: 13px;
   font-weight: 800;
   color: var(--ps-ink, #101010);
@@ -12713,7 +12717,7 @@ div:has(> .ps-invoice) {
 
 .ps-invoice-section-title {
   margin: 0 0 10px;
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
@@ -12740,7 +12744,7 @@ div:has(> .ps-invoice) {
   gap: 8px 12px;
   padding: 11px 14px;
   border-bottom: 1px solid var(--ps-border-subtle, #e8e8e8);
-  font-family: "Manrope", sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 13px;
   line-height: 1.45;
   align-items: start;
@@ -12811,7 +12815,7 @@ div:has(> .ps-invoice) {
 
 .ps-invoice-total-row dt,
 .ps-invoice-total-row dd {
-  font-family: "Instrument Sans", sans-serif;
+  font-family: var(--ps-ff-primary), sans-serif;
   font-size: 17px !important;
   font-weight: 800 !important;
   letter-spacing: -0.02em;
@@ -12828,7 +12832,7 @@ div:has(> .ps-invoice) {
   border-radius: 10px;
   border: 1px dashed var(--ps-border-subtle, #d0d0d0);
   background: var(--ps-surface-2, #fafafa);
-  font-family: "Manrope", sans-serif;
+  font-family: var(--ps-ff-ui), sans-serif;
   font-size: 13px;
 }
 

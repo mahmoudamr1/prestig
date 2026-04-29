@@ -1,0 +1,239 @@
+<section
+  class="promo-countdown-hero"
+  style="
+    --pch-text: {{ section_data.text_color | default: '#FFFFFF' }};
+    --pch-kicker: {{ section_data.kicker_color | default: section_data.text_color | default: '#FFFFFF' }};
+    --pch-btn-bg: {{ section_data.button_bg | default: '#FFFFFF' }};
+    --pch-btn-text: {{ section_data.button_text | default: '#111111' }};
+    --pch-overlay: {{ section_data.overlay_strength | default: 48 | divided_by: 100.0 }};
+    --pch-min-h: {% if section_data.min_height == 'compact' %}52vh{% elsif section_data.min_height == 'screen' %}92vh{% else %}72vh{% endif %};
+    {% if section_data.image != blank %}--pch-bg: url('{{ section_data.image }}');{% endif %}
+    {% if section_data.mobile_image != blank %}--pch-bg-mobile: url('{{ section_data.mobile_image }}');{% endif %}
+    --pch-bg-pos: {{ section_data.bg_position | default: 'center right' }};
+  "
+>
+  <div class="promo-countdown-hero__overlay" aria-hidden="true"></div>
+  <div class="promo-countdown-hero__grid">
+    <div class="promo-countdown-hero__copy">
+      {% if section_data.kicker != blank %}
+        <p class="promo-countdown-hero__kicker">{{ section_data.kicker }}</p>
+      {% endif %}
+      {% if section_data.headline != blank %}
+        <h2 class="promo-countdown-hero__title">{{ section_data.headline }}</h2>
+      {% endif %}
+      {% if section_data.description != blank %}
+        <p class="promo-countdown-hero__desc">{{ section_data.description }}</p>
+      {% endif %}
+      {% if section_data.cta_label != blank %}
+        <a class="promo-countdown-hero__btn" href="{{ section_data.cta_url | default: '/products' }}">{{ section_data.cta_label }}</a>
+      {% endif %}
+    </div>
+    {% assign pch_mode = section_data.countdown_mode | default: 'calendar_day' %}
+    {% assign pch_countdown_date = section_data.countdown_end_date %}
+    {% assign pch_roll_hours = section_data.rolling_duration_hours | default: 48 %}
+    {% assign pch_roll_key = section_data.rolling_storage_key | default: 'promo-hero' | strip %}
+    {% assign show_pch_timer = false %}
+    {% if section_data.show_countdown %}
+      {% if pch_mode == 'rolling_hours' and pch_roll_hours > 0 %}
+        {% assign show_pch_timer = true %}
+      {% elsif pch_mode != 'rolling_hours' and pch_countdown_date != blank %}
+        {% assign show_pch_timer = true %}
+      {% endif %}
+    {% endif %}
+    {% if show_pch_timer %}
+      {% if pch_mode == 'rolling_hours' %}
+      <div
+        class="promo-countdown-hero__timer"
+        dir="ltr"
+        data-pch-mode="rolling"
+        data-hours="{{ pch_roll_hours }}"
+        data-storage-key="{{ pch_roll_key }}"
+        role="timer"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+      {% else %}
+      <div
+        class="promo-countdown-hero__timer"
+        dir="ltr"
+        data-pch-mode="calendar"
+        data-end="{{ pch_countdown_date | strip }}"
+        role="timer"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+      {% endif %}
+        <div class="promo-countdown-hero__unit">
+          <span class="promo-countdown-hero__num" data-unit="days">00</span>
+          <span class="promo-countdown-hero__unit-label">{{ section_data.label_days | default: 'DAY' }}</span>
+        </div>
+        <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
+        <div class="promo-countdown-hero__unit">
+          <span class="promo-countdown-hero__num" data-unit="hours">00</span>
+          <span class="promo-countdown-hero__unit-label">{{ section_data.label_hours | default: 'HOURS' }}</span>
+        </div>
+        <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
+        <div class="promo-countdown-hero__unit">
+          <span class="promo-countdown-hero__num" data-unit="minutes">00</span>
+          <span class="promo-countdown-hero__unit-label">{{ section_data.label_minutes | default: 'MIN' }}</span>
+        </div>
+        <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
+        <div class="promo-countdown-hero__unit">
+          <span class="promo-countdown-hero__num" data-unit="seconds">00</span>
+          <span class="promo-countdown-hero__unit-label">{{ section_data.label_seconds | default: 'SEC' }}</span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .promo-countdown-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: var(--pch-min-h, 72vh);
+    display: flex;
+    align-items: stretch;
+    padding: clamp(2rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 3rem);
+    background-color: #141218;
+    background-image: var(--pch-bg-mobile, var(--pch-bg));
+    background-size: cover;
+    background-position: var(--pch-bg-pos, center right);
+    background-repeat: no-repeat;
+    color: var(--pch-text, #fff);
+  }
+  @media (min-width: 768px) {
+    .promo-countdown-hero {
+      background-image: var(--pch-bg);
+    }
+  }
+  .promo-countdown-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(8, 6, 10, calc(var(--pch-overlay, 0.48) + 0.15)) 0%,
+      rgba(8, 6, 10, calc(var(--pch-overlay, 0.48) * 0.92)) 42%,
+      rgba(8, 6, 10, calc(var(--pch-overlay, 0.48) * 0.45)) 100%
+    );
+  }
+  .promo-countdown-hero__grid {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 120rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2rem, 5vw, 3.5rem);
+  }
+  @media (min-width: 900px) {
+    .promo-countdown-hero__grid {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+  }
+  .promo-countdown-hero__copy {
+    max-width: 36rem;
+    text-align: center;
+  }
+  @media (min-width: 900px) {
+    .promo-countdown-hero__copy {
+      text-align: left;
+      margin-right: auto;
+    }
+  }
+  .promo-countdown-hero__kicker {
+    margin: 0 0 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--pch-kicker, #fff);
+    opacity: 0.95;
+  }
+  .promo-countdown-hero__title {
+    margin: 0 0 1rem;
+    font-size: clamp(1.75rem, 4.2vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--pch-text, #fff);
+  }
+  .promo-countdown-hero__desc {
+    margin: 0 0 1.5rem;
+    font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    line-height: 1.65;
+    opacity: 0.94;
+    color: var(--pch-text, #fff);
+  }
+  .promo-countdown-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 2rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    background: var(--pch-btn-bg, #fff);
+    color: var(--pch-btn-text, #111);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+  .promo-countdown-hero__btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  }
+  .promo-countdown-hero__timer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.35rem 0.25rem;
+    flex-shrink: 0;
+  }
+  @media (min-width: 900px) {
+    .promo-countdown-hero__timer {
+      justify-content: flex-end;
+    }
+  }
+  .promo-countdown-hero__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 3rem;
+  }
+  .promo-countdown-hero__num {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--pch-text, #fff);
+  }
+  .promo-countdown-hero__unit-label {
+    margin-top: 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    color: var(--pch-text, #fff);
+  }
+  .promo-countdown-hero__sep {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1;
+    padding-bottom: 1.25rem;
+    opacity: 0.85;
+    color: var(--pch-text, #fff);
+  }
+</style>

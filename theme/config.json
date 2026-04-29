@@ -100,7 +100,14 @@
     "featured_products_banner_description": "Discover our handpicked products designed for everyday style and comfort.",
     "thanks_title_fallback": "Thank you!",
     "thanks_subtitle_fallback": "Your order has been received.",
-    "thanks_confirmation_prefix": "The order confirmation has been sent to"
+    "thanks_confirmation_prefix": "The order confirmation has been sent to",
+    "font_google_families": "Instrument Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display",
+    "font_google_weights": "400;500;600;700",
+    "font_family_primary": "Instrument Sans",
+    "font_family_ui": "Manrope",
+    "font_family_alt": "Nunito",
+    "font_family_display": "Playfair Display",
+    "font_family_arabic": "Almarai"
   },
   "announcement_config": {
     "text": ["it works", "Free shipping for 1000 EGP", "Genuine Quality"],

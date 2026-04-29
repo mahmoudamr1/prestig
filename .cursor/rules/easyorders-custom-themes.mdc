@@ -51,6 +51,8 @@ alwaysApply: true
 
 **Upload:** full folder (zip) or per-file in the admin code editor.
 
+**Prestig repo (`theme/home-sections/`):** Homepage **composer sections** packaged as one folder each: `template.liquid` + `config.json` (`section_schema`). The storefront/renderer passes flattened settings as **`section_data`** inside that Liquid (not `theme_data` unless bridged globally). Icons and labels in `config.json` power the picker UI when the CLI or admin lists blocks. Extend this folder with new presets; keep **BEM-style class roots** stable if `script.js` or tests target them.
+
 ---
 
 ## 3) Palette — 22 merchant colors on `:root`
@@ -124,6 +126,27 @@ Set custom properties on a section root in Liquid:
 Then in `style.css`: `.hero { color: var(--primary); font-size: var(--font-base); }`
 
 **Platform tip:** For global storefront colors, prefer the **palette** on `:root`; use **`theme_data`** for content and behavior that goes beyond the 22 palette slots.
+
+### Prestig: Google Fonts (تلخيص)
+
+**تحميل**
+
+| الحقل | معنى |
+|------|------|
+| **`font_google_families`** | أسماء خطوط Google متعددة مفصولة بفاصلة (كما في الموقع). |
+| **`font_google_weights`** | أوزان لكل الخطوط معًا، مثل `400;500;600;700`. |
+
+**تعيين الأدوار**
+
+| **`theme_data`** | الاستخدام المعتاد (القديم افتراضيًا) | CSS |
+|------------------|----------------------------------------|-----|
+| **`font_family_primary`** | النص الأساسي — Instrument Sans | `--ps-ff-primary` |
+| **`font_family_ui`** | إعلان وواجهة ضيقة — Manrope | `--ps-ff-ui` |
+| **`font_family_alt`** | نص ثانوي — Nunito | `--ps-ff-alt` |
+| **`font_family_display`** | عناوين عرض — Playfair Display | `--ps-ff-display` |
+| **`font_family_arabic`** | العربية — Almarai؛ لخط واحد للعربي والإنجليزي ضع نفس الاسم هنا وفي **`font_family_primary`**. | `--ps-ff-arabic` |
+
+**تنفيذ:** `sections/header.liquid` يولِّد رابط **`fonts.googleapis.com/css2`** ويضمن **`var(--ps-ff-*)`** على `:root`; **`style.css`** يستخدم **`var`** فقط. أي اسم خط خام ما زال موجودًا في الشفرة القديمة (Montserrat/Jost…) يُضاف إلى **`font_google_families`**.
 
 ---
 
@@ -270,6 +293,20 @@ Same product contract as homepage listings: `products`, `category`, `section_tit
 ### `products-grid.liquid` (search & collections)
 
 Same product contract; `hide_view_all` is always `true` here. The **Load more** button is rendered **outside** Liquid by React; each fetch re-renders this template with the **accumulated** product list.
+
+### Prestig: `promo-countdown-hero` (`theme/home-sections/promo-countdown-hero/`)
+
+Full-width promo hero modeled after layered lifestyle photography: gradient overlay (`overlay_strength` 0–100), left column for eyebrow (**kicker**), **headline**, **description**, and a solid CTA (**cta_label** / **cta_url**). Optional horizontal countdown on the opposite side (**show_countdown**).
+
+| Merchant concern | Setting / mechanism |
+|------------------|---------------------|
+| Background | **image** URL (defaults to Prestig demo asset); optional **mobile_image** for smaller viewports (`background-image`, `cover`; desktop uses **`image`** again at `min-width: 768px`). **bg_position** controls focal point (`center`, `center right`, `center left`). |
+| Typography & contrast | **text_color** for headline, description, countdown digits/labels; **kicker_color** for the eyebrow (falls back to **text_color**). Darkening is from the overlay, not replacing product palette slots. Use **palette**/`theme_data` on other pages as usual. |
+| CTA look | **button_bg** and **button_text** (defaults: white / near-black) read as CSS variables on `.promo-countdown-hero__btn`. |
+| Countdown modes | **`countdown_mode`**: **`calendar_day`** uses **`countdown_end_date`** (`data-pch-mode="calendar"`, **`data-end`**) — **day–month–year**, end-of-local-day (see **`parsePromoCountdownEndMs`**). **`rolling_hours`** uses **`rolling_duration_hours`**, **`data-pch-mode="rolling"`**, **`data-hours`**, **`data-storage-key`** — **fake urgency** persisted in **`localStorage`** (`pch-promo-roll-{key}-h{N}` like PDP **`fake-counter`**). Only **one** mode renders; picking mode is **`select`**, mutually exclusive fields in admin messaging. |
+| Client JS | **`initPromoCountdownHeroTimers()`** calendar; **`initPromoCountdownHeroRollingTimers()`** rolling. Observer attributes: **`data-end`**, **`data-hours`**, **`data-pch-mode`**, **`data-storage-key`**. |
+
+**Distinction:** Platform **`sections/fake-counter.liquid`** stays for **product** PDP. **`promo-countdown-hero`** **`rolling_hours`** mirrors that behaviour **on the homepage** with a customizable storage key (`rolling_storage_key`).
 
 ---
 

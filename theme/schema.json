@@ -1,5 +1,47 @@
 [
   {
+    "name": "font_google_families",
+    "type": "string",
+    "description": "خطوط جوجل للتحميل: أسماء متعددة مفصولة بفاصلة كما في موقع Google Fonts.",
+    "default": "Instrument Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display"
+  },
+  {
+    "name": "font_google_weights",
+    "type": "string",
+    "description": "أوزان الخطوط (للكل): مثل 400;500;600;700",
+    "default": "400;500;600;700"
+  },
+  {
+    "name": "font_family_primary",
+    "type": "string",
+    "description": "النص الأساسي — بدلاً من Instrument Sans.",
+    "default": "Instrument Sans"
+  },
+  {
+    "name": "font_family_ui",
+    "type": "string",
+    "description": "إعلانات وواجهة ضيقة — بدلاً من Manrope.",
+    "default": "Manrope"
+  },
+  {
+    "name": "font_family_alt",
+    "type": "string",
+    "description": "نص ثانوي وتسميات — بدلاً من Nunito.",
+    "default": "Nunito"
+  },
+  {
+    "name": "font_family_display",
+    "type": "string",
+    "description": "عناوين عرض كبيرة — بدلاً من Playfair Display.",
+    "default": "Playfair Display"
+  },
+  {
+    "name": "font_family_arabic",
+    "type": "string",
+    "description": "العربية — بدلاً من Almarai. للخطّ الواحد للعربي والإنجليزي اكتب نفس اسم «النص الأساسي».",
+    "default": "Almarai"
+  },
+  {
     "name": "footer_quick_links",
     "type": "string",
     "description": "Footer: column title above categories.",

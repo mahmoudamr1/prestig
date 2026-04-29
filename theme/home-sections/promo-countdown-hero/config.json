@@ -1,0 +1,158 @@
+{
+  "icon": "https://api.iconify.design/lucide:timer.svg",
+  "label": "Promo countdown hero",
+  "section_schema": [
+    {
+      "name": "image",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1777438251081865442.webp",
+      "description": "Full-width background image URL"
+    },
+    {
+      "name": "mobile_image",
+      "type": "string",
+      "default": "",
+      "description": "Optional smaller/crop image for mobile (uses main image if empty)"
+    },
+    {
+      "name": "kicker",
+      "type": "string",
+      "default": "LIMITED TIME ONLY",
+      "description": "Small line above the headline (eyebrow)"
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "SUPER SALE UP TO 40% OFF",
+      "description": "Main headline (often uppercase in design)"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": "Shop our selection of exclusive handbags and backpacks at reduced price during the Super Sale. Hurry up!",
+      "description": "Supporting paragraph under the headline"
+    },
+    {
+      "name": "cta_label",
+      "type": "string",
+      "default": "SHOP NOW",
+      "description": "Primary button label"
+    },
+    {
+      "name": "cta_url",
+      "type": "string",
+      "default": "/products",
+      "description": "Primary button URL"
+    },
+    {
+      "name": "show_countdown",
+      "type": "boolean",
+      "default": true,
+      "description": "عرض صف العد التنازلي (طبقاً لوضع المؤقت أسفله). | Show the countdown row (see countdown mode)."
+    },
+    {
+      "name": "countdown_mode",
+      "type": "select",
+      "default": "calendar_day",
+      "description": "واحد فقط — إما انتهاء بتاريخ ثابت أو عدّاد وهمي لعدد ساعات لكل زائر. | Pick one timer type.",
+      "options": [
+        { "label": "Calendar — انتهاء عند يوم ثابت (يوم–شهر–سنة)", "value": "calendar_day" },
+        { "label": "Rolling hours — عدّاد وهمي لمدّة بالساعات", "value": "rolling_hours" }
+      ]
+    },
+    {
+      "name": "countdown_end_date",
+      "type": "string",
+      "default": "1-5-2026",
+      "description": "لو الوضع = تقويم فقط — آخر يوم للعرض بترتيب يوم-شهر-سنة (مثال 1-5-2026). فواصل - أو . أو /. حتى آخر ذلك اليوم محلياً. | When mode is calendar only: day-month-year."
+    },
+    {
+      "name": "rolling_duration_hours",
+      "type": "number",
+      "default": 48,
+      "description": "لو الوضع = ساعات وهمية — عدد الساعات من أول زيارة / آخر وقت محفوظ (مثل عدّاد الوهم بالمنتج). | Fake rolling countdown length in hours (mode = rolling)."
+    },
+    {
+      "name": "rolling_storage_key",
+      "type": "string",
+      "default": "promo-hero",
+      "description": "مفتاح فريد لكل بلوك (يمنع تشارك العد بين سكشنين). مهم لو عندك أكثر من promo hero. | Unique key for localStorage when mode = rolling hours."
+    },
+    {
+      "name": "label_days",
+      "type": "string",
+      "default": "DAY",
+      "description": "Countdown label under days"
+    },
+    {
+      "name": "label_hours",
+      "type": "string",
+      "default": "HOURS",
+      "description": "Countdown label under hours"
+    },
+    {
+      "name": "label_minutes",
+      "type": "string",
+      "default": "MIN",
+      "description": "Countdown label under minutes"
+    },
+    {
+      "name": "label_seconds",
+      "type": "string",
+      "default": "SEC",
+      "description": "Countdown label under seconds"
+    },
+    {
+      "name": "overlay_strength",
+      "type": "number",
+      "default": 48,
+      "description": "Dark overlay strength (0–100) for text legibility"
+    },
+    {
+      "name": "bg_position",
+      "type": "select",
+      "default": "center right",
+      "description": "Background focal point (wide lifestyle shots often need right bias)",
+      "options": [
+        { "label": "Center", "value": "center" },
+        { "label": "Center right", "value": "center right" },
+        { "label": "Center left", "value": "center left" }
+      ]
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Headline, body, and countdown text"
+    },
+    {
+      "name": "kicker_color",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Eyebrow / kicker line (can match text or be slightly muted in CSS via opacity if same)"
+    },
+    {
+      "name": "button_bg",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "CTA button background"
+    },
+    {
+      "name": "button_text",
+      "type": "color",
+      "default": "#111111",
+      "description": "CTA button label color"
+    },
+    {
+      "name": "min_height",
+      "type": "select",
+      "default": "tall",
+      "description": "Minimum section height",
+      "options": [
+        { "label": "Compact", "value": "compact" },
+        { "label": "Tall", "value": "tall" },
+        { "label": "Near full screen", "value": "screen" }
+      ]
+    }
+  ]
+}

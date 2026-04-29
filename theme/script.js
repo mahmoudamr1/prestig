@@ -230,6 +230,8 @@
     var slides = mc.querySelectorAll(".ps-announce-mc-slide");
     var i = 0;
     var timerId = null;
+    /** Auto-advance interval (prev/next reset this timer). */
+    var MC_INTERVAL_MS = 3000;
 
     function showIndex(nextI) {
       slides[i].classList.remove("ps-active");
@@ -252,7 +254,7 @@
       }
       timerId = window.setInterval(function () {
         step(1);
-      }, 10000);
+      }, MC_INTERVAL_MS);
       root.setAttribute("data-ps-mc-interval-id", String(timerId));
     }
 
@@ -1333,6 +1335,207 @@
     });
   }
 
+  function parsePromoCountdownEndMs(endRaw) {
+    var s = String(endRaw || "").trim();
+    if (!s) {
+      return NaN;
+    }
+    /* Normalize fancy dashes / spaces from copy-paste or RTL inputs */
+    s = s
+      .replace(/\u00a0/g, " ")
+      .replace(/[\u2013\u2014\u2212]/g, "-")
+      .trim();
+
+    /* Legacy: real ISO timestamps only (must contain T + clock). Do NOT match plain d-m-y:
+       e.g. "1-5-2026" was wrongly routed here because "-2026" satisfied [+-]\d{2}:?\d{2}$
+       → Date.parse() used US month/day rules. */
+    if (/T\s*\d/.test(s)) {
+      var legacy = Date.parse(s);
+      return isFinite(legacy) ? legacy : NaN;
+    }
+
+    /* Calendar day (no clock): merchant format is always day-month-year — last segment = 4-digit year */
+    var parts = s.split(/[-/.\s]+/).filter(function (p) {
+      return p.length > 0;
+    });
+    if (parts.length !== 3 || !/^\d{4}$/.test(parts[2])) {
+      return NaN;
+    }
+    var day = parseInt(parts[0], 10);
+    var mo = parseInt(parts[1], 10);
+    var year = parseInt(parts[2], 10);
+    if (mo < 1 || mo > 12 || day < 1 || day > 31) {
+      return NaN;
+    }
+    var dt = new Date(year, mo - 1, day, 23, 59, 59, 999);
+    if (dt.getFullYear() !== year || dt.getMonth() !== mo - 1 || dt.getDate() !== day) {
+      return NaN;
+    }
+    return dt.getTime();
+  }
+
+  function promoCountdownHeroResetDigits(timer) {
+    ["days", "hours", "minutes", "seconds"].forEach(function (unit) {
+      var el = timer.querySelector('[data-unit="' + unit + '"]');
+      if (el) {
+        el.textContent = "00";
+      }
+    });
+  }
+
+  function initPromoCountdownHeroTimers() {
+    document.querySelectorAll('.promo-countdown-hero__timer[data-pch-mode="calendar"][data-end]').forEach(function (timer) {
+      var endRaw = (timer.getAttribute("data-end") || "").trim();
+      var prevEnd = timer.getAttribute("data-pch-end");
+      var oldId = timer.getAttribute("data-pch-interval-id");
+
+      if (!endRaw) {
+        if (oldId) {
+          clearInterval(parseInt(oldId, 10));
+          timer.removeAttribute("data-pch-interval-id");
+        }
+        timer.removeAttribute("data-pch-end");
+        promoCountdownHeroResetDigits(timer);
+        return;
+      }
+
+      if (prevEnd === endRaw && oldId) {
+        return;
+      }
+
+      if (oldId) {
+        clearInterval(parseInt(oldId, 10));
+        timer.removeAttribute("data-pch-interval-id");
+      }
+
+      var endMs = parsePromoCountdownEndMs(endRaw);
+      if (!isFinite(endMs)) {
+        timer.removeAttribute("data-pch-end");
+        promoCountdownHeroResetDigits(timer);
+        return;
+      }
+
+      timer.setAttribute("data-pch-end", endRaw);
+
+      var daysEl = timer.querySelector('[data-unit="days"]');
+      var hoursEl = timer.querySelector('[data-unit="hours"]');
+      var minsEl = timer.querySelector('[data-unit="minutes"]');
+      var secsEl = timer.querySelector('[data-unit="seconds"]');
+
+      function pad(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function tick() {
+        var diff = Math.max(0, endMs - Date.now());
+        var s = Math.floor(diff / 1000);
+        var dd = Math.floor(s / 86400);
+        s -= dd * 86400;
+        var hh = Math.floor(s / 3600);
+        s -= hh * 3600;
+        var mm = Math.floor(s / 60);
+        s -= mm * 60;
+
+        if (daysEl) daysEl.textContent = pad(dd);
+        if (hoursEl) hoursEl.textContent = pad(hh);
+        if (minsEl) minsEl.textContent = pad(mm);
+        if (secsEl) secsEl.textContent = pad(s);
+      }
+
+      tick();
+      var intervalId = window.setInterval(tick, 1000);
+      timer.setAttribute("data-pch-interval-id", String(intervalId));
+    });
+  }
+
+  function initPromoCountdownHeroRollingTimers() {
+    document.querySelectorAll('.promo-countdown-hero__timer[data-pch-mode="rolling"]').forEach(function (timer) {
+      var hrs = parseFloat(timer.getAttribute("data-hours"));
+      var rawKey = (timer.getAttribute("data-storage-key") || "promo-hero").trim();
+      var storageKey = rawKey.replace(/[^a-zA-Z0-9\-_]/g, "").slice(0, 64) || "promo-hero";
+      var sig = storageKey + "|" + String(hrs);
+      var prevSig = timer.getAttribute("data-pch-roll-sig");
+      var oldId = timer.getAttribute("data-pch-roll-interval-id");
+
+      if (!isFinite(hrs) || hrs <= 0) {
+        if (oldId) {
+          clearInterval(parseInt(oldId, 10));
+          timer.removeAttribute("data-pch-roll-interval-id");
+        }
+        timer.removeAttribute("data-pch-roll-sig");
+        promoCountdownHeroResetDigits(timer);
+        return;
+      }
+
+      if (prevSig === sig && oldId) {
+        return;
+      }
+
+      if (oldId) {
+        clearInterval(parseInt(oldId, 10));
+        timer.removeAttribute("data-pch-roll-interval-id");
+      }
+
+      timer.setAttribute("data-pch-roll-sig", sig);
+
+      var lsKey = "pch-promo-roll-" + storageKey + "-h" + String(hrs);
+      var durationMs = hrs * 3600 * 1000;
+      var remaining = durationMs;
+
+      try {
+        var stored = localStorage.getItem(lsKey);
+        if (stored && Number(stored) > 60000) {
+          remaining = Number(stored);
+        }
+      } catch (e) {}
+
+      var end = Date.now() + remaining;
+
+      var daysEl = timer.querySelector('[data-unit="days"]');
+      var hoursEl = timer.querySelector('[data-unit="hours"]');
+      var minsEl = timer.querySelector('[data-unit="minutes"]');
+      var secsEl = timer.querySelector('[data-unit="seconds"]');
+
+      function pad(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function tick() {
+        var diff = Math.max(0, end - Date.now());
+        var tot = Math.floor(diff / 1000);
+        var d = Math.floor(tot / 86400);
+        tot -= d * 86400;
+        var h = Math.floor(tot / 3600);
+        tot -= h * 3600;
+        var m = Math.floor(tot / 60);
+        tot -= m * 60;
+        var s = tot;
+
+        if (daysEl) daysEl.textContent = pad(d);
+        if (hoursEl) hoursEl.textContent = pad(h);
+        if (minsEl) minsEl.textContent = pad(m);
+        if (secsEl) secsEl.textContent = pad(s);
+
+        try {
+          localStorage.setItem(lsKey, String(diff));
+        } catch (e) {}
+      }
+
+      tick();
+      var rollIv = window.setInterval(function () {
+        tick();
+        if (end <= Date.now()) {
+          clearInterval(rollIv);
+          timer.removeAttribute("data-pch-roll-interval-id");
+          try {
+            localStorage.removeItem(lsKey);
+          } catch (e) {}
+        }
+      }, 1000);
+      timer.setAttribute("data-pch-roll-interval-id", String(rollIv));
+    });
+  }
+
   function initLegacyFakeCounters() {
     var counters = document.querySelectorAll(".ab-fake-counter");
     for (var i = 0; i < counters.length; i++) {
@@ -1858,6 +2061,8 @@
       initLegacyGallery();
       initLegacyGalleryKeyboard();
       initLegacyReviews();
+      initPromoCountdownHeroTimers();
+      initPromoCountdownHeroRollingTimers();
       initLegacyFakeCounters();
       initLegacyFakeVisitors();
       initLegacyDescriptionAccordion();
@@ -1909,7 +2114,32 @@
 
   var observer = new MutationObserver(function (mutations) {
     for (var i = 0; i < mutations.length; i++) {
-      var nodes = mutations[i].addedNodes;
+      var m = mutations[i];
+      if (m.type === "attributes") {
+        var pname = m.attributeName;
+        if (
+          pname === "data-end" ||
+          pname === "data-hours" ||
+          pname === "data-pch-mode" ||
+          pname === "data-storage-key"
+        ) {
+          var at = m.target;
+          if (
+            at &&
+            at.nodeType === 1 &&
+            at.matches &&
+            at.matches(".promo-countdown-hero__timer")
+          ) {
+            scheduleDynamicInits();
+            return;
+          }
+        }
+        continue;
+      }
+      if (m.type !== "childList") {
+        continue;
+      }
+      var nodes = m.addedNodes;
       for (var j = 0; j < nodes.length; j++) {
         var el = nodes[j];
         if (el.nodeType !== 1) continue;
@@ -1921,6 +2151,7 @@
             el.matches(".ab-gallery") ||
             el.matches(".ab-reviews") ||
             el.matches(".ps-rev-section") ||
+            el.matches(".promo-countdown-hero__timer") ||
             el.matches(".ab-fake-counter") ||
             el.matches(".ab-fake-visitor") ||
             el.matches(".lq-desc-accordion") ||
@@ -1946,6 +2177,7 @@
             el.querySelector(".ab-gallery") ||
             el.querySelector(".ab-reviews") ||
             el.querySelector(".ps-rev-section") ||
+            el.querySelector(".promo-countdown-hero__timer") ||
             el.querySelector(".ab-fake-counter") ||
             el.querySelector(".ab-fake-visitor") ||
             el.querySelector(".lq-desc-accordion") ||
@@ -1986,13 +2218,23 @@
     document.addEventListener("DOMContentLoaded", function () {
       init();
       if (document.body) {
-        observer.observe(document.body, { childList: true, subtree: true });
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ["data-end", "data-hours", "data-pch-mode", "data-storage-key"],
+        });
       }
     });
   } else {
     init();
     if (document.body) {
-      observer.observe(document.body, { childList: true, subtree: true });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["data-end", "data-hours", "data-pch-mode", "data-storage-key"],
+      });
     }
   }
 })();
