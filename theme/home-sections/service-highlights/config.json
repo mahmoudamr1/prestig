@@ -1,0 +1,77 @@
+{
+  "icon": "https://api.iconify.design/lucide:columns-4.svg",
+  "label": "Service highlights strip",
+  "section_schema": [
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "transparent",
+      "description": "Section background"
+    },
+    {
+      "name": "title_color",
+      "type": "color",
+      "default": "#111111",
+      "description": "Feature title color"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#4B5563",
+      "description": "Description text color"
+    },
+    {
+      "name": "icon_max_width",
+      "type": "number",
+      "default": 48,
+      "description": "Icon image max width (px)"
+    },
+    {
+      "name": "items",
+      "type": "object_array",
+      "description": "Feature blocks (icon image + title + text)",
+      "default": [
+        {
+          "icon": "https://files.easy-orders.net/1777459486246957885svgexport-22.svg",
+          "title": "Express delivery",
+          "text": "DHL express delivery worldwide"
+        },
+        {
+          "icon": "https://files.easy-orders.net/1777459486225747568svgexport-24.svg",
+          "title": "Free returns",
+          "text": "Free return for 30 days for any order delivered in France"
+        },
+        {
+          "icon": "https://files.easy-orders.net/1777459486258835733svgexport-26.svg",
+          "title": "Available customer service",
+          "text": "Available via Whatsapp on +33123456789"
+        },
+        {
+          "icon": "https://files.easy-orders.net/1777459486235973530svgexport-28.svg",
+          "title": "Payment in 3x",
+          "text": "Take advantage of a payment in 3x without fees from $100 of purchase"
+        }
+      ],
+      "fields": [
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "https://files.easy-orders.net/1777459486246957885svgexport-22.svg",
+          "description": "Icon image URL (PNG/SVG recommended, transparent)"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "Express delivery",
+          "description": "Short feature title"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "default": "DHL express delivery worldwide",
+          "description": "Supporting line"
+        }
+      ]
+    }
+  ]
+}

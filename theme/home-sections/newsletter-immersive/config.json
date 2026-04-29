@@ -1,0 +1,107 @@
+{
+  "icon": "https://api.iconify.design/lucide:mail.svg",
+  "label": "Newsletter — immersive",
+  "section_schema": [
+    {
+      "name": "image",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1777459074541071075.webp",
+      "description": "Full-width background image URL"
+    },
+    {
+      "name": "mobile_image",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1777459072877767727.webp",
+      "description": "Optional image for small screens (falls back to main image)"
+    },
+    {
+      "name": "kicker",
+      "type": "string",
+      "default": "KEEP ME UPDATED",
+      "description": "Small label above the main heading"
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "NEWSLETTER",
+      "description": "Main heading"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "default": "Subscribe to get notified about product launches, special offers and company news.",
+      "description": "Supporting text"
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "E-mail",
+      "description": "Input placeholder"
+    },
+    {
+      "name": "button_label",
+      "type": "string",
+      "default": "SUBSCRIBE",
+      "description": "Submit button label"
+    },
+    {
+      "name": "form_action",
+      "type": "string",
+      "default": "/pages/contact",
+      "description": "Form action URL (same as Newsletter — luxe)"
+    },
+    {
+      "name": "footnote",
+      "type": "string",
+      "default": "By subscribing you agree to receive marketing emails. Unsubscribe anytime.",
+      "description": "Fine print under the form"
+    },
+    {
+      "name": "show_footnote",
+      "type": "boolean",
+      "default": true,
+      "description": "Show the fine print"
+    },
+    {
+      "name": "overlay_strength",
+      "type": "number",
+      "default": 45,
+      "description": "Dark overlay on the image (0–100)"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Text color"
+    },
+    {
+      "name": "button_bg",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Subscribe button background"
+    },
+    {
+      "name": "button_text",
+      "type": "color",
+      "default": "#101010",
+      "description": "Subscribe button label color"
+    },
+    {
+      "name": "input_border",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Email field border (use white on dark photos)"
+    },
+    {
+      "name": "min_height",
+      "type": "select",
+      "default": "comfortable",
+      "description": "Vertical padding / minimum height",
+      "options": [
+        { "label": "Compact", "value": "compact" },
+        { "label": "Comfortable", "value": "comfortable" },
+        { "label": "Tall", "value": "tall" }
+      ]
+    }
+  ]
+}

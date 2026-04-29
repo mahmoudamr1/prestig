@@ -1,0 +1,92 @@
+{
+  "icon": "https://api.iconify.design/lucide:users.svg",
+  "label": "Lifestyle editorial hero",
+  "section_schema": [
+    {
+      "name": "image",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1777458784428286068.webp",
+      "description": "Full-width background image URL"
+    },
+    {
+      "name": "mobile_image",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1777458784703489287.webp",
+      "description": "Optional image for small screens (falls back to main image)"
+    },
+    {
+      "name": "kicker",
+      "type": "string",
+      "default": "THE COUPLE",
+      "description": "Small label above the title (all caps recommended)"
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "LÉO ET VIOLETTE",
+      "description": "Main heading"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "default": "We aspire to be a brand of the 21st century: 100% online and without any intermediary.\nFrom you to us directly.",
+      "description": "Supporting text (use a line break for a second line)"
+    },
+    {
+      "name": "overlay_strength",
+      "type": "number",
+      "default": 38,
+      "description": "Dark overlay strength (0–100)"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Text color"
+    },
+    {
+      "name": "photo_style",
+      "type": "select",
+      "default": "monochrome",
+      "description": "Background photo treatment",
+      "options": [
+        { "label": "Black & white", "value": "monochrome" },
+        { "label": "Full color", "value": "color" }
+      ]
+    },
+    {
+      "name": "min_height",
+      "type": "select",
+      "default": "tall",
+      "description": "Minimum section height",
+      "options": [
+        { "label": "Compact", "value": "compact" },
+        { "label": "Tall", "value": "tall" },
+        { "label": "Near full screen", "value": "screen" }
+      ]
+    },
+    {
+      "name": "content_max_width",
+      "type": "select",
+      "default": "medium",
+      "description": "Text block width",
+      "options": [
+        { "label": "Narrow", "value": "narrow" },
+        { "label": "Medium", "value": "medium" },
+        { "label": "Wide", "value": "wide" }
+      ]
+    },
+    {
+      "name": "cta_label",
+      "type": "string",
+      "default": "",
+      "description": "Optional button label (hidden if empty)"
+    },
+    {
+      "name": "cta_url",
+      "type": "string",
+      "default": "/pages/about",
+      "description": "Optional button URL"
+    }
+  ]
+}

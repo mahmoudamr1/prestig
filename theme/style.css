@@ -1,4 +1,4 @@
-﻿/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
+/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
 
 /* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host â€” saves editing this + Liquid without extra tools. */
 
@@ -10766,6 +10766,84 @@ ul.checkout_cart_items_container.divide-y > li,
   --tw-ring-width: 0 !important;
   --tw-ring-offset-width: 0 !important;
   box-shadow: 0 0 0 1px var(--ps-co-blue) !important;
+}
+
+/*
+ * Merchant inputs (.global_input) outside PDP checkout wrappers (newsletter modals, etc.).
+ * Mirrors checkout field chrome; overrides Tailwind/preflight border-radius: 0 on type=email, etc.
+ * Composite .checkout-coupon rules above use higher specificity and keep square inner fields.
+ */
+input.global_input,
+textarea.global_textarea {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  font-family: inherit !important;
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--input-border, #d9d9d9) !important;
+  background: var(--input-bg, var(--ps-surface, #fff)) !important;
+  color: var(--input-text, var(--ps-ink, #101010)) !important;
+  padding: 12px 15px !important;
+  box-shadow: none !important;
+}
+
+input.global_input::placeholder,
+textarea.global_textarea::placeholder {
+  color: color-mix(
+      in srgb,
+      var(--input-text, #707070) 72%,
+      transparent
+    ) !important;
+  opacity: 1 !important;
+}
+
+input.global_input:focus,
+textarea.global_textarea:focus {
+  border-color: #005bd3 !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+  box-shadow: 0 0 0 1px #005bd3 !important;
+  outline: none !important;
+}
+
+/* Coupon composite strip: inner field is borderless; wrapper uses :focus-within — drop global focus ring */
+:is(
+    .ps-cart-drawer-footer,
+    .ps-checkout-page__summary-body,
+    section.checkout_order_summary
+  )
+  .checkout-coupon
+  .global_input:focus,
+:is(
+    .ps-cart-drawer-footer,
+    .ps-checkout-page__summary-body,
+    section.checkout_order_summary
+  )
+  .checkout-coupon
+  input.global_input:focus,
+:is(
+    .product_form_checkout.checkout_container,
+    form.checkout_form.checkout_container
+  )
+  .checkout-coupon
+  .global_input:focus,
+:is(
+    .product_form_checkout.checkout_container,
+    form.checkout_form.checkout_container
+  )
+  .checkout-coupon
+  input.global_input:focus {
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
 }
 
 :is(
