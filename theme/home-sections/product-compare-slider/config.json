@@ -1,0 +1,114 @@
+{
+  "icon": "https://api.iconify.design/lucide:columns-2.svg",
+  "label": "Product compare slider",
+  "section_schema": [
+    {
+      "name": "eyebrow",
+      "type": "string",
+      "default": "LE DALIA",
+      "description": "سطر صغير فوق العنوان (اختياري)"
+    },
+    {
+      "name": "heading",
+      "type": "string",
+      "default": "CHOOSE YOUR COLOUR",
+      "description": "العنوان الرئيسي"
+    },
+    {
+      "name": "image_left_url",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1777447252724830528.jpg",
+      "description": "صورة المنتج جهة الشمال/اليمين الأولى (طبقة علوية قبل القص)"
+    },
+    {
+      "name": "image_right_url",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1777447252259292373.jpg",
+      "description": "صورة ثانية جهة اليمنى/الجانب الآخر"
+    },
+    {
+      "name": "image_left_alt",
+      "type": "string",
+      "default": "Sage green leather handbag",
+      "description": "نص بديل لصورة الجهة الأولى"
+    },
+    {
+      "name": "image_right_alt",
+      "type": "string",
+      "default": "Blue grey leather handbag",
+      "description": "نص بديل لصورة الجهة الثانية"
+    },
+    {
+      "name": "initial_split_percent",
+      "type": "number",
+      "default": 50,
+      "description": "موضع المحبب عند الفتح (% من عرض الصورة، 0–100 يصل حافة اليمين والشمال)"
+    },
+    {
+      "name": "caption_left_title",
+      "type": "string",
+      "default": "SAGE GREEN LEATHER",
+      "description": "نص المنتج أسفل يسار المقارنة"
+    },
+    {
+      "name": "caption_left_url",
+      "type": "string",
+      "default": "/products",
+      "description": "رابط «عرض المنتج» جهة الشمال الأولى"
+    },
+    {
+      "name": "caption_left_link_label",
+      "type": "string",
+      "default": "View product",
+      "description": "نص الرابط جهة الشمال الأولى"
+    },
+    {
+      "name": "caption_right_title",
+      "type": "string",
+      "default": "BLUE GREY LEATHER",
+      "description": "نص المنتج أسفل جهة اليمنى"
+    },
+    {
+      "name": "caption_right_url",
+      "type": "string",
+      "default": "/products",
+      "description": "رابط «عرض المنتج» جهة اليمنى"
+    },
+    {
+      "name": "caption_right_link_label",
+      "type": "string",
+      "default": "View product",
+      "description": "نص الرابط جهة اليمنى"
+    },
+    {
+      "name": "divider_color",
+      "type": "color",
+      "default": "#ffffff",
+      "description": "خط الفاصل عمودياً بين الصورتين"
+    },
+    {
+      "name": "handle_arrow_color",
+      "type": "color",
+      "default": "#000000",
+      "description": "لون خطوط الأسهم على الـ SVG (المقبض)"
+    },
+    {
+      "name": "section_bg",
+      "type": "color",
+      "default": "#eae8e6",
+      "description": "خلفية السكشن"
+    },
+    {
+      "name": "aspect_ratio_desktop",
+      "type": "select",
+      "default": "cinematic",
+      "description": "نسبة ارتفاع المقارنة (سطح المكتب)",
+      "options": [
+        { "label": "عريض 21:9", "value": "ultrawide" },
+        { "label": "سينما 21:11", "value": "cinematic" },
+        { "label": "كلاسيكي 16:9", "value": "wide" },
+        { "label": "مربّع تقريباً 4:3", "value": "squareish" }
+      ]
+    }
+  ]
+}

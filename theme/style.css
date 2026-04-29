@@ -1,4 +1,4 @@
-/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
+﻿/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
 
 /* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host â€” saves editing this + Liquid without extra tools. */
 
@@ -12886,4 +12886,62 @@ div:has(> .ps-invoice) {
     text-align: start;
     min-width: 0;
   }
+}
+
+/* Product compare: captions inside each layer (clip with split); bottom corners */
+.psc-compare .psc-compare__caption-block {
+  position: absolute;
+  bottom: clamp(10px, 2.4vw, 22px);
+  top: auto;
+  margin: 0;
+  max-width: min(48%, calc(50vw - 1.5rem));
+  z-index: 2;
+  pointer-events: none;
+}
+
+.psc-compare .psc-compare__caption-block--left {
+  left: clamp(10px, 2.4vw, 22px);
+  right: auto;
+}
+
+.psc-compare .psc-compare__caption-block--right {
+  left: auto;
+  right: clamp(10px, 2.4vw, 22px);
+}
+
+.psc-compare .psc-compare__caption-block a {
+  pointer-events: auto;
+}
+
+/* Matches visible right-half: complements .psc-compare__layer--over clip so right caption hides with the splitter */
+.psc-compare .psc-compare__caption-slot--under-right {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  clip-path: inset(0 0 0 calc(var(--psc-split, 50) * 1%));
+}
+
+.psc-compare {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: none !important;
+  overflow: hidden;
+}
+.psc-compare .psc-compare__shell {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.psc-compare .psc-compare__viewport {
+  max-width: none !important;
+  padding-inline: 0 !important;
+}
+
+.psc-compare .psc-compare__scene {
+  touch-action: pan-y !important;
+}
+
+.psc-compare .psc-compare__handle {
+  touch-action: manipulation !important;
 }

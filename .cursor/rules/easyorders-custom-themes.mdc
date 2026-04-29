@@ -308,6 +308,10 @@ Full-width promo hero modeled after layered lifestyle photography: gradient over
 
 **Distinction:** Platform **`sections/fake-counter.liquid`** stays for **product** PDP. **`promo-countdown-hero`** **`rolling_hours`** mirrors that behaviour **on the homepage** with a customizable storage key (`rolling_storage_key`).
 
+### Prestig: `product-compare-slider` (`theme/home-sections/product-compare-slider/`)
+
+قبل/بعد بصورة واحدة للفرق بين لونين أو منتجين: **`image_left_url`** (طبقة علوية مُقصّة من اليمين)، **`image_right_url`** كخلفية كاملة جهة اليمنى. هيد **eyebrow** + **heading**، أسفل الصورة تعليقات **caption_left/right** مع روابط. **`initial_split_percent`** يضبط المحبب الأولي؛ **`initPrestigeProductCompareSliders()`** يحدّث **`--psc-split`** عن طريق **`pointer`** على `.psc-compare__media`.
+
 ---
 
 ## 12) Utility sections

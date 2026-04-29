@@ -1536,6 +1536,142 @@
     });
   }
 
+  function clampPscPct(p) {
+    if (!isFinite(p)) return 50;
+    return Math.max(0, Math.min(100, p));
+  }
+
+  function parsePscCompareSplitPct(root) {
+    if (!root) return 50;
+    var cs = window.getComputedStyle(root).getPropertyValue("--psc-split").trim().replace(",", ".");
+    if (cs) {
+      var a = parseFloat(cs);
+      if (isFinite(a)) return clampPscPct(a);
+    }
+    var ds = (root.getAttribute("data-psc-split") || "").trim().replace(",", ".");
+    var b = parseFloat(ds);
+    return isFinite(b) ? clampPscPct(b) : 50;
+  }
+
+  function initPrestigeProductCompareSliders() {
+    document.querySelectorAll(".psc-compare:not([data-psc-bound])").forEach(function (root) {
+      root.setAttribute("data-psc-bound", "1");
+
+      var scene = root.querySelector(".psc-compare__scene");
+      var media = root.querySelector(".psc-compare__media");
+      var viewport = root.querySelector(".psc-compare__viewport");
+      var handle = root.querySelector(".psc-compare__handle");
+      if (!media || !handle) return;
+
+      var track = scene || media;
+      var POINTER_SLOP_TRACK = 14;
+      var POINTER_SLOP_HANDLE = 5;
+      var startX = 0;
+      var startY = 0;
+      var dragging = false;
+      var gestureDecided = false;
+      /** Must be true only after pointerdown on track (not spurious hover moves with startX=0). */
+      var pointerArm = false;
+      var slopPx = POINTER_SLOP_TRACK;
+
+      function setSplitPct(pct) {
+        pct = clampPscPct(pct);
+        pct = Math.round(pct * 100) / 100;
+        root.style.setProperty("--psc-split", String(pct));
+        handle.setAttribute("aria-valuenow", String(Math.round(pct)));
+        root.setAttribute("data-psc-split", String(pct));
+      }
+
+      function pctFromClientX(cx) {
+        var rect = media.getBoundingClientRect();
+        if (!(rect.width > 0)) return parsePscCompareSplitPct(root);
+        return clampPscPct(((cx - rect.left) / rect.width) * 100);
+      }
+
+      function releaseCap(ev) {
+        if (!ev || ev.pointerId === undefined) return;
+        try {
+          track.releasePointerCapture(ev.pointerId);
+        } catch (e2) {}
+      }
+
+      function resetGesture(ev) {
+        releaseCap(ev);
+        pointerArm = false;
+        dragging = false;
+        gestureDecided = false;
+      }
+
+      function onPointerDown(ev) {
+        if (ev.button !== undefined && ev.button !== 0) return;
+        var nearLink = ev.target && ev.target.closest ? ev.target.closest("a") : null;
+        if (nearLink) return;
+
+        pointerArm = true;
+        slopPx =
+          handle.contains && ev.target ? (handle.contains(ev.target) ? POINTER_SLOP_HANDLE : POINTER_SLOP_TRACK) : POINTER_SLOP_TRACK;
+
+        startX = ev.clientX;
+        startY = ev.clientY;
+
+        if (handle.contains && ev.target && handle.contains(ev.target)) {
+          dragging = true;
+          gestureDecided = true;
+          try {
+            track.setPointerCapture(ev.pointerId);
+          } catch (e) {}
+          setSplitPct(pctFromClientX(ev.clientX));
+          return;
+        }
+
+        dragging = false;
+        gestureDecided = false;
+      }
+
+      function onPointerMove(ev) {
+        if (!pointerArm) return;
+        var dx = ev.clientX - startX;
+        var dy = ev.clientY - startY;
+        var adx = Math.abs(dx);
+        var ady = Math.abs(dy);
+
+        if (!gestureDecided && (adx > slopPx || ady > slopPx)) {
+          gestureDecided = true;
+          if (adx > ady) {
+            dragging = true;
+            try {
+              track.setPointerCapture(ev.pointerId);
+            } catch (e) {}
+          }
+        }
+
+        if (!dragging) return;
+        ev.preventDefault();
+        setSplitPct(pctFromClientX(ev.clientX));
+      }
+
+      function onPointerUp(ev) {
+        resetGesture(ev);
+      }
+
+      track.addEventListener("pointerdown", onPointerDown);
+      track.addEventListener("pointermove", onPointerMove, { passive: false });
+      track.addEventListener("pointerup", onPointerUp);
+      track.addEventListener("pointercancel", onPointerUp);
+
+      if (viewport) {
+        viewport.addEventListener("keydown", function (ev) {
+          if (ev.key !== "ArrowLeft" && ev.key !== "ArrowRight") return;
+          ev.preventDefault();
+          var cur = parsePscCompareSplitPct(root);
+          var step = 2;
+          if (ev.key === "ArrowLeft") setSplitPct(cur - step);
+          else setSplitPct(cur + step);
+        });
+      }
+    });
+  }
+
   function initLegacyFakeCounters() {
     var counters = document.querySelectorAll(".ab-fake-counter");
     for (var i = 0; i < counters.length; i++) {
@@ -2063,6 +2199,7 @@
       initLegacyReviews();
       initPromoCountdownHeroTimers();
       initPromoCountdownHeroRollingTimers();
+      initPrestigeProductCompareSliders();
       initLegacyFakeCounters();
       initLegacyFakeVisitors();
       initLegacyDescriptionAccordion();
@@ -2151,6 +2288,7 @@
             el.matches(".ab-gallery") ||
             el.matches(".ab-reviews") ||
             el.matches(".ps-rev-section") ||
+            el.matches(".psc-compare") ||
             el.matches(".promo-countdown-hero__timer") ||
             el.matches(".ab-fake-counter") ||
             el.matches(".ab-fake-visitor") ||
@@ -2177,6 +2315,7 @@
             el.querySelector(".ab-gallery") ||
             el.querySelector(".ab-reviews") ||
             el.querySelector(".ps-rev-section") ||
+            el.querySelector(".psc-compare") ||
             el.querySelector(".promo-countdown-hero__timer") ||
             el.querySelector(".ab-fake-counter") ||
             el.querySelector(".ab-fake-visitor") ||

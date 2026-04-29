@@ -1,0 +1,351 @@
+<section
+  class="psc-compare"
+  data-psc-split="{{ section_data.initial_split_percent | default: 50 }}"
+  style="
+    --psc-split: {{ section_data.initial_split_percent | default: 50 }};
+    --psc-divider: {{ section_data.divider_color | default: '#ffffff' }};
+    --psc-handle-icon: {{ section_data.handle_arrow_color | default: '#000000' }};
+    --psc-bg: {{ section_data.section_bg | default: '#eae8e6' }};
+  "
+>
+  {% assign _ar = section_data.aspect_ratio_desktop | default: 'cinematic' %}
+  <div class="psc-compare__shell psc-compare__shell--aspect-{{ _ar }}">
+    <header class="psc-compare__header">
+      {% if section_data.eyebrow != blank %}
+        <p class="psc-compare__eyebrow">{{ section_data.eyebrow }}</p>
+      {% endif %}
+      {% if section_data.heading != blank %}
+        <h2 class="psc-compare__heading">{{ section_data.heading }}</h2>
+      {% endif %}
+    </header>
+
+    <div
+      class="psc-compare__viewport"
+      tabindex="0"
+      role="group"
+      aria-label="{{ section_data.heading | default: 'Product comparison' }}"
+    >
+      {% if section_data.image_left_url != blank and section_data.image_right_url != blank %}
+        <div class="psc-compare__scene">
+          <div class="psc-compare__media">
+            <div class="psc-compare__layer psc-compare__layer--under">
+              <img
+                class="psc-compare__img"
+                src="{{ section_data.image_right_url }}"
+                alt="{{ section_data.image_right_alt }}"
+                loading="lazy"
+                decoding="async"
+                draggable="false"
+                width="1200"
+                height="675"
+              />
+              <div class="psc-compare__caption-slot psc-compare__caption-slot--under-right">
+                <div class="psc-compare__caption-block psc-compare__caption-block--right">
+                  {% if section_data.caption_right_title != blank %}
+                    <p class="psc-compare__caption-title">{{ section_data.caption_right_title }}</p>
+                  {% endif %}
+                  {% if section_data.caption_right_url != blank and section_data.caption_right_link_label != blank %}
+                    <a class="psc-compare__caption-link" href="{{ section_data.caption_right_url }}">{{ section_data.caption_right_link_label }}</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="psc-compare__layer psc-compare__layer--over">
+              <img
+                class="psc-compare__img"
+                src="{{ section_data.image_left_url }}"
+                alt="{{ section_data.image_left_alt }}"
+                loading="lazy"
+                decoding="async"
+                draggable="false"
+                width="1200"
+                height="675"
+              />
+              <div class="psc-compare__caption-block psc-compare__caption-block--left">
+                {% if section_data.caption_left_title != blank %}
+                  <p class="psc-compare__caption-title">{{ section_data.caption_left_title }}</p>
+                {% endif %}
+                {% if section_data.caption_left_url != blank and section_data.caption_left_link_label != blank %}
+                  <a class="psc-compare__caption-link" href="{{ section_data.caption_left_url }}">{{ section_data.caption_left_link_label }}</a>
+                {% endif %}
+              </div>
+            </div>
+
+            <span class="psc-compare__divider" aria-hidden="true"></span>
+
+            <button
+              type="button"
+              class="psc-compare__handle"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="{{ section_data.initial_split_percent | default: 50 }}"
+              aria-label="Drag to compare photos"
+            >
+              <svg
+                class="psc-compare__handle-svg"
+                role="presentation"
+                focusable="false"
+                aria-hidden="true"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+                width="50"
+                height="50"
+                viewBox="0 0 50 50"
+              >
+                <g>
+                  <rect width="50" height="50" rx="25" fill="{{ section_data.divider_color | default: '#ffffff' }}"></rect>
+                  <path
+                    d="m19.25 19-6 6 6 6m11.5 0 6-6-6-6"
+                    stroke="{{ section_data.handle_arrow_color | default: '#000000' }}"
+                    stroke-width="0.75"
+                    stroke-linecap="square"
+                  ></path>
+                </g>
+              </svg>
+            </button>
+
+          </div>
+        </div>
+      {% else %}
+        <div class="psc-compare__empty">Add left and right image URLs in section settings.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <style>
+    .psc-compare {
+      padding: clamp(1.25rem, 3vw, 2rem) 0 ;
+      padding-inline: 0 !important;
+      margin-inline: 0;
+      width: 100%;
+      max-width: none;
+      color: #1c1a17;
+    }
+    .psc-compare__shell {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0 !important;
+    }
+    .psc-compare__header {
+      text-align: center;
+      margin-bottom: clamp(1rem, 2.8vw, 1.65rem);
+      padding-inline: clamp(1rem, 4vw, 2rem);
+    }
+    .psc-compare__eyebrow {
+      margin: 0 0 0.5rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #5c574f;
+    }
+    .psc-compare__heading {
+      margin: 0;
+      font-family: var(--ps-ff-primary, Instrument Sans), system-ui, sans-serif;
+      font-size: clamp(1.35rem, 4vw, 2.125rem);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.15;
+      color: #12100e;
+    }
+    .psc-compare__viewport {
+      outline: none;
+      border-radius: 0;
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+      padding-inline: 0 !important;
+    }
+    .psc-compare__viewport:focus-visible {
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+    }
+    .psc-compare__scene {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      border-radius: 0;
+      overflow: hidden;
+      isolation: isolate;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .psc-compare__media {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: ew-resize;
+      aspect-ratio: 21 / 11;
+      min-height: 220px;
+      /* Anchor for absolutely positioned captions (must be inside this box, not a sibling) */
+      z-index: 0;
+    }
+    .psc-compare__shell--aspect-ultrawide .psc-compare__media {
+      aspect-ratio: 21 / 9;
+    }
+    .psc-compare__shell--aspect-wide .psc-compare__media {
+      aspect-ratio: 16 / 9;
+    }
+    .psc-compare__shell--aspect-squareish .psc-compare__media {
+      aspect-ratio: 4 / 3;
+    }
+    .psc-compare__layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .psc-compare__layer--under .psc-compare__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .psc-compare__layer--over {
+      clip-path: inset(0 calc(100% - (var(--psc-split, 50) * 1%)) 0 0);
+    }
+
+    /** Complementary clip: only the strip from the split line to the right edge (matches visible right-image area). */
+    .psc-compare__caption-slot--under-right {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      clip-path: inset(0 0 0 calc(var(--psc-split, 50) * 1%));
+    }
+    .psc-compare__layer--over .psc-compare__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .psc-compare__divider {
+      position: absolute;
+      left: calc(var(--psc-split, 50) * 1%);
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--psc-divider, #ffffff);
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 3;
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.08);
+    }
+    .psc-compare__handle {
+      position: absolute !important;
+      left: calc(var(--psc-split, 50) * 1%) !important;
+      top: 50% !important;
+      z-index: 6;
+      transform: translate(-50%, -50%) !important;
+      box-sizing: border-box !important;
+      width: 50px !important;
+      min-width: 50px !important;
+      max-width: 50px !important;
+      height: 50px !important;
+      min-height: 50px !important;
+      max-height: 50px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border-radius: 50%;
+      border: none;
+      background: transparent !important;
+      cursor: grab;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      transition: filter 0.15s ease;
+      filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.12));
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .psc-compare__handle:active {
+      cursor: grabbing;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .psc-compare__handle:hover {
+        transform: translate(-50%, -50%) scale(1.03) !important;
+        filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.16));
+      }
+    }
+    .psc-compare__handle-svg {
+      display: block !important;
+      width: 50px !important;
+      height: 50px !important;
+      max-width: 50px !important;
+      max-height: 50px !important;
+      flex: 0 0 50px !important;
+      pointer-events: none;
+    }
+    .psc-compare__caption-block {
+      position: absolute;
+      bottom: clamp(10px, 2.4vw, 22px);
+      margin: 0;
+      max-width: min(48%, calc(50vw - 1.5rem));
+      z-index: 2;
+      font-family: var(--ps-ff-primary, Instrument Sans), system-ui, sans-serif;
+      pointer-events: none;
+    }
+    .psc-compare__caption-block--left {
+      left: clamp(10px, 2.4vw, 22px);
+      right: auto;
+      text-align: left;
+    }
+    .psc-compare__caption-block--right {
+      left: auto;
+      right: clamp(10px, 2.4vw, 22px);
+      text-align: right;
+    }
+    .psc-compare__caption-block * {
+      pointer-events: none;
+    }
+    .psc-compare__caption-block a {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .psc-compare__caption-title {
+      margin: 0 0 0.3rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #12100e;
+      line-height: 1.35;
+      text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.95),
+        0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+    .psc-compare__caption-link {
+      display: inline-block;
+      margin: 0;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: #12100e;
+      text-decoration: none;
+      border-bottom: 1px solid #12100e;
+      padding-bottom: 3px;
+      pointer-events: auto;
+      text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.95),
+        0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+    .psc-compare__caption-link:hover {
+      opacity: 0.75;
+    }
+    .psc-compare__empty {
+      padding: 3rem 1rem;
+      text-align: center;
+      font-family: var(--ps-ff-ui, Manrope), system-ui, sans-serif;
+      font-size: 0.9rem;
+      color: #5c574f;
+    }
+  </style>
+</section>
