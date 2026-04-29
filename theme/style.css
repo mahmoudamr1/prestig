@@ -9870,30 +9870,79 @@ h2.variation_name .ps-variation-name-value {
     opacity 0.2s ease;
 }
 
-/* ألوان لوحة المنصة: «إضافة للسلة» = Cart Button — «اشتري الآن / إتمام» = Buy Button — لا تُستخدم لأيقونة السلة في الهيدر */
+/* ألوان لوحة المنصة: «إضافة للسلة» = إطار فاتح + تعبئة من --crt-* عند الهوفر — «اشتري الآن / إتمام» = زر الشراء Buy */
 .add_to_cart_btn {
-  background-color: var(--crt-btn-bg, var(--ps-ink, #101010)) !important;
-  color: var(--crt-btn-text, var(--ps-surface, #fff)) !important;
-  border-color: var(--crt-btn-border, var(--ps-ink, #101010)) !important;
+  background-color: transparent !important;
+  color: var(--crt-btn-bg, var(--ps-ink-secondary, #1c1c1c)) !important;
+  border-color: var(--crt-btn-border, var(--ps-border, #d8d8d8)) !important;
+  background-image:
+    linear-gradient(var(--ps-surface, #ffffff), var(--ps-surface, #ffffff)),
+    linear-gradient(
+      var(--crt-btn-bg, var(--ps-ink, #101010)),
+      var(--crt-btn-bg, var(--ps-ink, #101010))
+    ) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    101% 101%,
+    0 101% !important;
+  background-position:
+    left top,
+    left top !important;
+  transition:
+    background-size 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    border-color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    filter 0.2s ease,
+    opacity 0.2s ease !important;
 }
 
 .checkout_btn {
-  background-color: var(--buy-btn-bg, var(--ps-ink, #101010)) !important;
+  background-color: transparent !important;
   color: var(--buy-btn-text, var(--ps-surface, #fff)) !important;
-  border-color: var(--buy-btn-border, var(--ps-ink, #101010)) !important;
+  border-color: var(--buy-btn-border, var(--buy-btn-bg, var(--ps-ink, #101010))) !important;
+  background-image:
+    linear-gradient(
+      var(--buy-btn-bg, var(--ps-ink, #101010)),
+      var(--buy-btn-bg, var(--ps-ink, #101010))
+    ),
+    linear-gradient(var(--ps-surface, #ffffff), var(--ps-surface, #ffffff)) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    101% 101%,
+    0 101% !important;
+  background-position:
+    left top,
+    left top !important;
+  transition:
+    background-size 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    border-color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    filter 0.2s ease,
+    opacity 0.2s ease !important;
 }
 
 @media (hover: hover) {
-  .add_to_cart_btn:not(:disabled):hover,
+  .add_to_cart_btn:not(:disabled):hover {
+    background-size:
+      0 101%,
+      101% 101% !important;
+    color: var(--crt-btn-text, var(--ps-surface, #fff)) !important;
+    border-color: var(--crt-btn-bg, var(--ps-ink, #101010)) !important;
+  }
+
   .checkout_btn:not(:disabled):hover {
-    filter: brightness(1.05);
+    background-size:
+      0 101%,
+      101% 101% !important;
+    color: var(--buy-btn-bg, var(--ps-ink, #101010)) !important;
+    border-color: var(--buy-btn-bg, var(--ps-ink, #101010)) !important;
   }
 }
 
 .add_to_cart_btn:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 2px var(--crt-btn-text, var(--ps-surface, #fff)),
+    0 0 0 2px var(--ps-surface, #fff),
     0 0 0 4px var(--crt-btn-bg, var(--ps-ink, #101010));
 }
 
