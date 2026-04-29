@@ -1,4 +1,4 @@
-/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
+﻿/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
 
 /* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host â€” saves editing this + Liquid without extra tools. */
 
@@ -98,7 +98,9 @@ dt {
   /* Fallback before JS measures real heights */
   min-height: calc(var(--ps-announce-h, 0px) + var(--ps-header-h, 74px));
 }
-
+.builder-section-reset .ps-theme-layout-spacer {
+  display: none;
+}
 .ps-announce {
   width: 100%;
   box-sizing: border-box;
@@ -753,6 +755,19 @@ button.ps-icon-btn .ps-lang-icon {
 
 .ps-mobile-menu.ps-open {
   transform: translateX(0);
+}
+
+/* Same breakpoint as .ps-menu-btn / .ps-desktop-nav (≤1024): drawer + overlay active; wider = hidden. */
+@media (min-width: 1025px) {
+  .ps-mobile-menu,
+  .ps-mobile-menu.ps-open {
+    display: none;
+  }
+
+  .ps-mobile-overlay,
+  .ps-mobile-overlay.ps-open {
+    display: none;
+  }
 }
 
 main.container_class {
