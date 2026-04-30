@@ -18,28 +18,28 @@
     <h2 class="ps-featured-section-heading">{{ section_title }}</h2>
   {% endif %}
   <div class="ps-featured-desktop">
-    <a
-      href="{% if category and category.slug %}/collections/{{ category.slug }}{% else %}#{% endif %}"
-      class="ps-featured-banner ps-featured-banner--link ps-featured-hero"
-    >
-      <img
-        class="ps-featured-banner-bg-img"
-        src="{% if category and category.thumb %}{{ category.thumb }}{% elsif products and products[0] and products[0].thumb %}{{ products[0].thumb }}{% endif %}"
-        alt="{% if category and category.name %}{{ category.name }}{% else %}{{ section_title }}{% endif %}"
-        loading="lazy"
-      />
-      <span class="ps-featured-hero-overlay" aria-hidden="true"></span>
-      <div class="ps-featured-hero-content">
-        {% if category and category.name %}
-          <p class="ps-featured-banner-title">{{ category.name }}</p>
-        {% endif %}
-      </div>
-      {% unless hide_view_all %}
-        <span class="ps-featured-banner-cta">{{ shop_now }}</span>
-      {% endunless %}
-    </a>
-
     <div class="ps-featured-grid">
+      <a
+        href="{% if category and category.slug %}/collections/{{ category.slug }}{% else %}#{% endif %}"
+        class="ps-featured-banner ps-featured-banner--link ps-featured-hero"
+      >
+        <img
+          class="ps-featured-banner-bg-img"
+          src="{% if category and category.thumb %}{{ category.thumb }}{% elsif products and products[0] and products[0].thumb %}{{ products[0].thumb }}{% endif %}"
+          alt="{% if category and category.name %}{{ category.name }}{% else %}{{ section_title }}{% endif %}"
+          loading="lazy"
+        />
+        <span class="ps-featured-hero-overlay" aria-hidden="true"></span>
+        <div class="ps-featured-hero-content">
+          {% if category and category.name %}
+            <p class="ps-featured-banner-title">{{ category.name }}</p>
+          {% endif %}
+        </div>
+        {% unless hide_view_all %}
+          <span class="ps-featured-banner-cta">{{ shop_now }}</span>
+        {% endunless %}
+      </a>
+
       {% for product in products limit: 4 %}
         {% assign color_variation = product.variations | where: "type", "color" | first %}
         {% assign image_variation = product.variations | where: "type", "image" | first %}
@@ -65,8 +65,8 @@
               {% assign discount = list_price | minus: deal_price | times: 100 | divided_by: list_price | floor %}
               <span class="ps-pgrid-badge ps-sale-badge">{{ _sale_badge_label }} {{ discount }}%</span>
             {% endif %}
-            {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
-              <span class="ps-pgrid-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+            {% if product.product_theme_data.custom_badge_title and product.product_theme_data.custom_badge_title != "" %}
+              <span class="ps-pgrid-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>
             {% endif %}
             <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
             {% if hover_image != "" and hover_image != product.thumb %}

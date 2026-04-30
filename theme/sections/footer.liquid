@@ -120,13 +120,14 @@
           <button type="submit" class="ps-footer-subscribe-btn">{{ ps_footer_sub_btn }}</button>
         </form>
       </div>
+      {% assign ps_footer_payment_img = theme_data.footer_payment_custom_image | default: payment_img | default: 'https://files.easy-orders.net/1776682997164347446.webp' %}
     </div>
 
     <div class="ps-footer-meta-row">
-      <div class="ps-footer-brand-payments" aria-label="Payment methods">
+      <div class="ps-footer-brand-payments ps-footer-payments--desktop-only" aria-label="Payment methods">
         <span class="ps-footer-payment-item ps-footer-payment-single">
           <img
-            src="{{ theme_data.footer_payment_custom_image | default: payment_img | default: 'https://files.easy-orders.net/1776682997164347446.webp' }}"
+            src="{{ ps_footer_payment_img }}"
             alt="Accepted payment methods"
             loading="lazy"
           />
@@ -173,6 +174,16 @@
         {{ theme_data.footer_powered_by | default: "Powered by" }}
         <a href="https://www.easy-orders.net" target="_blank" rel="noreferrer">Easy Orders</a>
       </p>
+    </div>
+
+    <div class="ps-footer-brand-payments ps-footer-payments--mobile-only" aria-label="Payment methods">
+      <span class="ps-footer-payment-item ps-footer-payment-single">
+        <img
+          src="{{ ps_footer_payment_img }}"
+          alt="Accepted payment methods"
+          loading="lazy"
+        />
+      </span>
     </div>
   </div>
 </footer>

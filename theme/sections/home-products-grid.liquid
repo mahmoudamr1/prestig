@@ -97,8 +97,8 @@
                   {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
                   <span class="ps-plist-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
                 {% endif %}
-                {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
-                  <span class="ps-plist-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+                {% if product.product_theme_data.custom_badge_title and product.product_theme_data.custom_badge_title != "" %}
+                  <span class="ps-plist-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>
                 {% endif %}
                 <img class="ps-plist-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
                 {% if product.images[0] %}
@@ -212,8 +212,8 @@
                 {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
                 <span class="ps-pgrid-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
               {% endif %}
-              {% if product_theme_data.custom_badge_title and product_theme_data.custom_badge_title != "" %}
-                <span class="ps-pgrid-badge ps-product-custom-badge">{{ product_theme_data.custom_badge_title }}</span>
+              {% if product.product_theme_data.custom_badge_title and product.product_theme_data.custom_badge_title != "" %}
+                <span class="ps-pgrid-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>
               {% endif %}
               <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
               {% if product.images[0] %}
