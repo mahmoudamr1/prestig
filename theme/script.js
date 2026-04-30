@@ -1874,38 +1874,6 @@
       .replace(/"/g, "&quot;");
   }
 
-  /** Split "Color: white" from platform h2.variation_name so label/value colors differ (theme CSS). */
-  function initPrestigeVariationNameLabels() {
-    var headings = document.querySelectorAll("h2.variation_name");
-    for (var i = 0; i < headings.length; i++) {
-      var h = headings[i];
-      if (h.getAttribute("data-ps-variation-split") === "1") {
-        continue;
-      }
-      var raw = (h.textContent || "").trim();
-      if (!raw) {
-        continue;
-      }
-      var colon = raw.indexOf(":");
-      if (colon === -1) {
-        continue;
-      }
-      var labelPart = raw.slice(0, colon + 1).trim();
-      var valuePart = raw.slice(colon + 1).trim();
-      if (!valuePart) {
-        continue;
-      }
-      h.setAttribute("data-ps-variation-split", "1");
-      h.innerHTML =
-        '<span class="ps-variation-name-label">' +
-        escapeHtml(labelPart) +
-        "</span> " +
-        '<span class="ps-variation-name-value">' +
-        escapeHtml(valuePart) +
-        "</span>";
-    }
-  }
-
   /**
    * Platform Quick View uses Headless UI; tag the dialog panel so `style.css` can scope
    * Prestige PDP tokens (same classes as `.p_details_container`: .color_variation, .button_variation, …).

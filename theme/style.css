@@ -1363,12 +1363,24 @@ main.container_class {
   .ps-categories-grid {
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 320px;
+    grid-auto-flow: row;
     gap: 20px;
   }
 
-  .ps-category-card:nth-child(1) {
+  /* Repeating “hero left + two stacked right” every 3 categories (1,4,7… tall / 2,5,8… & 3,6,9…). */
+  .ps-category-card:nth-child(3n + 1) {
+    grid-column: 1;
     grid-row: span 2;
     height: 100%;
+    min-height: 0;
+  }
+
+  .ps-category-card:nth-child(3n + 2) {
+    grid-column: 2;
+  }
+
+  .ps-category-card:nth-child(3n) {
+    grid-column: 2;
   }
 }
 
@@ -4343,21 +4355,6 @@ div:has(> .ps-related-products) {
 .ps-cart-drawer-invoice dl[class*="pt-6"] {
   border-top: none !important;
   padding-top: 0 !important;
-}
-
-:is(
-    .ps-cart-drawer-footer,
-    .ps-checkout-page__summary-body,
-    section.checkout_order_summary
-  )
-  dl
-  > div,
-.ps-cart-drawer-invoice dl > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px 14px;
-  min-width: 0;
 }
 
 :is(
@@ -10133,7 +10130,7 @@ div.bg-white:has(> .checkout_container) {
   background: var(--ps-surface, #fff) !important;
 }
 
-.checkout_container.max-w-7xl {
+.checkout_container {
   position: relative;
   z-index: 1;
   box-sizing: border-box;
@@ -10144,8 +10141,8 @@ div.bg-white:has(> .checkout_container) {
   padding-left: 24px !important;
   padding-right: 24px !important;
   /* Spacer under `.ps-theme` already clears the fixed header stack */
-  padding-top: clamp(20px, 4vw, 40px) !important;
-  padding-bottom: clamp(2.5rem, 5vw, 4rem) !important;
+  padding-top: clamp(40px, 4vw, 40px) !important;
+  padding-bottom: clamp(4rem, 6vw, 6rem) !important;
   align-items: start;
 }
 
@@ -10685,9 +10682,9 @@ ul.checkout_cart_items_container.divide-y > li,
   width: 100%;
   max-width: 100%;
   gap: 12px !important;
-  padding-right: 0;
-  padding-left: 0;
   padding-bottom: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 :is(
@@ -13086,4 +13083,8 @@ div:has(> .ps-invoice) {
 
 .psc-compare .psc-compare__handle {
   touch-action: manipulation !important;
+}
+
+body:has(.checkout_container) .ps-footer {
+    display: none !important;
 }
