@@ -1,1 +1,15 @@
-
+{% if categories and categories.size > 0 %}
+  {% for crumb in categories %}
+    {% if forloop.last %}
+      {% if crumb.name != blank %}
+        <nav class="ab-breadcrumbs ab-breadcrumbs--category-only" aria-label="Collection">
+          {% if crumb.slug != blank %}
+            <a href="/collections/{{ crumb.slug }}" class="ab-breadcrumbs-cat-link">{{ crumb.name }}</a>
+          {% else %}
+            <span class="ab-breadcrumbs-cat">{{ crumb.name }}</span>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
