@@ -1,28 +1,22 @@
 {% if categories and categories.size > 0 %}
-{% assign categories_eyebrow = theme_data.categories_header_subtitle | default: '' | strip %}
-{% assign categories_heading = theme_data.categories_header_title | default: '' | strip %}
-{% assign _cat_sub_sz = categories_eyebrow | size %}
-{% assign _cat_ttl_sz = categories_heading | size %}
-{% if _cat_sub_sz == 0 %}
-  {% assign categories_eyebrow = 'best seller collections' %}
-{% endif %}
-{% if _cat_ttl_sz == 0 %}
-  {% assign categories_heading = 'Shop by Category' %}
-{% endif %}
-<div class="ps-categories-section">
-  <header class="ps-categories-header">
-    <p class="ps-categories-eyebrow">{{ categories_eyebrow }}</p>
-    <h2 class="ps-categories-heading">{{ categories_heading }}</h2>
+<div class="ab-categories-section">
+  <header class="ab-categories-header">
+    <p class="ab-categories-kicker">{{ theme_data.categories_header_subtitle | default: 'best seller collections' }}</p>
+    <h2 class="ab-categories-title">{{ theme_data.categories_header_title | default: 'Shop by Category' }}</h2>
   </header>
-  <div class="ps-categories-grid">
-    {% for category in categories %}
-      <a href="/collections/{{ category.slug }}" class="ps-category-card">
-        <img src="{{ category.thumb }}" alt="{{ category.name }}" class="ps-category-bg" loading="lazy" />
-        <div class="ps-category-content">
-          <h3 class="ps-category-title">{{ category.name }}</h3>
-        </div>
-      </a>
-    {% endfor %}
+  <div class="ab-categories">
+    <div class="ab-categories-track">
+      {% for category in categories %}
+        <a
+          href="/collections/{{ category.slug }}"
+          class="ab-cat-card ab-reveal"
+          style="animation-delay: {{ forloop.index0 | times: 40 }}ms"
+        >
+          <img src="{{ category.thumb }}" alt="{{ category.name }}" loading="lazy" />
+          <span class="ab-cat-label">{{ category.name }}</span>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </div>
 {% endif %}

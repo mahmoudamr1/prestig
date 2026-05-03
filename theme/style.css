@@ -1249,10 +1249,9 @@ main.container_class {
   }
 }
 
-/* Same width / gutters as Bootstrap `.container` (matches `.product_container` in this theme). */
-.ps-categories-section {
+/* Categories — horizontal track (`sections/categories.liquid`). Width matches Bootstrap `.container`. */
+.ab-categories-section {
   --bs-gutter-x: 1.5rem;
-  --bs-gutter-y: 0;
   box-sizing: border-box;
   width: 100%;
   max-width: none;
@@ -1265,7 +1264,7 @@ main.container_class {
 }
 
 @media (max-width: 767.98px) {
-  .ps-categories-section {
+  .ab-categories-section {
     --bs-gutter-x: 1rem;
     padding-left: 0;
     padding-right: 0;
@@ -1273,79 +1272,70 @@ main.container_class {
 }
 
 @media (min-width: 576px) {
-  .ps-categories-section {
+  .ab-categories-section {
     max-width: 540px;
   }
 }
 
 @media (min-width: 768px) {
-  .ps-categories-section {
+  .ab-categories-section {
     max-width: 720px;
   }
 }
 
 @media (min-width: 992px) {
-  .ps-categories-section {
+  .ab-categories-section {
     max-width: 960px;
   }
 }
 
 @media (min-width: 1200px) {
-  .ps-categories-section {
+  .ab-categories-section {
     max-width: 1140px;
   }
 }
 
 @media (min-width: 1400px) {
-  .ps-categories-section {
+  .ab-categories-section {
     max-width: 1320px;
   }
 }
 
-/* Figma 19:2218 â€” title stack only (Instrument Sans, uppercase, centered) */
-.ps-categories-header {
+.ab-categories-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   text-align: center;
   width: 100%;
-  margin-bottom: clamp(24px, 4vw, 40px);
+  margin-bottom: clamp(20px, 3.5vw, 32px);
   box-sizing: border-box;
   font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
-  color: #1c1c1c;
-  color: var(--ps-ink-secondary, #1c1c1c);
+  color: var(--body-text, var(--ps-ink-secondary, #1c1c1c));
   text-transform: uppercase;
 }
 
-.ps-categories-eyebrow {
+.ab-categories-kicker {
   margin: 0;
   width: 100%;
   max-width: 485px;
-  font-family: inherit;
   font-size: 12px;
-  font-weight: 400;
   line-height: 20.4px;
   letter-spacing: 2.16px;
-  text-transform: inherit;
-  color: inherit;
 }
 
-.ps-categories-heading {
+.ab-categories-title {
   margin: 0;
   max-width: 100%;
-  font-family: inherit;
   font-size: 28px;
   font-weight: 400;
   line-height: 39.2px;
   letter-spacing: 5.04px;
-  text-transform: inherit;
-  color: inherit;
 }
 
 @media (max-width: 575.98px) {
-  .ps-categories-heading {
+  .ab-categories-title {
     font-size: clamp(20px, 5.5vw, 28px);
     line-height: 1.25;
     letter-spacing: 0.12em;
@@ -1354,97 +1344,93 @@ main.container_class {
 }
 
 @media (min-width: 576px) {
-  .ps-categories-heading {
+  .ab-categories-title {
     white-space: nowrap;
   }
 }
 
-.ps-categories-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-.ps-category-card {
-  position: relative;
-  display: block;
+.ab-categories {
   width: 100%;
-  min-height: 280px;
-  overflow: hidden;
-  text-decoration: none;
+  box-sizing: border-box;
 }
 
-.ps-category-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.ps-category-card:hover .ps-category-bg {
-  transform: scale(1.05);
-}
-
-.ps-category-content {
-  position: absolute;
-  inset: 0;
+.ab-categories-track {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.12);
-  transition: background 0.3s ease;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  padding: 4px 2px 12px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
-.ps-category-card:hover .ps-category-content {
+.ab-categories-track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.ab-categories-track::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
 }
 
-.ps-category-title {
-  color: var(--ps-surface, #fff);
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin: 0;
-  text-align: center;
+.ab-cat-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(72vw, 260px);
+  scroll-snap-align: start;
+  overflow: hidden;
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
-  .ps-categories-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 320px;
-    grid-auto-flow: row;
-    gap: 20px;
-  }
-
-  /* Repeating “hero left + two stacked right” every 3 categories (1,4,7… tall / 2,5,8… & 3,6,9…). */
-  .ps-category-card:nth-child(3n + 1) {
-    grid-column: 1;
-    grid-row: span 2;
-    height: 100%;
-    min-height: 0;
-  }
-
-  .ps-category-card:nth-child(3n + 2) {
-    grid-column: 2;
-  }
-
-  .ps-category-card:nth-child(3n) {
-    grid-column: 2;
+  .ab-cat-card {
+    width: min(28vw, 320px);
   }
 }
 
-@media (min-width: 1024px) {
-  .ps-categories-grid {
-    grid-auto-rows: 400px;
-  }
+.ab-cat-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 
-  .ps-category-title {
-    font-size: 18px;
+.ab-cat-card:hover img {
+  transform: scale(1.05);
+}
+
+.ab-cat-label {
+  display: block;
+  padding: 12px 10px;
+  font-family: var(--ps-ff-primary), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--body-text, var(--ps-ink-secondary, #1c1c1c));
+  background: var(--body-bg, #fff);
+}
+
+@keyframes ab-cat-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ab-reveal {
+  opacity: 0;
+  animation: ab-cat-reveal 0.45s ease forwards;
 }
 
 /* Full-bleed on page bg â€” no inner box, no white strip (Figma frame sits on white/grey page) */

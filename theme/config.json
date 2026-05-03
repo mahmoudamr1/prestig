@@ -69,6 +69,8 @@
     "crt_btn_border": ""
   },
   "theme_data": {
+    "categories_header_subtitle": "best seller collections",
+    "categories_header_title": "Shop by Category",
     "footer_quick_links": "Shop",
     "footer_customer_support": "Pages",
     "footer_contact_us": "Contact us",
@@ -89,8 +91,6 @@
     "reviews_avatar_placeholder": "?",
     "reviews_read_more_label": "...Read more",
     "reviews_show_less_label": "Show less",
-    "categories_header_subtitle": "best seller collections",
-    "categories_header_title": "Shop by Category",
     "list_products_header_subtitle": "Best seller product",
     "list_products_header_title": "New Arrivals",
     "grid_products_header_subtitle": "",

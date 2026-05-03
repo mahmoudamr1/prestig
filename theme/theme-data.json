@@ -1,4 +1,6 @@
 {
+  "categories_header_subtitle": "best seller collections",
+  "categories_header_title": "Shop by Category",
   "font_google_families": "Instrument Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display",
   "font_google_weights": "400;500;600;700",
   "font_family_primary": "Instrument Sans",
@@ -26,8 +28,6 @@
   "reviews_avatar_placeholder": "?",
   "reviews_read_more_label": "...Read more",
   "reviews_show_less_label": "Show less",
-  "categories_header_subtitle": "best seller collections",
-  "categories_header_title": "Shop by Category",
   "list_products_header_subtitle": "Best seller product",
   "list_products_header_title": "New Arrivals",
   "grid_products_header_subtitle": "",
