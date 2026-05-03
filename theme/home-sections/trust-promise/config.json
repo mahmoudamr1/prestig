@@ -1,0 +1,47 @@
+{
+  "icon": "https://api.iconify.design/lucide:shield-check.svg",
+  "label": "Trust promise strip",
+  "section_schema": [
+    {
+      "name": "style",
+      "type": "select",
+      "default": "soft",
+      "description": "Background treatment",
+      "options": [
+        { "label": "Soft neutral", "value": "soft" },
+        { "label": "High contrast", "value": "contrast" }
+      ]
+    },
+    {
+      "name": "accent_color",
+      "type": "color",
+      "default": "#C9A962",
+      "description": "Icon tint and highlights"
+    },
+    {
+      "name": "promises",
+      "type": "object_array",
+      "description": "Service promises",
+      "fields": [
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "",
+          "description": "Optional small icon or logo URL"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "Complimentary shipping",
+          "description": "Promise title"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "default": "On all orders over a threshold—tracked and insured.",
+          "description": "Short supporting copy"
+        }
+      ]
+    }
+  ]
+}

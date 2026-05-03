@@ -1,0 +1,284 @@
+<section
+  class="shop-the-look shop-the-look--{{ section_data.surface | default: 'cream' }}"
+  style="--stl-accent: {{ section_data.accent_color | default: '#C9A962' }};"
+>
+  <header class="shop-the-look__head">
+    {% if section_data.eyebrow != blank %}
+      <p class="shop-the-look__eyebrow">{{ section_data.eyebrow }}</p>
+    {% endif %}
+    {% if section_data.title != blank %}
+      <h2 class="shop-the-look__title">{{ section_data.title }}</h2>
+    {% endif %}
+    {% if section_data.subtitle != blank %}
+      <p class="shop-the-look__subtitle">{{ section_data.subtitle }}</p>
+    {% endif %}
+  </header>
+
+  <div class="shop-the-look__layout">
+    <a class="shop-the-look__hero" href="{{ section_data.look_url | default: '/products' }}">
+      <div class="shop-the-look__hero-visual">
+        {% if section_data.look_image != blank %}
+          <img
+            class="shop-the-look__hero-img"
+            src="{{ section_data.look_image }}"
+            alt="{{ section_data.look_title | default: 'Look' }}"
+            loading="lazy"
+            width="900"
+            height="1120"
+          />
+        {% else %}
+          <div class="shop-the-look__hero-placeholder" aria-hidden="true"></div>
+        {% endif %}
+        <div class="shop-the-look__hero-shade" aria-hidden="true"></div>
+      </div>
+      <div class="shop-the-look__hero-copy">
+        {% if section_data.look_title != blank %}
+          <span class="shop-the-look__hero-title">{{ section_data.look_title }}</span>
+        {% endif %}
+        {% if section_data.look_caption != blank %}
+          <span class="shop-the-look__hero-caption">{{ section_data.look_caption }}</span>
+        {% endif %}
+        {% if section_data.look_cta_label != blank %}
+          <span class="shop-the-look__hero-cta">{{ section_data.look_cta_label }}</span>
+        {% endif %}
+      </div>
+    </a>
+
+    {% if section_data.picks and section_data.picks.size > 0 %}
+      <div class="shop-the-look__picks">
+        {% for pick in section_data.picks %}
+          <a class="shop-the-look__pick" href="{{ pick.url | default: '#' }}">
+            <div class="shop-the-look__pick-frame">
+              {% if pick.image != blank %}
+                <img
+                  class="shop-the-look__pick-img"
+                  src="{{ pick.image }}"
+                  alt="{{ pick.title }}"
+                  loading="lazy"
+                  width="320"
+                  height="400"
+                />
+              {% else %}
+                <div class="shop-the-look__pick-fallback" aria-hidden="true"></div>
+              {% endif %}
+            </div>
+            <div class="shop-the-look__pick-meta">
+              {% if pick.title != blank %}
+                <span class="shop-the-look__pick-title">{{ pick.title }}</span>
+              {% endif %}
+              {% if pick.price != blank %}
+                <span class="shop-the-look__pick-price">{{ pick.price }}</span>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .shop-the-look {
+    padding: clamp(2.5rem, 5vw, 4rem) 1.25rem;
+  }
+  .shop-the-look--cream {
+    background: #f3efe8;
+    color: #1c1a17;
+  }
+  .shop-the-look--charcoal {
+    background: #1e1c24;
+    color: #f4eee6;
+  }
+  .shop-the-look__head {
+    max-width: 40rem;
+    margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  }
+  .shop-the-look__eyebrow {
+    margin: 0 0 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--stl-accent, #c9a962);
+  }
+  .shop-the-look__title {
+    margin: 0 0 0.5rem;
+    font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-weight: 500;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    line-height: 1.15;
+  }
+  .shop-the-look__subtitle {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.65;
+    opacity: 0.82;
+  }
+  .shop-the-look__layout {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    align-items: stretch;
+  }
+  @media (min-width: 960px) {
+    .shop-the-look__layout {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+  }
+  .shop-the-look__hero {
+    position: relative;
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    min-height: clamp(300px, 52vh, 540px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .shop-the-look--charcoal .shop-the-look__hero {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
+  .shop-the-look__hero:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 32px 72px rgba(0, 0, 0, 0.18);
+  }
+  .shop-the-look__hero-visual {
+    position: absolute;
+    inset: 0;
+  }
+  .shop-the-look__hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .shop-the-look__hero-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #c4bbb0, #8a8278);
+  }
+  .shop-the-look--charcoal .shop-the-look__hero-placeholder {
+    background: linear-gradient(135deg, #3d3848, #1a1820);
+  }
+  .shop-the-look__hero-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(12, 10, 14, 0.88) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .shop-the-look__hero-copy {
+    position: relative;
+    z-index: 1;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-height: 100%;
+    color: #faf7f2;
+  }
+  .shop-the-look__hero-title {
+    font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-size: clamp(1.35rem, 3vw, 1.85rem);
+    font-weight: 500;
+  }
+  .shop-the-look__hero-caption {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    opacity: 0.88;
+    max-width: 26rem;
+  }
+  .shop-the-look__hero-cta {
+    margin-top: 0.5rem;
+    display: inline-flex;
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--stl-accent, #c9a962);
+    color: #141218;
+  }
+  .shop-the-look__picks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  @media (max-width: 959px) {
+    .shop-the-look__picks {
+      flex-flow: row nowrap;
+      overflow-x: auto;
+      padding-bottom: 0.35rem;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .shop-the-look__pick {
+      flex: 0 0 min(220px, 72vw);
+      scroll-snap-align: start;
+    }
+  }
+  .shop-the-look__pick {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    padding: 0.65rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(28, 26, 23, 0.06);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .shop-the-look--charcoal .shop-the-look__pick {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .shop-the-look__pick:hover {
+    background: rgba(255, 255, 255, 0.85);
+    transform: translateX(2px);
+  }
+  .shop-the-look--charcoal .shop-the-look__pick:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .shop-the-look__pick-frame {
+    flex-shrink: 0;
+    width: 76px;
+    height: 96px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #ddd8d0;
+  }
+  .shop-the-look--charcoal .shop-the-look__pick-frame {
+    background: #2a2630;
+  }
+  .shop-the-look__pick-img,
+  .shop-the-look__pick-fallback {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .shop-the-look__pick-fallback {
+    background: linear-gradient(160deg, #b0a69a, #7d756c);
+  }
+  .shop-the-look__pick-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+  .shop-the-look__pick-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .shop-the-look__pick-price {
+    font-size: 0.82rem;
+    opacity: 0.75;
+    letter-spacing: 0.03em;
+  }
+</style>

@@ -1,0 +1,101 @@
+{
+  "icon": "https://api.iconify.design/lucide:shirt.svg",
+  "label": "Shop the look",
+  "section_schema": [
+    {
+      "name": "eyebrow",
+      "type": "string",
+      "default": "Styling room",
+      "description": "Label above the section title"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "Shop the look",
+      "description": "Section heading"
+    },
+    {
+      "name": "subtitle",
+      "type": "string",
+      "default": "One outfit, every piece linked—build yours in a single pass.",
+      "description": "Intro line beside the hero look"
+    },
+    {
+      "name": "look_image",
+      "type": "string",
+      "default": "",
+      "description": "Main outfit or editorial image URL"
+    },
+    {
+      "name": "look_title",
+      "type": "string",
+      "default": "City nights",
+      "description": "Title on the hero card"
+    },
+    {
+      "name": "look_caption",
+      "type": "string",
+      "default": "Layered wool, soft leather, and a hint of shine.",
+      "description": "Short caption under the title"
+    },
+    {
+      "name": "look_url",
+      "type": "string",
+      "default": "/products",
+      "description": "Link for the full look CTA"
+    },
+    {
+      "name": "look_cta_label",
+      "type": "string",
+      "default": "Shop full look",
+      "description": "Hero card button label"
+    },
+    {
+      "name": "accent_color",
+      "type": "color",
+      "default": "#C9A962",
+      "description": "Accent for labels and buttons"
+    },
+    {
+      "name": "surface",
+      "type": "select",
+      "default": "cream",
+      "description": "Background style",
+      "options": [
+        { "label": "Warm cream", "value": "cream" },
+        { "label": "Soft charcoal", "value": "charcoal" }
+      ]
+    },
+    {
+      "name": "picks",
+      "type": "object_array",
+      "description": "Products or pieces to pair with the look",
+      "fields": [
+        {
+          "name": "image",
+          "type": "string",
+          "default": "",
+          "description": "Product image URL"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "Merino crewneck",
+          "description": "Product name"
+        },
+        {
+          "name": "price",
+          "type": "string",
+          "default": "1,290 MAD",
+          "description": "Price as shown to shoppers"
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "default": "/products",
+          "description": "Product or collection URL"
+        }
+      ]
+    }
+  ]
+}

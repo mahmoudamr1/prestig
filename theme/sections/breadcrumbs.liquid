@@ -1,0 +1,17 @@
+<nav class="ab-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="ab-breadcrumbs-list">
+    <li class="ab-breadcrumbs-item">
+      <a href="/">{{ home_text }}</a>
+      <span class="ab-breadcrumbs-sep">/</span>
+    </li>
+    {% for crumb in categories %}
+      <li class="ab-breadcrumbs-item">
+        <a href="/collections/{{ crumb.slug }}">{{ crumb.name }}</a>
+        <span class="ab-breadcrumbs-sep">/</span>
+      </li>
+    {% endfor %}
+    <li class="ab-breadcrumbs-item ab-breadcrumbs-current" aria-current="page">
+      {{ product_name }}
+    </li>
+  </ol>
+</nav>

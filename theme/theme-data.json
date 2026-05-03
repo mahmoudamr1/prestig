@@ -1,0 +1,9 @@
+{
+  "hero_slides": [],
+  "color_scheme": "light",
+  "color_primary": "#1A1A2E",
+  "hero_headline": "Welcome to Our Store",
+  "font_size_base": 16,
+  "hero_show_overlay": true,
+  "product_badge_types": ["sale", "new"]
+}

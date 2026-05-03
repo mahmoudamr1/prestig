@@ -1,0 +1,145 @@
+<section
+  class="editorial-feature editorial-feature--{{ section_data.surface | default: 'light' }} editorial-feature--img-{{ section_data.image_position | default: 'left' }}"
+  style="--ed-accent: {{ section_data.accent_color | default: '#8B7355' }};"
+>
+  <div class="editorial-feature__grid">
+    <div class="editorial-feature__media">
+      {% if section_data.image != blank %}
+        <img
+          class="editorial-feature__img"
+          src="{{ section_data.image }}"
+          alt="{{ section_data.title | default: 'Feature' }}"
+          loading="lazy"
+          width="900"
+          height="1100"
+        />
+      {% else %}
+        <div class="editorial-feature__placeholder" role="img" aria-label=""></div>
+      {% endif %}
+    </div>
+    <div class="editorial-feature__copy">
+      {% if section_data.eyebrow != blank %}
+        <p class="editorial-feature__eyebrow">{{ section_data.eyebrow }}</p>
+      {% endif %}
+      {% if section_data.title != blank %}
+        <h2 class="editorial-feature__title">{{ section_data.title }}</h2>
+      {% endif %}
+      {% if section_data.body != blank %}
+        <p class="editorial-feature__body">{{ section_data.body }}</p>
+      {% endif %}
+      {% if section_data.cta_label != blank %}
+        <a class="editorial-feature__link" href="{{ section_data.cta_url | default: '#' }}">
+          {{ section_data.cta_label }}
+          <span class="editorial-feature__link-arrow" aria-hidden="true">→</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .editorial-feature {
+    padding: clamp(2.5rem, 5vw, 4.5rem) 1.25rem;
+  }
+  .editorial-feature--light {
+    background: #f6f3ee;
+    color: #1c1a17;
+  }
+  .editorial-feature--dark {
+    background: #121015;
+    color: #f4eee6;
+  }
+  .editorial-feature__grid {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .editorial-feature__grid {
+      grid-template-columns: 1.05fr 1fr;
+    }
+    .editorial-feature--img-right .editorial-feature__media {
+      order: 2;
+    }
+    .editorial-feature--img-right .editorial-feature__copy {
+      order: 1;
+    }
+  }
+  .editorial-feature__media {
+    position: relative;
+  }
+  .editorial-feature__img {
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.18);
+  }
+  .editorial-feature--dark .editorial-feature__img {
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  }
+  .editorial-feature__placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 4px;
+    background: linear-gradient(145deg, rgba(139, 115, 85, 0.35), rgba(28, 26, 23, 0.08));
+  }
+  .editorial-feature--dark .editorial-feature__placeholder {
+    background: linear-gradient(145deg, rgba(201, 169, 98, 0.25), rgba(0, 0, 0, 0.4));
+  }
+  .editorial-feature__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.25rem 0;
+  }
+  .editorial-feature__eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ed-accent, #8b7355);
+  }
+  .editorial-feature__title {
+    margin: 0;
+    font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-weight: 500;
+    font-size: clamp(1.85rem, 4vw, 2.65rem);
+    line-height: 1.15;
+  }
+  .editorial-feature__body {
+    margin: 0;
+    font-size: 1.02rem;
+    line-height: 1.75;
+    opacity: 0.88;
+    max-width: 34rem;
+  }
+  .editorial-feature__link {
+    margin-top: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ed-accent, #8b7355);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+    width: fit-content;
+    transition: gap 0.2s ease, opacity 0.2s ease;
+  }
+  .editorial-feature__link:hover {
+    gap: 0.65rem;
+    opacity: 0.85;
+  }
+  .editorial-feature__link-arrow {
+    font-size: 1rem;
+    line-height: 1;
+  }
+</style>

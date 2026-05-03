@@ -1,0 +1,154 @@
+<div class="ab-invoice">
+  <div class="ab-invoice-header">
+    {% if logo and logo != "" %}
+      <img class="ab-invoice-logo" src="{{ logo }}" alt="{{ store_name }}" />
+    {% endif %}
+    <button
+      class="ab-invoice-track-btn"
+      type="button"
+      title="{{ tracking_link }}"
+      onclick="this.dispatchEvent(new CustomEvent('copy-tracking-link',{bubbles:true,detail:{link:'{{ tracking_link }}'}}));"
+    >{{ t_copy_tracking_link }}</button>
+  </div>
+
+  <div class="ab-invoice-body">
+    <div class="ab-invoice-sidebar">
+      {% if has_contact %}
+        <address class="ab-invoice-store-info">
+          <h3 class="ab-invoice-store-name">{{ store_name }}</h3>
+          <span class="ab-invoice-contact-row">
+            {% if contact_phone and contact_phone != "" %}
+              <a href="tel:{{ contact_phone }}">
+                <span class="ab-invoice-contact-label">{{ t_phone }}:</span> {{ contact_phone }}
+              </a>
+            {% endif %}
+            {% if contact_email and contact_email != "" %}
+              <a href="mailto:{{ contact_email }}">
+                <span class="ab-invoice-contact-label">{{ t_email }}:</span> {{ contact_email }}
+              </a>
+            {% endif %}
+          </span>
+          {% if contact_address and contact_address != "" %}
+            <span>
+              <span class="ab-invoice-contact-label">{{ t_address }}:</span> {{ contact_address }}
+            </span>
+          {% endif %}
+        </address>
+      {% endif %}
+
+      <div class="ab-invoice-shipping">
+        <h3 class="ab-invoice-section-title">{{ t_shipping_details }}</h3>
+        <dl class="ab-invoice-dl">
+          <div class="ab-invoice-dl-row">
+            <dt>{{ t_name }}:</dt>
+            <dd>{{ order.full_name }}</dd>
+          </div>
+          <div class="ab-invoice-dl-row">
+            <dt>{{ t_phone }}:</dt>
+            <dd>{{ order.phone }}</dd>
+          </div>
+          {% if order.email and order.email != "" %}
+            <div class="ab-invoice-dl-row">
+              <dt>{{ t_email }}:</dt>
+              <dd>{{ order.email }}</dd>
+            </div>
+          {% endif %}
+          {% if order.country and order.country != "" %}
+            <div class="ab-invoice-dl-row">
+              <dt>{{ t_country }}:</dt>
+              <dd>{{ order.country }}</dd>
+            </div>
+          {% endif %}
+          {% if order.government and order.government != "" %}
+            <div class="ab-invoice-dl-row">
+              <dt>{{ t_government }}:</dt>
+              <dd>{{ order.government }}</dd>
+            </div>
+          {% endif %}
+          {% if order.address and order.address != "" %}
+            <div class="ab-invoice-dl-row">
+              <dt>{{ t_address }}:</dt>
+              <dd>{{ order.address }}</dd>
+            </div>
+          {% endif %}
+          <div class="ab-invoice-dl-row">
+            <dt>{{ t_payment_details }}:</dt>
+            <dd>{{ order.payment_method }}</dd>
+          </div>
+          {% if order.transfer_receipt and order.transfer_receipt != "" %}
+            <div class="ab-invoice-dl-row ab-invoice-dl-row-center">
+              <img src="{{ order.transfer_receipt }}" alt="Transfer Receipt" class="ab-invoice-receipt-img" />
+            </div>
+          {% endif %}
+        </dl>
+      </div>
+
+      <div class="ab-invoice-timeline">
+        <ul class="ab-invoice-notes-list">
+          <li>
+            <span>{{ t_order_created }}</span>
+            <span class="ab-invoice-note-date">{{ order.created_at }}</span>
+          </li>
+          {% for note in order_notes %}
+            <li>
+              <span>{{ note.note }}</span>
+              <span class="ab-invoice-note-date">{{ note.created_at }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="ab-invoice-main">
+      <div class="ab-invoice-status-row">
+        <span class="ab-invoice-status-label">{{ t_order_status }}:</span>
+        <span class="ab-invoice-status-value">{{ order.status_label }}</span>
+      </div>
+
+      <div class="ab-invoice-items">
+        {% for item in order.cart_items %}
+          <div class="ab-invoice-item">
+            {% if item.thumb and item.thumb != "" %}
+              <img class="ab-invoice-item-img" src="{{ item.thumb }}" alt="{{ item.name }}" loading="lazy" />
+            {% endif %}
+            <div class="ab-invoice-item-details">
+              <h4 class="ab-invoice-item-name">{{ item.name }}</h4>
+              {% if item.variants and item.variants != "" %}
+                <p class="ab-invoice-item-variants">{{ item.variants }}</p>
+              {% endif %}
+              <p class="ab-invoice-item-qty">{{ t_items_count }}: {{ item.quantity }}</p>
+              <p class="ab-invoice-item-unit-price">{{ t_piece_price }}: {{ item.price }} {{ currency }}</p>
+              {% if item.metadata_html and item.metadata_html != "" %}
+                <div class="ab-invoice-item-metadata">{{ item.metadata_html }}</div>
+              {% endif %}
+            </div>
+            <span class="ab-invoice-item-total">{{ t_total }} {{ item.total }} {{ currency }}</span>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="ab-invoice-totals">
+        <div class="ab-invoice-dl-row">
+          <dt>{{ t_product_total }}:</dt>
+          <dd>{{ order.cost }} {{ currency }}</dd>
+        </div>
+        {% unless order.is_digital %}
+          <div class="ab-invoice-dl-row">
+            <dt>{{ t_shipping_cost }}:</dt>
+            <dd>{% if order.shipping_cost %}{{ order.shipping_cost }} {{ currency }}{% else %}{{ t_free_shipping }}{% endif %}</dd>
+          </div>
+        {% endunless %}
+        {% if order.coupon_code and order.coupon_code != "" %}
+          <div class="ab-invoice-dl-row">
+            <dt>{{ t_coupon_code }}: {{ order.coupon_code }}</dt>
+            <dd>{{ order.coupon_discount }} {{ currency }}</dd>
+          </div>
+        {% endif %}
+        <div class="ab-invoice-dl-row ab-invoice-total-row">
+          <dt>{{ t_total }}:</dt>
+          <dd>{{ order.total_cost }} {{ currency }}</dd>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

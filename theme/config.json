@@ -1,0 +1,123 @@
+{
+  "footer": {
+    "logo": "",
+    "pages": [
+      {
+        "slug": "terms-and-conditions",
+        "title": "شروط الاستخدام"
+      },
+      {
+        "slug": "shipping-policy",
+        "title": "سياسة الشحن"
+      },
+      {
+        "slug": "refund-policy",
+        "title": "سياسة الاستبدال و الاسترجاع"
+      },
+      {
+        "slug": "privacy-policy",
+        "title": "سياسات الخصوصية"
+      }
+    ],
+    "social": [
+      {
+        "url": "https://facebook.com",
+        "type": "facebook"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "instagram"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "twitter"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "linkedin"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "tiktok"
+      },
+      {
+        "url": "https://facebook.com",
+        "type": "youtube"
+      }
+    ],
+    "categories": [
+      {
+        "name": "Men",
+        "slug": "womens-accessories"
+      },
+      {
+        "name": "Women",
+        "slug": "mens-accessories"
+      },
+      {
+        "name": "New Arrival",
+        "slug": "98"
+      }
+    ],
+    "payment_img": "https://easyorders.fra1.digitaloceanspaces.com/1773958283329740254payment_icons.svg",
+    "is_use_config": true
+  },
+  "header": {
+    "logo": "",
+    "links": [
+      {
+        "url": "/collections/womens-accessories",
+        "name": "Men",
+        "slug": "womens-accessories",
+        "type": "category"
+      },
+      {
+        "url": "/collections/mens-accessories",
+        "name": "Women",
+        "slug": "mens-accessories",
+        "type": "category"
+      },
+      {
+        "url": "/collections/98",
+        "name": "New Arrival",
+        "slug": "98",
+        "type": "category"
+      },
+      {
+        "url": "/collections/30-off-tree-runner-go-tree-gliders",
+        "name": "Sale",
+        "slug": "30-off-tree-runner-go-tree-gliders",
+        "type": "category"
+      }
+    ],
+    "is_use_config": true
+  },
+  "palette": {
+    "ft_bg": "",
+    "hd_bg": "#a4e6b6",
+    "ann_bg": "#000000",
+    "ft_text": "",
+    "hd_text": "",
+    "ann_text": "",
+    "buy_btn_bg": "",
+    "crt_btn_bg": "",
+    "buy_btn_text": "",
+    "crt_btn_text": "",
+    "buy_btn_border": "",
+    "crt_btn_border": ""
+  },
+  "theme_data": {
+    "hero_slides": [],
+    "color_scheme": "light",
+    "color_primary": "#1A1A2E",
+    "hero_headline": "Welcome to Our Store",
+    "font_size_base": 16,
+    "hero_show_overlay": true,
+    "product_badge_types": ["sale", "new"]
+  },
+  "announcement_bar": {
+    "text": ["it works", "Free shipping for 1000 EGP", "Genuine Quality"],
+    "type": "marquee",
+    "is_use_config": true
+  }
+}

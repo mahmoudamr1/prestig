@@ -1,0 +1,10 @@
+<div class="ab-categories">
+  <div class="ab-categories-track">
+    {% for category in categories %}
+      <a href="/collections/{{ category.slug }}" class="ab-cat-card ab-reveal" style="animation-delay: {{ forloop.index | times: 0.04 }}s">
+        <img src="{{ category.thumb }}" alt="{{ category.name }}" />
+        <span class="ab-cat-label">{{ category.name }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,43 @@
+  <section class="ab-slider" data-autoplay="5000">
+    <div class="ab-slider-track">
+      {% for slide in slides %}
+        {% if slide.url != blank %}
+          <a
+            href="{{ slide.url }}"
+            class="ab-slider-slide{% if forloop.first %} ab-active{% endif %}"
+            aria-label="{{ slide.alt | default: "Slide image" }}"
+          >
+            <picture>
+              {% if slide.mobile_image != blank %}
+                <source media="(max-width: 425px)" srcset="{{ slide.mobile_image }}" />
+                <source media="(min-width: 426px)" srcset="{{ slide.image }}" />
+              {% endif %}
+              <img src="{{ slide.image }}" alt="{{ slide.alt | default: "Slide image" }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
+            </picture>
+          </a>
+        {% else %}
+          <div class="ab-slider-slide{% if forloop.first %} ab-active{% endif %}" aria-label="{{ slide.alt | default: "Slide image" }}">
+            <picture>
+              {% if slide.mobile_image != blank %}
+                <source media="(max-width: 425px)" srcset="{{ slide.mobile_image }}" />
+                <source media="(min-width: 426px)" srcset="{{ slide.image }}" />
+              {% endif %}
+              <img src="{{ slide.image }}" alt="{{ slide.alt | default: "Slide image" }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
+            </picture>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if slides.size > 1 %}
+      <div class="ab-slider-controls">
+        <div class="ab-slider-progress">
+          <span class="ab-slider-progress-bar"></span>
+        </div>
+        <button class="ab-slider-pause" aria-label="Pause slideshow">
+          <svg class="ab-slider-icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          <svg class="ab-slider-icon-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+        </button>
+      </div>
+    {% endif %}
+  </section>

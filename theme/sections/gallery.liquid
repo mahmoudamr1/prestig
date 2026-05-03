@@ -1,0 +1,61 @@
+<div class="ab-gallery">
+  <div class="ab-gallery-main" data-gallery-open>
+    {% if mainImage contains '.mp4' %}
+      <video
+        src="{{ mainImage }}"
+        class="ab-gallery-main-media"
+        controls
+        playsinline
+        autoplay
+        muted
+        preload="metadata"
+      ></video>
+    {% else %}
+      <img
+        id="gallery-main-image"
+        src="{{ mainImage }}"
+        alt="{{ product_name }}"
+        class="ab-gallery-main-media"
+      />
+    {% endif %}
+    <button class="ab-gallery-zoom" type="button" aria-label="Zoom image" data-gallery-open>
+      <span>+</span>
+    </button>
+  </div>
+
+  {% if images.size > 1 %}
+  <div class="ab-gallery-thumbs">
+    {% for image in images %}
+      <button
+        class="ab-gallery-thumb{% if image == mainImage %} ab-active{% endif %}"
+        data-src="{{ image }}"
+        type="button"
+        aria-label="View image {{ forloop.index }}"
+      >
+        {% if image contains '.mp4' %}
+          <video src="{{ image }}" muted playsinline preload="metadata"></video>
+        {% else %}
+          <img src="{{ image }}" alt="{{ product_name }}" loading="lazy" />
+        {% endif %}
+      </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="ab-lightbox" data-lightbox>
+    <div class="ab-lightbox-backdrop" data-lightbox-close></div>
+    <button class="ab-lightbox-close" data-lightbox-close aria-label="Close">&times;</button>
+    {% if images.size > 1 %}
+      <button class="ab-lightbox-arrow ab-lightbox-prev" data-lightbox-prev aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="ab-lightbox-arrow ab-lightbox-next" data-lightbox-next aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+      <div class="ab-lightbox-counter" data-lightbox-counter></div>
+    {% endif %}
+    <div class="ab-lightbox-body">
+      <img src="" alt="" class="ab-lightbox-img" data-lightbox-img />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+
+<footer class="ab-footer">
+  <div class="ab-footer-inner">
+    <div class="ab-footer-columns">
+      <div class="ab-footer-col ab-footer-brand">
+        <a href="/" class="ab-footer-logo">
+          {% if logo != "" %}
+            <img src="{{ logo }}" alt="{{ store_name }}" />
+          {% else %}
+            <span class="ab-footer-logo-text">{{ store_name }}</span>
+          {% endif %}
+        </a>
+        {% if has_contact %}
+          <address class="ab-footer-contact">
+            {% if phone != "" %}
+              <a href="tel:{{ phone }}" class="ab-footer-contact-item">
+                <span class="ab-footer-contact-icon ab-fci-phone" aria-hidden="true"></span>
+                <span dir="ltr">{{ phone }}</span>
+              </a>
+            {% endif %}
+            {% if email != "" %}
+              <a href="mailto:{{ email }}" class="ab-footer-contact-item">
+                <span class="ab-footer-contact-icon ab-fci-email" aria-hidden="true"></span>
+                {{ email }}
+              </a>
+            {% endif %}
+            {% if address != "" %}
+              <span class="ab-footer-contact-item">
+                <span class="ab-footer-contact-icon ab-fci-address" aria-hidden="true"></span>
+                {{ address }}
+              </span>
+            {% endif %}
+          </address>
+        {% endif %}
+      </div>
+
+      {% if categories.size > 0 %}
+        <div class="ab-footer-col">
+          <h4 class="ab-footer-heading">{{ shop_label }}</h4>
+          <ul class="ab-footer-links">
+            {% for cat in categories %}
+              <li><a href="/collections/{{ cat.slug }}">{{ cat.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if pages.size > 0 %}
+        <div class="ab-footer-col">
+          <h4 class="ab-footer-heading">{{ help_label }}</h4>
+          <ul class="ab-footer-links">
+            {% for page in pages %}
+              <li><a href="/pages/{{ page.slug }}">{{ page.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="ab-footer-right">
+      <div class="ab-footer-subscribe">
+        <h4 class="ab-footer-heading">{{ subscribe_label }}</h4>
+        <form
+          class="ab-footer-subscribe-form"
+          novalidate
+          onsubmit="
+            event.preventDefault();
+            if (!this.checkValidity()) {
+              this.reportValidity();
+              return;
+            }
+            var input = this.elements.email;
+            var email = input && input.value ? String(input.value).trim() : '';
+            this.dispatchEvent(
+              new CustomEvent('footer-subscribe', {
+                bubbles: true,
+                detail: { email: email }
+              })
+            );
+            this.reset()
+          "
+        >
+          <input
+            type="email"
+            name="email"
+            class="ab-footer-subscribe-input"
+            placeholder="{{ email_placeholder }}"
+            autocomplete="email"
+            inputmode="email"
+            maxlength="254"
+            pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+            title="{{ email_placeholder }}"
+            required
+            aria-required="true"
+          />
+          <button type="submit" class="ab-footer-subscribe-btn" aria-label="Subscribe">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </form>
+      </div>
+
+      {% if social.size > 0 %}
+        <div class="ab-footer-social">
+          <p class="ab-footer-social-label">{{ follow_label }}</p>
+          <div class="ab-footer-social-icons">
+            {% for item in social %}
+              <a href="{{ item.url }}" target="_blank" rel="noreferrer" aria-label="{{ item.label }}">
+                <span class="ab-footer-social-img" style="-webkit-mask-image:url({{ item.icon }});mask-image:url({{ item.icon }})"></span>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="ab-footer-bottom">
+          {% if payment_img != "" %}
+          <div class="ab-footer-payment">
+            <img src="{{ payment_img }}" alt="Accepted payment methods" />
+          </div>
+        {% endif %}
+
+    <p class="ab-footer-copy">&copy; {{ year }} {{ store_name }}. {{ rights_label }}</p>
+    {% if show_powered %}
+      <p class="ab-footer-powered">Powered by <a href="https://www.easy-orders.net" target="_blank" rel="noreferrer">easyorders</a></p>
+    {% endif %}
+  </div>  
+</footer>

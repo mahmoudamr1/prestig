@@ -1,0 +1,55 @@
+<div class="ab-reviews">
+  <div class="ab-reviews-header">
+    <h2 class="ab-reviews-title">{{ t_users_reviews }}</h2>
+    <div class="ab-reviews-summary">
+      <div class="ab-reviews-avg-stars">
+        {% assign avg_full = average_rating | floor %}
+        {% assign avg_decimal = average_rating | minus: avg_full %}
+        {% assign avg_has_half = false %}
+        {% if avg_decimal >= 0.25 and avg_decimal < 0.75 %}
+          {% assign avg_has_half = true %}
+        {% elsif avg_decimal >= 0.75 %}
+          {% assign avg_full = avg_full | plus: 1 %}
+        {% endif %}
+        {% for i in (1..5) %}
+          {% if i <= avg_full %}
+            <span class="ab-pd-star ab-pd-star-filled"></span>
+          {% elsif avg_has_half and i == avg_full | plus: 1 %}
+            <span class="ab-pd-star ab-pd-star-half"></span>
+          {% else %}
+            <span class="ab-pd-star ab-pd-star-empty"></span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <span class="ab-reviews-count">{{ average_rating_display }} ({{ reviews_count }} {{ t_reviews }})</span>
+    </div>
+    <button class="ab-reviews-write-btn" type="button" onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}))">{{ t_share_your_review }}</button>
+  </div>
+
+  <div class="ab-reviews-list">
+    {% for review in reviews %}
+    <div class="ab-review-card">
+      <div class="ab-review-stars">
+        {% for i in (1..5) %}
+          {% if i <= review.rating %}
+            <span class="ab-pd-star ab-pd-star-filled"></span>
+          {% else %}
+            <span class="ab-pd-star ab-pd-star-empty"></span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% if review.user_name and review.user_name != "" %}
+        <h3 class="ab-review-author">{{ review.user_name }}</h3>
+      {% endif %}
+      <p class="ab-review-comment" data-review-comment>{{ review.comment }}</p>
+      {% if review.image and review.image != "" %}
+        <img src="{{ review.image }}" alt="{{ review.user_name }}" class="ab-review-image" loading="lazy" />
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if reviews.size == 0 %}
+    <p class="ab-reviews-empty">{{ t_no_reviews }}</p>
+  {% endif %}
+</div>

@@ -1,0 +1,66 @@
+{
+  "icon": "https://api.iconify.design/lucide:mail.svg",
+  "label": "Newsletter — luxe",
+  "section_schema": [
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "Notes from the studio",
+      "description": "Heading"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "default": "Private previews, styling tips, and early access to drops—sent sparingly, never noisy.",
+      "description": "Supporting text"
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "Email address",
+      "description": "Input placeholder"
+    },
+    {
+      "name": "button_label",
+      "type": "string",
+      "default": "Join the list",
+      "description": "Submit button label"
+    },
+    {
+      "name": "form_action",
+      "type": "string",
+      "default": "/pages/contact",
+      "description": "Form action URL (your ESP or contact page)"
+    },
+    {
+      "name": "footnote",
+      "type": "string",
+      "default": "By subscribing you agree to receive marketing emails. Unsubscribe anytime.",
+      "description": "Fine print under the form"
+    },
+    {
+      "name": "show_footnote",
+      "type": "boolean",
+      "default": true,
+      "description": "Show the fine print"
+    },
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#1A1814",
+      "description": "Section background"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#F4EEE6",
+      "description": "Section text color"
+    },
+    {
+      "name": "button_color",
+      "type": "color",
+      "default": "#C9A962",
+      "description": "Button background"
+    }
+  ]
+}

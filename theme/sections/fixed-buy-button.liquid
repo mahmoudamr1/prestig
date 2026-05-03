@@ -1,0 +1,46 @@
+<div class="ab-fixed-buy">
+  {% if thumb and thumb != "" %}
+    <div class="ab-fixed-buy-preview">
+      <img class="ab-fixed-buy-thumb" src="{{ thumb }}" alt="{{ product_name }}" />
+      <div class="ab-fixed-buy-info">
+        <span class="ab-fixed-buy-name">{{ product_name }}</span>
+        <div class="ab-fixed-buy-price-row">
+          {% if sale_price and sale_price < price %}
+            <span class="ab-fixed-buy-price-old">{{ price }} {{ currency }}</span>
+            <span class="ab-fixed-buy-price ab-fixed-buy-price-sale">{{ sale_price }} {{ currency }}</span>
+          {% else %}
+            <span class="ab-fixed-buy-price">{{ price }} {{ currency }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% unless hide_quantity %}
+    <div class="ab-fixed-buy-qty">
+      <button
+        class="ab-fixed-buy-qty-btn"
+        type="button"
+        onclick="this.dispatchEvent(new CustomEvent('increment-quantity',{bubbles:true}));"
+        {% if increase_disabled %}disabled{% endif %}
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <span class="ab-fixed-buy-qty-value">{{ quantity }}</span>
+      <button
+        class="ab-fixed-buy-qty-btn"
+        type="button"
+        onclick="this.dispatchEvent(new CustomEvent('decrement-quantity',{bubbles:true}));"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  {% endunless %}
+
+  <button
+    class="ab-fixed-buy-btn"
+    type="button"
+    {% if disabled %}disabled{% endif %}
+    onclick="event.preventDefault();this.dispatchEvent(new CustomEvent('buy-now',{bubbles:true}));"
+  >{{ buy_now_text }}</button>
+</div>

@@ -1,0 +1,63 @@
+<div class="ab-pd">
+  <h1 class="ab-pd-name">{{ product_name }}</h1>
+
+  <div class="ab-pd-price-row">
+    {% if sale_price and sale_price < price %}
+      <span class="ab-pd-price-old">{{ price }} {{ currency }}</span>
+      <span class="ab-pd-price ab-pd-price-sale">{{ sale_price }} {{ currency }}</span>
+    {% else %}
+      <span class="ab-pd-price">{{ price }} {{ currency }}</span>
+    {% endif %}
+  </div>
+
+  {% if rating > 0 %}
+  <div class="ab-pd-rating">
+    <div class="ab-pd-stars">
+      {% assign full_stars = rating | floor %}
+      {% assign has_half = false %}
+      {% assign decimal = rating | minus: full_stars %}
+      {% if decimal >= 0.25 and decimal < 0.75 %}
+        {% assign has_half = true %}
+      {% elsif decimal >= 0.75 %}
+        {% assign full_stars = full_stars | plus: 1 %}
+      {% endif %}
+
+      {% for i in (1..5) %}
+        {% if i <= full_stars %}
+          <span class="ab-pd-star ab-pd-star-filled"></span>
+        {% elsif has_half and i == full_stars | plus: 1 %}
+          <span class="ab-pd-star ab-pd-star-half"></span>
+        {% else %}
+          <span class="ab-pd-star ab-pd-star-empty"></span>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <span class="ab-pd-reviews-count">({{ reviews_count }})</span>
+  </div>
+  {% endif %}
+
+  {% if description and description != "" %}
+    <p class="ab-pd-description">{{ description }}</p>
+  {% endif %}
+
+  {% comment %} Wishlist & Compare buttons on the product detail page — dispatch toggle events handled by the storefront JS layer
+  <div class="ab-pd-actions">
+    <button
+      class="ab-pd-wishlist-btn"
+      type="button"
+      aria-label="Add to wishlist"
+      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-wishlist',{bubbles:true,detail:{productId:'{{ product_id }}'}}));"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button
+      class="ab-pd-compare-btn"
+      type="button"
+      aria-label="Compare"
+      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-compare',{bubbles:true,detail:{productId:'{{ product_id }}'}}));"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 8 16 13"/><line x1="21" y1="8" x2="9" y2="8"/><polyline points="8 21 3 16 8 11"/><line x1="3" y1="16" x2="15" y2="16"/></svg>
+    </button>
+  </div>
+  {% endcomment %}
+</div>

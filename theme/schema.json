@@ -1,0 +1,145 @@
+[
+  {
+    "name": "hero_headline",
+    "type": "string",
+    "default": "Welcome to Our Store",
+    "description": "Hero headline text"
+  },
+  {
+    "name": "font_size_base",
+    "type": "number",
+    "default": 16,
+    "description": "Base font size in px"
+  },
+  {
+    "name": "color_primary",
+    "type": "color",
+    "default": "#1A1A2E",
+    "description": "Primary brand color"
+  },
+  {
+    "name": "hero_show_overlay",
+    "type": "boolean",
+    "default": true,
+    "description": "Show dark overlay on hero image"
+  },
+  {
+    "name": "color_scheme",
+    "type": "select",
+    "default": "light",
+    "options": [
+      {
+        "label": "Light",
+        "value": "light"
+      },
+      {
+        "label": "Dark",
+        "value": "dark"
+      },
+      {
+        "label": "System default",
+        "value": "system"
+      }
+    ],
+    "description": "Base color scheme"
+  },
+  {
+    "name": "product_badge_types",
+    "type": "multi_select",
+    "default": ["sale", "new"],
+    "options": [
+      {
+        "label": "Sale",
+        "value": "sale"
+      },
+      {
+        "label": "New arrival",
+        "value": "new"
+      },
+      {
+        "label": "Bestseller",
+        "value": "bestseller"
+      },
+      {
+        "label": "Low stock",
+        "value": "low_stock"
+      },
+      {
+        "label": "Sold out",
+        "value": "sold_out"
+      }
+    ],
+    "description": "Active product badge types"
+  },
+  {
+    "name": "hero_slides",
+    "type": "object_array",
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "description": "Slide headline"
+      },
+      {
+        "name": "overlay_opacity",
+        "type": "number",
+        "default": 40,
+        "description": "Overlay darkness (0–100)"
+      },
+      {
+        "name": "text_color",
+        "type": "color",
+        "default": "#FFFFFF",
+        "description": "Slide text color"
+      },
+      {
+        "name": "enabled",
+        "type": "boolean",
+        "default": true,
+        "description": "Enable this slide"
+      },
+      {
+        "name": "cta_style",
+        "type": "select",
+        "default": "filled",
+        "options": [
+          {
+            "label": "Filled",
+            "value": "filled"
+          },
+          {
+            "label": "Outline",
+            "value": "outline"
+          },
+          {
+            "label": "Text only",
+            "value": "text"
+          }
+        ],
+        "description": "CTA button style"
+      },
+      {
+        "name": "show_on_devices",
+        "type": "multi_select",
+        "default": ["desktop", "mobile"],
+        "options": [
+          {
+            "label": "Desktop",
+            "value": "desktop"
+          },
+          {
+            "label": "Tablet",
+            "value": "tablet"
+          },
+          {
+            "label": "Mobile",
+            "value": "mobile"
+          }
+        ],
+        "description": "Show this slide on"
+      }
+    ],
+    "description": "Hero slide"
+  }
+]

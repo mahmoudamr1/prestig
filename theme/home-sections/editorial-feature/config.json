@@ -1,0 +1,68 @@
+{
+  "icon": "https://api.iconify.design/lucide:layout-template.svg",
+  "label": "Editorial feature",
+  "section_schema": [
+    {
+      "name": "image",
+      "type": "string",
+      "default": "",
+      "description": "Feature image URL"
+    },
+    {
+      "name": "eyebrow",
+      "type": "string",
+      "default": "Inside the atelier",
+      "description": "Small label above the title"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "Tailoring that moves with you",
+      "description": "Headline"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "default": "Precision cuts and fluid fabrics—designed for city days and slow evenings. Discover the pieces our stylists reach for first.",
+      "description": "Body copy"
+    },
+    {
+      "name": "cta_label",
+      "type": "string",
+      "default": "Explore the story",
+      "description": "Link label"
+    },
+    {
+      "name": "cta_url",
+      "type": "string",
+      "default": "/pages/about",
+      "description": "Link URL"
+    },
+    {
+      "name": "image_position",
+      "type": "select",
+      "default": "left",
+      "description": "Image side on desktop",
+      "options": [
+        { "label": "Image left", "value": "left" },
+        { "label": "Image right", "value": "right" }
+      ]
+    },
+    {
+      "name": "surface",
+      "type": "select",
+      "default": "light",
+      "description": "Color mood",
+      "options": [
+        { "label": "Light editorial", "value": "light" },
+        { "label": "Dark editorial", "value": "dark" }
+      ]
+    },
+    {
+      "name": "accent_color",
+      "type": "color",
+      "default": "#8B7355",
+      "description": "Eyebrow and link accent"
+    }
+  ]
+}

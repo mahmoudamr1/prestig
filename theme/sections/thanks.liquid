@@ -1,0 +1,33 @@
+<div class="ab-thanks">
+  <div class="ab-thanks-content">
+    {% if content and content != "" %}
+      <div class="ab-thanks-custom-content">{{ content }}</div>
+    {% else %}
+      <div class="ab-thanks-default">
+        <div class="ab-thanks-icon" aria-hidden="true">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+            <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="3"/>
+            <path d="M24 42l10 10 22-24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1 class="ab-thanks-title">{{ thanks_title }}</h1>
+        <p class="ab-thanks-message">{{ thanks_message }}</p>
+        {% if phone_message and phone_message != "" %}
+          <p class="ab-thanks-phone-msg">{{ phone_message }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if show_home_button %}
+      <button
+        class="ab-thanks-home-btn"
+        type="button"
+        onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
+      >{{ go_home_text }}</button>
+    {% endif %}
+
+    {% if offers_text and offers_text != "" %}
+      <p class="ab-thanks-offers">{{ offers_text }}</p>
+    {% endif %}
+  </div>
+</div>
