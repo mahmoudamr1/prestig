@@ -164,13 +164,13 @@
   {
     "name": "categories_header_subtitle",
     "type": "string",
-    "description": "Categories block: eyebrow when subtitle is empty.",
+    "description": "Categories section: small uppercase eyebrow above the grid (Figma kicker). Leave empty to hide.",
     "default": "best seller collections"
   },
   {
     "name": "categories_header_title",
     "type": "string",
-    "description": "Categories block: heading when title is empty.",
+    "description": "Categories section: main heading above the grid. Leave empty to hide.",
     "default": "Shop by Category"
   },
   {
