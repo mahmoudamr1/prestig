@@ -40,7 +40,7 @@
         {% endunless %}
       </a>
 
-      {% for product in products limit: 4 %}
+      {% for product in products limit: 7 %}
         {% assign color_variation = product.variations | where: "type", "color" | first %}
         {% assign image_variation = product.variations | where: "type", "image" | first %}
         {% assign hover_image = "" %}
