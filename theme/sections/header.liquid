@@ -146,7 +146,7 @@
     {% endif %}
   >
     <div class="ps-header-inner">
-      <div class="ps-left-group">
+      <div class="ps-left-group" data-anim="fadeInRight" data-seq="1">
         <button id="eo-menu-btn" class="ps-menu-btn" type="button" aria-label="Open menu">
           <img
             src="https://files.easy-orders.net/1773672562651251535hamburger.svg"
@@ -190,7 +190,7 @@
         </nav>
       </div>
 
-      <a href="/" class="ps-logo" aria-label="{{ store_name }}">
+      <a href="/" class="ps-logo" aria-label="{{ store_name }}" data-anim="zoomIn" data-seq="0">
         {% if logo != blank %}
           <img src="{{ logo }}" alt="{{ store_name }}" />
         {% else %}
@@ -198,7 +198,7 @@
         {% endif %}
       </a>
 
-      <div class="ps-right-group">
+      <div class="ps-right-group" data-anim="fadeInLeft" data-seq="2">
         <a href="/search" class="ps-icon-btn search-btn" aria-label="Search" data-eo="search-btn">
           <img
             src="https://files.easy-orders.net/1773672173685851777search.svg"

@@ -7894,7 +7894,7 @@ html:lang(it)
   cursor: pointer;
 }
 
-.ab-review-read-more.ab-visible {
+.ab-review-read-more.ps-rev-read-more--shown {
   display: inline-block;
 }
 
@@ -13401,4 +13401,317 @@ div:has(> .ps-invoice) {
 
 body:has(.checkout_order_summary) .ps-footer {
   display: none !important;
+}
+
+/* --- Prestige scroll-reveal animation system (`data-anim`, `data-seq`, `data-anim="cycle"` + `data-cycle`) --- */
+.ps-sr-scope {
+  overflow-x: clip;
+  overflow-y: clip;
+}
+
+.ps-theme .ps-header,
+.ps-theme .ps-announce,
+.ps-theme .ps-slider,
+.ps-theme .ps-plist,
+.ps-theme .ps-pgrid-section,
+.ps-theme .ps-featured,
+.ps-theme .ps-footer,
+.ps-theme .ps-cl-section,
+.ps-theme .ps-related-products,
+.ps-theme .ps-rp,
+.ps-theme .ps-rev-section,
+.ps-theme .ps-thanks,
+.ps-theme .ab-categories-section,
+.ps-theme .promo-countdown-hero,
+.ps-theme .runway-hero,
+.ps-theme .lifestyle-editorial-hero,
+.ps-theme .newsletter-immersive,
+.ps-theme .newsletter-luxe,
+.ps-theme .service-highlights,
+.ps-theme .editorial-feature,
+.ps-theme .category-mosaic,
+.ps-theme .trust-promise,
+.ps-theme .psc-compare {
+  overflow-x: clip;
+  overflow-y: clip;
+}
+
+.ps-theme .ps-header {
+  overflow-y: visible;
+}
+
+/* Hide pending elements — !important beats host/Tailwind utilities (e.g. opacity-100). */
+.will-animate {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+}
+
+/* Transition-only reveal (no `anim-*` keyframe class). */
+.animated:not([class*="anim-"]) {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Keyframe-driven reveals: avoid transition fighting `animation`. */
+.animated[class*="anim-"] {
+  transition: none !important;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes flipIn {
+  from {
+    opacity: 0;
+    transform: perspective(400px) rotateY(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(400px) rotateY(0deg);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px) rotate(5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.anim-fadeInUp {
+  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-fadeInDown {
+  animation: fadeInDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-fadeInLeft {
+  animation: fadeInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-fadeInRight {
+  animation: fadeInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-scaleIn {
+  animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.anim-rotateIn {
+  animation: rotateIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-slideInUp {
+  animation: slideInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-bounceIn {
+  animation: bounceIn 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.anim-flipIn {
+  animation: flipIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-zoomIn {
+  animation: zoomIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-slideInLeft {
+  animation: slideInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-slideInRight {
+  animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-fadeInScale {
+  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hover-lift,
+.ps-hover-lift {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.hover-lift:hover,
+.ps-hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hover-scale,
+.ps-hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover,
+.ps-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-glow,
+.ps-hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover,
+.ps-hover-glow:hover {
+  box-shadow: 0 0 20px rgba(0, 126, 96, 0.3);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #007e60, #00a876);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .will-animate {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .animated,
+  .animated[class*="anim-"] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }

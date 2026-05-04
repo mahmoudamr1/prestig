@@ -2,7 +2,7 @@
   <div class="product_container ps-sticky-buy__container">
     <div class="ps-sticky-buy__inner">
       {% if thumb and thumb != "" %}
-        <div class="ps-sticky-buy__left">
+        <div class="ps-sticky-buy__left" data-anim="slideInLeft" data-seq="0">
           <div class="ps-sticky-buy__thumb">
             <img
               src="{{ thumb }}"
@@ -25,7 +25,7 @@
         </div>
       {% endif %}
 
-      <div class="ps-sticky-buy__actions">
+      <div class="ps-sticky-buy__actions" data-anim="fadeInRight" data-seq="1">
         <div class="ps-sticky-buy__actions-row">
           {% unless hide_quantity %}
             <div class="ps-sticky-buy__qty">

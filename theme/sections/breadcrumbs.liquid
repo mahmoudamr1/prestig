@@ -2,11 +2,11 @@
   {% for crumb in categories %}
     {% if forloop.last %}
       {% if crumb.name != blank %}
-        <nav class="ab-breadcrumbs ab-breadcrumbs--category-only" aria-label="Collection">
+        <nav class="ab-breadcrumbs ab-breadcrumbs--category-only ps-sr-scope" aria-label="Collection">
           {% if crumb.slug != blank %}
-            <a href="/collections/{{ crumb.slug }}" class="ab-breadcrumbs-cat-link">{{ crumb.name }}</a>
+            <a href="/collections/{{ crumb.slug }}" class="ab-breadcrumbs-cat-link" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</a>
           {% else %}
-            <span class="ab-breadcrumbs-cat">{{ crumb.name }}</span>
+            <span class="ab-breadcrumbs-cat" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</span>
           {% endif %}
         </nav>
       {% endif %}

@@ -1,16 +1,16 @@
-<div class="ab-pd" data-ps-pdp-details>
+<div class="ab-pd ps-sr-scope" data-ps-pdp-details>
   {% if theme_data.brand_name %}
-    <p class="ab-pd-brand">
+    <p class="ab-pd-brand" data-anim="fadeInDown" data-seq="0">
       <span class="ab-pd-brand-label">Brand:</span>
       <span class="ab-pd-brand-value">{{ theme_data.brand_name }}</span>
     </p>
   {% endif %}
 
-  <h1 class="ab-pd-name">{{ product_name }}</h1>
+  <h1 class="ab-pd-name" data-anim="slideInUp" data-seq="1">{{ product_name }}</h1>
 
   {% assign pd_list_price = price | plus: 0 %}
   {% assign pd_deal_price = sale_price | plus: 0 %}
-  <div class="ab-pd-price-rating-row">
+  <div class="ab-pd-price-rating-row" data-anim="scaleIn" data-seq="2">
     <div class="ab-pd-price-group">
       {% if pd_deal_price > 0 and pd_list_price > 0 and pd_deal_price < pd_list_price %}
         <span class="ab-pd-price ab-pd-price-current">{{ sale_price }} {{ currency }}</span>
@@ -99,7 +99,7 @@
   </div>
 
   {% if description and description != "" %}
-    <p class="ab-pd-description">{{ description }}</p>
+    <p class="ab-pd-description" data-anim="fadeInLeft" data-seq="3">{{ description }}</p>
   {% endif %}
 
   {% comment %} Wishlist & Compare buttons on the product detail page — dispatch toggle events handled by the storefront JS layer

@@ -12,10 +12,10 @@
   <div class="psc-compare__shell psc-compare__shell--aspect-{{ _ar }}">
     <header class="psc-compare__header">
       {% if section_data.eyebrow != blank %}
-        <p class="psc-compare__eyebrow">{{ section_data.eyebrow }}</p>
+        <p class="psc-compare__eyebrow" data-anim="fadeInDown" data-seq="0">{{ section_data.eyebrow }}</p>
       {% endif %}
       {% if section_data.heading != blank %}
-        <h2 class="psc-compare__heading">{{ section_data.heading }}</h2>
+        <h2 class="psc-compare__heading" data-anim="fadeInUp" data-seq="1">{{ section_data.heading }}</h2>
       {% endif %}
     </header>
 
@@ -24,6 +24,8 @@
       tabindex="0"
       role="group"
       aria-label="{{ section_data.heading | default: 'Product comparison' }}"
+      data-anim="fadeInScale"
+      data-seq="2"
     >
       {% if section_data.image_left_url != blank and section_data.image_right_url != blank %}
         <div class="psc-compare__scene">

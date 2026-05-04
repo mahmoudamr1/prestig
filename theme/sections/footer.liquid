@@ -1,5 +1,5 @@
 <footer
-  class="ps-footer"
+  class="ps-footer ps-sr-scope"
   {% if palette %}
     {% assign pfb = palette.ft_bg %}
     {% assign pft = palette.ft_text %}
@@ -10,7 +10,7 @@
 >
   <div class="content_container ps-footer-inner">
     <div class="ps-footer-main">
-      <a href="/" class="ps-footer-logo ps-footer-main__brand" aria-label="{{ store_name }}">
+      <a href="/" class="ps-footer-logo ps-footer-main__brand" aria-label="{{ store_name }}" data-anim="fadeInScale" data-seq="0">
         {% if logo != "" %}
           <img src="{{ logo }}" alt="{{ store_name }}" />
         {% else %}
@@ -23,7 +23,7 @@
         {% if ps_footer_title_shop == blank %}
           {% assign ps_footer_title_shop = "Shop" %}
         {% endif %}
-        <div class="ps-footer-col ps-footer-col--quick ps-footer-main__quick">
+        <div class="ps-footer-col ps-footer-col--quick ps-footer-main__quick" data-anim="fadeInLeft" data-seq="1">
           <h4 class="ps-footer-heading">{{ ps_footer_title_shop }}</h4>
           <ul class="ps-footer-links">
             {% for cat in categories %}
@@ -38,7 +38,7 @@
         {% if ps_footer_title_pages == blank %}
           {% assign ps_footer_title_pages = "Pages" %}
         {% endif %}
-        <div class="ps-footer-col ps-footer-col--support ps-footer-main__support">
+        <div class="ps-footer-col ps-footer-col--support ps-footer-main__support" data-anim="fadeInRight" data-seq="2">
           <h4 class="ps-footer-heading">{{ ps_footer_title_pages }}</h4>
           <ul class="ps-footer-links">
             {% for page in pages %}
@@ -53,7 +53,7 @@
         {% if ps_footer_contact_heading == blank %}
           {% assign ps_footer_contact_heading = "Contact us" %}
         {% endif %}
-        <div class="ps-footer-contact-col ps-footer-main__contact">
+        <div class="ps-footer-contact-col ps-footer-main__contact" data-anim="slideInUp" data-seq="3">
           <h4 class="ps-footer-heading">{{ ps_footer_contact_heading }}</h4>
           <div class="ps-footer-contact">
             {% if phone != "" %}
@@ -90,7 +90,7 @@
       {% if ps_footer_sub_btn == blank %}
         {% assign ps_footer_sub_btn = "Subscribe to Newsletter" %}
       {% endif %}
-      <div class="ps-footer-subscribe-col ps-footer-main__subscribe">
+      <div class="ps-footer-subscribe-col ps-footer-main__subscribe" data-anim="zoomIn" data-seq="4">
         <h4 class="ps-footer-heading">{{ ps_footer_title_newsletter }}</h4>
         <form
           class="footer-subscribe-form ps-footer-subscribe-form"
@@ -123,7 +123,7 @@
       {% assign ps_footer_payment_img = theme_data.footer_payment_custom_image | default: payment_img | default: 'https://files.easy-orders.net/1776682997164347446.webp' %}
     </div>
 
-    <div class="ps-footer-meta-row">
+    <div class="ps-footer-meta-row" data-anim="fadeInDown" data-seq="5">
       <div class="ps-footer-brand-payments ps-footer-payments--desktop-only" aria-label="Payment methods">
         <span class="ps-footer-payment-item ps-footer-payment-single">
           <img
@@ -168,7 +168,7 @@
 
     <div class="ps-footer-divider"></div>
 
-    <div class="ps-footer-bottom">
+    <div class="ps-footer-bottom" data-anim="fadeInUp" data-seq="6">
       <p class="ps-footer-copy">&copy; {{ year }} {{ store_name }}. {{ rights_label }}</p>
       <p class="ps-footer-powered">
         {{ theme_data.footer_powered_by | default: "Powered by" }}

@@ -1,5 +1,5 @@
 <section
-  class="lifestyle-editorial-hero lifestyle-editorial-hero--h-{{ section_data.min_height | default: 'tall' }} lifestyle-editorial-hero--w-{{ section_data.content_max_width | default: 'medium' }} {% if section_data.photo_style == 'color' %}lifestyle-editorial-hero--color{% endif %}"
+  class="lifestyle-editorial-hero lifestyle-editorial-hero--h-{{ section_data.min_height | default: 'tall' }} lifestyle-editorial-hero--w-{{ section_data.content_max_width | default: 'medium' }} {% if section_data.photo_style == 'color' %}lifestyle-editorial-hero--color{% endif %} ps-sr-scope"
   style="
     --leh-text: {{ section_data.text_color | default: '#FFFFFF' }};
     --leh-overlay-a: {{ section_data.overlay_strength | default: 38 | divided_by: 100.0 }};
@@ -11,16 +11,16 @@
   <div class="lifestyle-editorial-hero__overlay" aria-hidden="true"></div>
   <div class="lifestyle-editorial-hero__inner">
     {% if section_data.kicker != blank %}
-      <p class="lifestyle-editorial-hero__kicker">{{ section_data.kicker }}</p>
+      <p class="lifestyle-editorial-hero__kicker" data-anim="fadeInDown" data-seq="0">{{ section_data.kicker }}</p>
     {% endif %}
     {% if section_data.headline != blank %}
-      <h2 class="lifestyle-editorial-hero__title">{{ section_data.headline }}</h2>
+      <h2 class="lifestyle-editorial-hero__title" data-anim="fadeInUp" data-seq="1">{{ section_data.headline }}</h2>
     {% endif %}
     {% if section_data.body != blank %}
-      <p class="lifestyle-editorial-hero__body">{{ section_data.body }}</p>
+      <p class="lifestyle-editorial-hero__body" data-anim="fadeInLeft" data-seq="2">{{ section_data.body }}</p>
     {% endif %}
     {% if section_data.cta_label != blank %}
-      <a class="lifestyle-editorial-hero__cta" href="{{ section_data.cta_url | default: '#' }}">
+      <a class="lifestyle-editorial-hero__cta" href="{{ section_data.cta_url | default: '#' }}" data-anim="zoomIn" data-seq="3">
         {{ section_data.cta_label }}
       </a>
     {% endif %}

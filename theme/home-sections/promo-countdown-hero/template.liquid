@@ -1,5 +1,5 @@
 <section
-  class="promo-countdown-hero"
+  class="promo-countdown-hero ps-sr-scope"
   style="
     --pch-text: {{ section_data.text_color | default: '#FFFFFF' }};
     --pch-kicker: {{ section_data.kicker_color | default: section_data.text_color | default: '#FFFFFF' }};
@@ -16,16 +16,16 @@
   <div class="promo-countdown-hero__grid">
     <div class="promo-countdown-hero__copy">
       {% if section_data.kicker != blank %}
-        <p class="promo-countdown-hero__kicker">{{ section_data.kicker }}</p>
+        <p class="promo-countdown-hero__kicker" data-anim="fadeInDown" data-seq="0">{{ section_data.kicker }}</p>
       {% endif %}
       {% if section_data.headline != blank %}
-        <h2 class="promo-countdown-hero__title">{{ section_data.headline }}</h2>
+        <h2 class="promo-countdown-hero__title" data-anim="fadeInUp" data-seq="1">{{ section_data.headline }}</h2>
       {% endif %}
       {% if section_data.description != blank %}
-        <p class="promo-countdown-hero__desc">{{ section_data.description }}</p>
+        <p class="promo-countdown-hero__desc" data-anim="fadeInLeft" data-seq="2">{{ section_data.description }}</p>
       {% endif %}
       {% if section_data.cta_label != blank %}
-        <a class="promo-countdown-hero__btn" href="{{ section_data.cta_url | default: '/products' }}">{{ section_data.cta_label }}</a>
+        <a class="promo-countdown-hero__btn" href="{{ section_data.cta_url | default: '/products' }}" data-anim="scaleIn" data-seq="3">{{ section_data.cta_label }}</a>
       {% endif %}
     </div>
     {% assign pch_mode = section_data.countdown_mode | default: 'calendar_day' %}
@@ -51,6 +51,8 @@
         role="timer"
         aria-live="polite"
         aria-atomic="true"
+        data-anim="slideInRight"
+        data-seq="4"
       >
       {% else %}
       <div
@@ -61,6 +63,8 @@
         role="timer"
         aria-live="polite"
         aria-atomic="true"
+        data-anim="slideInRight"
+        data-seq="4"
       >
       {% endif %}
         <div class="promo-countdown-hero__unit">

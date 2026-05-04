@@ -1,6 +1,6 @@
 {% if section_data.items and section_data.items.size > 0 %}
 <section
-  class="service-highlights"
+  class="service-highlights ps-sr-scope"
   style="
     --sh-bg: {{ section_data.bg_color | default: 'transparent' }};
     --sh-title: {{ section_data.title_color | default: '#111111' }};
@@ -11,7 +11,7 @@
     <div class="service-highlights__inner">
       <div class="service-highlights__grid" role="list">
         {% for item in section_data.items %}
-          <article class="service-highlights__item" role="listitem">
+          <article class="service-highlights__item" role="listitem" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             <div class="service-highlights__icon-wrap">
               {% if item.icon != blank %}
                 <img

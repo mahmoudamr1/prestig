@@ -8,12 +8,12 @@
 {% endif %}
 
 {% if _rp_products and _rp_products.size > 0 %}
-<section class="ps-related-products" data-ps-related-products>
+<section class="ps-related-products ps-sr-scope" data-ps-related-products>
   <div class="ps-rev-inner product_container">
     <div class="ps-pgrid-inner">
       {% if section_title != blank %}
         <header class="ps-pgrid-header">
-          <h2 class="ps-pgrid-title">{{ section_title }}</h2>
+          <h2 class="ps-pgrid-title" data-anim="fadeInUp" data-seq="0">{{ section_title }}</h2>
         </header>
       {% endif %}
       <div class="ps-pgrid-main">
@@ -22,7 +22,7 @@
             {% assign color_variation = product.variations | where: "type", "color" | first %}
             {% assign image_variation = product.variations | where: "type", "image" | first %}
 
-            <a href="/products/{{ product.slug }}" class="ps-pgrid-card">
+            <a href="/products/{{ product.slug }}" class="ps-pgrid-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 1 }}">
               <div class="ps-pgrid-media">
                 {% if product.sale_price and product.sale_price < product.price %}
                   {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}

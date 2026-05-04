@@ -1,13 +1,13 @@
 {% if categories and categories.size > 0 %}
-<div class="ab-categories-section">
+<div class="ab-categories-section ps-sr-scope">
   <header class="ab-categories-header">
-    <p class="ab-categories-kicker">{{ theme_data.categories_header_subtitle | default: 'best seller collections' }}</p>
-    <h2 class="ab-categories-title">{{ theme_data.categories_header_title | default: 'Shop by Category' }}</h2>
+    <p class="ab-categories-kicker" data-anim="fadeInDown" data-seq="0">{{ theme_data.categories_header_subtitle | default: 'best seller collections' }}</p>
+    <h2 class="ab-categories-title" data-anim="fadeInUp" data-seq="1">{{ theme_data.categories_header_title | default: 'Shop by Category' }}</h2>
   </header>
   <div class="ab-categories">
     <div class="ab-categories-grid">
       {% for category in categories %}
-        <a class="ab-cat-tile" href="/collections/{{ category.slug }}">
+        <a class="ab-cat-tile" href="/collections/{{ category.slug }}" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 2 }}">
           <span class="ab-cat-tile__media">
             <img class="ab-cat-tile__img" src="{{ category.thumb }}" alt="" loading="lazy" />
             <span class="ab-cat-tile__dim"></span>

@@ -1,6 +1,6 @@
-<div class="lq-desc-accordion">
+<div class="lq-desc-accordion ps-sr-scope">
   {% if description != "" %}
-    <div class="lq-desc-item" data-open="true">
+    <div class="lq-desc-item" data-open="true" data-anim="fadeInDown" data-seq="0">
       <button class="lq-desc-toggle" type="button" aria-expanded="true">
         <span class="lq-desc-toggle-label">
           <svg class="lq-desc-icon lq-desc-icon--svg" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -20,7 +20,7 @@
   {% endif %}
 
   {% for policy in policies %}
-    <div class="lq-desc-item">
+    <div class="lq-desc-item" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 1 }}">
       <button class="lq-desc-toggle" type="button" aria-expanded="false">
         <span class="lq-desc-toggle-label">
           {% if policy.icon and policy.icon != '' %}
@@ -37,7 +37,7 @@
   {% endfor %}
 
   {% for desc in product_theme_data.desc %}
-    <div class="lq-desc-item">
+    <div class="lq-desc-item" data-anim="cycle" data-cycle="{{ forloop.index0 | plus: policies.size }}" data-seq="{{ forloop.index0 | plus: policies.size | plus: 2 }}">
       <button class="lq-desc-toggle" type="button" aria-expanded="false">
         <span class="lq-desc-toggle-label">
           <span>{{ desc.title_headline }}</span>

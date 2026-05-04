@@ -1,20 +1,20 @@
 <section
-  class="category-mosaic{% if section_data.gap_tight %} category-mosaic--tight{% endif %}"
+  class="category-mosaic{% if section_data.gap_tight %} category-mosaic--tight{% endif %} ps-sr-scope"
   style="--mosaic-cols: {{ section_data.columns | default: '3' }};"
 >
   <div class="category-mosaic__head">
     {% if section_data.title != blank %}
-      <h2 class="category-mosaic__title">{{ section_data.title }}</h2>
+      <h2 class="category-mosaic__title" data-anim="fadeInScale" data-seq="0">{{ section_data.title }}</h2>
     {% endif %}
     {% if section_data.subtitle != blank %}
-      <p class="category-mosaic__subtitle">{{ section_data.subtitle }}</p>
+      <p class="category-mosaic__subtitle" data-anim="fadeInUp" data-seq="1">{{ section_data.subtitle }}</p>
     {% endif %}
   </div>
 
   {% if section_data.tiles and section_data.tiles.size > 0 %}
     <div class="category-mosaic__grid">
       {% for tile in section_data.tiles %}
-        <a class="category-mosaic__tile" href="{{ tile.url | default: '#' }}">
+        <a class="category-mosaic__tile" href="{{ tile.url | default: '#' }}" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 2 }}">
           <div class="category-mosaic__visual">
             {% if tile.image != blank %}
               <img

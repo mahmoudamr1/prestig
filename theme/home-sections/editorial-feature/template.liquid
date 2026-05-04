@@ -1,9 +1,9 @@
 <section
-  class="editorial-feature editorial-feature--{{ section_data.surface | default: 'light' }} editorial-feature--img-{{ section_data.image_position | default: 'left' }}"
+  class="editorial-feature editorial-feature--{{ section_data.surface | default: 'light' }} editorial-feature--img-{{ section_data.image_position | default: 'left' }} ps-sr-scope"
   style="--ed-accent: {{ section_data.accent_color | default: '#8B7355' }};"
 >
   <div class="editorial-feature__grid">
-    <div class="editorial-feature__media">
+    <div class="editorial-feature__media" data-anim="fadeInLeft" data-seq="0">
       {% if section_data.image != blank %}
         <img
           class="editorial-feature__img"
@@ -19,16 +19,16 @@
     </div>
     <div class="editorial-feature__copy">
       {% if section_data.eyebrow != blank %}
-        <p class="editorial-feature__eyebrow">{{ section_data.eyebrow }}</p>
+        <p class="editorial-feature__eyebrow" data-anim="fadeInDown" data-seq="1">{{ section_data.eyebrow }}</p>
       {% endif %}
       {% if section_data.title != blank %}
-        <h2 class="editorial-feature__title">{{ section_data.title }}</h2>
+        <h2 class="editorial-feature__title" data-anim="slideInUp" data-seq="2">{{ section_data.title }}</h2>
       {% endif %}
       {% if section_data.body != blank %}
-        <p class="editorial-feature__body">{{ section_data.body }}</p>
+        <p class="editorial-feature__body" data-anim="fadeInRight" data-seq="3">{{ section_data.body }}</p>
       {% endif %}
       {% if section_data.cta_label != blank %}
-        <a class="editorial-feature__link" href="{{ section_data.cta_url | default: '#' }}">
+        <a class="editorial-feature__link" href="{{ section_data.cta_url | default: '#' }}" data-anim="scaleIn" data-seq="4">
           {{ section_data.cta_label }}
           <span class="editorial-feature__link-arrow" aria-hidden="true">→</span>
         </a>

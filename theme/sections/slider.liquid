@@ -1,4 +1,4 @@
-<section class="ps-slider ps-slider--under-nav" data-autoplay="5000">
+<section class="ps-slider ps-slider--under-nav ps-sr-scope" data-autoplay="5000">
   <div class="ps-slider-track">
     {% for slide in slides %}
       <div class="ps-slider-slide{% if forloop.first %} ps-active{% endif %}">
@@ -35,6 +35,9 @@
           type="button"
           data-slide-index="{{ forloop.index0 }}"
           aria-label="Go to slide {{ forloop.index }}"
+          data-anim="cycle"
+          data-cycle="{{ forloop.index0 }}"
+          data-seq="{{ forloop.index0 }}"
         >
           <span class="ps-slider-ind-num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
           <span class="ps-slider-ind-line">

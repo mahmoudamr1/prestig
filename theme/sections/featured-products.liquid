@@ -13,15 +13,17 @@
 {% if products_count < 1 %}
 {% comment %} No products — omit section {% endcomment %}
 {% else %}
-<section class="ps-featured">
+<section class="ps-featured ps-sr-scope">
   {% if section_title %}
-    <h2 class="ps-featured-section-heading">{{ section_title }}</h2>
+    <h2 class="ps-featured-section-heading" data-anim="fadeInDown" data-seq="0">{{ section_title }}</h2>
   {% endif %}
   <div class="ps-featured-desktop">
     <div class="ps-featured-grid">
       <a
         href="{% if category and category.slug %}/collections/{{ category.slug }}{% else %}#{% endif %}"
         class="ps-featured-banner ps-featured-banner--link ps-featured-hero"
+        data-anim="scaleIn"
+        data-seq="1"
       >
         <img
           class="ps-featured-banner-bg-img"
@@ -59,7 +61,7 @@
         {% assign list_price = product.price | plus: 0 %}
         {% assign deal_price = product.sale_price | plus: 0 %}
 
-        <a href="/products/{{ product.slug }}" class="ps-pgrid-card">
+        <a href="/products/{{ product.slug }}" class="ps-pgrid-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 2 }}">
           <div class="ps-pgrid-media">
             {% if deal_price > 0 and list_price > 0 and deal_price < list_price %}
               {% assign discount = list_price | minus: deal_price | times: 100 | divided_by: list_price | floor %}

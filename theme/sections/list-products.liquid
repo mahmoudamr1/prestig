@@ -1,7 +1,7 @@
-<section class="ps-plist" data-ps-plist>
+<section class="ps-plist ps-sr-scope" data-ps-plist>
   {% if section_title %}
     <header class="ps-plist-header">
-      <h2 class="ps-plist-title">{{ section_title }}</h2>
+      <h2 class="ps-plist-title" data-anim="fadeInLeft" data-seq="0">{{ section_title }}</h2>
     </header>
   {% endif %}
 
@@ -11,7 +11,7 @@
         {% assign color_variation = product.variations | where: "type", "color" | first %}
         {% assign image_variation = product.variations | where: "type", "image" | first %}
 
-        <a href="/products/{{ product.slug }}" class="ps-plist-card" data-ps-plist-card>
+        <a href="/products/{{ product.slug }}" class="ps-plist-card" data-ps-plist-card data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 1 }}">
           {% if product.sale_price and product.sale_price < product.price %}
             {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
             <span class="ps-plist-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>

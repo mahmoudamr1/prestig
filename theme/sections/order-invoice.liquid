@@ -16,9 +16,9 @@
 {% endif %}
 
 {% if order %}
-  <div class="ps-invoice" data-liquid-order-invoice>
+  <div class="ps-invoice ps-sr-scope" data-liquid-order-invoice>
     {% if _tracking != blank %}
-      <div class="ps-invoice-header">
+      <div class="ps-invoice-header" data-anim="fadeInDown" data-seq="0">
         <button
           class="ps-invoice-track-btn"
           type="button"
@@ -34,7 +34,7 @@
     <div class="ps-invoice-body">
       <div class="ps-invoice-main">
         {% if _created != blank or order_notes and order_notes.size > 0 %}
-          <div class="ps-invoice-timeline">
+          <div class="ps-invoice-timeline" data-anim="fadeInLeft" data-seq="1">
             <ul class="ps-invoice-notes-list">
               {% if _created != blank %}
                 <li>
@@ -55,9 +55,9 @@
         {% endif %}
 
         {% if order.cart_items and order.cart_items.size > 0 %}
-          <div class="ps-invoice-items">
+          <div class="ps-invoice-items" data-anim="fadeInUp" data-seq="2">
             {% for item in order.cart_items %}
-              <div class="ps-invoice-item">
+              <div class="ps-invoice-item" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 2 }}">
                 {% assign _thumb = item.thumb | default: item.product_thumb | default: item.image %}
                 {% if _thumb and _thumb != "" %}
                   <img class="ps-invoice-item-img" src="{{ _thumb }}" alt="{{ item.name }}" loading="lazy" />
@@ -77,7 +77,7 @@
           </div>
         {% endif %}
 
-        <div class="ps-invoice-shipping">
+        <div class="ps-invoice-shipping" data-anim="slideInUp" data-seq="6">
           <h3 class="ps-invoice-section-title">{{ t_shipping_details }}</h3>
           <dl class="ps-invoice-dl">
             <div class="ps-invoice-dl-row">
@@ -105,7 +105,7 @@
           </dl>
         </div>
 
-        <div class="ps-invoice-totals">
+        <div class="ps-invoice-totals" data-anim="fadeInScale" data-seq="7">
           <div class="ps-invoice-dl-row">
             <dt>{{ t_product_total }}:</dt>
             <dd>{{ order.cost | default: order.subtotal }} {{ currency }}</dd>
@@ -130,7 +130,7 @@
         </div>
 
         {% if _status_val != blank %}
-          <div class="ps-invoice-status-row">
+          <div class="ps-invoice-status-row" data-anim="rotateIn" data-seq="8">
             <span class="ps-invoice-status-label">{{ t_order_status }}:</span>
             <span class="ps-invoice-status-value">{{ _status_val }}</span>
           </div>

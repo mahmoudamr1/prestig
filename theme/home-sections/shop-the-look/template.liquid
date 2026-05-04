@@ -1,21 +1,21 @@
 <section
-  class="shop-the-look shop-the-look--{{ section_data.surface | default: 'cream' }}"
+  class="shop-the-look shop-the-look--{{ section_data.surface | default: 'cream' }} ps-sr-scope"
   style="--stl-accent: {{ section_data.accent_color | default: '#C9A962' }};"
 >
   <header class="shop-the-look__head">
     {% if section_data.eyebrow != blank %}
-      <p class="shop-the-look__eyebrow">{{ section_data.eyebrow }}</p>
+      <p class="shop-the-look__eyebrow" data-anim="fadeInDown" data-seq="0">{{ section_data.eyebrow }}</p>
     {% endif %}
     {% if section_data.title != blank %}
-      <h2 class="shop-the-look__title">{{ section_data.title }}</h2>
+      <h2 class="shop-the-look__title" data-anim="fadeInUp" data-seq="1">{{ section_data.title }}</h2>
     {% endif %}
     {% if section_data.subtitle != blank %}
-      <p class="shop-the-look__subtitle">{{ section_data.subtitle }}</p>
+      <p class="shop-the-look__subtitle" data-anim="fadeInLeft" data-seq="2">{{ section_data.subtitle }}</p>
     {% endif %}
   </header>
 
   <div class="shop-the-look__layout">
-    <a class="shop-the-look__hero" href="{{ section_data.look_url | default: '/products' }}">
+    <a class="shop-the-look__hero" href="{{ section_data.look_url | default: '/products' }}" data-anim="scaleIn" data-seq="3">
       <div class="shop-the-look__hero-visual">
         {% if section_data.look_image != blank %}
           <img
@@ -47,7 +47,7 @@
     {% if section_data.picks and section_data.picks.size > 0 %}
       <div class="shop-the-look__picks">
         {% for pick in section_data.picks %}
-          <a class="shop-the-look__pick" href="{{ pick.url | default: '#' }}">
+          <a class="shop-the-look__pick" href="{{ pick.url | default: '#' }}" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 4 }}">
             <div class="shop-the-look__pick-frame">
               {% if pick.image != blank %}
                 <img

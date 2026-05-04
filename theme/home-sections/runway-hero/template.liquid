@@ -1,5 +1,5 @@
 <section
-  class="runway-hero runway-hero--{{ section_data.alignment | default: 'center' }}"
+  class="runway-hero runway-hero--{{ section_data.alignment | default: 'center' }} ps-sr-scope"
   style="
     --runway-text: {{ section_data.text_color | default: '#FAF7F2' }};
     --runway-accent: {{ section_data.accent_color | default: '#C9A962' }};
@@ -11,15 +11,15 @@
   <div class="runway-hero__overlay" aria-hidden="true"></div>
   <div class="runway-hero__inner">
     {% if section_data.kicker != blank %}
-      <p class="runway-hero__kicker">{{ section_data.kicker }}</p>
+      <p class="runway-hero__kicker" data-anim="fadeInDown" data-seq="0">{{ section_data.kicker }}</p>
     {% endif %}
     {% if section_data.headline != blank %}
-      <h1 class="runway-hero__title">{{ section_data.headline }}</h1>
+      <h1 class="runway-hero__title" data-anim="slideInUp" data-seq="1">{{ section_data.headline }}</h1>
     {% endif %}
     {% if section_data.subheadline != blank %}
-      <p class="runway-hero__lede">{{ section_data.subheadline }}</p>
+      <p class="runway-hero__lede" data-anim="fadeInRight" data-seq="2">{{ section_data.subheadline }}</p>
     {% endif %}
-    <div class="runway-hero__actions">
+    <div class="runway-hero__actions" data-anim="fadeInScale" data-seq="3">
       {% if section_data.primary_label != blank %}
         <a class="runway-hero__btn runway-hero__btn--primary" href="{{ section_data.primary_url | default: '/products' }}">
           {{ section_data.primary_label }}

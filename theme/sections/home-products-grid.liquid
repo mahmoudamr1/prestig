@@ -1,18 +1,18 @@
 {% if filter_groups and filter_groups.size > 0 %}
 
-<section class="ps-cl-section">
+<section class="ps-cl-section ps-sr-scope">
   {% if section_title %}
     <header class="ps-cl-hero">
       <div class="ps-cl-hero-inner">
-        <h1 class="ps-cl-title">{{ section_title | upcase }}</h1>
+        <h1 class="ps-cl-title" data-anim="fadeInScale" data-seq="0">{{ section_title | upcase }}</h1>
         {% if category_description and category_description != "" %}
-          <p class="ps-cl-desc">{{ category_description }}</p>
+          <p class="ps-cl-desc" data-anim="fadeInUp" data-seq="1">{{ category_description }}</p>
         {% endif %}
       </div>
     </header>
   {% endif %}
 
-  <div class="ps-cl-toolbar">
+  <div class="ps-cl-toolbar" data-anim="slideInRight" data-seq="2">
     <div class="ps-cl-toolbar-start">
       <div class="ps-cl-toolbar-spacer" aria-hidden="true"></div>
       <div class="ps-cl-layout-switch" aria-hidden="true">
@@ -43,7 +43,7 @@
   </div>
 
   <div class="ps-cl-layout">
-    <aside class="ps-cl-filters" aria-label="Product filters">
+    <aside class="ps-cl-filters" aria-label="Product filters" data-anim="fadeInLeft" data-seq="3">
       <details class="ps-cl-filters-shell" data-ps-filters-shell open>
         <summary class="ps-cl-filters-shell-summary">
           <span class="ps-cl-filters-shell-label">{{ filters_label }}</span>
@@ -90,7 +90,7 @@
             {% assign swatch_total = image_variation.props.size %}
           {% endif %}
 
-          <article class="ps-plist-card" data-ps-plist-card>
+          <article class="ps-plist-card" data-ps-plist-card data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 4 }}">
             <a href="/products/{{ product.slug }}" class="ps-plist-media-link">
               <div class="ps-plist-media">
                 {% if product.sale_price and product.sale_price < product.price %}
@@ -167,7 +167,7 @@
   </div>
 
   {% if total_pages > 1 %}
-    <nav class="ps-cl-pagination" aria-label="Pagination">
+    <nav class="ps-cl-pagination" aria-label="Pagination" data-anim="fadeInUp" data-seq="6">
       <button type="button" class="ps-cl-page-nav {% if current_page <= 1 %}is-disabled{% endif %}" data-ps-cl-page="{{ current_page | minus: 1 }}">‹</button>
       {% for i in (1..total_pages) %}
         <button type="button" class="ps-cl-page-num {% if i == current_page %}is-active{% endif %}" data-ps-cl-page="{{ i }}">{{ i }}</button>
@@ -181,15 +181,15 @@
 
 {% assign _pg_sub = theme_data.grid_products_header_subtitle | default: shop_label | strip %}
 {% assign _pg_title = theme_data.grid_products_header_title | default: section_title | strip %}
-<section class="ps-pgrid-section" data-ps-pgrid>
+<section class="ps-pgrid-section ps-sr-scope" data-ps-pgrid>
   <div class="ps-pgrid-inner">
     {% if _pg_sub != blank or _pg_title != blank %}
       <header class="ps-pgrid-header">
         {% if _pg_sub != blank %}
-          <p class="ps-pgrid-label">{{ _pg_sub }}</p>
+          <p class="ps-pgrid-label" data-anim="fadeInDown" data-seq="0">{{ _pg_sub }}</p>
         {% endif %}
         {% if _pg_title != blank %}
-          <h2 class="ps-pgrid-title">{{ _pg_title }}</h2>
+          <h2 class="ps-pgrid-title" data-anim="slideInUp" data-seq="1">{{ _pg_title }}</h2>
         {% endif %}
       </header>
     {% endif %}
@@ -206,7 +206,7 @@
             {% assign swatch_total = image_variation.props.size %}
           {% endif %}
 
-          <a href="/products/{{ product.slug }}" class="ps-pgrid-card">
+          <a href="/products/{{ product.slug }}" class="ps-pgrid-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 2 }}">
             <div class="ps-pgrid-media">
               {% if product.sale_price and product.sale_price < product.price %}
                 {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
@@ -278,7 +278,7 @@
       </div>
 
       {% if category.slug %}
-        <div class="ps-pgrid-footer">
+        <div class="ps-pgrid-footer" data-anim="rotateIn" data-seq="10">
           <a href="/collections/{{ category.slug }}" class="ps-pgrid-view-all gap-2">
             <span>{{ shop_now }}</span>
             <img src="https://files.easy-orders.net/1773832247629050805.webp" alt="" class="ps-viewall-arrow" width="20" height="20" loading="lazy" />

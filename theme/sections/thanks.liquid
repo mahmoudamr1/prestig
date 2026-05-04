@@ -1,11 +1,11 @@
 {% assign _thanks_check_icon = thanks_done_icon_url | default: "https://files.easy-orders.net/1775775058192802203.webp" %}
-<section class="ps-thanks" data-liquid-thanks data-ps-thanks data-thanks-client-fetch="0">
+<section class="ps-thanks ps-sr-scope" data-liquid-thanks data-ps-thanks data-thanks-client-fetch="0">
   <div class="ps-thanks-content">
     {% if content and content != "" %}
-      <div class="ps-thanks-custom-content">{{ content }}</div>
+      <div class="ps-thanks-custom-content" data-anim="fadeInScale" data-seq="0">{{ content }}</div>
     {% else %}
       <div class="ps-thanks-default">
-        <div class="ps-thanks-icon" aria-hidden="true">
+        <div class="ps-thanks-icon" aria-hidden="true" data-anim="zoomIn" data-seq="0">
           <img
             class="ps-thanks-icon-img"
             src="{{ _thanks_check_icon }}"
@@ -16,10 +16,10 @@
             decoding="async"
           />
         </div>
-        <h1 class="ps-thanks-title">{{ thanks_title | default: t_thank_you }}</h1>
-        <p class="ps-thanks-message">{{ thanks_message | default: t_order_received }}</p>
+        <h1 class="ps-thanks-title" data-anim="fadeInUp" data-seq="1">{{ thanks_title | default: t_thank_you }}</h1>
+        <p class="ps-thanks-message" data-anim="fadeInLeft" data-seq="2">{{ thanks_message | default: t_order_received }}</p>
         {% if phone_message and phone_message != "" %}
-          <p class="ps-thanks-phone-msg">{{ phone_message }}</p>
+          <p class="ps-thanks-phone-msg" data-anim="fadeInRight" data-seq="3">{{ phone_message }}</p>
         {% endif %}
       </div>
     {% endif %}
@@ -29,13 +29,15 @@
         class="ps-thanks-home-btn"
         type="button"
         onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
+        data-anim="slideInUp"
+        data-seq="4"
       >
         {{ go_home_text | default: "Go home" }}
       </button>
     {% endif %}
 
     {% if offers_text and offers_text != "" %}
-      <p class="ps-thanks-offers">{{ offers_text }}</p>
+      <p class="ps-thanks-offers" data-anim="fadeInScale" data-seq="5">{{ offers_text }}</p>
     {% endif %}
   </div>
 </section>

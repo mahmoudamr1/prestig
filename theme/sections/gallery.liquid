@@ -1,5 +1,5 @@
-<div class="ab-gallery" data-ps-pdp-gallery>
-  <div class="ab-gallery-main">
+<div class="ab-gallery ps-sr-scope" data-ps-pdp-gallery>
+  <div class="ab-gallery-main" data-anim="fadeInLeft" data-seq="0">
     <div class="ab-gallery-slider" data-ab-gallery-slider tabindex="0">
       <div class="ab-gallery-slides">
         {% for image in images %}
@@ -38,7 +38,7 @@
   </div>
 
   {% if images.size > 1 %}
-    <div class="ab-gallery-dots" data-ab-gallery-dots role="tablist" aria-label="Product images">
+    <div class="ab-gallery-dots" data-ab-gallery-dots role="tablist" aria-label="Product images" data-anim="fadeInUp" data-seq="1">
       {% for image in images %}
         <button
           type="button"
@@ -53,7 +53,7 @@
   {% endif %}
 
   {% if images.size > 0 %}
-  <div class="ab-gallery-thumbs">
+  <div class="ab-gallery-thumbs" data-anim="slideInUp" data-seq="2">
     {% for image in images %}
       <button
         class="ab-gallery-thumb{% if image == mainImage %} ab-active{% endif %}"

@@ -1,4 +1,4 @@
-<section class="ps-pgrid-section" data-ps-pgrid>
+<section class="ps-pgrid-section ps-sr-scope" data-ps-pgrid>
   <div class="ps-pgrid-inner">
     <div class="ps-pgrid-main">
       <div class="ps-pgrid-grid">
@@ -12,7 +12,7 @@
             {% assign swatch_total = image_variation.props.size %}
           {% endif %}
 
-          <a href="/products/{{ product.slug }}" class="ps-pgrid-card">
+          <a href="/products/{{ product.slug }}" class="ps-pgrid-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             <div class="ps-pgrid-media">
               {% if product.sale_price and product.sale_price < product.price %}
                 {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
@@ -85,7 +85,7 @@
       </div>
 
       {% if category and category.slug %}
-        <div class="ps-pgrid-footer">
+        <div class="ps-pgrid-footer" data-anim="fadeInUp" data-seq="8">
           <a href="/collections/{{ category.slug }}" class="ps-pgrid-view-all gap-2">
             <span>{{ shop_now }}</span>
             <img src="https://files.easy-orders.net/1773832247629050805.webp" alt="" class="ps-viewall-arrow" width="20" height="20" loading="lazy" />
