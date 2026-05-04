@@ -1249,56 +1249,20 @@ main.container_class {
   }
 }
 
-/* Categories — horizontal track (`sections/categories.liquid`). Width matches Bootstrap `.container`. */
+/* Categories — Figma 19:2216 (section shell + 19:2218 header) + asymmetric grid 19:2222 (3n+1 tall left). Tile copy = category.name centered only. */
 .ab-categories-section {
-  --bs-gutter-x: 1.5rem;
+  --ab-cat-gap: 20px;
+  --ab-cat-section-gap: clamp(2.25rem, 6vw, 4rem);
   box-sizing: border-box;
   width: 100%;
   max-width: none;
-  padding-left: calc(var(--bs-gutter-x) * 0.5);
-  padding-right: calc(var(--bs-gutter-x) * 0.5);
   margin-left: auto;
   margin-right: auto;
-  margin-top: clamp(28px, 5vw, 56px);
-  margin-bottom: clamp(28px, 5vw, 56px);
-}
-
-@media (max-width: 767.98px) {
-  .ab-categories-section {
-    --bs-gutter-x: 1rem;
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
-@media (min-width: 576px) {
-  .ab-categories-section {
-    max-width: 540px;
-  }
-}
-
-@media (min-width: 768px) {
-  .ab-categories-section {
-    max-width: 720px;
-  }
-}
-
-@media (min-width: 992px) {
-  .ab-categories-section {
-    max-width: 960px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .ab-categories-section {
-    max-width: 1140px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .ab-categories-section {
-    max-width: 1320px;
-  }
+  padding: clamp(40px, 8vw, 60px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(24px, 4vw, 40px);
 }
 
 .ab-categories-header {
@@ -1306,14 +1270,16 @@ main.container_class {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  text-align: center;
   width: 100%;
-  margin-bottom: clamp(20px, 3.5vw, 32px);
+  max-width: 1240px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--body-text, #1c1c1c);
   font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 400;
-  color: var(--body-text, var(--ps-ink-secondary, #1c1c1c));
-  text-transform: uppercase;
 }
 
 .ab-categories-kicker {
@@ -1327,110 +1293,125 @@ main.container_class {
 
 .ab-categories-title {
   margin: 0;
+  width: 100%;
   max-width: 100%;
-  font-size: 28px;
+  font-size: clamp(22px, 4vw, 28px);
   font-weight: 400;
-  line-height: 39.2px;
-  letter-spacing: 5.04px;
+  line-height: 1.35;
+  letter-spacing: 0.14em;
+  text-wrap: balance;
 }
 
-@media (max-width: 575.98px) {
+@media (min-width: 768px) {
   .ab-categories-title {
-    font-size: clamp(20px, 5.5vw, 28px);
-    line-height: 1.25;
-    letter-spacing: 0.12em;
-    white-space: normal;
-  }
-}
-
-@media (min-width: 576px) {
-  .ab-categories-title {
-    white-space: nowrap;
+    line-height: 39.2px;
+    letter-spacing: 5.04px;
   }
 }
 
 .ab-categories {
   width: 100%;
+  max-width: 1240px;
   box-sizing: border-box;
 }
 
-.ab-categories-track {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x proximity;
-  padding: 4px 2px 12px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
+.ab-categories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: stretch;
+  width: 100%;
 }
 
-.ab-categories-track::-webkit-scrollbar {
-  height: 6px;
-}
-
-.ab-categories-track::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 999px;
-}
-
-.ab-cat-card {
+.ab-cat-tile {
   position: relative;
-  flex: 0 0 auto;
-  width: min(72vw, 260px);
-  scroll-snap-align: start;
+  display: block;
   overflow: hidden;
-  border-radius: 4px;
+  min-height: min(72vw, 400px);
   text-decoration: none;
   color: inherit;
   box-sizing: border-box;
+  isolation: isolate;
+  background: #eee;
 }
 
-@media (min-width: 768px) {
-  .ab-cat-card {
-    width: min(28vw, 320px);
-  }
+.ab-cat-tile:focus-visible {
+  outline: 2px solid var(--body-text, #1c1c1c);
+  outline-offset: 3px;
 }
 
-.ab-cat-card img {
-  display: block;
+.ab-cat-tile__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.ab-cat-tile__img {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
+  transform: scale(1.02);
   transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.ab-cat-card:hover img {
-  transform: scale(1.05);
+.ab-cat-tile:hover .ab-cat-tile__img {
+  transform: scale(1.07);
 }
 
-.ab-cat-label {
-  display: block;
-  padding: 12px 10px;
-  font-family: var(--ps-ff-primary), sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.ab-cat-tile__dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.ab-cat-tile__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 5vw, 40px);
+  box-sizing: border-box;
   text-align: center;
-  color: var(--body-text, var(--ps-ink-secondary, #1c1c1c));
-  background: var(--body-bg, #fff);
+  pointer-events: none;
 }
 
-@keyframes ab-cat-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.ab-cat-tile__title {
+  margin: 0;
+  max-width: 22.75rem;
+  font-family: var(--ps-ff-primary), sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  text-wrap: balance;
 }
 
-.ab-reveal {
-  opacity: 0;
-  animation: ab-cat-reveal 0.45s ease forwards;
+@media (min-width: 768px) {
+  .ab-categories-grid {
+    grid-template-columns: minmax(0, 1.195fr) minmax(0, 1fr);
+    gap: var(--ab-cat-gap);
+    grid-auto-rows: minmax(min(280px, 22vw), auto);
+  }
+
+  .ab-cat-tile {
+    min-height: 0;
+  }
+
+  .ab-cat-tile:nth-child(3n + 1) {
+    grid-row: span 2;
+    min-height: min(721px, 58vw);
+  }
+
+  .ab-cat-tile:nth-child(3n + 2),
+  .ab-cat-tile:nth-child(3n) {
+    min-height: min(351px, 29vw);
+  }
 }
 
 /* Full-bleed on page bg â€” no inner box, no white strip (Figma frame sits on white/grey page) */

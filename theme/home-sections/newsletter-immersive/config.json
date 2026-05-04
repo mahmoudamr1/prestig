@@ -45,12 +45,6 @@
       "description": "Submit button label"
     },
     {
-      "name": "form_action",
-      "type": "string",
-      "default": "/pages/contact",
-      "description": "Form action URL (same as Newsletter — luxe)"
-    },
-    {
       "name": "footnote",
       "type": "string",
       "default": "By subscribing you agree to receive marketing emails. Unsubscribe anytime.",

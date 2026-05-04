@@ -5,15 +5,16 @@
     <h2 class="ab-categories-title">{{ theme_data.categories_header_title | default: 'Shop by Category' }}</h2>
   </header>
   <div class="ab-categories">
-    <div class="ab-categories-track">
+    <div class="ab-categories-grid">
       {% for category in categories %}
-        <a
-          href="/collections/{{ category.slug }}"
-          class="ab-cat-card ab-reveal"
-          style="animation-delay: {{ forloop.index0 | times: 40 }}ms"
-        >
-          <img src="{{ category.thumb }}" alt="{{ category.name }}" loading="lazy" />
-          <span class="ab-cat-label">{{ category.name }}</span>
+        <a class="ab-cat-tile" href="/collections/{{ category.slug }}">
+          <span class="ab-cat-tile__media">
+            <img class="ab-cat-tile__img" src="{{ category.thumb }}" alt="" loading="lazy" />
+            <span class="ab-cat-tile__dim"></span>
+          </span>
+          <span class="ab-cat-tile__content">
+            <span class="ab-cat-tile__title">{{ category.name }}</span>
+          </span>
         </a>
       {% endfor %}
     </div>

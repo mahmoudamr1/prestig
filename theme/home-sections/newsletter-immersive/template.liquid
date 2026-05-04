@@ -24,23 +24,39 @@
       <p class="newsletter-immersive__body">{{ section_data.body }}</p>
     {% endif %}
 
-    {%- comment -%}
-      Same contract as Newsletter — luxe: GET + email field + configurable action URL (ESP / contact page).
-    {%- endcomment -%}
     <form
       class="newsletter-immersive__form"
-      action="{{ section_data.form_action | default: '/pages/contact' }}"
-      method="get"
+      novalidate
+      onsubmit="
+        event.preventDefault();
+        if (!this.checkValidity()) {
+          this.reportValidity();
+          return;
+        }
+        var input = this.elements.email;
+        var email = input && input.value ? String(input.value).trim() : '';
+        this.dispatchEvent(
+          new CustomEvent('footer-subscribe', {
+            bubbles: true,
+            detail: { email: email }
+          })
+        );
+        this.reset();
+      "
     >
       <input
         class="newsletter-immersive__input global_input"
         type="email"
         name="email"
-        inputmode="email"
         autocomplete="email"
-        aria-label="{{ section_data.placeholder | default: 'Email' }}"
-        placeholder="{{ section_data.placeholder | default: 'E-mail' }}"
+        inputmode="email"
+        maxlength="254"
+        pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+        title="Valid email required"
         required
+        aria-required="true"
+        aria-label="{{ section_data.placeholder | default: 'Email address' }}"
+        placeholder="{{ section_data.placeholder | default: 'E-mail' }}"
       />
       <button class="newsletter-immersive__submit" type="submit">
         {{ section_data.button_label | default: 'SUBSCRIBE' }}
