@@ -1,10 +1,18 @@
+{% comment %}When `mainImage` mismatches (common in Quick View), still mark first slide active so CSS does not hide all slides.{% endcomment %}
+{% assign ps_gallery_main_ok = false %}
+{% for image in images %}
+  {% if image == mainImage %}
+    {% assign ps_gallery_main_ok = true %}
+  {% endif %}
+{% endfor %}
+
 <div class="ab-gallery ps-sr-scope" data-ps-pdp-gallery>
   <div class="ab-gallery-main" data-anim="fadeInLeft" data-seq="0">
     <div class="ab-gallery-slider" data-ab-gallery-slider tabindex="0">
       <div class="ab-gallery-slides">
         {% for image in images %}
         <div
-          class="ab-gallery-slide{% if image == mainImage %} is-active{% endif %}"
+          class="ab-gallery-slide{% if image == mainImage %} is-active{% elsif ps_gallery_main_ok == false and forloop.first %} is-active{% endif %}"
           data-src="{{ image }}"
           data-slide-index="{{ forloop.index0 }}"
         >
@@ -16,11 +24,11 @@
               playsinline
               muted
               preload="metadata"
-              {% if image == mainImage %}autoplay{% endif %}
+              {% if image == mainImage %}autoplay{% elsif ps_gallery_main_ok == false and forloop.first %}autoplay{% endif %}
             ></video>
           {% else %}
             <img
-              {% if image == mainImage %}id="gallery-main-image"{% endif %}
+              {% if image == mainImage %}id="gallery-main-image"{% elsif ps_gallery_main_ok == false and forloop.first %}id="gallery-main-image"{% endif %}
               src="{{ image }}"
               alt="{{ product_name }}"
               class="ab-gallery-main-media"
@@ -42,10 +50,10 @@
       {% for image in images %}
         <button
           type="button"
-          class="ab-gallery-dot{% if image == mainImage %} is-active{% endif %}"
+          class="ab-gallery-dot{% if image == mainImage %} is-active{% elsif ps_gallery_main_ok == false and forloop.first %} is-active{% endif %}"
           data-dot-index="{{ forloop.index0 }}"
           role="tab"
-          aria-selected="{% if image == mainImage %}true{% else %}false{% endif %}"
+          aria-selected="{% if image == mainImage %}true{% elsif ps_gallery_main_ok == false and forloop.first %}true{% else %}false{% endif %}"
           aria-label="Image {{ forloop.index }}"
         ></button>
       {% endfor %}
@@ -56,7 +64,7 @@
   <div class="ab-gallery-thumbs" data-anim="slideInUp" data-seq="2">
     {% for image in images %}
       <button
-        class="ab-gallery-thumb{% if image == mainImage %} ab-active{% endif %}"
+        class="ab-gallery-thumb{% if image == mainImage %} ab-active{% elsif ps_gallery_main_ok == false and forloop.first %} ab-active{% endif %}"
         data-src="{{ image }}"
         data-thumb-index="{{ forloop.index0 }}"
         type="button"

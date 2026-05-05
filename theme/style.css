@@ -7054,7 +7054,7 @@ html:lang(it)
 
 .ab-gallery {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
+  grid-template-columns: 72px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
   width: 100%;
@@ -7089,6 +7089,12 @@ html:lang(it)
 }
 
 .ab-gallery-slide.is-active {
+  display: block;
+}
+
+/* If nothing matches `mainImage` (e.g. Quick View markup): show first slide without waiting for JS. */
+.ab-gallery-slides:not(:has(.ab-gallery-slide.is-active))
+  .ab-gallery-slide:first-child {
   display: block;
 }
 
@@ -7167,8 +7173,12 @@ html:lang(it)
   border: 1px solid var(--ps-border-light, #d1d1d1);
   border-radius: 0;
   overflow: hidden;
-  background: #eee;
+  background: var(--ps-surface-subtle, #f5f5f5);
   cursor: pointer;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  display: block;
   transition:
     border-color 0.25s ease,
     transform 0.25s ease;
@@ -7180,10 +7190,11 @@ html:lang(it)
 
 .ab-gallery-thumb img,
 .ab-gallery-thumb video {
-  width: 52px;
-  height: auto;
+  width: 100%;
+  height: 100%;
   display: block;
   object-fit: cover;
+  object-position: center;
 }
 
 .ab-gallery-dots {
@@ -8954,14 +8965,12 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
     gap: clamp(28px, 3vw, 40px);
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]):has(.p_details_container)
-    > .p_gallery_container {
+.p_gallery_container {
     grid-column: 1;
     grid-row: 1;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]):has(.p_details_container)
-    > .p_details_container {
+  .p_details_container {
     grid-column: 2;
     grid-row: 1;
     margin-top: 0;
@@ -8988,12 +8997,12 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
     grid-column: 1;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery {
+   .ab-gallery {
     grid-template-columns: 72px minmax(0, 1fr);
     gap: 44px;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-zoom {
+  .ab-gallery-zoom {
     width: 44px;
     height: 44px;
     bottom: 13px;
@@ -9004,7 +9013,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
     box-shadow: 0 1px 2px rgba(13, 13, 18, 0.06);
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-main {
+  .ab-gallery-main {
     overflow: visible;
     cursor: zoom-in;
   }
@@ -9015,18 +9024,18 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
     cursor: zoom-in;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-slider {
+  .ab-gallery-slider {
     overflow: visible;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-slides {
+  .ab-gallery-slides {
     display: flex;
     flex-direction: column;
     gap: 12px;
     width: 100%;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-slide {
+  .ab-gallery-slide {
     display: block !important;
     flex: 0 0 auto;
     overflow: hidden;
@@ -9051,10 +9060,10 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
     background: #000;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-thumbs {
+  .ab-gallery-thumbs {
     gap: 12px;
     position: sticky;
-    top: clamp(88px, 12vw, 118px);
+    top:0;
     align-self: start;
     max-height: calc(100vh - clamp(96px, 14vw, 132px));
     overflow-y: auto;
@@ -9064,10 +9073,17 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
     scrollbar-color: rgba(16, 16, 16, 0.35) transparent;
   }
 
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-thumb img,
-  .p_content_container:has([data-ps-pdp-gallery]) .ab-gallery-thumb video {
+  .ab-gallery-thumb {
     width: 72px;
+    flex-shrink: 0;
+  }
+
+  .ab-gallery-thumb img,
+  .ab-gallery-thumb video {
+    width: 100%;
     height: auto;
+    object-fit: cover;
+    object-position: center;
   }
 
   .p_content_container:has([data-ps-pdp-gallery])
@@ -9666,6 +9682,13 @@ h2.variation_name .ps-variation-name-value {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Headless dialog: scroll-reveal often never fires, so `.will-animate` stays opacity 0. */
+.fixed.inset-0.overflow-y-auto [id^="headlessui-dialog-panel"] [data-anim].will-animate,
+.ps-prestige-qv [data-anim].will-animate {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 .ps-prestige-qv button:not([class*="rounded-full"]) {
   border-radius: 0 !important;
 }
@@ -9726,6 +9749,74 @@ h2.variation_name .ps-variation-name-value {
 
 .ps-prestige-qv .grid {
   gap: 16px !important;
+}
+
+/* Desktop QV (lg+): panel-inner must not clip sticky; both columns sticky + own scroll. */
+@media (min-width: 1024px) {
+  .fixed.inset-0.overflow-y-auto:has(.ps-prestige-qv) [data-product-preview="panel-inner"],
+  .ps-prestige-qv [data-product-preview="panel-inner"] {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  .ps-prestige-qv [data-product-preview="liquid-content"] {
+    overflow: visible !important;
+  }
+
+  .ps-prestige-qv [data-product-preview="grid"],
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) {
+    align-items: start !important;
+  }
+
+  .ps-prestige-qv [data-product-preview="grid"] > div:first-child,
+  .ps-prestige-qv [data-product-preview="grid"] > div:nth-child(2),
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) > div:first-child,
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) > div:nth-child(2) {
+    position: sticky;
+    top: max(12px, env(safe-area-inset-top, 0px));
+    align-self: start;
+    min-width: 0;
+    min-height: 0;
+    z-index: 1;
+    max-height: min(
+      85vh,
+      calc(
+        100vh - 9rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+      )
+    );
+    max-height: min(
+      85dvh,
+      calc(
+        100dvh - 9rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+      )
+    );
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(16, 16, 16, 0.35) transparent;
+  }
+
+  .ps-prestige-qv [data-product-preview="grid"] > div:first-child::-webkit-scrollbar,
+  .ps-prestige-qv [data-product-preview="grid"] > div:nth-child(2)::-webkit-scrollbar,
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) > div:first-child::-webkit-scrollbar,
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) > div:nth-child(2)::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .ps-prestige-qv [data-product-preview="grid"] > div:first-child::-webkit-scrollbar-thumb,
+  .ps-prestige-qv [data-product-preview="grid"] > div:nth-child(2)::-webkit-scrollbar-thumb,
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) > div:first-child::-webkit-scrollbar-thumb,
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) > div:nth-child(2)::-webkit-scrollbar-thumb {
+    background: rgba(16, 16, 16, 0.28);
+    border-radius: 3px;
+  }
+
+  .ps-prestige-qv [data-product-preview="grid"] > div:first-child .ab-gallery,
+  .ps-prestige-qv .grid:has([data-ps-pdp-gallery]) > div:first-child .ab-gallery {
+    min-height: 0;
+  }
 }
 
 .ps-prestige-qv .grid a[href*="/collections/"] {
@@ -10008,6 +10099,45 @@ h2.variation_name .ps-variation-name-value {
 
 .ps-prestige-qv a[href^="/products/"]:hover {
   opacity: 0.85;
+}
+
+/* Quick View modal (≤768px): cancel PDP 100vw gallery bleed; images stay inside panel-inner. */
+@media (max-width: 768px) {
+  [data-product-preview="panel-inner"] [data-ps-pdp-gallery].ab-gallery,
+  .ps-prestige-qv [data-ps-pdp-gallery].ab-gallery {
+    width: 100% !important;
+    max-width: 100% !important;
+    left: auto !important;
+    transform: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box;
+  }
+
+  .ps-prestige-qv .ab-gallery,
+  [data-product-preview="panel-inner"] .ab-gallery {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .ps-prestige-qv .ab-gallery-main,
+  [data-product-preview="panel-inner"] .ab-gallery-main {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .ps-prestige-qv .ab-gallery-slider,
+  [data-product-preview="panel-inner"] .ab-gallery-slider {
+    max-width: 100%;
+  }
+
+  .ps-prestige-qv .ab-gallery-slide .ab-gallery-main-media,
+  [data-product-preview="panel-inner"] .ab-gallery-slide .ab-gallery-main-media {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
 }
 
 @media (max-width: 767.98px) {
