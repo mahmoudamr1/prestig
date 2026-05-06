@@ -10,6 +10,51 @@
   }
   var MOUNT_EVENT = "ps-theme-content-mounted";
 
+  /** `html`/`body` RTL breaks horizontal `scrollLeft` / touch unless scrollports use LTR coordinates. */
+  function prestigeForceLtrScrollPort(el) {
+    if (!el || !el.style) return;
+    try {
+      el.style.setProperty("direction", "ltr", "important");
+      el.style.setProperty("unicode-bidi", "isolate", "important");
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function prestigeHScrollGet(el) {
+    if (!el) return 0;
+    var sl = el.scrollLeft;
+    var max = Math.max(0, el.scrollWidth - el.clientWidth);
+    if (max <= 0) return 0;
+    try {
+      var cs = window.getComputedStyle(el);
+      if ((cs.direction || "").toLowerCase() === "rtl") {
+        if (sl < 0) return Math.min(max, -sl);
+        return Math.max(0, Math.min(max, max - sl));
+      }
+    } catch (e2) {
+      /* ignore */
+    }
+    return sl;
+  }
+
+  function prestigeHScrollSet(el, leftPx, behavior) {
+    if (!el) return;
+    prestigeForceLtrScrollPort(el);
+    var max = Math.max(0, el.scrollWidth - el.clientWidth);
+    var x = Math.max(0, Math.min(max, leftPx));
+    var beh = behavior || "auto";
+    if (beh === "smooth") {
+      try {
+        el.scrollTo({ left: x, behavior: "smooth" });
+      } catch (e3) {
+        el.scrollLeft = x;
+      }
+    } else {
+      el.scrollLeft = x;
+    }
+  }
+
   function readPrestigeScrollY(scrollRoot) {
     if (!scrollRoot || scrollRoot === window) {
       return window.scrollY || document.documentElement.scrollTop || 0;
@@ -411,6 +456,8 @@
           return;
         }
 
+        prestigeForceLtrScrollPort(track);
+
         var mobileCurrent = 0;
         var mobileStartAt = 0;
         var mobileRafId = 0;
@@ -446,7 +493,7 @@
         function syncMobileCurrent() {
           var width = mobileSlideWidth();
           if (!width) return;
-          mobileCurrent = Math.round(track.scrollLeft / width);
+          mobileCurrent = Math.round(prestigeHScrollGet(track) / width);
           if (mobileCurrent >= slides.length) mobileCurrent = slides.length - 1;
           if (mobileCurrent < 0) mobileCurrent = 0;
           setMobileActive(mobileCurrent);
@@ -456,7 +503,7 @@
           mobileCurrent = ((idx % slides.length) + slides.length) % slides.length;
           setMobileActive(mobileCurrent);
           var w = mobileSlideWidth();
-          track.scrollTo({ left: mobileCurrent * w, behavior: behavior || "smooth" });
+          prestigeHScrollSet(track, mobileCurrent * w, behavior || "smooth");
           mobileStartAt = performance.now();
         }
 
@@ -666,6 +713,8 @@
         return;
       }
 
+      prestigeForceLtrScrollPort(carousel);
+
       var mqMobile = window.matchMedia("(max-width: 767.98px)");
       var current = 0;
       var total = slides.length;
@@ -702,7 +751,7 @@
         if (w <= 0) {
           return;
         }
-        carousel.scrollLeft = index * w;
+        prestigeHScrollSet(carousel, index * w, "auto");
       }
 
       function goTo(index) {
@@ -727,7 +776,7 @@
         if (w <= 0) {
           return;
         }
-        var idx = Math.round(carousel.scrollLeft / w);
+        var idx = Math.round(prestigeHScrollGet(carousel) / w);
         idx = Math.max(0, Math.min(total - 1, idx));
         if (idx !== current) {
           setActiveFromIndex(idx);
@@ -823,6 +872,11 @@
         return;
       }
 
+      prestigeForceLtrScrollPort(track);
+      if (viewport) {
+        prestigeForceLtrScrollPort(viewport);
+      }
+
       var current = 0;
       var isMobile = function () {
         return typeof window !== "undefined" && window.innerWidth <= 767;
@@ -863,7 +917,7 @@
         var max = maxIndex();
         current = Math.min(Math.max(index, 0), max);
         var el = getScrollEl();
-        el.scrollTo({ left: current * cardStep(), behavior: "smooth" });
+        prestigeHScrollSet(el, current * cardStep(), "smooth");
         updateProgress();
       }
 
@@ -872,7 +926,7 @@
         if (!step) return;
         var el = getScrollEl();
         var max = maxIndex();
-        current = Math.min(Math.max(Math.round(el.scrollLeft / step), 0), max);
+        current = Math.min(Math.max(Math.round(prestigeHScrollGet(el) / step), 0), max);
         updateProgress();
       }
 
@@ -915,7 +969,7 @@
           isPointerDown = true;
           hasDragged = false;
           dragStartX = evt.clientX;
-          dragScrollLeft = el.scrollLeft;
+          dragScrollLeft = prestigeHScrollGet(el);
           evt.preventDefault();
           document.addEventListener("mousemove", onTrackMouseMove, true);
           document.addEventListener("mouseup", onTrackMouseUp, true);
@@ -926,7 +980,9 @@
           if (Math.abs(dx) > 5) {
             hasDragged = true;
           }
-          getScrollEl().scrollLeft = dragScrollLeft - dx;
+          var sel = getScrollEl();
+          prestigeForceLtrScrollPort(sel);
+          sel.scrollLeft = dragScrollLeft - dx;
         }
         function onTrackMouseUp() {
           isPointerDown = false;
@@ -983,6 +1039,10 @@
       var thumbs = gallery.querySelectorAll(".ab-gallery-thumb");
       var dots = gallery.querySelectorAll(".ab-gallery-dot");
       var images = [];
+
+      if (slider) {
+        prestigeForceLtrScrollPort(slider);
+      }
 
       function syncDots(idx) {
         if (!dots.length) return;
@@ -1049,10 +1109,7 @@
         if (isStackLayout()) return;
         var w = slider.clientWidth;
         if (w <= 0) return;
-        slider.scrollTo({
-          left: idx * w,
-          behavior: instant ? "auto" : "smooth",
-        });
+        prestigeHScrollSet(slider, idx * w, instant ? "auto" : "smooth");
       }
 
       function scrollStackToIndex(idx, instant) {
@@ -1150,7 +1207,7 @@
           scrollT = null;
           var w = slider.clientWidth;
           if (w <= 0) return;
-          var idx = Math.round(slider.scrollLeft / w);
+          var idx = Math.round(prestigeHScrollGet(slider) / w);
           if (idx < 0 || idx >= slides.length) return;
           syncSlideMedia(idx);
           thumbs.forEach(function (t) {

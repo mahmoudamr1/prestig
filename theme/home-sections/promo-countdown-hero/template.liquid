@@ -25,7 +25,14 @@
         <p class="promo-countdown-hero__desc" data-anim="fadeInLeft" data-seq="2">{{ section_data.description }}</p>
       {% endif %}
       {% if section_data.cta_label != blank %}
-        <a class="promo-countdown-hero__btn" href="{{ section_data.cta_url | default: '/products' }}" data-anim="scaleIn" data-seq="3">{{ section_data.cta_label }}</a>
+        <a
+          class="promo-countdown-hero__btn"
+          href="{{ section_data.cta_url | default: '/products' }}"
+          data-anim="scaleIn"
+          data-seq="3"
+        >
+          {{- section_data.cta_label -}}
+        </a>
       {% endif %}
     </div>
     {% assign pch_mode = section_data.countdown_mode | default: 'calendar_day' %}
@@ -42,50 +49,50 @@
     {% endif %}
     {% if show_pch_timer %}
       {% if pch_mode == 'rolling_hours' %}
-      <div
-        class="promo-countdown-hero__timer"
-        dir="ltr"
-        data-pch-mode="rolling"
-        data-hours="{{ pch_roll_hours }}"
-        data-storage-key="{{ pch_roll_key }}"
-        role="timer"
-        aria-live="polite"
-        aria-atomic="true"
-        data-anim="slideInRight"
-        data-seq="4"
-      >
+        <div
+          class="promo-countdown-hero__timer"
+          dir="ltr"
+          data-pch-mode="rolling"
+          data-hours="{{ pch_roll_hours }}"
+          data-storage-key="{{ pch_roll_key }}"
+          role="timer"
+          aria-live="polite"
+          aria-atomic="true"
+          data-anim="slideInRight"
+          data-seq="4"
+        >
       {% else %}
-      <div
-        class="promo-countdown-hero__timer"
-        dir="ltr"
-        data-pch-mode="calendar"
-        data-end="{{ pch_countdown_date | strip }}"
-        role="timer"
-        aria-live="polite"
-        aria-atomic="true"
-        data-anim="slideInRight"
-        data-seq="4"
-      >
+        <div
+          class="promo-countdown-hero__timer"
+          dir="ltr"
+          data-pch-mode="calendar"
+          data-end="{{ pch_countdown_date | strip }}"
+          role="timer"
+          aria-live="polite"
+          aria-atomic="true"
+          data-anim="slideInRight"
+          data-seq="4"
+        >
       {% endif %}
-        <div class="promo-countdown-hero__unit">
-          <span class="promo-countdown-hero__num" data-unit="days">00</span>
-          <span class="promo-countdown-hero__unit-label">{{ section_data.label_days | default: 'DAY' }}</span>
-        </div>
-        <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
-        <div class="promo-countdown-hero__unit">
-          <span class="promo-countdown-hero__num" data-unit="hours">00</span>
-          <span class="promo-countdown-hero__unit-label">{{ section_data.label_hours | default: 'HOURS' }}</span>
-        </div>
-        <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
-        <div class="promo-countdown-hero__unit">
-          <span class="promo-countdown-hero__num" data-unit="minutes">00</span>
-          <span class="promo-countdown-hero__unit-label">{{ section_data.label_minutes | default: 'MIN' }}</span>
-        </div>
-        <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
-        <div class="promo-countdown-hero__unit">
-          <span class="promo-countdown-hero__num" data-unit="seconds">00</span>
-          <span class="promo-countdown-hero__unit-label">{{ section_data.label_seconds | default: 'SEC' }}</span>
-        </div>
+      <div class="promo-countdown-hero__unit">
+        <span class="promo-countdown-hero__num" data-unit="days">00</span>
+        <span class="promo-countdown-hero__unit-label">{{ section_data.label_days | default: 'DAY' }}</span>
+      </div>
+      <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
+      <div class="promo-countdown-hero__unit">
+        <span class="promo-countdown-hero__num" data-unit="hours">00</span>
+        <span class="promo-countdown-hero__unit-label">{{ section_data.label_hours | default: 'HOURS' }}</span>
+      </div>
+      <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
+      <div class="promo-countdown-hero__unit">
+        <span class="promo-countdown-hero__num" data-unit="minutes">00</span>
+        <span class="promo-countdown-hero__unit-label">{{ section_data.label_minutes | default: 'MIN' }}</span>
+      </div>
+      <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
+      <div class="promo-countdown-hero__unit">
+        <span class="promo-countdown-hero__num" data-unit="seconds">00</span>
+        <span class="promo-countdown-hero__unit-label">{{ section_data.label_seconds | default: 'SEC' }}</span>
+      </div>
       </div>
     {% endif %}
   </div>
@@ -105,7 +112,7 @@
     background-position: var(--pch-bg-pos, center right);
     background-repeat: no-repeat;
     color: var(--pch-text, #fff);
-    margin: clamp(1.25rem, 3vw, 2rem) 0 ;
+    margin: clamp(1.25rem, 3vw, 2rem) 0;
   }
   @media (min-width: 768px) {
     .promo-countdown-hero {
@@ -145,12 +152,10 @@
   }
   .promo-countdown-hero__copy {
     max-width: 36rem;
-    text-align: center;
   }
-  @media (min-width: 900px) {
+  @media (max-width: 768px) {
     .promo-countdown-hero__copy {
-      text-align: left;
-      margin-right: auto;
+      text-align: center;
     }
   }
   .promo-countdown-hero__kicker {
