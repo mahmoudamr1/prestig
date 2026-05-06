@@ -40,6 +40,10 @@
 {% if _fb == blank %}
   {% assign _fb = 'Almarai' %}
 {% endif %}
+{% assign _ps_anim_on = true %}
+{% if theme_data.enable_theme_animations == false %}
+  {% assign _ps_anim_on = false %}
+{% endif %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -57,7 +61,7 @@
     font-family: var(--ps-ff-arabic), var(--ps-ff-primary), sans-serif;
   }
 </style>
-<div class="ps-theme">
+<div class="ps-theme" data-ps-animations="{% if _ps_anim_on %}1{% else %}0{% endif %}">
   {% comment %}
     Platform sends `announcement_config`; some previews / config stubs use `announcement_bar`.
   {% endcomment %}

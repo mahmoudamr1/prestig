@@ -42,6 +42,12 @@
     "default": "Almarai"
   },
   {
+    "name": "enable_theme_animations",
+    "type": "boolean",
+    "description": "تفعيل حركات وانتقالات الثيم (ظهور عند التمرير، سليدر تلقائي، ماركي، إلخ). عطّله لإيقاف كل الأنيميشن دفعة واحدة.",
+    "default": true
+  },
+  {
     "name": "footer_quick_links",
     "type": "string",
     "description": "Footer: column title above categories.",

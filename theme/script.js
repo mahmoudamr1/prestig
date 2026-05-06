@@ -10,6 +10,34 @@
   }
   var MOUNT_EVENT = "ps-theme-content-mounted";
 
+  /**
+   * `theme_data.enable_theme_animations` — output on `.ps-theme[data-ps-animations]` from header.liquid,
+   * mirrored to `<html data-ps-animations="0|1">` for global CSS. Default: animations on.
+   */
+  function prestigeThemeAnimationsEnabled() {
+    var wrap = document.querySelector(".ps-theme");
+    if (wrap && wrap.hasAttribute("data-ps-animations")) {
+      return wrap.getAttribute("data-ps-animations") !== "0";
+    }
+    var h = document.documentElement.getAttribute("data-ps-animations");
+    if (h === "0") {
+      return false;
+    }
+    return true;
+  }
+
+  function prestigeSyncAnimationsFlagToHtml() {
+    var wrap = document.querySelector(".ps-theme");
+    if (!wrap) {
+      return;
+    }
+    if (wrap.getAttribute("data-ps-animations") === "0") {
+      document.documentElement.setAttribute("data-ps-animations", "0");
+    } else {
+      document.documentElement.setAttribute("data-ps-animations", "1");
+    }
+  }
+
   /** `html`/`body` RTL breaks horizontal `scrollLeft` / touch unless scrollports use LTR coordinates. */
   function prestigeForceLtrScrollPort(el) {
     if (!el || !el.style) return;
@@ -237,7 +265,9 @@
       return;
     }
 
-    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var reduced =
+      (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+      !prestigeThemeAnimationsEnabled();
     var mc = document.createElement("div");
     mc.className = "ps-announce-mc";
     mc.setAttribute("aria-live", "polite");
@@ -503,7 +533,11 @@
           mobileCurrent = ((idx % slides.length) + slides.length) % slides.length;
           setMobileActive(mobileCurrent);
           var w = mobileSlideWidth();
-          prestigeHScrollSet(track, mobileCurrent * w, behavior || "smooth");
+          var beh = behavior || "smooth";
+          if (!prestigeThemeAnimationsEnabled() && beh === "smooth") {
+            beh = "auto";
+          }
+          prestigeHScrollSet(track, mobileCurrent * w, beh);
           mobileStartAt = performance.now();
         }
 
@@ -562,12 +596,16 @@
           btn.addEventListener("click", function () {
             var idx = parseInt(btn.getAttribute("data-slide-index") || "0", 10);
             if (!isNaN(idx) && idx !== mobileCurrent) {
-              goToMobile(idx, "smooth");
+              goToMobile(idx, prestigeThemeAnimationsEnabled() ? "smooth" : "auto");
             }
           });
         });
 
         goToMobile(0, "auto");
+        if (!prestigeThemeAnimationsEnabled()) {
+          syncMobileCurrent();
+          return;
+        }
         restartMobileAutoplay();
         return;
       }
@@ -673,7 +711,9 @@
       });
 
       activateSlide(0);
-      rafId = requestAnimationFrame(tick);
+      if (prestigeThemeAnimationsEnabled()) {
+        rafId = requestAnimationFrame(tick);
+      }
 
       slider.addEventListener("touchstart", onDragStart, { passive: true });
       slider.addEventListener("touchmove", onDragMove, { passive: true });
@@ -917,7 +957,11 @@
         var max = maxIndex();
         current = Math.min(Math.max(index, 0), max);
         var el = getScrollEl();
-        prestigeHScrollSet(el, current * cardStep(), "smooth");
+        prestigeHScrollSet(
+          el,
+          current * cardStep(),
+          prestigeThemeAnimationsEnabled() ? "smooth" : "auto"
+        );
         updateProgress();
       }
 
@@ -2273,6 +2317,23 @@
   }
 
   function prestigeTriggerAnimation(el) {
+    if (!prestigeThemeAnimationsEnabled()) {
+      prestigeClearAnimTimer(el);
+      if (!el.getAttribute("data-anim")) {
+        return;
+      }
+      if (prestigeAnimWasProcessed(el) || el.classList.contains("animated")) {
+        return;
+      }
+      prestigeAnimMarkProcessed(el);
+      var animType = prestigeResolveAnimType(el);
+      el.classList.remove("will-animate");
+      el.classList.add("animated");
+      if (animType) {
+        el.classList.add("anim-" + animType);
+      }
+      return;
+    }
     if (prestigeAnimWasProcessed(el)) {
       return;
     }
@@ -2391,7 +2452,8 @@
     }
 
     var reduced =
-      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+      !prestigeThemeAnimationsEnabled();
 
     psSrWireClassesToAnimAttrs();
 
@@ -2550,6 +2612,7 @@
 
   function init() {
     try {
+      prestigeSyncAnimationsFlagToHtml();
       syncPrestigeThemeStack();
       initPrestigeHeaderScroll();
       initPrestigeSearchRedirect();
@@ -2573,10 +2636,25 @@
   }
 
   document.addEventListener(MOUNT_EVENT, function () {
+    try {
+      prestigeSyncAnimationsFlagToHtml();
+    } catch (e) {
+      /* ignore */
+    }
     scheduleDynamicInits();
   });
 
   window.addEventListener("popstate", function () {
+    try {
+      prestigeSyncAnimationsFlagToHtml();
+    } catch (e) {
+      /* ignore */
+    }
+    try {
+      schedulePrestigeScrollRevealAnimations();
+    } catch (e) {
+      /* ignore */
+    }
     try {
       initPrestigeThanksOrderFetch();
     } catch (e) {
@@ -2719,4 +2797,5 @@
       });
     }
   }
+  prestigeSyncAnimationsFlagToHtml();
 })();

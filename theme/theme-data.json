@@ -8,6 +8,7 @@
   "font_family_alt": "Nunito",
   "font_family_display": "Playfair Display",
   "font_family_arabic": "Almarai",
+  "enable_theme_animations": true,
   "footer_quick_links": "Shop",
   "footer_customer_support": "Pages",
   "footer_contact_us": "Contact us",

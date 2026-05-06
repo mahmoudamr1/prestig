@@ -13883,3 +13883,26 @@ body:has(.checkout_order_summary) .ps-footer {
     opacity: 1 !important;
   }
 }
+
+/* Merchant: `enable_theme_animations` off — mirrored to `html[data-ps-animations="0"]` by script.js. */
+html[data-ps-animations="0"] .will-animate {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html[data-ps-animations="0"] .animated,
+html[data-ps-animations="0"] .animated[class*="anim-"] {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+html[data-ps-animations="0"] *,
+html[data-ps-animations="0"] *::before,
+html[data-ps-animations="0"] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
