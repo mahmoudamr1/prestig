@@ -1975,26 +1975,6 @@
       .replace(/"/g, "&quot;");
   }
 
-  /**
-   * Platform Quick View uses Headless UI; tag the dialog panel so `style.css` can scope
-   * Prestige PDP tokens (same classes as `.p_details_container`: .color_variation, .button_variation, …).
-   */
-  function initPrestigeQuickViewScope() {
-    var panels = document.querySelectorAll('[id^="headlessui-dialog-panel"]');
-    for (var i = 0; i < panels.length; i++) {
-      var panel = panels[i];
-      if (!panel || !panel.querySelector) {
-        continue;
-      }
-      if (
-        panel.querySelector(".color_variation") ||
-        panel.querySelector(".button_variations_container") ||
-        panel.querySelector(".button_variation")
-      ) {
-        panel.classList.add("ps-prestige-qv");
-      }
-    }
-  }
 
   function normalizeThanksApiOrder(body) {
     if (!body || typeof body !== "object") return null;
