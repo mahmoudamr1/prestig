@@ -8717,7 +8717,6 @@ div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
     transform: translateX(-50%);
     grid-template-columns: 1fr;
     gap: 0;
-    margin-bottom: 14px;
   }
 
   .ab-gallery {
