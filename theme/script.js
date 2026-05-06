@@ -2200,8 +2200,12 @@
     }
   }
 
-  /** Scroll-triggered reveal: `[data-anim]` (+ optional `data-seq`, `data-cycle` when `data-anim="cycle"`). Simple viewport IO + optional wiring below. Respects `prefers-reduced-motion`. */
-  var PS_SR_ANIM_CYCLE = [
+  /**
+   * Scroll reveal — same model as a minimal inline script: IntersectionObserver + `[data-anim]`,
+   * optional `data-seq` delay, and `data-anim="cycle"` with `data-cycle`.
+   * Prestige extras: `prestigeThemeAnimationsEnabled`, `prefers-reduced-motion`, and `ps-sr-*` class → attr wiring.
+   */
+  var PS_SR_CYCLE = [
     "fadeInUp",
     "fadeInDown",
     "fadeInLeft",
@@ -2216,36 +2220,30 @@
     "flipIn",
   ];
 
-  var prestigeAnimProcessedWeak =
-    typeof WeakSet !== "undefined" ? new WeakSet() : null;
-  var prestigeAnimProcessedSet = prestigeAnimProcessedWeak ? null : [];
+  var prestigeScrollRevealDone =
+    typeof Set !== "undefined"
+      ? new Set()
+      : null;
+  var prestigeScrollRevealDoneFallback = prestigeScrollRevealDone ? null : [];
 
-  function prestigeAnimWasProcessed(el) {
-    if (prestigeAnimProcessedWeak) {
-      return prestigeAnimProcessedWeak.has(el);
+  function prestigeScrollRevealIsDone(el) {
+    if (prestigeScrollRevealDone) {
+      return prestigeScrollRevealDone.has(el);
     }
-    return prestigeAnimProcessedSet.indexOf(el) !== -1;
+    return prestigeScrollRevealDoneFallback.indexOf(el) !== -1;
   }
 
-  function prestigeAnimMarkProcessed(el) {
-    if (prestigeAnimProcessedWeak) {
-      prestigeAnimProcessedWeak.add(el);
+  function prestigeScrollRevealMarkDone(el) {
+    if (prestigeScrollRevealDone) {
+      prestigeScrollRevealDone.add(el);
       return;
     }
-    if (prestigeAnimProcessedSet.indexOf(el) === -1) {
-      prestigeAnimProcessedSet.push(el);
+    if (prestigeScrollRevealDoneFallback.indexOf(el) === -1) {
+      prestigeScrollRevealDoneFallback.push(el);
     }
   }
 
-  function prestigeClearAnimTimer(el) {
-    var tid = el.getAttribute("data-prestige-anim-timer");
-    if (tid) {
-      clearTimeout(parseInt(tid, 10));
-      el.removeAttribute("data-prestige-anim-timer");
-    }
-  }
-
-  function prestigeResolveAnimType(el) {
+  function prestigeScrollRevealResolveType(el) {
     var raw = el.getAttribute("data-anim");
     if (!raw) {
       return null;
@@ -2258,9 +2256,54 @@
       if (c % 19 === 13) {
         return "bounceIn";
       }
-      return PS_SR_ANIM_CYCLE[c % PS_SR_ANIM_CYCLE.length];
+      return PS_SR_CYCLE[c % PS_SR_CYCLE.length];
     }
     return raw;
+  }
+
+  function prestigeScrollRevealRun(el, animType) {
+    if (!el.isConnected || el.classList.contains("animated")) {
+      return;
+    }
+    el.classList.remove("will-animate");
+    el.classList.add("animated", "anim-" + animType);
+  }
+
+  function prestigeScrollRevealTrigger(el) {
+    if (prestigeScrollRevealIsDone(el)) {
+      return;
+    }
+    if (el.classList.contains("animated")) {
+      prestigeScrollRevealMarkDone(el);
+      return;
+    }
+    if (!el.getAttribute("data-anim")) {
+      return;
+    }
+
+    var animType = prestigeScrollRevealResolveType(el);
+    prestigeScrollRevealMarkDone(el);
+    if (!animType) {
+      return;
+    }
+
+    var instant =
+      !prestigeThemeAnimationsEnabled() ||
+      (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+    if (instant) {
+      prestigeScrollRevealRun(el, animType);
+      return;
+    }
+
+    var seq = el.getAttribute("data-seq");
+    var delay = seq ? parseInt(seq, 10) * 0.1 : 0;
+    if (isNaN(delay)) {
+      delay = 0;
+    }
+    window.setTimeout(function () {
+      prestigeScrollRevealRun(el, animType);
+    }, delay * 1000);
   }
 
   function prestigeEnsureAnimObserver() {
@@ -2271,88 +2314,29 @@
       return window.__prestigeAnimationObserver;
     }
 
-    var isMobile = window.innerWidth <= 768;
-    var config = {
-      root: null,
-      rootMargin: isMobile ? "0px 0px -20px 0px" : "0px 0px -50px 0px",
-      threshold: isMobile ? 0.05 : 0.1,
-    };
-
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) {
-          return;
-        }
-        prestigeTriggerAnimation(entry.target);
-        try {
-          obs.unobserve(entry.target);
-        } catch (unobsErr) {
-          /* ignore */
-        }
-      });
-    }, config);
-
+    var mobile = window.innerWidth <= 768;
+    var obs = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          prestigeScrollRevealTrigger(entry.target);
+          try {
+            obs.unobserve(entry.target);
+          } catch (e) {}
+        });
+      },
+      {
+        root: null,
+        rootMargin: mobile ? "0px 0px -20px 0px" : "0px 0px -50px 0px",
+        threshold: mobile ? 0.05 : 0.1,
+      }
+    );
     window.__prestigeAnimationObserver = obs;
     return obs;
   }
 
-  function prestigeTriggerAnimation(el) {
-    if (!prestigeThemeAnimationsEnabled()) {
-      prestigeClearAnimTimer(el);
-      if (!el.getAttribute("data-anim")) {
-        return;
-      }
-      if (prestigeAnimWasProcessed(el) || el.classList.contains("animated")) {
-        return;
-      }
-      prestigeAnimMarkProcessed(el);
-      var animType = prestigeResolveAnimType(el);
-      el.classList.remove("will-animate");
-      el.classList.add("animated");
-      if (animType) {
-        el.classList.add("anim-" + animType);
-      }
-      return;
-    }
-    if (prestigeAnimWasProcessed(el)) {
-      return;
-    }
-    if (el.classList.contains("animated")) {
-      prestigeAnimMarkProcessed(el);
-      return;
-    }
-
-    if (!el.getAttribute("data-anim")) {
-      return;
-    }
-
-    prestigeAnimMarkProcessed(el);
-
-    var animType = prestigeResolveAnimType(el);
-    if (!animType) {
-      return;
-    }
-
-    var seq = el.getAttribute("data-seq");
-    var delay = seq ? parseInt(seq, 10) * 0.1 : 0;
-    if (isNaN(delay)) {
-      delay = 0;
-    }
-
-    prestigeClearAnimTimer(el);
-    var tid = window.setTimeout(function () {
-      el.removeAttribute("data-prestige-anim-timer");
-      if (!el.isConnected || el.classList.contains("animated")) {
-        return;
-      }
-      el.classList.remove("will-animate");
-      el.classList.add("animated");
-      el.classList.add("anim-" + animType);
-    }, delay * 1000);
-    el.setAttribute("data-prestige-anim-timer", String(tid));
-  }
-
-  /** Maps class tokens `ps-sr-a-*` / `ps-sr-s-*` / `ps-sr-c-*` into `data-*` when the host strips attributes. */
   function psSrClassTokens(el) {
     var cn = el.className;
     if (cn && typeof cn.baseVal === "string") {
@@ -2367,6 +2351,7 @@
       .filter(Boolean);
   }
 
+  /** `ps-sr-a-*` / `ps-sr-s-*` / `ps-sr-c-*` → `data-*` if the host strips attributes. */
   function psSrWireClassesToAnimAttrs() {
     if (!document.querySelectorAll) {
       return;
@@ -2375,48 +2360,31 @@
     if (!candidates.length) {
       return;
     }
-    for (var i = 0; i < candidates.length; i++) {
-      var el = candidates[i];
+    var rules = [
+      { pre: "ps-sr-a-", attr: "data-anim", ok: function (v) { return !!v; } },
+      { pre: "ps-sr-s-", attr: "data-seq", ok: function (v) { return /^\d+$/.test(v); } },
+      { pre: "ps-sr-c-", attr: "data-cycle", ok: function (v) { return /^\d+$/.test(v); } },
+    ];
+    var sliceLen = 8;
+    var i, r, pi, el, parts, t, val;
+    for (i = 0; i < candidates.length; i++) {
+      el = candidates[i];
       if (!el || el.nodeType !== 1) {
         continue;
       }
-      var parts = psSrClassTokens(el);
-      var pi;
-      if (!el.getAttribute("data-anim")) {
-        for (pi = 0; pi < parts.length; pi++) {
-          var ta = parts[pi];
-          if (ta.indexOf("ps-sr-a-") !== 0) {
-            continue;
-          }
-          var anim = ta.slice(8);
-          if (anim) {
-            el.setAttribute("data-anim", anim);
-          }
-          break;
+      parts = psSrClassTokens(el);
+      for (r = 0; r < rules.length; r++) {
+        if (el.getAttribute(rules[r].attr)) {
+          continue;
         }
-      }
-      if (!el.getAttribute("data-seq")) {
         for (pi = 0; pi < parts.length; pi++) {
-          var ts = parts[pi];
-          if (ts.indexOf("ps-sr-s-") !== 0) {
+          t = parts[pi];
+          if (t.indexOf(rules[r].pre) !== 0) {
             continue;
           }
-          var ns = ts.slice(8);
-          if (/^\d+$/.test(ns)) {
-            el.setAttribute("data-seq", ns);
-          }
-          break;
-        }
-      }
-      if (!el.getAttribute("data-cycle")) {
-        for (pi = 0; pi < parts.length; pi++) {
-          var tc = parts[pi];
-          if (tc.indexOf("ps-sr-c-") !== 0) {
-            continue;
-          }
-          var nc = tc.slice(8);
-          if (/^\d+$/.test(nc)) {
-            el.setAttribute("data-cycle", nc);
+          val = t.slice(sliceLen);
+          if (rules[r].ok(val)) {
+            el.setAttribute(rules[r].attr, val);
           }
           break;
         }
@@ -2431,38 +2399,20 @@
       return;
     }
 
+    psSrWireClassesToAnimAttrs();
+
     var reduced =
       (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ||
       !prestigeThemeAnimationsEnabled();
 
-    psSrWireClassesToAnimAttrs();
-
-    function revealAllInstant(el) {
-      prestigeClearAnimTimer(el);
-      if (!el.getAttribute("data-anim")) {
-        return;
-      }
-      if (el.classList.contains("animated")) {
-        return;
-      }
-      var animType = prestigeResolveAnimType(el);
-      el.classList.remove("will-animate");
-      el.classList.add("animated");
-      if (animType) {
-        el.classList.add("anim-" + animType);
-      }
-    }
-
-    var noIO = reduced || !window.IntersectionObserver;
-
-    if (noIO) {
-      document.querySelectorAll("[data-anim]").forEach(revealAllInstant);
+    if (reduced || !window.IntersectionObserver) {
+      document.querySelectorAll("[data-anim]").forEach(prestigeScrollRevealTrigger);
       return;
     }
 
     var observer = prestigeEnsureAnimObserver();
     if (!observer) {
-      document.querySelectorAll("[data-anim]").forEach(revealAllInstant);
+      document.querySelectorAll("[data-anim]").forEach(prestigeScrollRevealTrigger);
       return;
     }
 
@@ -2470,7 +2420,7 @@
     var visibilityOffset = isMobile ? 20 : 100;
 
     document.querySelectorAll("[data-anim]").forEach(function (el) {
-      if (prestigeAnimWasProcessed(el)) {
+      if (prestigeScrollRevealIsDone(el)) {
         return;
       }
 
@@ -2482,18 +2432,15 @@
       }
 
       if (el.classList.contains("animated")) {
-        prestigeAnimMarkProcessed(el);
+        prestigeScrollRevealMarkDone(el);
         return;
       }
 
       var rect = el.getBoundingClientRect();
       var windowHeight =
         window.innerHeight || document.documentElement.clientHeight;
-      var isVisible =
-        rect.top < windowHeight - visibilityOffset && rect.bottom > 0;
-
-      if (isVisible) {
-        prestigeTriggerAnimation(el);
+      if (rect.top < windowHeight - visibilityOffset && rect.bottom > 0) {
+        prestigeScrollRevealTrigger(el);
       } else {
         observer.observe(el);
       }
@@ -2516,20 +2463,15 @@
       return;
     }
     window.__prestigeAnimationBootTimers = true;
-    window.setTimeout(function () {
+    var boot = function () {
       try {
         schedulePrestigeScrollRevealAnimations();
       } catch (e) {
-        console.warn("[Prestige] Scroll reveal (boot 100ms):", e);
+        console.warn("[Prestige] Scroll reveal (boot):", e);
       }
-    }, 100);
-    window.setTimeout(function () {
-      try {
-        schedulePrestigeScrollRevealAnimations();
-      } catch (e) {
-        console.warn("[Prestige] Scroll reveal (boot 300ms):", e);
-      }
-    }, 300);
+    };
+    window.setTimeout(boot, 100);
+    window.setTimeout(boot, 300);
   }
 
   function runPrestigeDynamicInits() {
