@@ -16,13 +16,13 @@
     },
     {
       "name": "image_left_url",
-      "type": "string",
+      "type": "image",
       "default": "https://files.easy-orders.net/1777447252724830528.jpg",
       "description": "صورة المنتج جهة الشمال/اليمين الأولى (طبقة علوية قبل القص)"
     },
     {
       "name": "image_right_url",
-      "type": "string",
+      "type": "image",
       "default": "https://files.easy-orders.net/1777447252259292373.jpg",
       "description": "صورة ثانية جهة اليمنى/الجانب الآخر"
     },
@@ -91,12 +91,6 @@
       "type": "color",
       "default": "#000000",
       "description": "لون خطوط الأسهم على الـ SVG (المقبض)"
-    },
-    {
-      "name": "section_bg",
-      "type": "color",
-      "default": "#eae8e6",
-      "description": "خلفية السكشن"
     },
     {
       "name": "aspect_ratio_desktop",

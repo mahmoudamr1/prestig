@@ -4,13 +4,13 @@
   "section_schema": [
     {
       "name": "image",
-      "type": "string",
+      "type": "image",
       "default": "https://files.easy-orders.net/1777458784428286068.webp",
-      "description": "Full-width background image URL"
+      "description": "Full-width background image"
     },
     {
       "name": "mobile_image",
-      "type": "string",
+      "type": "image",
       "default": "https://files.easy-orders.net/1777458784703489287.webp",
       "description": "Optional image for small screens (falls back to main image)"
     },

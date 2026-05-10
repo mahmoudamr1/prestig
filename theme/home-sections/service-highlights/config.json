@@ -55,9 +55,9 @@
       "fields": [
         {
           "name": "icon",
-          "type": "string",
+          "type": "image",
           "default": "https://files.easy-orders.net/1777459486246957885svgexport-22.svg",
-          "description": "Icon image URL (PNG/SVG recommended, transparent)"
+          "description": "Icon image (PNG/SVG recommended, transparent)"
         },
         {
           "name": "title",

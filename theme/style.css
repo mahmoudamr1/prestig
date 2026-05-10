@@ -3653,13 +3653,11 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   }
 }
 
-/* Figma 27:2685 â€” Prestige footer (Ø¹Ø±Ø¶ ÙƒØ§Ù…Ù„ Ù…Ø«Ù„ .content_container + .ps-pgrid-inner) */
+/* Footer: palette --ft-bg / --ft-text (Liquid sets them on <footer> when palette exists; else inherit from :root). CSS uses var(--ft-*, fallback) only. */
 .ps-footer {
-  --ps-footer-fg: var(--ft-text, var(--ps-surface, #ffffff));
   --ps-footer-bg: var(--ft-bg, #1c1c1c);
-  --ps-footer-muted: #98989a;
   background: var(--ps-footer-bg);
-  color: var(--ps-footer-fg);
+  color: var(--ft-text, #ffffff);
   padding: 70px 0 20px;
   box-sizing: border-box;
   width: 100%;
@@ -3829,7 +3827,7 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--ps-footer-fg);
+  color: var(--ft-text, #ffffff);
   opacity: 0.85;
 }
 
@@ -3844,7 +3842,7 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   min-width: 0;
   border: 0;
   background: transparent;
-  color: var(--ps-footer-fg);
+  color: var(--ft-text, #ffffff);
   font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -3853,7 +3851,8 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
 }
 
 .ps-footer-subscribe-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--ft-text, #ffffff);
+  opacity: 0.45;
 }
 
 .ps-footer-subscribe-btn {
@@ -3900,7 +3899,7 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   color: inherit;
 }
 
-/* Column titles: match readable footer links tier (links use rgba white); --ft-text alone often clashes when footer bg is dark */
+/* Column titles — palette Footer Text (--ft-text) */
 .ps-footer-heading {
   margin: 0 0 26px;
   font-family: var(--ps-ff-primary), sans-serif;
@@ -3908,7 +3907,7 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   font-weight: 400;
   line-height: 1.5;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--ft-text, #ffffff);
 }
 
 .ps-footer-links {
@@ -3922,7 +3921,8 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
 
 .ps-footer-links a {
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--ft-text, #ffffff);
+  opacity: 0.78;
   font-family: var(--ps-ff-primary), sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -3946,7 +3946,8 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--ft-text, #ffffff);
+  opacity: 0.82;
 }
 
 .ps-footer-contact-block a,
@@ -3955,7 +3956,8 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--ft-text, #ffffff);
+  opacity: 0.78;
   text-decoration: none;
 }
 
@@ -4028,7 +4030,7 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  color: var(--ps-footer-fg);
+  color: var(--ft-text, #ffffff);
 }
 
 .ps-footer-social-img {
@@ -4048,14 +4050,15 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
   display: block;
   width: 20px;
   height: 20px;
-  color: var(--ps-footer-fg);
+  color: var(--ft-text, #ffffff);
   flex-shrink: 0;
 }
 
 .ps-footer-divider {
   height: 1px;
   margin-top: clamp(20px, 2.5vw, 24px);
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--ft-text, #ffffff);
+  opacity: 0.14;
 }
 
 .ps-footer-bottom {
@@ -4076,7 +4079,8 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
 
 .ps-footer-copy {
   margin: 0;
-  color: var(--ps-footer-muted);
+  color: var(--ft-text, #ffffff);
+  opacity: 0.62;
   font-family: var(--ps-ff-primary), sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -4086,7 +4090,8 @@ html.ps-app-lang-ar .ps-plist-arrow svg,
 
 .ps-footer-powered {
   margin: 0;
-  color: var(--ps-footer-muted);
+  color: var(--ft-text, #ffffff);
+  opacity: 0.62;
   font-family: var(--ps-ff-primary), sans-serif;
   font-size: 16px;
   font-weight: 400;

@@ -109,8 +109,8 @@
   },
   {
     "name": "footer_payment_custom_image",
-    "type": "string",
-    "description": "Footer: optional payment strip image URL. Empty uses store payment image.",
+    "type": "image",
+    "description": "Footer: optional payment strip image. Empty uses store payment image.",
     "default": ""
   },
   {

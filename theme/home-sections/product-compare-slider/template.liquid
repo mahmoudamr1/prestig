@@ -5,7 +5,6 @@
     --psc-split: {{ section_data.initial_split_percent | default: 50 }};
     --psc-divider: {{ section_data.divider_color | default: '#ffffff' }};
     --psc-handle-icon: {{ section_data.handle_arrow_color | default: '#000000' }};
-    --psc-bg: {{ section_data.section_bg | default: '#eae8e6' }};
   "
 >
   {% assign _ar = section_data.aspect_ratio_desktop | default: 'cinematic' %}
