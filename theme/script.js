@@ -224,14 +224,31 @@
     });
   }
 
+  /** How the bar was rendered in Liquid — do not trust data-ann-type alone (can be stale and force slider JS). */
+  function detectPrestigeAnnounceMode(root) {
+    if (!root || !root.querySelector) {
+      return "simple";
+    }
+    if (root.querySelector(".ps-announce-marquee")) {
+      return "marquee";
+    }
+    if (root.querySelector(".ps-announce-slider")) {
+      return "slider";
+    }
+    if (root.querySelector(".ps-announce-simple")) {
+      return "simple";
+    }
+    return "simple";
+  }
+
   function collectAnnounceItems(root) {
-    var type = root.getAttribute("data-ann-type");
+    var mode = detectPrestigeAnnounceMode(root);
     var out = [];
-    if (type === "marquee") {
+    if (mode === "marquee") {
       root.querySelectorAll('.ps-announce-marquee-item:not([aria-hidden="true"])').forEach(function (el) {
         out.push(el.innerHTML);
       });
-    } else if (type === "slider") {
+    } else if (mode === "slider") {
       root.querySelectorAll(".ps-announce-slide").forEach(function (el) {
         out.push(el.innerHTML);
       });
@@ -259,6 +276,9 @@
   }
 
   function setupAnnounceCarousel(root) {
+    if (detectPrestigeAnnounceMode(root) !== "slider") {
+      return;
+    }
     teardownAnnounceCarousel(root);
     var items = collectAnnounceItems(root);
     if (items.length < 2) {
@@ -351,9 +371,32 @@
     });
     clearPrestigeAnnounceSliders();
     document.querySelectorAll("[data-ps-announce]").forEach(function (root) {
+      var mode = detectPrestigeAnnounceMode(root);
       var items = collectAnnounceItems(root);
-      if (items.length > 1) {
+      if (items.length < 2) {
+        return;
+      }
+      /* Injected carousel only matches real slider markup from Liquid. */
+      if (mode === "slider") {
         setupAnnounceCarousel(root);
+      }
+    });
+    /* Host may inject .ps-announce-mc after theme runs; strip it unless layout is slider. */
+    document.querySelectorAll("[data-ps-announce]").forEach(function (root) {
+      if (detectPrestigeAnnounceMode(root) !== "slider") {
+        teardownAnnounceCarousel(root);
+      }
+    });
+    requestAnimationFrame(function () {
+      document.querySelectorAll("[data-ps-announce]").forEach(function (root) {
+        if (detectPrestigeAnnounceMode(root) !== "slider") {
+          teardownAnnounceCarousel(root);
+        }
+      });
+      try {
+        syncPrestigeThemeStack();
+      } catch (e) {
+        /* ignore */
       }
     });
     syncPrestigeThemeStack();

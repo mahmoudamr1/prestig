@@ -293,6 +293,17 @@ html.ps-app-lang-ar .ps-announce {
   display: none !important;
 }
 
+/* Marquee / simple: --has-mc + .ps-announce-mc must not hide the real bar (host or stale script may inject carousel). */
+.ps-announce:has(.ps-announce-marquee).ps-announce--has-mc .ps-announce-inner,
+.ps-announce:has(.ps-announce-simple).ps-announce--has-mc .ps-announce-inner {
+  display: flex !important;
+}
+
+.ps-announce:has(.ps-announce-marquee) .ps-announce-mc,
+.ps-announce:has(.ps-announce-simple) .ps-announce-mc {
+  display: none !important;
+}
+
 .ps-announce-mc {
   display: flex;
   align-items: center;

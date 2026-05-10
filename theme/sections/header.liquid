@@ -63,7 +63,8 @@
 </style>
 <div class="ps-theme" data-ps-animations="{% if _ps_anim_on %}1{% else %}0{% endif %}">
   {% comment %}
-    Platform sends `announcement_config`; some previews / config stubs use `announcement_bar`.
+    `announcement_config`: text[], type (marquee | slider | simple). Type is normalized in Liquid;
+    script only injects the prev/next carousel for `slider` with 2+ lines so marquee & simple stay distinct.
   {% endcomment %}
   {% assign ann_cfg = announcement_config %}
   {% if ann_cfg == nil or ann_cfg.text == nil or ann_cfg.text.size == 0 %}
@@ -77,11 +78,20 @@
     {% assign ann_count = ann_cfg.text | size %}
   {% endif %}
 
+  {% comment %} Normalize announcement display mode (dashboard may send any casing). {% endcomment %}
+  {% assign ann_type_key = 'simple' %}
+  {% if ann_cfg and ann_cfg.type != blank %}
+    {% assign ann_type_key = ann_cfg.type | strip | downcase %}
+  {% endif %}
+  {% if ann_type_key != 'marquee' and ann_type_key != 'slider' %}
+    {% assign ann_type_key = 'simple' %}
+  {% endif %}
+
   {% if ann_count > 0 %}
     <div
       class="ps-announce"
       data-ps-announce
-      data-ann-type="{{ ann_cfg.type }}"
+      data-ann-type="{{ ann_type_key }}"
       role="region"
       aria-label="Announcement"
       {% if palette %}
@@ -92,7 +102,7 @@
         {% endif %}
       {% endif %}
     >
-      {% if ann_cfg.type == "marquee" %}
+      {% if ann_type_key == 'marquee' %}
         <div class="ps-announce-inner ps-announce-marquee">
           <div class="ps-announce-marquee-track">
             {% for item in ann_cfg.text %}
@@ -103,7 +113,7 @@
             {% endfor %}
           </div>
         </div>
-      {% elsif ann_cfg.type == "slider" %}
+      {% elsif ann_type_key == 'slider' %}
         <div class="ps-announce-inner ps-announce-slider">
           {% for item in ann_cfg.text %}
             <div class="ps-announce-slide{% if forloop.first %} ps-active{% endif %}">{{ item }}</div>
@@ -122,6 +132,7 @@
     <div
       class="ps-announce"
       data-ps-announce
+      data-ann-type="simple"
       role="region"
       aria-label="Announcement"
       {% if palette %}
@@ -132,8 +143,8 @@
         {% endif %}
       {% endif %}
     >
-      <div class="ps-announce-inner">
-        {{ announcement_text }}
+      <div class="ps-announce-inner ps-announce-simple">
+        <span>{{ announcement_text }}</span>
       </div>
     </div>
   {% endif %}
