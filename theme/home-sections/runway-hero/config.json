@@ -4,9 +4,9 @@
   "section_schema": [
     {
       "name": "image",
-      "type": "string",
+      "type": "image",
       "default": "",
-      "description": "Full-width background image URL"
+      "description": "Full-width background image"
     },
     {
       "name": "kicker",
@@ -33,10 +33,9 @@
       "description": "Primary button label"
     },
     {
-      "name": "primary_url",
-      "type": "string",
-      "default": "/products",
-      "description": "Primary button URL"
+      "name": "primary_category_id",
+      "type": "category_single_select",
+      "description": "Collection the primary button links to (resolved on the storefront)"
     },
     {
       "name": "secondary_label",
@@ -45,10 +44,9 @@
       "description": "Secondary button label (hidden if empty)"
     },
     {
-      "name": "secondary_url",
-      "type": "string",
-      "default": "/pages/lookbook",
-      "description": "Secondary button URL"
+      "name": "secondary_page_id",
+      "type": "page_single_select",
+      "description": "Simple page the secondary button links to (when label is set)"
     },
     {
       "name": "overlay_strength",

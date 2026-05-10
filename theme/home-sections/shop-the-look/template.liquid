@@ -1,21 +1,21 @@
 <section
-  class="shop-the-look shop-the-look--{{ section_data.surface | default: 'cream' }} ps-sr-scope"
+  class="shop-the-look shop-the-look--{{ section_data.surface | default: 'cream' }}"
   style="--stl-accent: {{ section_data.accent_color | default: '#C9A962' }};"
 >
   <header class="shop-the-look__head">
     {% if section_data.eyebrow != blank %}
-      <p class="shop-the-look__eyebrow" data-anim="fadeInDown" data-seq="0">{{ section_data.eyebrow }}</p>
+      <p class="shop-the-look__eyebrow">{{ section_data.eyebrow }}</p>
     {% endif %}
     {% if section_data.title != blank %}
-      <h2 class="shop-the-look__title" data-anim="fadeInUp" data-seq="1">{{ section_data.title }}</h2>
+      <h2 class="shop-the-look__title">{{ section_data.title }}</h2>
     {% endif %}
     {% if section_data.subtitle != blank %}
-      <p class="shop-the-look__subtitle" data-anim="fadeInLeft" data-seq="2">{{ section_data.subtitle }}</p>
+      <p class="shop-the-look__subtitle">{{ section_data.subtitle }}</p>
     {% endif %}
   </header>
 
   <div class="shop-the-look__layout">
-    <a class="shop-the-look__hero" href="{{ section_data.look_url | default: '/products' }}" data-anim="scaleIn" data-seq="3">
+    <a class="shop-the-look__hero" href="{{ section_data.look_url | default: '/products' }}">
       <div class="shop-the-look__hero-visual">
         {% if section_data.look_image != blank %}
           <img
@@ -25,7 +25,7 @@
             loading="lazy"
             width="900"
             height="1120"
-          />
+          >
         {% else %}
           <div class="shop-the-look__hero-placeholder" aria-hidden="true"></div>
         {% endif %}
@@ -44,36 +44,21 @@
       </div>
     </a>
 
-    {% if section_data.picks and section_data.picks.size > 0 %}
-      <div class="shop-the-look__picks">
-        {% for pick in section_data.picks %}
-          <a class="shop-the-look__pick" href="{{ pick.url | default: '#' }}" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 4 }}">
-            <div class="shop-the-look__pick-frame">
-              {% if pick.image != blank %}
-                <img
-                  class="shop-the-look__pick-img"
-                  src="{{ pick.image }}"
-                  alt="{{ pick.title }}"
-                  loading="lazy"
-                  width="320"
-                  height="400"
-                />
-              {% else %}
-                <div class="shop-the-look__pick-fallback" aria-hidden="true"></div>
-              {% endif %}
-            </div>
-            <div class="shop-the-look__pick-meta">
-              {% if pick.title != blank %}
-                <span class="shop-the-look__pick-title">{{ pick.title }}</span>
-              {% endif %}
-              {% if pick.price != blank %}
-                <span class="shop-the-look__pick-price">{{ pick.price }}</span>
-              {% endif %}
-            </div>
-          </a>
-        {% endfor %}
+    <div
+      class="shop-the-look__picks eo-hs{% if section_data.pick_product_ids == blank or section_data.pick_product_ids.size == 0 %} eo-hs--empty{% endif %}"
+      data-eo-hs-entity="products"
+      data-eo-hs-ids="{{ section_data.pick_product_ids | join: ',' | strip }}"
+    >
+      <div class="shop-the-look__picks-inner" data-eo-hs-mount>
+        {% if section_data.pick_product_ids and section_data.pick_product_ids.size > 0 %}
+          {% for id in section_data.pick_product_ids %}
+            <div class="eo-hs-skeleton eo-hs-skeleton--product" aria-hidden="true"></div>
+          {% endfor %}
+        {% else %}
+          <p class="shop-the-look__picks-empty">Add products in the section settings to list pieces from this look.</p>
+        {% endif %}
       </div>
-    {% endif %}
+    </div>
   </div>
 </section>
 
@@ -204,27 +189,52 @@
     color: #141218;
   }
   .shop-the-look__picks {
+    min-width: 0;
+  }
+  .shop-the-look__picks-empty {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    opacity: 0.75;
+    padding: 0.5rem 0;
+  }
+  .shop-the-look__picks-inner {
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
   }
+  .shop-the-look__picks-inner.eo-hs-loading {
+    opacity: 0.85;
+  }
   @media (max-width: 959px) {
-    .shop-the-look__picks {
+    .shop-the-look__picks-inner {
       flex-flow: row nowrap;
       overflow-x: auto;
       padding-bottom: 0.35rem;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
     }
-    .shop-the-look__pick {
+    .shop-the-look__picks-inner .eo-hs-card--product {
       flex: 0 0 min(220px, 72vw);
       scroll-snap-align: start;
     }
   }
-  .shop-the-look__pick {
+  .shop-the-look__picks-inner .eo-hs-skeleton--product {
+    min-height: 96px;
+    border-radius: 8px;
+    background: linear-gradient(110deg, #ece8e2 8%, #f5f2ee 18%, #ece8e2 33%);
+    background-size: 200% 100%;
+    animation: shop-the-look-shimmer 1.2s ease-in-out infinite;
+  }
+  .shop-the-look--charcoal .shop-the-look__picks-inner .eo-hs-skeleton--product {
+    background: linear-gradient(110deg, #2a2630 8%, #3a3540 18%, #2a2630 33%);
+    background-size: 200% 100%;
+  }
+  .shop-the-look__picks-inner .eo-hs-card--product {
     display: flex;
-    gap: 0.85rem;
+    flex-direction: row;
     align-items: center;
+    gap: 0.85rem;
     text-decoration: none;
     color: inherit;
     padding: 0.65rem;
@@ -233,52 +243,62 @@
     border: 1px solid rgba(28, 26, 23, 0.06);
     transition: background 0.2s ease, transform 0.2s ease;
   }
-  .shop-the-look--charcoal .shop-the-look__pick {
+  .shop-the-look--charcoal .shop-the-look__picks-inner .eo-hs-card--product {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.08);
   }
-  .shop-the-look__pick:hover {
+  .shop-the-look__picks-inner .eo-hs-card--product:hover {
     background: rgba(255, 255, 255, 0.85);
     transform: translateX(2px);
   }
-  .shop-the-look--charcoal .shop-the-look__pick:hover {
+  .shop-the-look--charcoal .shop-the-look__picks-inner .eo-hs-card--product:hover {
     background: rgba(255, 255, 255, 0.1);
   }
-  .shop-the-look__pick-frame {
+  .shop-the-look__picks-inner .eo-hs-card--product .eo-hs-card__media {
     flex-shrink: 0;
     width: 76px;
     height: 96px;
     border-radius: 4px;
     overflow: hidden;
+    aspect-ratio: unset;
+  }
+  .shop-the-look__picks-inner .eo-hs-card--product .eo-hs-card__media--empty {
+    min-height: 96px;
     background: #ddd8d0;
   }
-  .shop-the-look--charcoal .shop-the-look__pick-frame {
+  .shop-the-look--charcoal .shop-the-look__picks-inner .eo-hs-card--product .eo-hs-card__media--empty {
     background: #2a2630;
   }
-  .shop-the-look__pick-img,
-  .shop-the-look__pick-fallback {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .shop-the-look__pick-fallback {
-    background: linear-gradient(160deg, #b0a69a, #7d756c);
-  }
-  .shop-the-look__pick-meta {
+  .shop-the-look__picks-inner .eo-hs-card--product .eo-hs-card__body {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
     min-width: 0;
+    padding: 0;
   }
-  .shop-the-look__pick-title {
+  .shop-the-look__picks-inner .eo-hs-card--product .eo-hs-card__title {
     font-size: 0.9rem;
     font-weight: 600;
     line-height: 1.35;
   }
-  .shop-the-look__pick-price {
+  .shop-the-look__picks-inner .eo-hs-card--product .eo-hs-card__meta {
     font-size: 0.82rem;
     opacity: 0.75;
     letter-spacing: 0.03em;
+  }
+  .shop-the-look__picks .eo-hs-error {
+    margin: 0;
+    font-size: 0.86rem;
+    color: #8b3225;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  @keyframes shop-the-look-shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
   }
 </style>

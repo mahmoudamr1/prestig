@@ -25,9 +25,9 @@
       "fields": [
         {
           "name": "icon",
-          "type": "string",
+          "type": "image",
           "default": "",
-          "description": "Optional small icon or logo URL"
+          "description": "Optional small icon or logo"
         },
         {
           "name": "title",
