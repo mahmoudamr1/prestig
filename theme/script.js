@@ -8,6 +8,25 @@
   if (typeof document === "undefined") {
     return;
   }
+
+  /**
+   * EasyOrders REST API v1 base (no trailing slash). Single place to change for fetches in this file.
+   * Matches hosted `files.easy-orders.net/...script.js` default (`https://api.easy-orders.net/api/v1`).
+   */
+  const PS_EO_API_V1_BASE = "https://api.easy-orders.net/api/v1";
+
+  /** @param {string|null|undefined} override - optional host origin or full `.../api/v1` from `data-eo-api-origin`. */
+  function normalizePsEoApiV1Root(override) {
+    var s = String(override || "").trim().replace(/\/$/, "");
+    if (!s) {
+      return PS_EO_API_V1_BASE.replace(/\/$/, "");
+    }
+    if (!/\/api\/v\d+$/i.test(s)) {
+      s = (s + "/api/v1").replace(/\/$/, "");
+    }
+    return s.replace(/\/$/, "");
+  }
+
   var MOUNT_EVENT = "ps-theme-content-mounted";
 
   /**
@@ -2010,6 +2029,278 @@
     }
   }
 
+  /**
+   * Home-section API hydration — same behaviour as hosted `...script.js` (`E` + `A` + MutationObserver),
+   * plus: categories render as collection cards, mount on self, `data-eo-hs-ids` attribute retries, Prestige price probes.
+   */
+  var eoHsCurrencySymbolCache = "";
+
+  function resolveEoHsCurrencySymbol() {
+    if (eoHsCurrencySymbolCache) {
+      return eoHsCurrencySymbolCache;
+    }
+    try {
+      var nd = document.getElementById("__NEXT_DATA__");
+      if (nd) {
+        var data = JSON.parse(nd.textContent || "{}");
+        var app =
+          data &&
+          data.props &&
+          data.props.pageProps &&
+          data.props.pageProps.appSettings;
+        if (app && app.currency_symbol) {
+          eoHsCurrencySymbolCache = String(app.currency_symbol);
+          return eoHsCurrencySymbolCache;
+        }
+      }
+    } catch (eSym) {}
+    var probe = document.querySelector(
+      ".ps-pgrid-price-current, .ps-plist-price-current, .ps-featured-price-current, .eo-hs-card__meta, .ab-pgrid-price, .ab-pd-price, .ab-plist-price, .ab-featured-price, .ab-price-old"
+    );
+    if (probe) {
+      var sym = (probe.textContent || "").replace(/[\d,.\s]/g, "").trim();
+      if (sym) {
+        eoHsCurrencySymbolCache = sym;
+        return eoHsCurrencySymbolCache;
+      }
+    }
+    return "";
+  }
+
+  function resolveEoHsApiBase(fromEl) {
+    var anchor =
+      fromEl && fromEl.closest && fromEl.closest("[data-eo-api-base]");
+    var s = "";
+    if (anchor && anchor.getAttribute("data-eo-api-base")) {
+      s = String(anchor.getAttribute("data-eo-api-base") || "").trim();
+    } else if (
+      typeof window.__EO_STORE_API_BASE__ === "string" &&
+      window.__EO_STORE_API_BASE__
+    ) {
+      s = String(window.__EO_STORE_API_BASE__).trim();
+    }
+    return normalizePsEoApiV1Root(s || null);
+  }
+
+  function eoHsEscapeAttr(val) {
+    return String(val || "").replace(/"/g, "&quot;");
+  }
+
+  function resolveEoHsHydrationMount(root) {
+    if (!root || root.nodeType !== 1) {
+      return null;
+    }
+    if (root.hasAttribute && root.hasAttribute("data-eo-hs-mount")) {
+      return root;
+    }
+    return root.querySelector("[data-eo-hs-mount]");
+  }
+
+  function initEasyOrdersHsCtaLinks() {
+    document
+      .querySelectorAll("a[data-eo-hs-cta]:not([data-eo-hs-cta-done])")
+      .forEach(function (el) {
+        var id = String(el.getAttribute("data-eo-hs-cta-id") || "").trim();
+        var entity = el.getAttribute("data-eo-hs-cta-entity") || "";
+        if (!id) {
+          return;
+        }
+        el.setAttribute("data-eo-hs-cta-done", "1");
+        var base = resolveEoHsApiBase(el);
+        var path =
+          entity === "categories"
+            ? "categories"
+            : entity === "pages"
+              ? "simple-pages"
+              : "products";
+        var url = base + "/" + path + "?filter=id||$in||" + id + "&limit=1";
+        fetch(url, {
+          credentials: "omit",
+          headers: { Accept: "application/json" },
+        })
+          .then(function (res) {
+            return res.ok
+              ? res.json()
+              : Promise.reject(new Error(String(res.status)));
+          })
+          .then(function (body) {
+            var rows = Array.isArray(body)
+              ? body
+              : body && Array.isArray(body.data)
+                ? body.data
+                : [];
+            var row = rows[0];
+            if (!row) {
+              return;
+            }
+            var slug = row.slug || "";
+            if (!slug) {
+              return;
+            }
+            if (entity === "categories") {
+              el.href = "/collections/" + encodeURIComponent(slug);
+            } else if (entity === "pages") {
+              el.href = "/pages/" + encodeURIComponent(slug);
+            } else {
+              el.href = "/products/" + encodeURIComponent(slug);
+            }
+          })
+          .catch(function () {});
+      });
+  }
+
+  function initEasyOrdersHsHydration() {
+    var roots = document.querySelectorAll(
+      "[data-eo-hs-ids]:not([data-eo-hs-fetched])"
+    );
+    if (!roots.length) {
+      return;
+    }
+
+    var currencySym = resolveEoHsCurrencySymbol();
+
+    roots.forEach(function (root) {
+      var ids = (root.getAttribute("data-eo-hs-ids") || "").trim();
+      if (!ids) {
+        return;
+      }
+
+      var mount = resolveEoHsHydrationMount(root);
+      if (!mount) {
+        return;
+      }
+
+      root.setAttribute("data-eo-hs-fetched", "1");
+      mount.classList.add("eo-hs-loading");
+
+      var base = resolveEoHsApiBase(root);
+      var entity = root.getAttribute("data-eo-hs-entity") || "products";
+      var collection = entity === "categories" ? "categories" : "products";
+      var url =
+        base +
+        "/" +
+        collection +
+        "?filter=id||$in||" +
+        ids +
+        "&limit=20";
+
+      fetch(url, {
+        credentials: "omit",
+        headers: { Accept: "application/json" },
+      })
+        .then(function (res) {
+          return res.ok ? res.json() : Promise.reject(res.status);
+        })
+        .then(function (body) {
+          var rows = Array.isArray(body)
+            ? body
+            : body && Array.isArray(body.data)
+              ? body.data
+              : [];
+
+          if (!rows.length) {
+            mount.innerHTML =
+              '<p class="eo-hs-error">' +
+              (entity === "categories"
+                ? "No categories found."
+                : "No products found.") +
+              "</p>";
+            mount.classList.remove("eo-hs-loading");
+            return;
+          }
+
+          var html = "";
+          if (entity === "categories") {
+            rows.forEach(function (row) {
+              var slug = row.slug || "";
+              var name = row.name || "";
+              var thumb =
+                row.thumb ||
+                row.image ||
+                (row.images && row.images[0]) ||
+                "";
+              var href = slug
+                ? "/collections/" + encodeURIComponent(slug)
+                : "#";
+              var media = thumb
+                ? '<div class="eo-hs-card__media"><img src="' +
+                  eoHsEscapeAttr(thumb) +
+                  '" alt="' +
+                  eoHsEscapeAttr(name) +
+                  '" loading="lazy" width="320" height="400" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>'
+                : '<div class="eo-hs-card__media eo-hs-card__media--empty"></div>';
+              html +=
+                '<a class="eo-hs-card--category" href="' +
+                href +
+                '">' +
+                media +
+                '<div class="eo-hs-card__body"><span class="eo-hs-card__title">' +
+                String(name).replace(/</g, "&lt;") +
+                "</span></div></a>";
+            });
+          } else {
+            rows.forEach(function (row) {
+              var slug = row.slug || "";
+              var name = row.name || "";
+              var thumb =
+                row.thumb ||
+                (row.images && row.images[0]) ||
+                "";
+              var sale = row.sale_price;
+              var price = row.price;
+              var showSale =
+                sale != null &&
+                price != null &&
+                Number(sale) < Number(price);
+              var priceNow = showSale ? sale : price || 0;
+              var priceWas = showSale ? price : 0;
+              var sym = currencySym || row.currency || "";
+              var media = thumb
+                ? '<div class="eo-hs-card__media"><img src="' +
+                  eoHsEscapeAttr(thumb) +
+                  '" alt="' +
+                  eoHsEscapeAttr(name) +
+                  '" loading="lazy" width="320" height="400" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>'
+                : '<div class="eo-hs-card__media eo-hs-card__media--empty"></div>';
+              var meta = '<span class="eo-hs-card__meta">';
+              if (priceWas) {
+                meta +=
+                  '<del style="opacity:0.55;margin-inline-end:4px">' +
+                  priceWas +
+                  " " +
+                  sym +
+                  "</del> ";
+              }
+              meta += priceNow + " " + sym + "</span>";
+              html +=
+                '<a class="eo-hs-card--product" href="/products/' +
+                encodeURIComponent(slug) +
+                '">' +
+                media +
+                '<div class="eo-hs-card__body"><span class="eo-hs-card__title">' +
+                String(name).replace(/</g, "&lt;") +
+                "</span>" +
+                meta +
+                "</div></a>";
+            });
+          }
+
+          mount.innerHTML = html;
+          mount.classList.remove("eo-hs-loading");
+          if (typeof window.initFormatPrices === "function") {
+            try {
+              window.initFormatPrices();
+            } catch (eFmt) {}
+          }
+        })
+        .catch(function () {
+          mount.innerHTML = '<p class="eo-hs-error">Failed to load.</p>';
+          mount.classList.remove("eo-hs-loading");
+          root.removeAttribute("data-eo-hs-fetched");
+        });
+    });
+  }
+
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g, "&amp;")
@@ -2017,7 +2308,6 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
   }
-
 
   function normalizeThanksApiOrder(body) {
     if (!body || typeof body !== "object") return null;
@@ -2201,8 +2491,8 @@
 
       if (root.getAttribute("data-thanks-fetch-inflight") === "1") continue;
 
-      var base = (root.getAttribute("data-eo-api-origin") || "https://api.easyorders.dev").replace(/\/$/, "");
-      var url = base + "/api/v1/orders/client/" + encodeURIComponent(orderId);
+      var apiRoot = normalizePsEoApiV1Root(root.getAttribute("data-eo-api-origin"));
+      var url = apiRoot + "/orders/client/" + encodeURIComponent(orderId);
 
       root.setAttribute("data-thanks-fetch-inflight", "1");
 
@@ -2519,6 +2809,20 @@
 
   function runPrestigeDynamicInits() {
     try {
+      initEasyOrdersHsCtaLinks();
+      initEasyOrdersHsHydration();
+    } catch (e) {
+      console.warn("[Prestige] EasyOrders home-section hydration error:", e);
+    }
+    window.requestAnimationFrame(function () {
+      try {
+        initEasyOrdersHsCtaLinks();
+        initEasyOrdersHsHydration();
+      } catch (eEoRaf) {
+        /* ignore */
+      }
+    });
+    try {
       initPrestigeQuickViewScope();
     } catch (e) {
       console.warn("[Prestige] Quick View scope error:", e);
@@ -2621,6 +2925,11 @@
       /* ignore */
     }
     try {
+      scheduleDynamicInits();
+    } catch (ePs) {
+      /* ignore */
+    }
+    try {
       initPrestigeThanksOrderFetch();
     } catch (e) {
       console.warn("[Prestige] Thanks order fetch (popstate):", e);
@@ -2632,6 +2941,19 @@
       var m = mutations[i];
       if (m.type === "attributes") {
         var pname = m.attributeName;
+        if (pname === "data-eo-hs-ids") {
+          var eoRoot = m.target;
+          if (
+            eoRoot &&
+            eoRoot.nodeType === 1 &&
+            eoRoot.matches &&
+            eoRoot.matches("[data-eo-hs-ids]")
+          ) {
+            eoRoot.removeAttribute("data-eo-hs-fetched");
+            scheduleDynamicInits();
+            return;
+          }
+        }
         if (
           pname === "data-end" ||
           pname === "data-hours" ||
@@ -2680,6 +3002,10 @@
             el.matches(".ps-header") ||
             el.matches("#eo-header") ||
             el.matches("[data-liquid-thanks]") ||
+            el.matches("[data-eo-hs-ids]") ||
+            el.matches("a[data-eo-hs-cta]") ||
+            el.matches(".shop-the-look") ||
+            el.matches(".category-mosaic") ||
             (el.id && el.id.indexOf("headlessui-dialog-panel") === 0))
         ) {
           scheduleDynamicInits();
@@ -2707,6 +3033,10 @@
             el.querySelector(".ps-header") ||
             el.querySelector("#eo-header") ||
             el.querySelector("[data-liquid-thanks]") ||
+            el.querySelector("[data-eo-hs-ids]") ||
+            el.querySelector("a[data-eo-hs-cta]") ||
+            el.querySelector(".shop-the-look") ||
+            el.querySelector(".category-mosaic") ||
             el.querySelector('[id^="headlessui-dialog-panel"]'))
         ) {
           scheduleDynamicInits();
@@ -2737,6 +3067,11 @@
     } catch (e) {
       console.warn("[Prestige] Scroll reveal (load):", e);
     }
+    try {
+      scheduleDynamicInits();
+    } catch (eLoad) {
+      /* ignore */
+    }
   });
 
   if (document.readyState === "loading") {
@@ -2747,7 +3082,13 @@
           childList: true,
           subtree: true,
           attributes: true,
-          attributeFilter: ["data-end", "data-hours", "data-pch-mode", "data-storage-key"],
+          attributeFilter: [
+            "data-eo-hs-ids",
+            "data-end",
+            "data-hours",
+            "data-pch-mode",
+            "data-storage-key",
+          ],
         });
       }
     });
@@ -2758,7 +3099,13 @@
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ["data-end", "data-hours", "data-pch-mode", "data-storage-key"],
+        attributeFilter: [
+          "data-eo-hs-ids",
+          "data-end",
+          "data-hours",
+          "data-pch-mode",
+          "data-storage-key",
+        ],
       });
     }
   }
