@@ -225,7 +225,8 @@ html.ps-app-lang-ar .ps-announce {
   align-items: center;
   gap: 2.5rem;
   width: max-content;
-  animation: ps-announce-marquee 3s linear infinite;
+  animation: ps-announce-marquee var(--ps-announce-marquee-duration, 28s) linear infinite;
+  will-change: transform;
 }
 
 .ps-announce-marquee-item {
@@ -237,10 +238,32 @@ html.ps-app-lang-ar .ps-announce {
 
 @keyframes ps-announce-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(calc(-100% / var(--ps-announce-marquee-segments, 2)), 0, 0);
+  }
+}
+
+/* RTL / Arabic storefronts: scroll the tape in the reading direction. */
+html.ps-app-lang-ar .ps-announce-marquee-track,
+[dir="rtl"] .ps-announce-marquee-track {
+  animation-name: ps-announce-marquee-rtl;
+}
+
+@keyframes ps-announce-marquee-rtl {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(100% / var(--ps-announce-marquee-segments, 2)), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-announce-marquee-track {
+    animation: none !important;
+    transform: none !important;
   }
 }
 

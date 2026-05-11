@@ -103,13 +103,27 @@
       {% endif %}
     >
       {% if ann_type_key == 'marquee' %}
+        {% comment %}
+          Many repeated segments + translate by one segment width = seamless infinite tape
+          (short lines / wide screens never show an empty strip).
+        {% endcomment %}
+        {% assign ps_marquee_segments = 10 %}
         <div class="ps-announce-inner ps-announce-marquee">
-          <div class="ps-announce-marquee-track">
-            {% for item in ann_cfg.text %}
-              <span class="ps-announce-marquee-item">{{ item }}</span>
-            {% endfor %}
-            {% for item in ann_cfg.text %}
-              <span class="ps-announce-marquee-item" aria-hidden="true">{{ item }}</span>
+          <div
+            class="ps-announce-marquee-track"
+            style="--ps-announce-marquee-segments: {{ ps_marquee_segments }};"
+          >
+            {% for seg in (1..ps_marquee_segments) %}
+              {% for item in ann_cfg.text %}
+                <span
+                  class="ps-announce-marquee-item"
+                  {% if seg > 1 %}
+                    aria-hidden="true"
+                  {% endif %}
+                >
+                  {{- item -}}
+                </span>
+              {% endfor %}
             {% endfor %}
           </div>
         </div>
