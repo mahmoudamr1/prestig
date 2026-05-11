@@ -420,9 +420,10 @@ html.ps-app-lang-ar .ps-announce {
     backdrop-filter 0.24s ease;
 }
 
-/* #eo-header: top-of-page only — fully transparent bar; colors stay from palette (--hd-text, assets). */
+/* #eo-header: top-of-page only — faint tint of palette header bg (~5%), not solid --hd-bg */
 .ps-header:not(.ps-scrolled) {
-  background: var(--hd-bg, #ffffff28) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  background: color-mix(in srgb, var(--hd-bg, #ffffff) 5%, transparent) !important;
   border-bottom-color: transparent !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
