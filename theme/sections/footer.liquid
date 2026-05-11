@@ -120,19 +120,20 @@
           <button type="submit" class="ps-footer-subscribe-btn">{{ ps_footer_sub_btn }}</button>
         </form>
       </div>
-      {% assign ps_footer_payment_img = theme_data.footer_payment_custom_image | default: payment_img | default: 'https://files.easy-orders.net/1776682997164347446.webp' %}
     </div>
 
     <div class="ps-footer-meta-row" data-anim="fadeInDown" data-seq="5">
+      {% if payment_img != "" and theme_data.show_payment_icons != false %}
       <div class="ps-footer-brand-payments ps-footer-payments--desktop-only" aria-label="Payment methods">
         <span class="ps-footer-payment-item ps-footer-payment-single">
           <img
-            src="{{ ps_footer_payment_img }}"
+            src="{{ payment_img }}"
             alt="Accepted payment methods"
             loading="lazy"
           />
         </span>
       </div>
+      {% endif %}
 
       {% if social and social.size > 0 %}
           {% assign si_known = "|facebook|instagram|x|linkedin|tiktok|youtube|pinterest|threads|snapchat|whatsapp|telegram|discord|reddit|github|google|vimeo|medium|dribbble|behance|mastodon|twitch|skype|slack|line|wechat|vk|rss|spotify|soundcloud|apple|etsy|shopify|" %}
@@ -176,14 +177,16 @@
       </p>
     </div>
 
+    {% if payment_img != "" and theme_data.show_payment_icons != false %}
     <div class="ps-footer-brand-payments ps-footer-payments--mobile-only" aria-label="Payment methods">
       <span class="ps-footer-payment-item ps-footer-payment-single">
         <img
-          src="{{ ps_footer_payment_img }}"
+          src="{{ payment_img }}"
           alt="Accepted payment methods"
           loading="lazy"
         />
       </span>
     </div>
+    {% endif %}
   </div>
 </footer>

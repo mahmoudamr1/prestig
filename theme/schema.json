@@ -2,240 +2,280 @@
   {
     "name": "font_google_families",
     "type": "string",
+    "group": "Typography",
     "description": "خطوط جوجل للتحميل: أسماء متعددة مفصولة بفاصلة كما في موقع Google Fonts.",
     "default": "Instrument Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display"
   },
   {
     "name": "font_google_weights",
     "type": "string",
+    "group": "Typography",
     "description": "أوزان الخطوط (للكل): مثل 400;500;600;700",
     "default": "400;500;600;700"
   },
   {
     "name": "font_family_primary",
     "type": "string",
+    "group": "Typography",
     "description": "النص الأساسي — بدلاً من Instrument Sans.",
     "default": "Instrument Sans"
   },
   {
     "name": "font_family_ui",
     "type": "string",
+    "group": "Typography",
     "description": "إعلانات وواجهة ضيقة — بدلاً من Manrope.",
     "default": "Manrope"
   },
   {
     "name": "font_family_alt",
     "type": "string",
+    "group": "Typography",
     "description": "نص ثانوي وتسميات — بدلاً من Nunito.",
     "default": "Nunito"
   },
   {
     "name": "font_family_display",
     "type": "string",
+    "group": "Typography",
     "description": "عناوين عرض كبيرة — بدلاً من Playfair Display.",
     "default": "Playfair Display"
   },
   {
     "name": "font_family_arabic",
     "type": "string",
+    "group": "Typography",
     "description": "العربية — بدلاً من Almarai. للخطّ الواحد للعربي والإنجليزي اكتب نفس اسم «النص الأساسي».",
     "default": "Almarai"
   },
   {
     "name": "enable_theme_animations",
     "type": "boolean",
+    "group": "Theme",
     "description": "تفعيل حركات وانتقالات الثيم (ظهور عند التمرير، سليدر تلقائي، ماركي، إلخ). عطّله لإيقاف كل الأنيميشن دفعة واحدة.",
     "default": true
   },
   {
     "name": "footer_quick_links",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: column title above categories.",
     "default": "Shop"
   },
   {
     "name": "footer_customer_support",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: column title above pages.",
     "default": "Pages"
   },
   {
     "name": "footer_contact_us",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: column title above contact.",
     "default": "Contact us"
   },
   {
     "name": "footer_phone_label",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: label above phone.",
     "default": "Phone"
   },
   {
     "name": "footer_email_label",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: label above email.",
     "default": "Email"
   },
   {
     "name": "footer_address_label",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: label above address.",
     "default": "Address"
   },
   {
     "name": "footer_subscribe_emails",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: newsletter heading.",
     "default": "Subscribe to Our Newsletter"
   },
   {
     "name": "footer_email_placeholder",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: newsletter input placeholder.",
     "default": "Enter your email address"
   },
   {
     "name": "footer_subscribe_newsletter_btn",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: newsletter button.",
     "default": "Subscribe to Newsletter"
   },
   {
     "name": "footer_powered_by",
     "type": "string",
+    "group": "Footer",
     "description": "Footer: text before powered-by link.",
     "default": "Powered By"
   },
   {
-    "name": "footer_payment_custom_image",
-    "type": "image",
-    "description": "Footer: optional payment strip image. Empty uses store payment image.",
-    "default": ""
+    "name": "show_payment_icons",
+    "type": "boolean",
+    "group": "Footer",
+    "description": "Footer: show the store payment strip when the store has a payment image.",
+    "default": true
   },
   {
     "name": "reviews_heading_fallback",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: section heading fallback.",
     "default": "All Reviews"
   },
   {
     "name": "reviews_share_cta_fallback",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: write-review button fallback.",
     "default": "Share your review"
   },
   {
     "name": "reviews_count_word",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: word after the count.",
     "default": "reviews"
   },
   {
     "name": "reviews_load_more_label",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: load-more button.",
     "default": "Load more reviews"
   },
   {
     "name": "reviews_empty_message",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: empty state.",
     "default": "No reviews yet."
   },
   {
     "name": "reviews_anonymous_name",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: name when missing.",
     "default": "Customer"
   },
   {
     "name": "reviews_avatar_placeholder",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: avatar letter fallback.",
     "default": "?"
   },
   {
     "name": "reviews_read_more_label",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: expand long text.",
     "default": "...Read more"
   },
   {
     "name": "reviews_show_less_label",
     "type": "string",
+    "group": "Reviews",
     "description": "Reviews: collapse expanded text.",
     "default": "Show less"
   },
   {
     "name": "categories_header_subtitle",
     "type": "string",
+    "group": "Categories",
     "description": "Categories section: small uppercase eyebrow above the grid (Figma kicker). Leave empty to hide.",
     "default": "best seller collections"
   },
   {
     "name": "categories_header_title",
     "type": "string",
+    "group": "Categories",
     "description": "Categories section: main heading above the grid. Leave empty to hide.",
     "default": "Shop by Category"
   },
   {
     "name": "list_products_header_subtitle",
     "type": "string",
+    "group": "Product list",
     "description": "Product list carousel: eyebrow when shop_label is empty.",
     "default": "Best seller product"
   },
   {
     "name": "list_products_header_title",
     "type": "string",
+    "group": "Product list",
     "description": "Product list carousel: heading when section_title is empty.",
     "default": "New Arrivals"
   },
   {
     "name": "grid_products_header_subtitle",
     "type": "string",
+    "group": "Home product grid",
     "description": "Home grid (single category): eyebrow when shop_label is empty.",
     "default": ""
   },
   {
     "name": "grid_products_header_title",
     "type": "string",
+    "group": "Home product grid",
     "description": "Home grid (single category): heading when section_title is empty.",
     "default": ""
   },
   {
     "name": "sale_badge_label",
     "type": "string",
+    "group": "Products",
     "description": "Sale badge: word before discount %. Empty uses platform default.",
     "default": "Save"
   },
   {
     "name": "featured_products_header_subtitle",
     "type": "string",
+    "group": "Featured products",
     "description": "Featured section: eyebrow when shop_label is empty.",
     "default": "Shop"
   },
   {
     "name": "featured_products_banner_description",
     "type": "string",
+    "group": "Featured products",
     "description": "Featured section: banner paragraph on large screens.",
     "default": "Discover our handpicked products designed for everyday style and comfort."
   },
   {
     "name": "thanks_title_fallback",
     "type": "string",
+    "group": "Thank you page",
     "description": "Thank-you page: heading fallback.",
     "default": "Thank you!"
   },
   {
     "name": "thanks_subtitle_fallback",
     "type": "string",
+    "group": "Thank you page",
     "description": "Thank-you page: subtitle fallback.",
     "default": "Your order has been received."
   },
   {
     "name": "thanks_confirmation_prefix",
     "type": "string",
+    "group": "Thank you page",
     "description": "Thank-you page: text before customer email.",
     "default": "The order confirmation has been sent to"
   }
