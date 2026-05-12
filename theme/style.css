@@ -453,16 +453,22 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   -webkit-backdrop-filter: none !important;
 }
 
-/* قبل التمرير: نص وأيقونات فوق الهيرو — `#eo-header` يغلب utility classes من المنصة */
-#eo-header:not(.ps-scrolled) :is(.ps-desktop-nav-link, .ps-logo, .ps-icon-btn) {
+/* قبل التمرير: أبيض فوق الهيرو — لا يُطبَّق داخل معاينة `.builder-section-reset` */
+body:not(:has(.builder-section-reset #eo-header))
+  #eo-header:not(.ps-scrolled)
+  :is(.ps-desktop-nav-link, .ps-logo, .ps-icon-btn) {
   color: #fff !important;
 }
 
-#eo-header:not(.ps-scrolled) :is(.ps-icon-btn img.ps-icon-image, .ps-menu-btn .ps-menu-icon) {
+body:not(:has(.builder-section-reset #eo-header))
+  #eo-header:not(.ps-scrolled)
+  :is(.ps-icon-btn img.ps-icon-image, .ps-menu-btn .ps-menu-icon) {
   filter: brightness(0) invert(1) !important;
 }
 
-#eo-header:not(.ps-scrolled) :is(.ps-cart-count, .ps-icon-btn #header-cart-count) {
+body:not(:has(.builder-section-reset #eo-header))
+  #eo-header:not(.ps-scrolled)
+  :is(.ps-cart-count, .ps-icon-btn #header-cart-count) {
   background: #fff !important;
   border-color: rgba(15, 15, 15, 0.28) !important;
 }
