@@ -112,11 +112,11 @@
       "name": "bg_position",
       "type": "select",
       "default": "center right",
-      "description": "Background focal point (wide lifestyle shots often need right bias)",
+      "description": "Background focal point (wide lifestyle shots often need end bias)",
       "options": [
         { "label": "Center", "value": "center" },
-        { "label": "Center right", "value": "center right" },
-        { "label": "Center left", "value": "center left" }
+        { "label": "End", "value": "center right" },
+        { "label": "Start", "value": "center left" }
       ]
     },
     {

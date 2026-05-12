@@ -43,8 +43,8 @@
       "default": "left",
       "description": "Image side on desktop",
       "options": [
-        { "label": "Image left", "value": "left" },
-        { "label": "Image right", "value": "right" }
+        { "label": "Start", "value": "left" },
+        { "label": "End", "value": "right" }
       ]
     },
     {
