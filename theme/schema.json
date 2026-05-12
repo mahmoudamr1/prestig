@@ -56,6 +56,13 @@
     "default": true
   },
   {
+    "name": "header_logo_height",
+    "type": "number",
+    "group": "Header",
+    "description": "ارتفاع صورة الشعار في شريط التنقل (بكسل).",
+    "default": 46
+  },
+  {
     "name": "footer_quick_links",
     "type": "string",
     "group": "Footer",

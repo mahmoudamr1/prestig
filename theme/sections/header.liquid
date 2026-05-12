@@ -45,6 +45,11 @@
   {% assign _ps_anim_on = false %}
 {% endif %}
 
+{% assign _logo_h = theme_data.header_logo_height | default: 46 | plus: 0 %}
+{% if _logo_h < 1 %}
+  {% assign _logo_h = 46 %}
+{% endif %}
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="{{ prestig_google_font_url }}" />
@@ -219,7 +224,14 @@
         </nav>
       </div>
 
-      <a href="/" class="ps-logo" aria-label="{{ store_name }}" data-anim="zoomIn" data-seq="0">
+      <a
+        href="/"
+        class="ps-logo"
+        style="--ps-logo-img-h: {{ _logo_h }}px;"
+        aria-label="{{ store_name }}"
+        data-anim="zoomIn"
+        data-seq="0"
+      >
         {% if logo != blank %}
           <img src="{{ logo }}" alt="{{ store_name }}" />
         {% else %}

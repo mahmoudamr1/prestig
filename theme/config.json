@@ -108,7 +108,8 @@
     "font_family_alt": "Nunito",
     "font_family_display": "Playfair Display",
     "font_family_arabic": "Almarai",
-    "enable_theme_animations": true
+    "enable_theme_animations": true,
+    "header_logo_height": 46
   },
   "announcement_config": {
     "text": ["it works", "Free shipping for 1000 EGP", "Genuine Quality"],
