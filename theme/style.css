@@ -389,7 +389,8 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   transition: background 0.2s ease;
 }
 
-.ps-announce-mc-nav svg {
+.ps-announce-mc-nav svg,
+.ps-announce-mc-nav img {
   flex-shrink: 0;
   width: 14px;
   height: 14px;
@@ -417,7 +418,8 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
     height: 40px;
   }
 
-  .ps-announce-mc-nav svg {
+  .ps-announce-mc-nav svg,
+  .ps-announce-mc-nav img {
     width: 16px;
     height: 16px;
   }
@@ -812,6 +814,7 @@ button.ps-icon-btn .ps-lang-icon {
 .ps-mobile-link--iconrow .ps-mobile-row-icon {
   flex-shrink: 0;
   opacity: 0.85;
+  display: block;
 }
 
 .ps-arrow-icon {
@@ -2262,7 +2265,8 @@ main.container_class {
   box-sizing: border-box;
 }
 
-.ps-plist-arrow svg {
+.ps-plist-arrow svg,
+.ps-plist-arrow img {
   width: 30px;
   height: 30px;
 }
@@ -2805,17 +2809,29 @@ body:dir(rtl) .ps-viewall-arrow,
 }
 
 html:dir(rtl) .ps-announce-mc-nav svg,
+html:dir(rtl) .ps-announce-mc-nav img,
 html:dir(rtl) .ps-plist-arrow svg,
+html:dir(rtl) .ps-plist-arrow img,
 body:dir(rtl) .ps-announce-mc-nav svg,
+body:dir(rtl) .ps-announce-mc-nav img,
 body:dir(rtl) .ps-plist-arrow svg,
+body:dir(rtl) .ps-plist-arrow img,
 .ps-doc-rtl .ps-announce-mc-nav svg,
+.ps-doc-rtl .ps-announce-mc-nav img,
 .ps-doc-rtl .ps-plist-arrow svg,
+.ps-doc-rtl .ps-plist-arrow img,
 [dir="rtl"] .ps-announce-mc-nav svg,
+[dir="rtl"] .ps-announce-mc-nav img,
 [dir="rtl"] .ps-plist-arrow svg,
+[dir="rtl"] .ps-plist-arrow img,
 html.ps-app-lang-ar .ps-announce-mc-nav svg,
+html.ps-app-lang-ar .ps-announce-mc-nav img,
 html.ps-app-lang-ar .ps-plist-arrow svg,
+html.ps-app-lang-ar .ps-plist-arrow img,
 :lang(ar) .ps-announce-mc-nav svg,
-:lang(ar) .ps-plist-arrow svg {
+:lang(ar) .ps-announce-mc-nav img,
+:lang(ar) .ps-plist-arrow svg,
+:lang(ar) .ps-plist-arrow img {
   transform: rotate(180deg);
 }
 
@@ -6643,7 +6659,8 @@ html:lang(it)
 }
 
 .ps-cl-add .ps-product-plus-icon,
-.ps-cl-add svg {
+.ps-cl-add svg,
+.ps-cl-add img {
   width: 14px;
   height: 14px;
   display: block;
@@ -7075,6 +7092,10 @@ html:lang(it)
   color: rgba(28, 28, 28, 0.2);
 }
 
+img.ab-pd-star-icon.ab-pd-star-icon--off {
+  opacity: 0.22;
+}
+
 /* Fractional star (e.g. 4.7): gray base + clipped dark overlay; width set inline from Liquid */
 .ab-pd-star-slot {
   position: relative;
@@ -7369,21 +7390,10 @@ html:lang(it)
   border-radius: 8px;
 }
 
-.ab-lightbox-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: none;
-  background: var(--ps-surface, #fff);
-  color: var(--ps-ink, #101010);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.ab-lightbox-arrow img {
+  display: block;
+  width: 24px;
+  height: 24px;
 }
 
 .ab-lightbox-prev {
@@ -7553,7 +7563,7 @@ html:lang(it)
   flex-shrink: 0;
   width: 12px;
   height: 8px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23101010' d='M1.4 0L6 4.6 10.6 0 12 1.4l-6 6-6-6z'/%3E%3C/svg%3E")
+  background: url("https://files.easy-orders.net/1778659559800239805prestig-form-select-chevron-down.svg")
     no-repeat center;
   opacity: 0.85;
   transition: transform 0.2s ease;
@@ -7634,7 +7644,7 @@ html:lang(it)
   font-weight: 500;
   color: var(--ps-rev-text);
   background-color: var(--ps-surface, #fff);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23101010' d='M1.4 0L6 4.6 10.6 0 12 1.4l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-image: url("https://files.easy-orders.net/1778659559800239805prestig-form-select-chevron-down.svg");
   background-repeat: no-repeat;
   background-position: right 12px center;
   border: 1px solid #d4d4d4;

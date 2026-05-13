@@ -82,28 +82,15 @@
               aria-valuenow="{{ section_data.initial_split_percent | default: 50 }}"
               aria-label="Drag to compare photos"
             >
-              <svg
+              <img
                 class="psc-compare__handle-svg"
-                role="presentation"
-                focusable="false"
-                aria-hidden="true"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="xMidYMid meet"
+                src="https://files.easy-orders.net/1778659565017908466prestig-psc-compare-handle.svg"
+                alt=""
                 width="50"
                 height="50"
-                viewBox="0 0 50 50"
-              >
-                <g>
-                  <rect width="50" height="50" rx="25" fill="{{ section_data.divider_color | default: '#ffffff' }}"></rect>
-                  <path
-                    d="m19.25 19-6 6 6 6m11.5 0 6-6-6-6"
-                    stroke="{{ section_data.handle_arrow_color | default: '#000000' }}"
-                    stroke-width="0.75"
-                    stroke-linecap="square"
-                  ></path>
-                </g>
-              </svg>
+                loading="lazy"
+                aria-hidden="true"
+              />
             </button>
 
           </div>

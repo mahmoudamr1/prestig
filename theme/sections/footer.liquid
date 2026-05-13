@@ -99,9 +99,7 @@
         >
           <div class="ps-footer-subscribe-field">
             <span class="ps-footer-subscribe-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6h16v12H4V6zm0 0l8 6 8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <img src="https://files.easy-orders.net/1778659559764892507prestig-footer-icon-newsletter-envelope.svg" alt="" width="24" height="24" />
             </span>
             <input
               type="email"
@@ -157,9 +155,7 @@
                 {% elsif si_known contains needle %}
                   <img class="ps-footer-social-img" src="https://cdn.simpleicons.org/{{ slug }}/ffffff" alt="" width="20" height="20" loading="lazy" />
                 {% else %}
-                  <svg class="ps-footer-social-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <img class="ps-footer-social-svg ps-footer-social-img--invert" src="https://files.easy-orders.net/1778659559794034419prestig-footer-icon-social-fallback-external.svg" alt="" width="20" height="20" loading="lazy" aria-hidden="true" />
                 {% endif %}
               </a>
             {% endfor %}

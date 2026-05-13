@@ -319,17 +319,14 @@
           <div class="ps-mobile-accordion">
             <button class="ps-mobile-link ps-accordion-trigger" type="button">
               <span>{{ category.name }}</span>
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                fill="none"
+              <img
+                src="https://files.easy-orders.net/1778659562990248523prestig-header-mobile-accordion-chevron.svg"
+                alt=""
                 width="12"
                 height="12"
                 class="ps-arrow-icon"
-                viewBox="0 0 10 10"
-              >
-                <path d="m3 9 4-4-4-4" stroke="currentColor" stroke-linecap="square"></path>
-              </svg>
+                aria-hidden="true"
+              />
             </button>
             <div class="ps-accordion-panel">
               <a href="{{ cat_href }}" class="ps-mobile-sublink">All {{ category.name }}</a>
@@ -355,9 +352,14 @@
 
       <a href="/search" class="ps-mobile-link ps-mobile-link--iconrow" data-eo="search-btn">
         <span>Search</span>
-        <svg class="ps-mobile-row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
+        <img
+          class="ps-mobile-row-icon"
+          src="https://files.easy-orders.net/1778659565008229748prestig-header-mobile-icon-search.svg"
+          alt=""
+          width="20"
+          height="20"
+          aria-hidden="true"
+        />
       </a>
 
       <a

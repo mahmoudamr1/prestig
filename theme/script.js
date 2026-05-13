@@ -316,7 +316,7 @@
     prev.className = "ps-announce-mc-nav ps-announce-mc-prev";
     prev.setAttribute("aria-label", "Previous announcement");
     prev.innerHTML =
-      '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      '<img src="https://files.easy-orders.net/1778659559759186537prestig-announce-carousel-icon-prev-14.svg" alt="" width="14" height="14" aria-hidden="true" />';
 
     var view = document.createElement("div");
     view.className = "ps-announce-mc-view";
@@ -333,7 +333,7 @@
     next.className = "ps-announce-mc-nav ps-announce-mc-next";
     next.setAttribute("aria-label", "Next announcement");
     next.innerHTML =
-      '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      '<img src="https://files.easy-orders.net/1778659559014396471prestig-announce-carousel-icon-next-14.svg" alt="" width="14" height="14" aria-hidden="true" />';
 
     mc.appendChild(prev);
     mc.appendChild(view);

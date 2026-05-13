@@ -31,65 +31,45 @@
           {% for i in (1..5) %}
             {% assign prev = i | minus: 1 %}
             {% if r_stars >= i %}
-              <svg
+              <img
                 class="ab-pd-star-icon ab-pd-star-icon--on"
-                aria-hidden="true"
-                focusable="false"
+                src="https://files.easy-orders.net/1778659566243183115prestig-pdp-rating-star.svg"
+                alt=""
                 width="12"
                 height="11"
-                viewBox="0 0 12 11"
-              >
-                <path
-                  d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
-                  fill="currentColor"
-                />
-              </svg>
+                aria-hidden="true"
+              />
             {% elsif r_stars > prev %}
               {% assign frac = r_stars | minus: prev %}
               <span class="ab-pd-star-slot">
-                <svg
+                <img
                   class="ab-pd-star-icon ab-pd-star-icon--off"
-                  aria-hidden="true"
-                  focusable="false"
+                  src="https://files.easy-orders.net/1778659566243183115prestig-pdp-rating-star.svg"
+                  alt=""
                   width="12"
                   height="11"
-                  viewBox="0 0 12 11"
-                >
-                  <path
-                    d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
-                    fill="currentColor"
-                  />
-                </svg>
+                  aria-hidden="true"
+                />
                 <span class="ab-pd-star-fill" style="width: calc(100% * {{ frac }});">
-                  <svg
+                  <img
                     class="ab-pd-star-icon ab-pd-star-icon--on"
-                    aria-hidden="true"
-                    focusable="false"
+                    src="https://files.easy-orders.net/1778659566243183115prestig-pdp-rating-star.svg"
+                    alt=""
                     width="12"
                     height="11"
-                    viewBox="0 0 12 11"
-                  >
-                    <path
-                      d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
-                      fill="currentColor"
-                    />
-                  </svg>
+                    aria-hidden="true"
+                  />
                 </span>
               </span>
             {% else %}
-              <svg
+              <img
                 class="ab-pd-star-icon ab-pd-star-icon--off"
-                aria-hidden="true"
-                focusable="false"
+                src="https://files.easy-orders.net/1778659566243183115prestig-pdp-rating-star.svg"
+                alt=""
                 width="12"
                 height="11"
-                viewBox="0 0 12 11"
-              >
-                <path
-                  d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
-                  fill="currentColor"
-                />
-              </svg>
+                aria-hidden="true"
+              />
             {% endif %}
           {% endfor %}
         </div>
@@ -110,7 +90,7 @@
       aria-label="Add to wishlist"
       onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-wishlist',{bubbles:true,detail:{productId:'{{ product_id }}'}}));"
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <img src="https://files.easy-orders.net/1778659562987257039prestig-header-icon-wishlist-heart.svg" alt="" width="24" height="24" aria-hidden="true" />
     </button>
     <button
       class="ab-pd-compare-btn"

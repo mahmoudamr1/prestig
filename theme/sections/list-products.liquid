@@ -31,23 +31,15 @@
               aria-label="Add to cart"
               onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
+              <img
                 class="ps-product-plus-icon"
+                src="https://files.easy-orders.net/1778659565003721866prestig-product-card-icon-quick-add-plus.svg"
+                alt=""
                 width="14"
                 height="14"
-                viewBox="0 0 14 14"
-                fill="none"
+                loading="lazy"
                 aria-hidden="true"
-              >
-                <path
-                  d="M0.75 6.75H6.75M6.75 6.75H12.75M6.75 6.75V0.75M6.75 6.75V12.75"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              />
             </button>
           </div>
 
@@ -87,10 +79,10 @@
       </div>
       <div class="ps-plist-arrows">
         <button type="button" class="ps-plist-arrow ps-plist-arrow-prev" data-ps-plist-prev aria-label="Previous">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          <img src="https://files.easy-orders.net/1778659566254837361prestig-ui-icon-chevron-left-24.svg" alt="" width="24" height="24" aria-hidden="true" />
         </button>
         <button type="button" class="ps-plist-arrow ps-plist-arrow-next" data-ps-plist-next aria-label="Next">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          <img src="https://files.easy-orders.net/1778659566248894972prestig-ui-icon-chevron-right-24.svg" alt="" width="24" height="24" aria-hidden="true" />
         </button>
       </div>
     </div>
