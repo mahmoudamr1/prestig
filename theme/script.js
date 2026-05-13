@@ -30,7 +30,122 @@
   var MOUNT_EVENT = "ps-theme-content-mounted";
 
   /**
-   * `theme_data.enable_theme_animations` — output on `.ps-theme[data-ps-animations]` from header.liquid,
+   * Builds `https://fonts.googleapis.com/css2?...&display=swap` from comma-separated family names + weight spec
+   * (same rules as former `header.liquid` Liquid loop). Used when `data-ps-gf-href` is absent.
+   */
+  function prestigeBuildGoogleFontsCss2Href(familiesStr, weightsStr) {
+    var w = String(weightsStr || "")
+      .trim()
+      .replace(/^;+|;+$/g, "");
+    if (!w) {
+      w = "400;500;600;700";
+    }
+    var raw = String(familiesStr || "").trim();
+    var parts = [];
+    if (raw) {
+      raw.split(",").forEach(function (seg) {
+        var one = String(seg || "")
+          .trim()
+          .replace(/["']/g, "");
+        if (!one) {
+          return;
+        }
+        var enc = one.replace(/\s+/g, "+");
+        parts.push("family=" + enc + ":wght@" + w);
+      });
+    }
+    var q = parts.length ? parts.join("&") : "family=Instrument+Sans:wght@" + w;
+    return "https://fonts.googleapis.com/css2?" + q + "&display=swap";
+  }
+
+  /**
+   * Theme font roles: copy `data-ps-ff-*` from `.ps-theme` to `<html style>` (`--ps-ff-*`).
+   * Inline custom properties beat `theme/style.css` `:root { --ps-ff-* }` when the stylesheet loads after this script
+   * (unlike `--ps-logo-img-h`, which is set inline in Liquid on the logo only).
+   * `prestigeInjectThemeFonts` calls this, then injects Google Fonts from `data-ps-gf-*`.
+   */
+  function prestigeApplyFontRoleVarsFromPsTheme(wrap) {
+    if (!wrap) {
+      return;
+    }
+    function readFontRole(attr, fallback) {
+      var v = wrap.getAttribute(attr);
+      v = v != null ? String(v).trim().replace(/["']/g, "") : "";
+      if (!v) {
+        return fallback;
+      }
+      return v;
+    }
+    function quotedFontCssValue(name) {
+      return '"' + String(name || "").replace(/"/g, "") + '"';
+    }
+    var root = document.documentElement;
+    root.style.setProperty("--ps-ff-primary", quotedFontCssValue(readFontRole("data-ps-ff-primary", "Instrument Sans")));
+    root.style.setProperty("--ps-ff-ui", quotedFontCssValue(readFontRole("data-ps-ff-ui", "Manrope")));
+    root.style.setProperty("--ps-ff-alt", quotedFontCssValue(readFontRole("data-ps-ff-alt", "Nunito")));
+    root.style.setProperty("--ps-ff-display", quotedFontCssValue(readFontRole("data-ps-ff-display", "Playfair Display")));
+    root.style.setProperty("--ps-ff-arabic", quotedFontCssValue(readFontRole("data-ps-ff-arabic", "Almarai")));
+    var legacyFontVars = document.getElementById("prestige-theme-font-vars");
+    if (legacyFontVars && legacyFontVars.parentNode) {
+      legacyFontVars.parentNode.removeChild(legacyFontVars);
+    }
+  }
+
+  function prestigeInjectThemeFonts() {
+    var wrap = document.querySelector(".ps-theme");
+    if (!wrap) {
+      return;
+    }
+    prestigeApplyFontRoleVarsFromPsTheme(wrap);
+    var hrefLegacy = (wrap.getAttribute("data-ps-gf-href") || "").trim();
+    var href = hrefLegacy;
+    if (!href || href.indexOf("https://fonts.googleapis.com/css2") !== 0) {
+      href = prestigeBuildGoogleFontsCss2Href(
+        wrap.getAttribute("data-ps-gf-families"),
+        wrap.getAttribute("data-ps-gf-weights")
+      );
+    }
+    if (!href || href.indexOf("https://fonts.googleapis.com/css2") !== 0) {
+      return;
+    }
+    var head = document.head || document.getElementsByTagName("head")[0];
+    if (!head) {
+      return;
+    }
+    function ensurePreconnect(url, crossOrigin) {
+      var id =
+        "prestige-font-preconnect-" +
+        (url.indexOf("gstatic") >= 0 ? "gstatic" : "googleapis");
+      if (document.getElementById(id)) {
+        return;
+      }
+      var l = document.createElement("link");
+      l.id = id;
+      l.rel = "preconnect";
+      l.href = url;
+      if (crossOrigin) {
+        l.setAttribute("crossorigin", "");
+      }
+      head.insertBefore(l, head.firstChild);
+    }
+    ensurePreconnect("https://fonts.googleapis.com", false);
+    ensurePreconnect("https://fonts.gstatic.com", true);
+
+    var idCss = "prestige-google-fonts-stylesheet";
+    var linkEl = document.getElementById(idCss);
+    if (!linkEl) {
+      linkEl = document.createElement("link");
+      linkEl.id = idCss;
+      linkEl.rel = "stylesheet";
+      head.appendChild(linkEl);
+    }
+    if (linkEl.getAttribute("href") !== href) {
+      linkEl.setAttribute("href", href);
+    }
+  }
+
+  /**
+   * `theme_data.enable_theme_animations` — on `.ps-theme[data-ps-animations]` from header.liquid,
    * mirrored to `<html data-ps-animations="0|1">` for global CSS. Default: animations on.
    */
   function prestigeThemeAnimationsEnabled() {
@@ -2859,6 +2974,11 @@
 
   function runPrestigeDynamicInits() {
     try {
+      prestigeInjectThemeFonts();
+    } catch (eFonts) {
+      /* ignore */
+    }
+    try {
       initEasyOrdersHsCtaLinks();
       initEasyOrdersHsHydration();
     } catch (e) {
@@ -2930,6 +3050,11 @@
   }
 
   function init() {
+    try {
+      prestigeInjectThemeFonts();
+    } catch (eFontsInit) {
+      /* ignore */
+    }
     try {
       prestigeSyncStoreLangOnHtml();
       prestigeSyncAnimationsFlagToHtml();

@@ -1,15 +1,1 @@
-{% if categories and categories.size > 0 %}
-  {% for crumb in categories %}
-    {% if forloop.last %}
-      {% if crumb.name != blank %}
-        <nav class="ab-breadcrumbs ab-breadcrumbs--category-only ps-sr-scope" aria-label="Collection">
-          {% if crumb.slug != blank %}
-            <a href="/collections/{{ crumb.slug }}" class="ab-breadcrumbs-cat-link" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</a>
-          {% else %}
-            <span class="ab-breadcrumbs-cat" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</span>
-          {% endif %}
-        </nav>
-      {% endif %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
+{% if categories and categories.size > 0 %}{% for crumb in categories %}{% if forloop.last %}{% if crumb.name != blank %}<nav class="ab-breadcrumbs ab-breadcrumbs--category-only ps-sr-scope" aria-label="Collection">{% if crumb.slug != blank %}<a href="/collections/{{ crumb.slug }}" class="ab-breadcrumbs-cat-link" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</a>{% else %}<span class="ab-breadcrumbs-cat" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</span>{% endif %}</nav>{% endif %}{% endif %}{% endfor %}{% endif %}

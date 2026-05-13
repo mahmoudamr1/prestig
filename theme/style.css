@@ -1,4 +1,4 @@
-﻿/* Google Fonts: loaded from sections/header.liquid (`theme_data.font_google_families`). Defaults below mirror schema until header injects overrides. */
+﻿/* Google Fonts: `theme/script.js` builds the css2 URL from `.ps-theme[data-ps-gf-families]` + weights (or legacy href), injects stylesheet, then sets `--ps-ff-*` on `<html style>` so merchant fonts override this file’s `:root` defaults after load order. */
 
 /* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host â€” saves editing this + Liquid without extra tools. */
 
@@ -62,11 +62,18 @@
   }
 }
 
+/* Document root: theme primary so nodes without their own `font-family` inherit it (overrides app shell system stacks). */
+html,
+body {
+  font-family: var(--ps-ff-primary), sans-serif;
+}
+
 /* Arabic storefront: __NEXT_DATA__ `appSettings.lang` → `ps-app-lang-ar` on html (sync in script.js: prestigeSyncStoreLangOnHtml). */
 html.ps-app-lang-ar,
 html.ps-app-lang-ar body {
   direction: rtl;
   text-align: right;
+  font-family: var(--ps-ff-primary), sans-serif;
 }
 
 /* Arabic: letter-spacing from Latin-oriented UI rules harms readability — neutralize on the whole document */
@@ -102,6 +109,11 @@ dt {
   box-sizing: border-box;
 }
 
+html[lang="ar"] .ps-theme,
+.ps-theme[lang="ar"] {
+  font-family: var(--ps-ff-arabic), var(--ps-ff-primary), sans-serif;
+}
+
 /* In-flow placeholder: fixed announce + fixed header do not consume layout height. */
 .ps-theme-layout-spacer {
   width: 100%;
@@ -117,7 +129,7 @@ dt {
 .ps-announce {
   width: 100%;
   box-sizing: border-box;
-  /* Palette (--ann-*) from header.liquid; storefront may also set --ab-ann-* on :root */
+  /* Palette: --ann-bg / --ann-text from storefront :root (EasyOrders palette); optional --ab-ann-* fallbacks */
   background: var(--ann-bg, var(--ab-ann-bg, var(--ps-ink, #101010)));
   color: var(--ann-text, var(--ab-ann-text, var(--ps-surface, #ffffff)));
   padding: 8px 18px;
