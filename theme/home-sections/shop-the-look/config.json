@@ -22,9 +22,9 @@
     },
     {
       "name": "look_image",
-      "type": "string",
+      "type": "image",
       "default": "",
-      "description": "Main outfit or editorial image URL"
+      "description": "Main outfit or editorial image"
     },
     {
       "name": "look_title",
@@ -67,35 +67,9 @@
       ]
     },
     {
-      "name": "picks",
-      "type": "object_array",
-      "description": "Products or pieces to pair with the look",
-      "fields": [
-        {
-          "name": "image",
-          "type": "string",
-          "default": "",
-          "description": "Product image URL"
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "default": "Merino crewneck",
-          "description": "Product name"
-        },
-        {
-          "name": "price",
-          "type": "string",
-          "default": "1,290 MAD",
-          "description": "Price as shown to shoppers"
-        },
-        {
-          "name": "url",
-          "type": "string",
-          "default": "/products",
-          "description": "Product or collection URL"
-        }
-      ]
+      "name": "pick_product_ids",
+      "type": "product_multi_select",
+      "description": "Products to show beside the hero (search and reorder in the picker)"
     }
   ]
 }

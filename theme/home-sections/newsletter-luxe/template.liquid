@@ -14,15 +14,39 @@
       <p class="newsletter-luxe__body">{{ section_data.body }}</p>
     {% endif %}
 
-    <form class="newsletter-luxe__form" action="{{ section_data.form_action | default: '/pages/contact' }}" method="get">
+    <form
+      class="newsletter-luxe__form"
+      novalidate
+      onsubmit="
+        event.preventDefault();
+        if (!this.checkValidity()) {
+          this.reportValidity();
+          return;
+        }
+        var input = this.elements.email;
+        var email = input && input.value ? String(input.value).trim() : '';
+        this.dispatchEvent(
+          new CustomEvent('footer-subscribe', {
+            bubbles: true,
+            detail: { email: email }
+          })
+        );
+        this.reset();
+      "
+    >
       <input
         class="newsletter-luxe__input"
         type="email"
         name="email"
         autocomplete="email"
+        inputmode="email"
+        maxlength="254"
+        pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+        title="Valid email required"
+        required
+        aria-required="true"
         aria-label="{{ section_data.placeholder | default: 'Email address' }}"
         placeholder="{{ section_data.placeholder | default: 'Email address' }}"
-        required
       />
       <button class="newsletter-luxe__submit" type="submit">
         {{ section_data.button_label | default: 'Join the list' }}

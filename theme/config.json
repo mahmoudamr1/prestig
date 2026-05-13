@@ -45,52 +45,14 @@
         "type": "youtube"
       }
     ],
-    "categories": [
-      {
-        "name": "Men",
-        "slug": "womens-accessories"
-      },
-      {
-        "name": "Women",
-        "slug": "mens-accessories"
-      },
-      {
-        "name": "New Arrival",
-        "slug": "98"
-      }
-    ],
+    "categories": [],
     "payment_img": "https://easyorders.fra1.digitaloceanspaces.com/1773958283329740254payment_icons.svg",
-    "is_use_config": true
+    "is_use_config": false
   },
   "header": {
     "logo": "",
-    "links": [
-      {
-        "url": "/collections/womens-accessories",
-        "name": "Men",
-        "slug": "womens-accessories",
-        "type": "category"
-      },
-      {
-        "url": "/collections/mens-accessories",
-        "name": "Women",
-        "slug": "mens-accessories",
-        "type": "category"
-      },
-      {
-        "url": "/collections/98",
-        "name": "New Arrival",
-        "slug": "98",
-        "type": "category"
-      },
-      {
-        "url": "/collections/30-off-tree-runner-go-tree-gliders",
-        "name": "Sale",
-        "slug": "30-off-tree-runner-go-tree-gliders",
-        "type": "category"
-      }
-    ],
-    "is_use_config": true
+    "links": [],
+    "is_use_config": false
   },
   "palette": {
     "ft_bg": "",
@@ -107,15 +69,64 @@
     "crt_btn_border": ""
   },
   "theme_data": {
-    "hero_slides": [],
-    "color_scheme": "light",
-    "color_primary": "#1A1A2E",
-    "hero_headline": "Welcome to Our Store",
-    "font_size_base": 16,
-    "hero_show_overlay": true,
-    "product_badge_types": ["sale", "new"]
+    "header_hamburger_icon": "https://files.easy-orders.net/1773672562651251535hamburger.svg",
+    "header_search_icon": "https://files.easy-orders.net/1773672173685851777search.svg",
+    "header_cart_icon": "https://files.easy-orders.net/1773672173697877890card.svg",
+    "header_close_icon": "https://files.easy-orders.net/1777886670778456461close%20icon.svg",
+    "categories_header_subtitle": "Care For Your Skin",
+    "categories_header_title": "Natural self care products",
+    "categories_section_description": "Thoughtfully chosen routines and essentials to care for your skin every day.",
+    "categories_items_label": "items",
+    "categories_carousel_prev_label": "Previous categories",
+    "categories_carousel_next_label": "Next categories",
+    "footer_quick_links": "Shop",
+    "footer_customer_support": "Pages",
+    "footer_contact_us": "Contact us",
+    "footer_phone_label": "Phone",
+    "footer_email_label": "Email",
+    "footer_address_label": "Address",
+    "footer_subscribe_emails": "Subscribe to Our Newsletter",
+    "footer_email_placeholder": "Enter your email address",
+    "footer_subscribe_newsletter_btn": "Subscribe to Newsletter",
+    "footer_powered_by": "Powered By",
+    "footer_payment_custom_image": "",
+    "reviews_heading_fallback": "All Reviews",
+    "reviews_share_cta_fallback": "Share your review",
+    "reviews_count_word": "reviews",
+    "reviews_load_more_label": "Load more reviews",
+    "reviews_empty_message": "No reviews yet.",
+    "reviews_anonymous_name": "Customer",
+    "reviews_avatar_placeholder": "?",
+    "reviews_read_more_label": "...Read more",
+    "reviews_show_less_label": "Show less",
+    "list_products_header_subtitle": "Best seller product",
+    "list_products_header_title": "New Arrivals",
+    "list_products_card_cta_label": "Shop this product",
+    "grid_products_header_subtitle": "",
+    "grid_products_header_title": "",
+    "grid_products_view_all_label": "Shop All Products",
+    "grid_products_view_all_arrow_url": "https://files.easy-orders.net/1773832247629050805.webp",
+    "grid_products_quick_add_icon_url": "",
+    "grid_products_choose_options_label": "Choose options",
+    "product_card_search_icon_url": "https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg",
+    "product_card_choose_label": "",
+    "product_card_show_swatches": true,
+    "sale_badge_label": "Save",
+    "featured_products_header_subtitle": "Shop",
+    "featured_products_banner_description": "Discover our handpicked products designed for everyday style and comfort.",
+    "thanks_title_fallback": "Thank you!",
+    "thanks_subtitle_fallback": "Your order has been received.",
+    "thanks_confirmation_prefix": "The order confirmation has been sent to",
+    "font_google_families": "DM Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display, Instrument Sans",
+    "font_google_weights": "400;500;600;700",
+    "font_family_primary": "DM Sans",
+    "font_family_ui": "Manrope",
+    "font_family_alt": "Nunito",
+    "font_family_display": "Playfair Display",
+    "font_family_arabic": "Almarai",
+    "font_family_announce": "DM Sans"
   },
-  "announcement_bar": {
+  "announcement_config": {
     "text": ["it works", "Free shipping for 1000 EGP", "Genuine Quality"],
     "type": "marquee",
     "is_use_config": true

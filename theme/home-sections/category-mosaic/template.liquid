@@ -1,6 +1,8 @@
 <section
-  class="category-mosaic{% if section_data.gap_tight %} category-mosaic--tight{% endif %}"
+  class="category-mosaic eo-hs{% if section_data.gap_tight %} category-mosaic--tight{% endif %}{% if section_data.mosaic_category_ids == blank or section_data.mosaic_category_ids.size == 0 %} eo-hs--empty{% endif %}"
   style="--mosaic-cols: {{ section_data.columns | default: '3' }};"
+  data-eo-hs-entity="categories"
+  data-eo-hs-ids="{{ section_data.mosaic_category_ids | join: ',' | strip }}"
 >
   <div class="category-mosaic__head">
     {% if section_data.title != blank %}
@@ -11,37 +13,15 @@
     {% endif %}
   </div>
 
-  {% if section_data.tiles and section_data.tiles.size > 0 %}
-    <div class="category-mosaic__grid">
-      {% for tile in section_data.tiles %}
-        <a class="category-mosaic__tile" href="{{ tile.url | default: '#' }}">
-          <div class="category-mosaic__visual">
-            {% if tile.image != blank %}
-              <img
-                class="category-mosaic__img"
-                src="{{ tile.image }}"
-                alt="{{ tile.label }}"
-                loading="lazy"
-                width="640"
-                height="800"
-              />
-            {% else %}
-              <div class="category-mosaic__img-fallback" aria-hidden="true"></div>
-            {% endif %}
-            <div class="category-mosaic__shade" aria-hidden="true"></div>
-          </div>
-          <div class="category-mosaic__meta">
-            {% if tile.label != blank %}
-              <span class="category-mosaic__label">{{ tile.label }}</span>
-            {% endif %}
-            {% if tile.tagline != blank %}
-              <span class="category-mosaic__tagline">{{ tile.tagline }}</span>
-            {% endif %}
-          </div>
-        </a>
+  <div class="category-mosaic__grid" data-eo-hs-mount>
+    {% if section_data.mosaic_category_ids and section_data.mosaic_category_ids.size > 0 %}
+      {% for id in section_data.mosaic_category_ids %}
+        <div class="eo-hs-skeleton eo-hs-skeleton--category" aria-hidden="true"></div>
       {% endfor %}
-    </div>
-  {% endif %}
+    {% else %}
+      <p class="category-mosaic__placeholder">Choose categories in the section settings to build this mosaic.</p>
+    {% endif %}
+  </div>
 </section>
 
 <style>
@@ -77,6 +57,9 @@
     grid-template-columns: repeat(var(--mosaic-cols, 3), minmax(0, 1fr));
     gap: 1.25rem;
   }
+  .category-mosaic__grid.eo-hs-loading {
+    opacity: 0.85;
+  }
   @media (max-width: 899px) {
     .category-mosaic__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -87,7 +70,26 @@
       grid-template-columns: 1fr;
     }
   }
-  .category-mosaic__tile {
+  .category-mosaic .eo-hs-skeleton--category {
+    aspect-ratio: 3 / 4;
+    border-radius: 6px;
+    background: linear-gradient(110deg, #ece8e2 8%, #f5f2ee 18%, #ece8e2 33%);
+    background-size: 200% 100%;
+    animation: category-mosaic-shimmer 1.2s ease-in-out infinite;
+  }
+  .category-mosaic__placeholder {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 1.25rem;
+    text-align: center;
+    color: #7a7368;
+    font-size: 0.9rem;
+  }
+  .category-mosaic.eo-hs--empty .category-mosaic__grid {
+    display: flex;
+    justify-content: center;
+  }
+  .category-mosaic .eo-hs-card--category {
     position: relative;
     display: block;
     text-decoration: none;
@@ -97,55 +99,57 @@
     background: #ece8e1;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .category-mosaic__tile:hover {
+  .category-mosaic .eo-hs-card--category:hover {
     transform: translateY(-4px);
     box-shadow: 0 22px 50px rgba(20, 18, 24, 0.18);
   }
-  .category-mosaic__visual {
-    position: relative;
+  .category-mosaic .eo-hs-card--category .eo-hs-card__media {
+    display: block;
     aspect-ratio: 3 / 4;
+    background: #ece8e2;
     overflow: hidden;
   }
-  .category-mosaic__img,
-  .category-mosaic__img-fallback {
+  .category-mosaic .eo-hs-card--category .eo-hs-card__media--empty {
+    min-height: 200px;
+  }
+  .category-mosaic .eo-hs-card--category .eo-hs-card__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
     transition: transform 0.45s ease;
   }
-  .category-mosaic__img-fallback {
-    background: linear-gradient(160deg, #d4cec4, #a39a8f);
-  }
-  .category-mosaic__tile:hover .category-mosaic__img {
+  .category-mosaic .eo-hs-card--category:hover .eo-hs-card__media img {
     transform: scale(1.04);
   }
-  .category-mosaic__shade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(12, 10, 14, 0.72), transparent 55%);
-    pointer-events: none;
-  }
-  .category-mosaic__meta {
+  .category-mosaic .eo-hs-card--category .eo-hs-card__body {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     padding: 1.25rem 1.1rem 1.1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    color: #fff;
+    background: linear-gradient(to top, rgba(12, 10, 14, 0.72), transparent 55%);
   }
-  .category-mosaic__label {
+  .category-mosaic .eo-hs-card--category .eo-hs-card__title {
     font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: 0.02em;
+    color: #fff;
   }
-  .category-mosaic__tagline {
-    font-size: 0.82rem;
-    opacity: 0.88;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  .category-mosaic .eo-hs-error {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.88rem;
+    color: #8b3225;
+  }
+  @keyframes category-mosaic-shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
   }
 </style>

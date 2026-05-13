@@ -1,0 +1,317 @@
+{% assign ct_items = section_data.items %}
+{% if ct_items and ct_items.size > 0 %}
+  {% assign ct_shape = section_data.image_style | default: 'circle' %}
+  {% if ct_shape != 'circle' and ct_shape != 'rounded' and ct_shape != 'square' %}
+    {% assign ct_shape = 'circle' %}
+  {% endif %}
+  {% assign ct_marquee = section_data.enable_marquee %}
+  {% if ct_marquee == nil %}
+    {% assign ct_marquee = true %}
+  {% endif %}
+  {% assign ct_speed = section_data.marquee_speed | default: 45 %}
+<section
+  class="collection-ticker{% if ct_marquee %} collection-ticker--marquee{% endif %}"
+  style="
+    --ct-bg: {{ section_data.bg_color | default: '#ffffff' }};
+    --ct-text: {{ section_data.text_color | default: '#141218' }};
+    --ct-marquee-dur: {{ ct_speed }}s;
+  "
+>
+  <div class="collection-ticker__inner">
+    {% if ct_marquee %}
+      <div
+        class="collection-ticker__viewport collection-ticker__viewport--marquee"
+        tabindex="0"
+        role="region"
+        aria-label="Collections"
+      >
+        <div class="collection-ticker__marquee">
+          <div class="collection-ticker__rail">
+            {% for item in ct_items %}
+              {% if item.category_id != blank %}
+                <a
+                  class="collection-ticker__item"
+                  href="#"
+                  data-eo-hs-cta="1"
+                  data-eo-hs-cta-entity="categories"
+                  data-eo-hs-cta-id="{{ item.category_id }}"
+                >
+                  {% if item.image != blank %}
+                    <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                    </span>
+                  {% endif %}
+                  {% if item.label != blank %}
+                    <span class="collection-ticker__label">{{ item.label }}</span>
+                  {% endif %}
+                </a>
+              {% else %}
+                <div class="collection-ticker__item collection-ticker__item--static">
+                  {% if item.image != blank %}
+                    <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                    </span>
+                  {% endif %}
+                  {% if item.label != blank %}
+                    <span class="collection-ticker__label">{{ item.label }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="collection-ticker__rail collection-ticker__rail--clone" aria-hidden="true">
+            {% for item in ct_items %}
+              {% if item.category_id != blank %}
+                <a
+                  class="collection-ticker__item"
+                  href="#"
+                  data-eo-hs-cta="1"
+                  data-eo-hs-cta-entity="categories"
+                  data-eo-hs-cta-id="{{ item.category_id }}"
+                >
+                  {% if item.image != blank %}
+                    <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                    </span>
+                  {% endif %}
+                  {% if item.label != blank %}
+                    <span class="collection-ticker__label">{{ item.label }}</span>
+                  {% endif %}
+                </a>
+              {% else %}
+                <div class="collection-ticker__item collection-ticker__item--static">
+                  {% if item.image != blank %}
+                    <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                    </span>
+                  {% endif %}
+                  {% if item.label != blank %}
+                    <span class="collection-ticker__label">{{ item.label }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="collection-ticker__viewport collection-ticker__viewport--scroll">
+        <div class="collection-ticker__rail collection-ticker__rail--scroll">
+          {% for item in ct_items %}
+            {% if item.category_id != blank %}
+              <a
+                class="collection-ticker__item"
+                href="#"
+                data-eo-hs-cta="1"
+                data-eo-hs-cta-entity="categories"
+                data-eo-hs-cta-id="{{ item.category_id }}"
+              >
+                {% if item.image != blank %}
+                  <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
+                    <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                  </span>
+                {% endif %}
+                {% if item.label != blank %}
+                  <span class="collection-ticker__label">{{ item.label }}</span>
+                {% endif %}
+              </a>
+            {% else %}
+              <div class="collection-ticker__item collection-ticker__item--static">
+                {% if item.image != blank %}
+                  <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
+                    <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                  </span>
+                {% endif %}
+                {% if item.label != blank %}
+                  <span class="collection-ticker__label">{{ item.label }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .collection-ticker {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.85rem 0;
+    background: var(--ct-bg, #fff);
+    color: var(--ct-text, #141218);
+    font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .collection-ticker__inner {
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* LTR strip so marquee direction is stable in RTL storefronts */
+  .collection-ticker__viewport {
+    direction: ltr;
+    overflow: hidden;
+  }
+
+  .collection-ticker__viewport--scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .collection-ticker__viewport--scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .collection-ticker__marquee {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: max-content;
+    animation: collection-ticker-marquee var(--ct-marquee-dur, 45s) linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collection-ticker__marquee {
+      animation: none;
+    }
+  }
+
+  .collection-ticker__rail {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: clamp(1.25rem, 4vw, 2.75rem);
+    padding: 0 clamp(1rem, 3vw, 2rem);
+    box-sizing: border-box;
+  }
+
+  .collection-ticker__rail--scroll {
+    width: max-content;
+    min-width: 100%;
+    justify-content: flex-start;
+  }
+
+  .collection-ticker__item {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.65rem;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .collection-ticker__item:not(.collection-ticker__item--static):hover {
+      opacity: 0.82;
+    }
+  }
+
+  .collection-ticker__item--static {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .collection-ticker__thumb {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.06);
+    display: block;
+  }
+
+  .collection-ticker__thumb--circle {
+    border-radius: 50%;
+  }
+
+  .collection-ticker__thumb--rounded {
+    border-radius: 10px;
+  }
+
+  .collection-ticker__thumb--square {
+    border-radius: 2px;
+  }
+
+  .collection-ticker__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .collection-ticker__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+    white-space: nowrap;
+    color: var(--ct-text, #141218);
+  }
+
+  @keyframes collection-ticker-marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Tablet + small: manual horizontal scroll (like editorial-trio rail) — no duplicate row */
+  @media (max-width: 1023.98px) {
+    .collection-ticker--marquee .collection-ticker__viewport--marquee {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scroll-padding-inline: max(1rem, env(safe-area-inset-left, 0px));
+      outline: none;
+    }
+
+    .collection-ticker--marquee .collection-ticker__viewport--marquee::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .collection-ticker--marquee .collection-ticker__viewport--marquee:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+
+    .collection-ticker--marquee .collection-ticker__marquee {
+      animation: none !important;
+      width: max-content;
+    }
+
+    .collection-ticker--marquee .collection-ticker__rail--clone {
+      display: none !important;
+    }
+
+    .collection-ticker--marquee .collection-ticker__item {
+      scroll-snap-align: start;
+      scroll-snap-stop: normal;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .collection-ticker--marquee .collection-ticker__viewport--marquee {
+        scroll-behavior: auto;
+      }
+    }
+  }
+</style>
+{% endif %}

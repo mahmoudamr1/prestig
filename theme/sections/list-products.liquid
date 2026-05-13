@@ -1,93 +1,186 @@
-<section class="ab-plist">
-  <div class="ab-plist-header">
-    {% if section_title %}
-      <h2 class="ab-plist-title ab-reveal">{{ section_title }}</h2>
+<section class="ps-plist ps-plist--split-showcase" data-ps-plist data-ps-plist-split data-ps-plist-showcase>
+  {% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
+  {% assign _pc_ch1 = theme_data.product_card_choose_label | strip %}
+  {% if _pc_ch1 != blank %}
+    {% assign _pc_choose = _pc_ch1 %}
+  {% else %}
+    {% assign _pc_choose = theme_data.grid_products_choose_options_label | strip | default: add | default: 'Choose options' %}
+  {% endif %}
+  {% assign _plist_cta = theme_data.list_products_card_cta_label | strip %}
+  {% if _plist_cta == blank %}
+    {% assign _plist_cta = 'Shop this product' %}
+  {% endif %}
+  {% assign plist_slide_total = 0 %}
+  {% if products %}
+    {% assign plist_slide_total = products.size %}
+    {% if plist_slide_total > 10 %}
+      {% assign plist_slide_total = 10 %}
     {% endif %}
-    <div class="ab-plist-actions">
-      {% if category.slug %}
-        <a href="/collections/{{ category.slug }}" class="ab-plist-viewall-btn">{{ shop_now }}</a>
-      {% endif %}
-      <div class="ab-plist-arrows">
-        <button class="ab-plist-arrow ab-plist-prev" aria-label="Previous">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <button class="ab-plist-arrow ab-plist-next" aria-label="Next">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
-        </button>
-      </div>
+  {% endif %}
+
+  {% if section_title != blank or products and products.size > 1 %}
+    <div class="ps-plist-split__header-wrap">
+      <header class="ps-plist-header ps-plist-header--split{% if section_title == blank %} ps-plist-header--nav-only{% endif %}">
+        <div class="ps-plist-split__header-text">
+          {% if section_title != blank %}
+            <h2 class="ps-plist-title ps-plist-title--split">{{ section_title }}</h2>
+          {% endif %}
+        </div>
+        {% if products and products.size > 1 %}
+          <div class="ps-plist-split__slider-controls" aria-label="{{ section_title | default: 'Products' | escape }}">
+            <button type="button" class="ps-plist-arrow ps-plist-arrow-prev ps-plist-split__btn" data-ps-plist-prev aria-label="Slide left">
+              <svg class="ps-plist-split__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12.75 16.2505L6.5 10.0005L12.75 3.75049" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <button type="button" class="ps-plist-arrow ps-plist-arrow-next ps-plist-split__btn" data-ps-plist-next aria-label="Slide right">
+              <svg class="ps-plist-split__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M7.5 3.74121L13.75 9.99121L7.5 16.2412" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="ps-plist-split__fraction" data-ps-plist-fraction aria-live="polite">
+              <span data-ps-plist-frac-current>1</span>
+              <span class="ps-plist-split__fraction-sep" aria-hidden="true"> / </span>
+              <span data-ps-plist-frac-total>{{ plist_slide_total }}</span>
+            </div>
+          </div>
+        {% endif %}
+      </header>
     </div>
-  </div>
+  {% endif %}
 
-  <div class="ab-plist-track">
-    {% for product in products %}
-      {% assign color_variation = product.variations | where: "type", "color" | first %}
-      {% assign image_variation = product.variations | where: "type", "image" | first %}
-
-      <a href="/products/{{ product.slug }}" class="ab-plist-card ab-reveal" style="animation-delay: {{ forloop.index | times: 0.04 }}s">
-        {% if product.sale_price and product.sale_price < product.price %}
-          {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
-          <span class="ab-plist-badge ab-sale-badge">{{ sale }} -{{ discount }}%</span>
+  <div class="ps-plist-carousel-col ps-plist-split__slider-col">
+    <div class="ps-plist-carousel-track" data-ps-plist-carousel tabindex="0" dir="ltr">
+      {% for product in products limit: 10 %}
+        {% assign color_variation = product.variations | where: "type", "color" | first %}
+        {% assign image_variation = product.variations | where: "type", "image" | first %}
+        {% assign hover_image = "" %}
+        {% if product.gallery and product.gallery.size > 1 %}
+          {% assign hover_image = product.gallery[1].thumbnail %}
+        {% elsif product.gallery and product.gallery.size > 0 %}
+          {% if product.gallery[0].thumbnail != product.thumb %}
+            {% assign hover_image = product.gallery[0].thumbnail %}
+          {% endif %}
+        {% endif %}
+        {% if hover_image == "" and product.images and product.images.size > 1 %}
+          {% assign hover_image = product.images[1] %}
+        {% elsif hover_image == "" and product.images and product.images.size > 0 and product.images[0] != product.thumb %}
+          {% assign hover_image = product.images[0] %}
+        {% endif %}
+        {% assign _plist_desc = product.description | strip_html | strip %}
+        {% if _plist_desc == blank %}
+          {% assign _plist_desc = product.product_theme_data.small_description | strip_html | strip %}
+        {% endif %}
+        {% if _plist_desc != blank %}
+          {% assign _plist_desc = _plist_desc | truncate: 200, '...' %}
         {% endif %}
 
-        <div class="ab-plist-media">
-          <img class="ab-plist-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
-          {% if product.images[0] %}
-            <img class="ab-plist-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+        <article class="ps-plist-carousel-slide ps-plist-card ps-plist-card--split ps-store-card" data-ps-plist-card>
+          <a href="/products/{{ product.slug }}" class="ps-plist-split__card-link" draggable="false">
+          {% if product.sale_price and product.sale_price < product.price %}
+            {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+            <span class="ps-plist-badge ps-sale-badge">-{{ discount }}%</span>
           {% endif %}
-          {% comment %} Wishlist & Compare action buttons — dispatch custom events caught by the storefront JS layer
-          <div class="ab-card-actions">
-            <button
-              class="ab-wishlist-btn"
-              type="button"
-              aria-label="Add to wishlist"
-              onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-wishlist',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </button>
-            <button
-              class="ab-compare-btn"
-              type="button"
-              aria-label="Compare"
-              onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-compare',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 8 16 13"/><line x1="21" y1="8" x2="9" y2="8"/><polyline points="8 21 3 16 8 11"/><line x1="3" y1="16" x2="15" y2="16"/></svg>
-            </button>
-          </div>
-          {% endcomment %}
-          <button
-            class="ab-plist-add-btn"
-            type="button"
-            aria-label="Add to cart"
-            onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-          ></button>
-        </div>
+          {% if product.product_theme_data.custom_badge_title != blank %}
+            <span class="ps-plist-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>
+          {% endif %}
 
-        <div class="ab-plist-info">
-          <p class="ab-plist-name">{{ product.name }}</p>
-          <div class="ab-plist-price-row">
-            {% if product.sale_price and product.sale_price < product.price %}
-              <span class="ab-price-old">{{ product.price }} {{ currency }}</span>
-              <span class="ab-plist-price ab-price-sale">{{ product.sale_price }} {{ currency }}</span>
-            {% else %}
-              <span class="ab-plist-price">{{ product.price }} {{ currency }}</span>
-            {% endif %}
-          </div>
+          <div class="ps-plist-split__showcase">
+            <div class="ps-plist-split__thumbnail">
+              <div class="ps-plist-split__media-wrapper">
+                <div class="ps-plist-split__aspect">
+                  <div class="ps-plist-media">
+                    <img class="ps-plist-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" draggable="false" />
+                    {% if hover_image != "" and hover_image != product.thumb %}
+                      <img class="ps-plist-img-hover" src="{{ hover_image }}" alt="{{ product.name }}" loading="lazy" draggable="false" />
+                    {% endif %}
+                    <button
+                      type="button"
+                      class="ps-card-qview"
+                      aria-label="Quick view"
+                      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-view',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+                    >
+                      <img src="{{ _pc_search }}" alt="" class="ps-card-qview-img" width="20" height="20" loading="lazy" decoding="async" />
+                    </button>
+                    <button
+                      type="button"
+                      class="ps-card-choose ps-product-quick-add"
+                      aria-label="{{ _pc_choose }}"
+                      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+                    >
+                      {{ _pc_choose }}
+                    </button>
+                    <button
+                      type="button"
+                      class="ps-card-mcart ps-product-quick-add"
+                      aria-label="Add to cart"
+                      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+                    >
+                      <img src="{{ theme_data.header_cart_icon | strip | default: 'https://files.easy-orders.net/1777884423251467919cart.svg' }}" alt="" class="ps-icon-image ps-card-mcart-icon" width="20" height="20" loading="lazy" decoding="async" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div class="ab-plist-swatches">
-            {% if color_variation and color_variation.props %}
-              {% for prop in color_variation.props limit: 4 %}
-                <span class="ab-plist-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
-              {% endfor %}
-            {% elsif image_variation and image_variation.props %}
-              {% for prop in image_variation.props limit: 4 %}
-                <span class="ab-plist-swatch ab-plist-swatch-image" title="{{ prop.name }}">
-                  <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
-                </span>
-              {% endfor %}
-            {% endif %}
+            <div class="ps-plist-info ps-plist-split__info">
+              <div class="ps-plist-split__info-inner">
+                {% if category and category.name %}
+                  <p class="ps-plist-split__type">{{ category.name }}</p>
+                {% elsif product.type != blank %}
+                  <p class="ps-plist-split__type">{{ product.type }}</p>
+                {% endif %}
+                <h3 class="ps-plist-split__heading">
+                  <span class="ps-plist-name ps-plist-split__title">{{ product.name }}</span>
+                </h3>
+                <div class="ps-plist-split__price ps-plist-price-row ps-plist-split__prices">
+                  {% if product.sale_price and product.sale_price < product.price %}
+                    <span class="ps-plist-price-current ps-plist-split__price-sale">{{ product.sale_price }} {{ currency }}</span>
+                    <span class="ps-plist-price-old">{{ product.price }} {{ currency }}</span>
+                  {% else %}
+                    <span class="ps-plist-price-current ps-plist-split__price-regular">{{ product.price }} {{ currency }}</span>
+                  {% endif %}
+                </div>
+                {% if _plist_desc != blank %}
+                  <div class="ps-plist-split__description rte">
+                    <div class="ps-plist-split__text-limit">
+                      <p class="ps-plist-split__desc">{{ _plist_desc }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+                <div class="ps-plist-split__view-details">
+                  <span class="ps-plist-split__cta ps-plist-split__btn-primary">{{ _plist_cta }}</span>
+                </div>
+                {% unless theme_data.product_card_show_swatches == false %}
+                  {% assign swatch_total = 0 %}
+                  {% if color_variation and color_variation.props %}
+                    {% assign swatch_total = color_variation.props.size %}
+                  {% elsif image_variation and image_variation.props %}
+                    {% assign swatch_total = image_variation.props.size %}
+                  {% endif %}
+                  <div class="ps-pgrid-swatches ps-plist-split__swatches">
+                    {% if color_variation and color_variation.props %}
+                      {% for prop in color_variation.props limit: 6 %}
+                        <span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                      {% endfor %}
+                    {% elsif image_variation and image_variation.props %}
+                      {% for prop in image_variation.props limit: 6 %}
+                        <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                          <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                        </span>
+                      {% endfor %}
+                    {% endif %}
+                    {% if swatch_total > 6 %}
+                      <span class="ps-pgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
+                    {% endif %}
+                  </div>
+                {% endunless %}
+              </div>
+            </div>
           </div>
-        </div>
-      </a>
-    {% endfor %}
+          </a>
+        </article>
+      {% endfor %}
+    </div>
   </div>
 </section>

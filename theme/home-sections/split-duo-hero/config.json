@@ -1,0 +1,90 @@
+{
+  "icon": "https://api.iconify.design/lucide:layout-panel-left.svg",
+  "label": "Split duo hero",
+  "section_schema": [
+    {
+      "name": "shell_radius",
+      "type": "number",
+      "default": 28,
+      "description": "Outer corner radius (px)"
+    },
+    {
+      "name": "left_bg",
+      "type": "color",
+      "default": "#ebe4d8",
+      "description": "Left panel background"
+    },
+    {
+      "name": "right_bg",
+      "type": "color",
+      "default": "#a85c42",
+      "description": "Right panel base / peek color"
+    },
+    {
+      "name": "kicker",
+      "type": "string",
+      "default": "Gentle And Safe",
+      "description": "Eyebrow above headline"
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "Made for sensitive skin",
+      "description": "Main heading"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "default": "We create safe products that really work and are designed to make you feel good",
+      "description": "Supporting paragraph"
+    },
+    {
+      "name": "cta_label",
+      "type": "string",
+      "default": "Shop Now",
+      "description": "Primary button label"
+    },
+    {
+      "name": "cta_url",
+      "type": "string",
+      "default": "/collections/all",
+      "description": "Primary button URL"
+    },
+    {
+      "name": "cta_bg",
+      "type": "color",
+      "default": "#111111",
+      "description": "Button background"
+    },
+    {
+      "name": "cta_text",
+      "type": "color",
+      "default": "#ffffff",
+      "description": "Button label color"
+    },
+    {
+      "name": "left_text",
+      "type": "color",
+      "default": "#111111",
+      "description": "Left column text color"
+    },
+    {
+      "name": "image",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1777458784428286068.webp",
+      "description": "Right panel photo URL"
+    },
+    {
+      "name": "image_alt",
+      "type": "string",
+      "default": "Skincare lifestyle",
+      "description": "Image alt text"
+    },
+    {
+      "name": "show_slider_rail",
+      "type": "boolean",
+      "default": true,
+      "description": "Show thin vertical bar on the right edge (visual cue)"
+    }
+  ]
+}

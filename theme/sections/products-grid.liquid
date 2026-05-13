@@ -1,86 +1,111 @@
-
-<section class="ab-pgrid">
-  <div class="ab-pgrid-wrap ab-pgrid-wrap--no-hero">
-    {% for product in products %}
-      {% assign color_variation = product.variations | where: "type", "color" | first %}
-      {% assign image_variation = product.variations | where: "type", "image" | first %}
-      {% assign swatch_total = 0 %}
-      {% if color_variation and color_variation.props %}
-        {% assign swatch_total = color_variation.props.size %}
-      {% elsif image_variation and image_variation.props %}
-        {% assign swatch_total = image_variation.props.size %}
-      {% endif %}
-
-      <a href="/products/{{ product.slug }}" class="ab-pgrid-card ab-reveal" style="animation-delay: {{ forloop.index | times: 0.04 }}s">
-        {% if product.sale_price and product.sale_price < product.price %}
-          {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
-          <span class="ab-pgrid-badge ab-sale-badge">{{ sale }} -{{ discount }}%</span>
-        {% endif %}
-
-        <div class="ab-pgrid-media">
-          <img class="ab-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
-          {% if product.images[0] %}
-            <img class="ab-pgrid-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+<section class="ps-pgrid-section" data-ps-pgrid>
+  {% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
+  {% assign _pc_ch1 = theme_data.product_card_choose_label | strip %}
+  {% if _pc_ch1 != blank %}
+    {% assign _pc_choose = _pc_ch1 %}
+  {% else %}
+    {% assign _pc_choose = theme_data.grid_products_choose_options_label | strip | default: add | default: 'Choose options' %}
+  {% endif %}
+  <div class="ps-pgrid-inner">
+    <div class="ps-pgrid-main">
+      <div class="ps-pgrid-grid">
+        {% for product in products %}
+          {% assign color_variation = product.variations | where: "type", "color" | first %}
+          {% assign image_variation = product.variations | where: "type", "image" | first %}
+          {% assign swatch_total = 0 %}
+          {% if color_variation and color_variation.props %}
+            {% assign swatch_total = color_variation.props.size %}
+          {% elsif image_variation and image_variation.props %}
+            {% assign swatch_total = image_variation.props.size %}
           {% endif %}
-          {% comment %} Wishlist & Compare action buttons — dispatch custom events caught by the storefront JS layer
-          <div class="ab-card-actions">
-            <button
-              class="ab-wishlist-btn"
-              type="button"
-              aria-label="Add to wishlist"
-              onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-wishlist',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </button>
-            <button
-              class="ab-compare-btn"
-              type="button"
-              aria-label="Compare"
-              onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('toggle-compare',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 8 16 13"/><line x1="21" y1="8" x2="9" y2="8"/><polyline points="8 21 3 16 8 11"/><line x1="3" y1="16" x2="15" y2="16"/></svg>
-            </button>
-          </div>
-          {% endcomment %}
-          <button
-            class="ab-pgrid-add-btn"
-            type="button"
-            aria-label="Add to cart"
-            onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-          ></button>
+
+          <a href="/products/{{ product.slug }}" class="ps-pgrid-card ps-store-card">
+            <div class="ps-pgrid-media">
+              {% if product.sale_price and product.sale_price < product.price %}
+                {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+                <span class="ps-pgrid-badge ps-sale-badge">-{{ discount }}%</span>
+              {% endif %}
+              {% if product.product_theme_data.custom_badge_title != blank %}
+                <span class="ps-pgrid-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>
+              {% endif %}
+              <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+              {% if product.images[0] %}
+                <img class="ps-pgrid-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+              {% endif %}
+              <button
+                type="button"
+                class="ps-card-qview"
+                aria-label="Quick view"
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-view',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                <img src="{{ _pc_search }}" alt="" class="ps-card-qview-img" width="20" height="20" loading="lazy" decoding="async" />
+              </button>
+              <button
+                type="button"
+                class="ps-card-choose ps-product-quick-add"
+                aria-label="{{ _pc_choose }}"
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                {{ _pc_choose }}
+              </button>
+              <button
+                type="button"
+                class="ps-card-mcart ps-product-quick-add"
+                aria-label="Add to cart"
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                <img src="{{ theme_data.header_cart_icon | strip | default: 'https://files.easy-orders.net/1777884423251467919cart.svg' }}" alt="" class="ps-icon-image ps-card-mcart-icon" width="20" height="20" loading="lazy" decoding="async" />
+              </button>
+            </div>
+
+            <div class="ps-pgrid-info">
+              {% if category and category.name %}
+                <p class="ps-store-card__cat">{{ category.name }}</p>
+              {% elsif product.type != blank %}
+                <p class="ps-store-card__cat">{{ product.type }}</p>
+              {% endif %}
+              <span class="ps-pgrid-name">{{ product.name }}</span>
+              {% unless theme_data.product_card_show_swatches == false %}
+              <div class="ps-pgrid-swatches">
+                {% if color_variation and color_variation.props %}
+                  {% for prop in color_variation.props limit: 6 %}
+                    <span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                  {% endfor %}
+                {% elsif image_variation and image_variation.props %}
+                  {% for prop in image_variation.props limit: 6 %}
+                    <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                      <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                    </span>
+                  {% endfor %}
+                {% endif %}
+
+                {% if swatch_total > 6 %}
+                  <span class="ps-pgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
+                {% endif %}
+              </div>
+              {% endunless %}
+
+              <div class="ps-pgrid-price-row">
+                {% if product.sale_price and product.sale_price < product.price %}
+                  <span class="ps-pgrid-price-current">{{ product.sale_price }} {{ currency }}</span>
+                  <span class="ps-pgrid-price-old">{{ product.price }} {{ currency }}</span>
+                {% else %}
+                  <span class="ps-pgrid-price-current">{{ product.price }} {{ currency }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if category and category.slug %}
+        <div class="ps-pgrid-footer">
+          <a href="/collections/{{ category.slug }}" class="ps-pgrid-view-all gap-2">
+            <span>{{ shop_now }}</span>
+            <img src="https://files.easy-orders.net/1773832247629050805.webp" alt="" class="ps-viewall-arrow" width="20" height="20" loading="lazy" />
+          </a>
         </div>
-
-        <div class="ab-pgrid-info">
-          <p class="ab-pgrid-name">{{ product.name }}</p>
-
-          <div class="ab-pgrid-price-row">
-            {% if product.sale_price and product.sale_price < product.price %}
-              <span class="ab-price-old">{{ product.price }} {{ currency }}</span>
-              <span class="ab-pgrid-price ab-price-sale">{{ product.sale_price }} {{ currency }}</span>
-            {% else %}
-              <span class="ab-pgrid-price">{{ product.price }} {{ currency }}</span>
-            {% endif %}
-          </div>
-
-          <div class="ab-pgrid-swatches">
-            {% if color_variation and color_variation.props %}
-              {% for prop in color_variation.props limit: 6 %}
-                <span class="ab-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
-              {% endfor %}
-            {% elsif image_variation and image_variation.props %}
-              {% for prop in image_variation.props limit: 6 %}
-                <span class="ab-pgrid-swatch ab-pgrid-swatch-image" title="{{ prop.name }}">
-                  <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
-                </span>
-              {% endfor %}
-            {% endif %}
-
-            {% if swatch_total > 6 %}
-              <span class="ab-pgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
-            {% endif %}
-          </div>
-        </div>
-      </a>
-    {% endfor %}
+      {% endif %}
+    </div>
   </div>
 </section>

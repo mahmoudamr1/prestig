@@ -1,0 +1,68 @@
+{
+  "icon": "https://api.iconify.design/lucide:badge-check.svg",
+  "label": "Trust badge pills",
+  "section_schema": [
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#ffffff",
+      "description": "Section background"
+    },
+    {
+      "name": "pill_bg",
+      "type": "color",
+      "default": "#ffffff",
+      "description": "Pill background"
+    },
+    {
+      "name": "pill_border",
+      "type": "color",
+      "default": "#e0e0e0",
+      "description": "Pill border"
+    },
+    {
+      "name": "icon_circle_bg",
+      "type": "color",
+      "default": "#f0f0f0",
+      "description": "Check icon circle fill"
+    },
+    {
+      "name": "icon_color",
+      "type": "color",
+      "default": "#111111",
+      "description": "Checkmark stroke color"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#111111",
+      "description": "Label text color"
+    },
+    {
+      "name": "badges",
+      "type": "object_array",
+      "description": "Trust badges (label + optional link)",
+      "default": [
+        { "label": "Free Shipping", "link_url": "" },
+        { "label": "Money Guarantee", "link_url": "" },
+        { "label": "Flexible Payment", "link_url": "" },
+        { "label": "Online Support", "link_url": "" },
+        { "label": "Return within 7 days", "link_url": "" }
+      ],
+      "fields": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "",
+          "description": "Badge text"
+        },
+        {
+          "name": "link_url",
+          "type": "string",
+          "default": "",
+          "description": "Optional URL (internal page or policy)"
+        }
+      ]
+    }
+  ]
+}

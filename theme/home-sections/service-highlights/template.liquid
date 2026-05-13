@@ -1,0 +1,142 @@
+{% if section_data.items and section_data.items.size > 0 %}
+<section
+  class="service-highlights"
+  style="
+    --sh-bg: {{ section_data.bg_color | default: 'transparent' }};
+    --sh-title: {{ section_data.title_color | default: '#111111' }};
+    --sh-text: {{ section_data.text_color | default: '#4B5563' }};
+    --sh-icon-max: {{ section_data.icon_max_width | default: 48 }}px;
+  "
+>
+    <div class="service-highlights__inner">
+      <div class="service-highlights__grid" role="list">
+        {% for item in section_data.items %}
+          <article class="service-highlights__item" role="listitem">
+            <div class="service-highlights__icon-wrap">
+              {% if item.icon != blank %}
+                <img
+                  class="service-highlights__icon"
+                  src="{{ item.icon }}"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  width="48"
+                  height="48"
+                />
+              {% else %}
+                <span class="service-highlights__icon-fallback" aria-hidden="true"></span>
+              {% endif %}
+            </div>
+            {% if item.title != blank %}
+              <h3 class="service-highlights__title">{{ item.title }}</h3>
+            {% endif %}
+            {% if item.text != blank %}
+              <p class="service-highlights__desc">{{ item.text }}</p>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+</section>
+
+<style>
+  .service-highlights {
+    padding: clamp(1.25rem, 3vw, 2rem) 0;
+    background: var(--sh-bg, transparent);
+    color: var(--sh-title, #111);
+    font-family: var(--ps-ff-ui, "Manrope"), system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .service-highlights__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* min() keeps one column on narrow phones; opens to 2 then 4 columns */
+  .service-highlights__grid {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 2.75rem) clamp(1rem, 3vw, 1.75rem);
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  @media (min-width: 480px) {
+    .service-highlights__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .service-highlights__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .service-highlights__item {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.65rem;
+    min-width: 0;
+  }
+
+  .service-highlights__icon-wrap {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: calc(var(--sh-icon-max, 48px) + 8px);
+  }
+
+  .service-highlights__icon {
+    max-width: var(--sh-icon-max, 48px);
+    width: 100%;
+    height: auto;
+    max-height: 56px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .service-highlights__icon-fallback {
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sh-text, #4b5563) 22%, transparent);
+  }
+
+  .service-highlights__title {
+    margin: 0;
+    font-size: clamp(0.72rem, 1.6vw, 0.82rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    color: var(--sh-title, #111);
+    text-wrap: balance;
+    max-width: 22rem;
+  }
+
+  .service-highlights__desc {
+    margin: 0;
+    font-size: clamp(0.82rem, 1.75vw, 0.92rem);
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--sh-text, #4b5563);
+    max-width: 18rem;
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 480px) and (max-width: 959px) {
+    .service-highlights__desc {
+      max-width: 20rem;
+    }
+  }
+</style>
+{% endif %}

@@ -1,0 +1,316 @@
+{% if section_data.items and section_data.items.size > 0 %}
+<section
+  class="faq-split-showcase"
+  data-ps-faq-split
+  style="--fs-bg: {{ section_data.bg_color | default: '#f0ebe3' }};"
+>
+  <div class="faq-split-showcase__inner">
+    <div class="faq-split-showcase__grid">
+      <div class="faq-split-showcase__col faq-split-showcase__col--intro">
+        {% if section_data.heading != blank %}
+          <h2 class="faq-split-showcase__heading">{{ section_data.heading }}</h2>
+        {% endif %}
+        {% if section_data.body != blank %}
+          <p class="faq-split-showcase__body">{{ section_data.body }}</p>
+        {% endif %}
+        {% if section_data.cta_label != blank and section_data.cta_url != blank %}
+          <a class="faq-split-showcase__cta" href="{{ section_data.cta_url }}">{{ section_data.cta_label }}</a>
+        {% elsif section_data.cta_label != blank %}
+          <span class="faq-split-showcase__cta faq-split-showcase__cta--disabled">{{ section_data.cta_label }}</span>
+        {% endif %}
+      </div>
+
+      <div class="faq-split-showcase__col faq-split-showcase__col--media">
+        {% if section_data.center_image != blank %}
+          <div class="faq-split-showcase__media">
+            <img
+              class="faq-split-showcase__img"
+              src="{{ section_data.center_image }}"
+              alt="{{ section_data.center_image_alt | default: 'Product' | escape }}"
+              width="480"
+              height="640"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="faq-split-showcase__col faq-split-showcase__col--acc" role="list">
+        {% for item in section_data.items %}
+          <div
+            class="faq-split-showcase__item{% if forloop.first %} is-open{% endif %}"
+            role="listitem"
+            data-faq-split-item
+          >
+            <button
+              type="button"
+              class="faq-split-showcase__trigger"
+              data-faq-split-trigger
+              aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+              id="faq-split-trigger-{{ forloop.index0 }}"
+              aria-controls="faq-split-panel-{{ forloop.index0 }}"
+            >
+              <span class="faq-split-showcase__q">{{ item.question }}</span>
+              <span class="faq-split-showcase__icon" aria-hidden="true"></span>
+            </button>
+            <div
+              class="faq-split-showcase__panel"
+              id="faq-split-panel-{{ forloop.index0 }}"
+              role="region"
+              aria-labelledby="faq-split-trigger-{{ forloop.index0 }}"
+              {% unless forloop.first %}hidden{% endunless %}
+            >
+              {% if item.answer != blank %}
+                <div class="faq-split-showcase__answer">{{ item.answer }}</div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-split-showcase {
+    box-sizing: border-box;
+    width: 100%;
+    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2rem);
+    background: var(--fs-bg, #f0ebe3);
+    color: #111111;
+    font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .faq-split-showcase__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .faq-split-showcase__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1.15fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  @media (max-width: 991px) {
+    .faq-split-showcase__grid {
+      grid-template-columns: 1fr;
+      gap: clamp(1.75rem, 4vw, 2.5rem);
+    }
+
+    .faq-split-showcase__col--media {
+      order: 2;
+      max-width: 420px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .faq-split-showcase__col--intro {
+      order: 1;
+      text-align: center;
+      align-items: center;
+    }
+
+    .faq-split-showcase__col--acc {
+      order: 3;
+    }
+  }
+
+  .faq-split-showcase__col--intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+    padding-top: 0.25rem;
+  }
+
+  @media (max-width: 991px) {
+    .faq-split-showcase__col--intro {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .faq-split-showcase__heading {
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #111111;
+    max-width: 14ch;
+  }
+
+  @media (max-width: 991px) {
+    .faq-split-showcase__heading {
+      max-width: 20ch;
+    }
+  }
+
+  .faq-split-showcase__body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    font-weight: 400;
+    color: #1a1a1a;
+    max-width: 28rem;
+  }
+
+  .faq-split-showcase__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.35rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: 999px;
+    background: #111111;
+    color: #ffffff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .faq-split-showcase__cta:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+  }
+
+  .faq-split-showcase__cta--disabled {
+    opacity: 0.45;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .faq-split-showcase__media {
+    border-radius: clamp(14px, 2vw, 20px);
+    overflow: hidden;
+    background: #e8e4df;
+    aspect-ratio: 4 / 5;
+    max-height: min(560px, 70vh);
+  }
+
+  @media (max-width: 991px) {
+    .faq-split-showcase__media {
+      max-height: none;
+    }
+  }
+
+  .faq-split-showcase__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .faq-split-showcase__col--acc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    min-width: 0;
+  }
+
+  .faq-split-showcase__item {
+    border-radius: 14px;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    background: rgba(255, 255, 255, 0.45);
+    overflow: hidden;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .faq-split-showcase__item.is-open {
+    background: #ffffff;
+    border-color: rgba(17, 17, 17, 0.06);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  }
+
+  .faq-split-showcase__trigger {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    box-sizing: border-box;
+  }
+
+  .faq-split-showcase__trigger:focus-visible {
+    outline: 2px solid #111111;
+    outline-offset: 2px;
+  }
+
+  .faq-split-showcase__q {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: #111111;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .faq-split-showcase__icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #111111;
+    user-select: none;
+  }
+
+  .faq-split-showcase__icon::before {
+    content: "+";
+  }
+
+  .faq-split-showcase__item.is-open .faq-split-showcase__icon::before {
+    content: "−";
+    font-size: 1.25rem;
+  }
+
+  .faq-split-showcase__panel {
+    padding: 0 1.15rem 1.1rem;
+    border-top: 1px solid transparent;
+  }
+
+  .faq-split-showcase__item.is-open .faq-split-showcase__panel {
+    border-top-color: rgba(17, 17, 17, 0.06);
+  }
+
+  .faq-split-showcase__panel[hidden] {
+    display: none !important;
+  }
+
+  .faq-split-showcase__answer {
+    margin: 0;
+    padding-top: 0.65rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #3d3d3d;
+  }
+</style>
+{% endif %}

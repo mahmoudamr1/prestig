@@ -4,9 +4,9 @@
   "section_schema": [
     {
       "name": "image",
-      "type": "string",
+      "type": "image",
       "default": "",
-      "description": "Feature image URL"
+      "description": "Feature image"
     },
     {
       "name": "eyebrow",
@@ -33,10 +33,9 @@
       "description": "Link label"
     },
     {
-      "name": "cta_url",
-      "type": "string",
-      "default": "/pages/about",
-      "description": "Link URL"
+      "name": "cta_page_id",
+      "type": "page_single_select",
+      "description": "Simple page the CTA opens (link URL is resolved on the storefront)"
     },
     {
       "name": "image_position",

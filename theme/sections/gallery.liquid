@@ -1,61 +1,115 @@
-<div class="ab-gallery">
-  <div class="ab-gallery-main" data-gallery-open>
-    {% if mainImage contains '.mp4' %}
-      <video
-        src="{{ mainImage }}"
-        class="ab-gallery-main-media"
-        controls
-        playsinline
-        autoplay
-        muted
-        preload="metadata"
-      ></video>
-    {% else %}
-      <img
-        id="gallery-main-image"
-        src="{{ mainImage }}"
-        alt="{{ product_name }}"
-        class="ab-gallery-main-media"
-      />
-    {% endif %}
-    <button class="ab-gallery-zoom" type="button" aria-label="Zoom image" data-gallery-open>
-      <span>+</span>
-    </button>
-  </div>
-
-  {% if images.size > 1 %}
-  <div class="ab-gallery-thumbs">
-    {% for image in images %}
-      <button
-        class="ab-gallery-thumb{% if image == mainImage %} ab-active{% endif %}"
-        data-src="{{ image }}"
-        type="button"
-        aria-label="View image {{ forloop.index }}"
-      >
-        {% if image contains '.mp4' %}
-          <video src="{{ image }}" muted playsinline preload="metadata"></video>
-        {% else %}
-          <img src="{{ image }}" alt="{{ product_name }}" loading="lazy" />
-        {% endif %}
-      </button>
-    {% endfor %}
-  </div>
+<div class="ab-gallery ab-gallery--mix" data-ps-pdp-gallery>
+  {% if images.size > 0 %}
+    <div class="ab-gallery-grid-mix" role="list" aria-label="{{ product_name }} images">
+      {% for image in images %}
+        {% assign i0 = forloop.index0 %}
+        {% assign mod3 = i0 | modulo: 3 %}
+        <button
+          type="button"
+          role="listitem"
+          class="ab-gallery-cell{% if mod3 == 0 %} ab-gallery-cell--span{% endif %}{% if image == mainImage %} ab-gallery-cell--active{% endif %}"
+          data-src="{{ image }}"
+          data-thumb-index="{{ i0 }}"
+          data-gallery-open
+          aria-label="View image {{ forloop.index }}"
+        >
+          {% if image contains '.mp4' %}
+            <video
+              src="{{ image }}"
+              class="ab-gallery-cell-media"
+              muted
+              playsinline
+              preload="metadata"
+            ></video>
+          {% else %}
+            <img
+              src="{{ image }}"
+              alt="{{ product_name }}"
+              class="ab-gallery-cell-media"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              width="800"
+              height="800"
+            />
+          {% endif %}
+        </button>
+      {% endfor %}
+    </div>
   {% endif %}
 
-  <div class="ab-lightbox" data-lightbox>
-    <div class="ab-lightbox-backdrop" data-lightbox-close></div>
-    <button class="ab-lightbox-close" data-lightbox-close aria-label="Close">&times;</button>
+  <div class="ab-gallery-mobile">
+    <div class="ab-gallery-main" data-gallery-open>
+      {% if mainImage contains '.mp4' %}
+        <video
+          src="{{ mainImage }}"
+          class="ab-gallery-main-media"
+          controls
+          playsinline
+          autoplay
+          muted
+          preload="metadata"
+        ></video>
+      {% else %}
+        <img
+          id="gallery-main-image"
+          src="{{ mainImage }}"
+          alt="{{ product_name }}"
+          class="ab-gallery-main-media"
+        />
+      {% endif %}
+      <button class="ab-gallery-zoom" type="button" aria-label="Zoom image">
+        <span class="ab-gallery-zoom-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+
     {% if images.size > 1 %}
-      <button class="ab-lightbox-arrow ab-lightbox-prev" data-lightbox-prev aria-label="Previous">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button class="ab-lightbox-arrow ab-lightbox-next" data-lightbox-next aria-label="Next">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
-      </button>
-      <div class="ab-lightbox-counter" data-lightbox-counter></div>
+      <div class="ab-gallery-thumbs">
+        {% for image in images %}
+          <button
+            class="ab-gallery-thumb{% if image == mainImage %} ab-active{% endif %}"
+            data-src="{{ image }}"
+            data-thumb-index="{{ forloop.index0 }}"
+            type="button"
+            aria-label="View image {{ forloop.index }}"
+          >
+            {% if image contains '.mp4' %}
+              <video src="{{ image }}" muted playsinline preload="metadata"></video>
+            {% else %}
+              <img src="{{ image }}" alt="{{ product_name }}" loading="lazy" />
+            {% endif %}
+          </button>
+        {% endfor %}
+      </div>
     {% endif %}
-    <div class="ab-lightbox-body">
-      <img src="" alt="" class="ab-lightbox-img" data-lightbox-img />
+  </div>
+
+  <div class="ab-lightbox" data-lightbox>
+    <div class="ab-lightbox-backdrop" data-lightbox-close tabindex="-1" aria-hidden="true"></div>
+    <div class="ab-lightbox-shell">
+      <div class="ab-lightbox-body">
+        <img src="" alt="" class="ab-lightbox-img" data-lightbox-img />
+      </div>
+      <nav class="ab-lightbox-toolbar" aria-label="{{ product_name }} — preview">
+        {% if images.size > 1 %}
+          <button type="button" class="ab-lightbox-fab ab-lightbox-prev" data-lightbox-prev aria-label="Previous image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+        {% else %}
+          <span class="ab-lightbox-fab-spacer" aria-hidden="true"></span>
+        {% endif %}
+        <button type="button" class="ab-lightbox-fab ab-lightbox-fab--close" data-lightbox-close aria-label="Close preview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        {% if images.size > 1 %}
+          <button type="button" class="ab-lightbox-fab ab-lightbox-next" data-lightbox-next aria-label="Next image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+        {% else %}
+          <span class="ab-lightbox-fab-spacer" aria-hidden="true"></span>
+        {% endif %}
+      </nav>
+      {% if images.size > 1 %}
+        <span class="ps-u-sr-only" data-lightbox-counter aria-live="polite"></span>
+      {% endif %}
     </div>
   </div>
 </div>

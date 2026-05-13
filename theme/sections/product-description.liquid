@@ -2,7 +2,13 @@
   {% if description != "" %}
     <div class="lq-desc-item" data-open="true">
       <button class="lq-desc-toggle" type="button" aria-expanded="true">
-        <span>{{ description_label }}</span>
+        <span class="lq-desc-toggle-label">
+          <svg class="lq-desc-icon lq-desc-icon--svg" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span>{{ description_label }}</span>
+        </span>
         <span class="lq-desc-chevron"></span>
       </button>
       <div class="lq-desc-panel" style="display:block">
@@ -17,13 +23,29 @@
     <div class="lq-desc-item">
       <button class="lq-desc-toggle" type="button" aria-expanded="false">
         <span class="lq-desc-toggle-label">
-          <img src="{{ policy.icon }}" alt="" class="lq-desc-icon" />
+          {% if policy.icon and policy.icon != '' %}
+            <img src="{{ policy.icon }}" alt="" class="lq-desc-icon" />
+          {% endif %}
           <span>{{ policy.title }}</span>
         </span>
         <span class="lq-desc-chevron"></span>
       </button>
       <div class="lq-desc-panel" style="display:none">
         <div class="lq-desc-content">{{ policy.content }}</div>
+      </div>
+    </div>
+  {% endfor %}
+
+  {% for desc in product_theme_data.desc %}
+    <div class="lq-desc-item">
+      <button class="lq-desc-toggle" type="button" aria-expanded="false">
+        <span class="lq-desc-toggle-label">
+          <span>{{ desc.title_headline }}</span>
+        </span>
+        <span class="lq-desc-chevron"></span>
+      </button>
+      <div class="lq-desc-panel" style="display:none">
+        <div class="lq-desc-content">{{ desc.title_desc }}</div>
       </div>
     </div>
   {% endfor %}

@@ -32,35 +32,9 @@
       "description": "Use tighter spacing between tiles"
     },
     {
-      "name": "tiles",
-      "type": "object_array",
-      "description": "Category or collection tiles",
-      "fields": [
-        {
-          "name": "image",
-          "type": "string",
-          "default": "",
-          "description": "Tile image URL"
-        },
-        {
-          "name": "label",
-          "type": "string",
-          "default": "Dresses",
-          "description": "Tile title"
-        },
-        {
-          "name": "tagline",
-          "type": "string",
-          "default": "Fluid lines",
-          "description": "Short line under the title"
-        },
-        {
-          "name": "url",
-          "type": "string",
-          "default": "/products",
-          "description": "Tile link URL"
-        }
-      ]
+      "name": "mosaic_category_ids",
+      "type": "category_multi_select",
+      "description": "Categories to show as tiles (search and reorder in the picker). Images and titles load from each category."
     }
   ]
 }

@@ -1,43 +1,84 @@
-  <section class="ab-slider" data-autoplay="5000">
-    <div class="ab-slider-track">
-      {% for slide in slides %}
-        {% if slide.url != blank %}
-          <a
-            href="{{ slide.url }}"
-            class="ab-slider-slide{% if forloop.first %} ab-active{% endif %}"
-            aria-label="{{ slide.alt | default: "Slide image" }}"
-          >
-            <picture>
-              {% if slide.mobile_image != blank %}
-                <source media="(max-width: 425px)" srcset="{{ slide.mobile_image }}" />
-                <source media="(min-width: 426px)" srcset="{{ slide.image }}" />
-              {% endif %}
-              <img src="{{ slide.image }}" alt="{{ slide.alt | default: "Slide image" }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
-            </picture>
-          </a>
-        {% else %}
-          <div class="ab-slider-slide{% if forloop.first %} ab-active{% endif %}" aria-label="{{ slide.alt | default: "Slide image" }}">
-            <picture>
-              {% if slide.mobile_image != blank %}
-                <source media="(max-width: 425px)" srcset="{{ slide.mobile_image }}" />
-                <source media="(min-width: 426px)" srcset="{{ slide.image }}" />
-              {% endif %}
-              <img src="{{ slide.image }}" alt="{{ slide.alt | default: "Slide image" }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
-            </picture>
+{% comment %}
+  Hero — ديسكتوب: translate + clone loop من script.js. موبايل: scroll-snap + نفس شكل المؤشرات (pill / نقاط) + autoplay عبر data-autoplay.
+  Styling: `style.css` تحت SCOPE: SLIDER.
+{% endcomment %}
+{% assign hero_slides = slides %}
+{% if hero_slides == blank or hero_slides.size == 0 %}
+  {% if theme_data.hero_slides != blank and theme_data.hero_slides.size > 0 %}
+    {% assign hero_slides = theme_data.hero_slides %}
+  {% endif %}
+{% endif %}
+
+{% if hero_slides != blank and hero_slides.size > 0 %}
+<section
+  class="ps-slider ps-slider--under-nav ps-u-w-100 ps-u-relative"
+  data-ps-peek-slider
+  data-autoplay="3000"
+>
+  <div class="ps-slider-viewport ps-u-relative ps-u-w-100 ps-u-overflow-hidden">
+    <div class="ps-slider-track ps-u-flex-row">
+      {% for slide in hero_slides %}
+        <article
+          class="ps-slider-slide ps-u-flex-shrink-0 ps-u-overflow-hidden{% if forloop.first %} ps-active{% endif %}"
+          data-ps-slide
+          aria-roledescription="slide"
+          aria-label="{{ forloop.index }} / {{ hero_slides.size }}"
+        >
+          <div class="ps-slider-slide-media">
+            {% if slide.url != blank %}
+              <a href="{{ slide.url }}" class="ps-slider-slide-link">
+                <picture>
+                  {% if slide.mobile_image != blank %}
+                    <source media="(max-width: 768px)" srcset="{{ slide.mobile_image }}" />
+                  {% endif %}
+                  <img
+                    src="{{ slide.image }}"
+                    alt="{{ slide.alt }}"
+                    draggable="false"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    decoding="async"
+                  />
+                </picture>
+              </a>
+            {% else %}
+              <div class="ps-slider-slide-link ps-slider-slide-link--static">
+                <picture>
+                  {% if slide.mobile_image != blank %}
+                    <source media="(max-width: 768px)" srcset="{{ slide.mobile_image }}" />
+                  {% endif %}
+                  <img
+                    src="{{ slide.image }}"
+                    alt="{{ slide.alt }}"
+                    draggable="false"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    decoding="async"
+                  />
+                </picture>
+              </div>
+            {% endif %}
           </div>
-        {% endif %}
+        </article>
       {% endfor %}
     </div>
+  </div>
 
-    {% if slides.size > 1 %}
-      <div class="ab-slider-controls">
-        <div class="ab-slider-progress">
-          <span class="ab-slider-progress-bar"></span>
-        </div>
-        <button class="ab-slider-pause" aria-label="Pause slideshow">
-          <svg class="ab-slider-icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-          <svg class="ab-slider-icon-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+  {% if hero_slides.size > 1 %}
+    <div class="ps-slider-indicators ps-u-flex-center" role="tablist" aria-label="Slides">
+      {% for slide in hero_slides %}
+        <button
+          class="ps-slider-indicator{% if forloop.first %} ps-active{% endif %}"
+          type="button"
+          data-slide-index="{{ forloop.index0 }}"
+          aria-label="Go to slide {{ forloop.index }}"
+          aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+        >
+          <span class="ps-u-sr-only">{{ forloop.index }} / {{ hero_slides.size }}</span>
+          <span class="ps-slider-ind-line" aria-hidden="true">
+            <span class="ps-slider-ind-progress"></span>
+          </span>
         </button>
-      </div>
-    {% endif %}
-  </section>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endif %}

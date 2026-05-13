@@ -1,0 +1,166 @@
+<section
+  class="lifestyle-editorial-hero lifestyle-editorial-hero--h-{{ section_data.min_height | default: 'tall' }} lifestyle-editorial-hero--w-{{ section_data.content_max_width | default: 'medium' }} {% if section_data.photo_style == 'color' %}lifestyle-editorial-hero--color{% endif %}"
+  style="
+    --leh-text: {{ section_data.text_color | default: '#FFFFFF' }};
+    --leh-overlay-a: {{ section_data.overlay_strength | default: 38 | divided_by: 100.0 }};
+    {% if section_data.image != blank %}--leh-img: url('{{ section_data.image }}');{% endif %}
+    {% if section_data.mobile_image != blank %}--leh-img-m: url('{{ section_data.mobile_image }}');{% endif %}
+  "
+>
+  <div class="lifestyle-editorial-hero__bg" aria-hidden="true"></div>
+  <div class="lifestyle-editorial-hero__overlay" aria-hidden="true"></div>
+  <div class="lifestyle-editorial-hero__inner">
+    {% if section_data.kicker != blank %}
+      <p class="lifestyle-editorial-hero__kicker">{{ section_data.kicker }}</p>
+    {% endif %}
+    {% if section_data.headline != blank %}
+      <h2 class="lifestyle-editorial-hero__title">{{ section_data.headline }}</h2>
+    {% endif %}
+    {% if section_data.body != blank %}
+      <p class="lifestyle-editorial-hero__body">{{ section_data.body }}</p>
+    {% endif %}
+    {% if section_data.cta_label != blank %}
+      <a class="lifestyle-editorial-hero__cta" href="{{ section_data.cta_url | default: '#' }}">
+        {{ section_data.cta_label }}
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .lifestyle-editorial-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    --leh-min-h: min(74vh, 720px);
+    min-height: var(--leh-min-h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: clamp(3rem, 10vw, 6rem) 1.5rem;
+    color: var(--leh-text, #fff);
+    background-color: #1a1918;
+    font-family: var(--ps-ff-ui, "Manrope"), system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    margin: clamp(1.25rem, 3vw, 2rem) 0;
+  }
+
+  .lifestyle-editorial-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--leh-img-m, var(--leh-img));
+    background-color: #252423;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.002);
+    filter: grayscale(1);
+  }
+
+  @media (min-width: 768px) {
+    .lifestyle-editorial-hero__bg {
+      background-image: var(--leh-img, var(--leh-img-m));
+    }
+  }
+
+  .lifestyle-editorial-hero--color .lifestyle-editorial-hero__bg {
+    filter: none;
+  }
+
+  .lifestyle-editorial-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, var(--leh-overlay-a, 0.38));
+    pointer-events: none;
+  }
+
+  .lifestyle-editorial-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--leh-copy-max, 40rem);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 1.75rem);
+  }
+
+  .lifestyle-editorial-hero--w-narrow .lifestyle-editorial-hero__inner {
+    --leh-copy-max: 26rem;
+  }
+  .lifestyle-editorial-hero--w-medium .lifestyle-editorial-hero__inner {
+    --leh-copy-max: 38rem;
+  }
+  .lifestyle-editorial-hero--w-wide .lifestyle-editorial-hero__inner {
+    --leh-copy-max: 48rem;
+  }
+
+  .lifestyle-editorial-hero--h-compact {
+    --leh-min-h: 48vh;
+  }
+  .lifestyle-editorial-hero--h-tall {
+    --leh-min-h: min(74vh, 720px);
+  }
+  .lifestyle-editorial-hero--h-screen {
+    --leh-min-h: min(92vh, 920px);
+  }
+
+  .lifestyle-editorial-hero__kicker {
+    margin: 0;
+    font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    color: inherit;
+    opacity: 0.95;
+  }
+
+  .lifestyle-editorial-hero__title {
+    margin: 0;
+    font-size: clamp(1.85rem, 5.5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .lifestyle-editorial-hero__body {
+    margin: 0;
+    font-size: clamp(0.95rem, 2.1vw, 1.08rem);
+    font-weight: 400;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+    max-width: 36rem;
+    opacity: 0.94;
+    white-space: pre-line;
+  }
+
+  .lifestyle-editorial-hero__cta {
+    margin-top: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #101010;
+    background: #fff;
+    border-radius: 999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.22);
+  }
+
+  .lifestyle-editorial-hero__cta:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.28);
+  }
+</style>

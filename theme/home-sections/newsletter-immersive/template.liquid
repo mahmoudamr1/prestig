@@ -1,0 +1,226 @@
+<section
+  class="newsletter-immersive newsletter-immersive--h-{{ section_data.min_height | default: 'comfortable' }}"
+  style="
+    --ni-text: {{ section_data.text_color | default: '#FFFFFF' }};
+    --ni-btn-bg: {{ section_data.button_bg | default: '#FFFFFF' }};
+    --ni-btn-text: {{ section_data.button_text | default: '#101010' }};
+    --ni-input-border: {{ section_data.input_border | default: '#FFFFFF' }};
+    --ni-overlay-a: {{ section_data.overlay_strength | default: 45 | divided_by: 100.0 }};
+    {% if section_data.image != blank %}--ni-img: url('{{ section_data.image }}');{% endif %}
+    {% if section_data.mobile_image != blank %}--ni-img-m: url('{{ section_data.mobile_image }}');{% endif %}
+  "
+>
+  <div class="newsletter-immersive__bg" aria-hidden="true"></div>
+  <div class="newsletter-immersive__overlay" aria-hidden="true"></div>
+
+  <div class="newsletter-immersive__inner">
+    {% if section_data.kicker != blank %}
+      <p class="newsletter-immersive__kicker">{{ section_data.kicker }}</p>
+    {% endif %}
+    {% if section_data.headline != blank %}
+      <h2 class="newsletter-immersive__title">{{ section_data.headline }}</h2>
+    {% endif %}
+    {% if section_data.body != blank %}
+      <p class="newsletter-immersive__body">{{ section_data.body }}</p>
+    {% endif %}
+
+    {%- comment -%}
+      Same contract as Newsletter — luxe: GET + email field + configurable action URL (ESP / contact page).
+    {%- endcomment -%}
+    <form
+      class="newsletter-immersive__form"
+      action="{{ section_data.form_action | default: '/pages/contact' }}"
+      method="get"
+    >
+      <input
+        class="newsletter-immersive__input global_input"
+        type="email"
+        name="email"
+        inputmode="email"
+        autocomplete="email"
+        aria-label="{{ section_data.placeholder | default: 'Email' }}"
+        placeholder="{{ section_data.placeholder | default: 'E-mail' }}"
+        required
+      />
+      <button class="newsletter-immersive__submit" type="submit">
+        {{ section_data.button_label | default: 'SUBSCRIBE' }}
+      </button>
+    </form>
+
+    {% if section_data.show_footnote and section_data.footnote != blank %}
+      <p class="newsletter-immersive__fine">{{ section_data.footnote }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .newsletter-immersive {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(3rem, 10vw, 5.25rem) 1.25rem;
+    text-align: center;
+    font-family: var(--ps-ff-ui, "Manrope"), system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ni-text, #fff);
+    background-color: #141414;
+    -webkit-font-smoothing: antialiased;
+    margin: clamp(1.25rem, 3vw, 2rem) 0;
+  }
+
+  .newsletter-immersive--h-compact {
+    padding: clamp(2.25rem, 7vw, 3.5rem) 1.25rem;
+    min-height: 0;
+  }
+  .newsletter-immersive--h-comfortable {
+    min-height: min(58vh, 560px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .newsletter-immersive--h-tall {
+    min-height: min(76vh, 720px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .newsletter-immersive__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--ni-img-m, var(--ni-img));
+    background-color: #1c1c1c;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.001);
+  }
+
+  @media (min-width: 768px) {
+    .newsletter-immersive__bg {
+      background-image: var(--ni-img, var(--ni-img-m));
+    }
+  }
+
+  .newsletter-immersive__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: rgba(0, 0, 0, var(--ni-overlay-a, 0.45));
+  }
+
+  .newsletter-immersive__inner {
+    position: relative;
+    z-index: 2;
+    max-width: 44rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 1.35rem);
+  }
+
+  .newsletter-immersive__kicker {
+    margin: 0;
+    font-size: clamp(0.68rem, 1.45vw, 0.76rem);
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: inherit;
+    line-height: 1.35;
+    opacity: 0.96;
+  }
+
+  .newsletter-immersive__title {
+    margin: 0;
+    font-size: clamp(1.85rem, 5vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .newsletter-immersive__body {
+    margin: 0;
+    font-size: clamp(0.95rem, 2.1vw, 1.05rem);
+    line-height: 1.65;
+    font-weight: 400;
+    max-width: 36rem;
+    opacity: 0.94;
+  }
+
+  .newsletter-immersive__form {
+    width: 100%;
+    max-width: 36rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: stretch;
+    justify-content: center;
+    margin-top: 0.35rem;
+  }
+
+  @media (min-width: 520px) {
+    .newsletter-immersive__form {
+      flex-wrap: nowrap;
+    }
+  }
+
+  /* Layer on top of .global_input (rounded checkout-style) — glass field on hero */
+  .newsletter-immersive__input.newsletter-immersive__input {
+    flex: 1 1 12rem;
+    min-width: 0;
+    min-height: 48px !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 8px !important;
+    border: 1px solid color-mix(in srgb, var(--ni-input-border, #fff) 92%, transparent) !important;
+    background: transparent !important;
+    color: var(--ni-text, #fff) !important;
+    font-size: 0.95rem !important;
+    box-shadow: none !important;
+  }
+
+  .newsletter-immersive__input.newsletter-immersive__input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+    opacity: 1 !important;
+  }
+
+  .newsletter-immersive__input.newsletter-immersive__input:focus {
+    border-color: var(--ni-btn-bg, #fff) !important;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ni-btn-bg, #fff) 55%, transparent) !important;
+  }
+
+  .newsletter-immersive__submit {
+    flex-shrink: 0;
+    min-height: 48px;
+    padding: 0.75rem 1.65rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--ni-btn-bg, #fff);
+    color: var(--ni-btn-text, #101010);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+  }
+
+  .newsletter-immersive__submit:hover {
+    transform: translateY(-1px);
+    opacity: 0.94;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  }
+
+  .newsletter-immersive__fine {
+    margin: 0.35rem 0 0;
+    font-size: 0.7rem;
+    line-height: 1.55;
+    opacity: 0.58;
+    max-width: 34rem;
+  }
+</style>

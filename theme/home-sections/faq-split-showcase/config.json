@@ -1,0 +1,85 @@
+{
+  "icon": "https://api.iconify.design/lucide:circle-help.svg",
+  "label": "FAQ split showcase",
+  "section_schema": [
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#f0ebe3",
+      "description": "Section background (warm neutral)"
+    },
+    {
+      "name": "heading",
+      "type": "string",
+      "default": "We're answerable!",
+      "description": "Left column headline"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "default": "We create safe products that really work and are designed to make you feel good. Any question about our products? Check if you can find them here or Contact us",
+      "description": "Supporting paragraph under the headline"
+    },
+    {
+      "name": "cta_label",
+      "type": "string",
+      "default": "See More Answers",
+      "description": "Black pill button label"
+    },
+    {
+      "name": "cta_url",
+      "type": "string",
+      "default": "/pages/faq",
+      "description": "Button link (FAQ page or contact)"
+    },
+    {
+      "name": "center_image",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1777458784428286068.webp",
+      "description": "Center column product / lifestyle image"
+    },
+    {
+      "name": "center_image_alt",
+      "type": "string",
+      "default": "Product",
+      "description": "Alt text for the center image"
+    },
+    {
+      "name": "items",
+      "type": "object_array",
+      "description": "FAQ accordion rows (first item opens by default)",
+      "default": [
+        {
+          "question": "How long does shipping take?",
+          "answer": "Shipping usually takes 3-7 business days, depending on your location. Expedited shipping options are available for faster delivery. Contact us for any specific shipping inquiries."
+        },
+        {
+          "question": "Does my piece come in any packaging?",
+          "answer": "Yes — each order is packed with care using protective materials so your products arrive safely."
+        },
+        {
+          "question": "Do you ship internationally?",
+          "answer": "We ship to many countries. Rates and delivery times vary by region; see checkout or contact us for details."
+        },
+        {
+          "question": "What payment methods do you accept?",
+          "answer": "We accept major cards and other methods shown at checkout for your region."
+        }
+      ],
+      "fields": [
+        {
+          "name": "question",
+          "type": "string",
+          "default": "",
+          "description": "Accordion question (shown in the row header)"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "default": "",
+          "description": "Answer copy (plain text; line breaks preserved where supported)"
+        }
+      ]
+    }
+  ]
+}

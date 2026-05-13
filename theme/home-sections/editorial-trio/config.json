@@ -1,0 +1,75 @@
+{
+  "icon": "https://api.iconify.design/lucide:layout-grid.svg",
+  "label": "Editorial trio",
+  "section_schema": [
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "Spring styles to wear together or apart, whatever the weather.",
+      "description": "Centered main heading above the three cards"
+    },
+    {
+      "name": "subtitle",
+      "type": "string",
+      "default": "About Us",
+      "description": "Small centered line under the headline (often a link label)"
+    },
+    {
+      "name": "subtitle_url",
+      "type": "string",
+      "default": "/pages/about",
+      "description": "Optional URL — when set, the subtitle becomes a link; leave empty for plain text"
+    },
+    {
+      "name": "cards",
+      "type": "object_array",
+      "description": "Three editorial cards (image, title, pill button)",
+      "default": [
+        {
+          "image": "https://files.easy-orders.net/1777458784428286068.webp",
+          "title": "News, tips, reviews",
+          "button_label": "View Our Blog",
+          "button_url": "/pages/blog"
+        },
+        {
+          "image": "https://files.easy-orders.net/1777459074541071075.webp",
+          "title": "Stores near you",
+          "button_label": "Find A Store",
+          "button_url": "/pages/contact"
+        },
+        {
+          "image": "https://files.easy-orders.net/1777438251081865442.webp",
+          "title": "On the gram",
+          "button_label": "@Glossy_store",
+          "button_url": "https://instagram.com"
+        }
+      ],
+      "fields": [
+        {
+          "name": "image",
+          "type": "image",
+          "default": "",
+          "description": "Tall card image (portrait-friendly)"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "Heading overlaid at the bottom of the card (Sleek-style)"
+        },
+        {
+          "name": "button_label",
+          "type": "string",
+          "default": "",
+          "description": "Black pill button text"
+        },
+        {
+          "name": "button_url",
+          "type": "string",
+          "default": "",
+          "description": "Button link (internal path or full URL)"
+        }
+      ]
+    }
+  ]
+}

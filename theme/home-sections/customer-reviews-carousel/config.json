@@ -1,0 +1,107 @@
+{
+  "icon": "https://api.iconify.design/lucide:message-circle-heart.svg",
+  "label": "Customer reviews carousel",
+  "section_schema": [
+    {
+      "name": "heading",
+      "type": "string",
+      "default": "Over 2,000 Happy reviews",
+      "description": "Section title (header row)"
+    },
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#f5f1ee",
+      "description": "Section background"
+    },
+    {
+      "name": "heading_color",
+      "type": "color",
+      "default": "#111111",
+      "description": "Title color"
+    },
+    {
+      "name": "card_radius",
+      "type": "number",
+      "default": 18,
+      "description": "Card corner radius (px)"
+    },
+    {
+      "name": "track_gap",
+      "type": "number",
+      "default": 18,
+      "description": "Gap between cards (px)"
+    },
+    {
+      "name": "prev_label",
+      "type": "string",
+      "default": "Previous reviews",
+      "description": "Previous button aria-label"
+    },
+    {
+      "name": "next_label",
+      "type": "string",
+      "default": "Next reviews",
+      "description": "Next button aria-label"
+    },
+    {
+      "name": "reviews",
+      "type": "object_array",
+      "description": "Review cards",
+      "default": [
+        {
+          "photo_url": "https://files.easy-orders.net/1777458784428286068.webp",
+          "reviewer_name": "Jaroslava K.",
+          "verified_label": "Verified Buyer",
+          "body": "Also the customer service is phenomenal. I would purchase again without hesitation — the texture and scent are perfect for everyday use.",
+          "product_id": ""
+        },
+        {
+          "photo_url": "https://files.easy-orders.net/1777459074541071075.webp",
+          "reviewer_name": "Maria L.",
+          "verified_label": "Verified Buyer",
+          "body": "Great product line and packaging. Very attentive staff — the order arrived quickly and everything matched the photos online.",
+          "product_id": ""
+        },
+        {
+          "photo_url": "https://files.easy-orders.net/1777438251081865442.webp",
+          "reviewer_name": "Alex R.",
+          "verified_label": "Verified Buyer",
+          "body": "Soft on sensitive skin and absorbs beautifully. I have already recommended this shop to friends — quality feels truly premium.",
+          "product_id": ""
+        }
+      ],
+      "fields": [
+        {
+          "name": "photo_url",
+          "type": "image",
+          "default": "",
+          "description": "Top lifestyle / portrait image URL"
+        },
+        {
+          "name": "reviewer_name",
+          "type": "string",
+          "default": "",
+          "description": "Reviewer display name"
+        },
+        {
+          "name": "verified_label",
+          "type": "string",
+          "default": "Verified Buyer",
+          "description": "Muted label (e.g. Verified Buyer)"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "default": "",
+          "description": "Review text"
+        },
+        {
+          "name": "product_id",
+          "type": "product_single_select",
+          "description": "Product under the review — thumbnail, title, and PDP link are resolved on the storefront (same picker flow as Shop the look)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "icon": "https://api.iconify.design/lucide:gallery-horizontal-end.svg",
+  "label": "Collection ticker",
+  "section_schema": [
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#ffffff",
+      "description": "Strip background"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#141218",
+      "description": "Label text color"
+    },
+    {
+      "name": "image_style",
+      "type": "select",
+      "default": "circle",
+      "description": "Thumbnail shape",
+      "options": [
+        { "label": "Circle", "value": "circle" },
+        { "label": "Rounded square", "value": "rounded" },
+        { "label": "Square", "value": "square" }
+      ]
+    },
+    {
+      "name": "enable_marquee",
+      "type": "boolean",
+      "default": true,
+      "description": "Infinite horizontal scroll (duplicated row). Turn off for plain horizontal scroll only."
+    },
+    {
+      "name": "marquee_speed",
+      "type": "number",
+      "default": 45,
+      "description": "Marquee loop duration (seconds, higher = slower)"
+    },
+    {
+      "name": "items",
+      "type": "object_array",
+      "description": "Each row: your image + label + collection (link resolved on the storefront)",
+      "default": [
+        {
+          "image": "https://files.easy-orders.net/1777458784428286068.webp",
+          "label": "New Season Essential",
+          "category_id": ""
+        },
+        {
+          "image": "https://files.easy-orders.net/1777459074541071075.webp",
+          "label": "Rescue Your Skin",
+          "category_id": ""
+        },
+        {
+          "image": "https://files.easy-orders.net/1777438251081865442.webp",
+          "label": "Made with love",
+          "category_id": ""
+        },
+        {
+          "image": "https://files.easy-orders.net/1777459072877767727.webp",
+          "label": "Glow ritual",
+          "category_id": ""
+        }
+      ],
+      "fields": [
+        {
+          "name": "image",
+          "type": "image",
+          "default": "",
+          "description": "Thumbnail shown next to the label"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "",
+          "description": "Short line (e.g. collection headline)"
+        },
+        {
+          "name": "category_id",
+          "type": "category_single_select",
+          "description": "Collection to open when the row is clicked (same picker as Runway hero primary button)"
+        }
+      ]
+    }
+  ]
+}

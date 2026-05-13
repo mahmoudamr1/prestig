@@ -1,0 +1,156 @@
+{% if section_data.items and section_data.items.size > 0 %}
+<section
+  class="ps-featured-press"
+  style="
+    --ps-fp-bg: {{ section_data.bg_color | default: '#ffffff' }};
+    --ps-fp-heading: {{ section_data.heading_color | default: '#111111' }};
+    --ps-fp-quote: {{ section_data.quote_color | default: '#4b4b4b' }};
+    --ps-fp-divider: {{ section_data.divider_color | default: '#e8e8e8' }};
+  "
+>
+  <div class="ps-featured-press__inner">
+    {% if section_data.heading != blank %}
+      <h2 class="ps-featured-press__title">{{ section_data.heading }}</h2>
+    {% endif %}
+
+    <div class="ps-featured-press__track">
+      {% for item in section_data.items %}
+        {% if item.logo_url != blank or item.quote != blank %}
+          <article class="ps-featured-press__cell">
+            {% if item.logo_url != blank %}
+              <div class="ps-featured-press__logo-wrap">
+                <img
+                  class="ps-featured-press__logo"
+                  src="{{ item.logo_url }}"
+                  alt="{{ item.logo_alt | default: 'Press logo' }}"
+                  loading="lazy"
+                  decoding="async"
+                  width="280"
+                  height="120"
+                />
+              </div>
+            {% endif %}
+            {% if item.quote != blank %}
+              <p class="ps-featured-press__quote">
+                <span class="ps-featured-press__quote-mark" aria-hidden="true">“</span>{{ item.quote }}<span class="ps-featured-press__quote-mark" aria-hidden="true">”</span>
+              </p>
+            {% endif %}
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% if section_data.show_divider != false %}
+    <div class="ps-featured-press__rule" aria-hidden="true"></div>
+  {% endif %}
+</section>
+
+<style>
+  .ps-featured-press {
+    box-sizing: border-box;
+    width: 100%;
+    background: var(--ps-fp-bg, var(--body-bg, #ffffff));
+    font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
+    padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 5vw, 3.25rem);
+  }
+
+  .ps-featured-press__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .ps-featured-press__title {
+    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    text-align: center;
+    font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--ps-fp-heading, var(--product-name-text, #111111));
+  }
+
+  .ps-featured-press__track {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 4vw, 2.75rem);
+    align-items: start;
+  }
+
+  .ps-featured-press__cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .ps-featured-press__logo-wrap {
+    width: 100%;
+    max-width: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.5rem;
+  }
+
+  .ps-featured-press__logo {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    max-height: 72px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  .ps-featured-press__quote {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--ps-fp-quote, var(--body-text, #4b4b4b));
+    max-width: 34ch;
+  }
+
+  .ps-featured-press__quote-mark {
+    font-weight: 500;
+  }
+
+  .ps-featured-press__rule {
+    height: 0;
+    margin: 0 clamp(1rem, 4vw, 2rem);
+    border: 0;
+    border-bottom: 1px solid var(--ps-fp-divider, #e8e8e8);
+  }
+
+  @media (max-width: 767px) {
+    .ps-featured-press__track {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 1.25rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      margin-inline: calc(-1 * clamp(1rem, 4vw, 2rem));
+      padding-inline: clamp(1rem, 4vw, 2rem);
+      padding-bottom: 0.25rem;
+    }
+
+    .ps-featured-press__cell {
+      flex: 0 0 min(280px, 82vw);
+      scroll-snap-align: start;
+    }
+
+    .ps-featured-press__quote {
+      max-width: none;
+    }
+  }
+</style>
+{% endif %}

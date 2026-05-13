@@ -28,7 +28,15 @@
         <p class="editorial-feature__body">{{ section_data.body }}</p>
       {% endif %}
       {% if section_data.cta_label != blank %}
-        <a class="editorial-feature__link" href="{{ section_data.cta_url | default: '#' }}">
+        <a
+          class="editorial-feature__link"
+          href="#"
+          {% if section_data.cta_page_id != blank %}
+            data-eo-hs-cta="1"
+            data-eo-hs-cta-entity="pages"
+            data-eo-hs-cta-id="{{ section_data.cta_page_id }}"
+          {% endif %}
+        >
           {{ section_data.cta_label }}
           <span class="editorial-feature__link-arrow" aria-hidden="true">→</span>
         </a>

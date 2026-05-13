@@ -1,46 +1,179 @@
-<div class="ab-pd">
+<div class="ab-pd" data-ps-pdp-details>
+  {% if theme_data.brand_name %}
+    <p class="ab-pd-brand">
+      <span class="ab-pd-brand-label">Brand:</span>
+      <span class="ab-pd-brand-value">{{ theme_data.brand_name }}</span>
+    </p>
+  {% endif %}
+
   <h1 class="ab-pd-name">{{ product_name }}</h1>
 
-  <div class="ab-pd-price-row">
-    {% if sale_price and sale_price < price %}
-      <span class="ab-pd-price-old">{{ price }} {{ currency }}</span>
-      <span class="ab-pd-price ab-pd-price-sale">{{ sale_price }} {{ currency }}</span>
-    {% else %}
-      <span class="ab-pd-price">{{ price }} {{ currency }}</span>
+  {% if rating > 0 %}
+    {% assign r_stars = rating | plus: 0 %}
+    {% if r_stars > 5 %}{% assign r_stars = 5 %}{% endif %}
+    {% if r_stars < 0 %}{% assign r_stars = 0 %}{% endif %}
+    {% assign rc = reviews_count | default: 0 | plus: 0 %}
+    <div class="ab-pd-rating-row" role="img" aria-label="Rating {{ rating | round: 1 }} out of 5">
+      <div class="ab-pd-stars" aria-hidden="true">
+        {% for i in (1..5) %}
+          {% assign prev = i | minus: 1 %}
+          {% if r_stars >= i %}
+            <svg
+              class="ab-pd-star-icon ab-pd-star-icon--on"
+              aria-hidden="true"
+              focusable="false"
+              width="18"
+              height="15"
+              viewBox="0 0 12 11"
+            >
+              <path
+                d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                fill="currentColor"
+              />
+            </svg>
+          {% elsif r_stars > prev %}
+            {% assign frac = r_stars | minus: prev %}
+            <span class="ab-pd-star-slot ab-pd-star-slot--lg">
+              <svg
+                class="ab-pd-star-icon ab-pd-star-icon--off"
+                aria-hidden="true"
+                focusable="false"
+                width="18"
+                height="15"
+                viewBox="0 0 12 11"
+              >
+                <path
+                  d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span class="ab-pd-star-fill" style="width: calc(100% * {{ frac }});">
+                <svg
+                  class="ab-pd-star-icon ab-pd-star-icon--on"
+                  aria-hidden="true"
+                  focusable="false"
+                  width="18"
+                  height="15"
+                  viewBox="0 0 12 11"
+                >
+                  <path
+                    d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+            </span>
+          {% else %}
+            <svg
+              class="ab-pd-star-icon ab-pd-star-icon--off"
+              aria-hidden="true"
+              focusable="false"
+              width="18"
+              height="15"
+              viewBox="0 0 12 11"
+            >
+              <path
+                d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z"
+                fill="currentColor"
+              />
+            </svg>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% if rc > 0 %}
+        <span class="ab-pd-rating-count">({{ rc }})</span>
+      {% else %}
+        <span class="ab-pd-rating-paren">({{ rating | round: 1 }})</span>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="ab-pd-price-block">
+    <div class="ab-pd-price-group">
+      {% if sale_price and price and sale_price < price %}
+        <span class="ab-pd-price ab-pd-price-current">{{ sale_price }} {{ currency }}</span>
+        <span class="ab-pd-price-old">{{ price }} {{ currency }}</span>
+        {% assign discount = price | minus: sale_price | times: 100 | divided_by: price | floor %}
+        <span class="ab-pd-discount-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>
+      {% else %}
+        <span class="ab-pd-price ab-pd-price-current">{{ price }} {{ currency }}</span>
+      {% endif %}
+    </div>
+    {% assign ship_note = theme_data.pdp_shipping_note | strip %}
+    {% if ship_note != blank %}
+      <p class="ab-pd-shipping-note rte">{{ ship_note }}</p>
     {% endif %}
   </div>
-
-  {% if rating > 0 %}
-  <div class="ab-pd-rating">
-    <div class="ab-pd-stars">
-      {% assign full_stars = rating | floor %}
-      {% assign has_half = false %}
-      {% assign decimal = rating | minus: full_stars %}
-      {% if decimal >= 0.25 and decimal < 0.75 %}
-        {% assign has_half = true %}
-      {% elsif decimal >= 0.75 %}
-        {% assign full_stars = full_stars | plus: 1 %}
-      {% endif %}
-
-      {% for i in (1..5) %}
-        {% if i <= full_stars %}
-          <span class="ab-pd-star ab-pd-star-filled"></span>
-        {% elsif has_half and i == full_stars | plus: 1 %}
-          <span class="ab-pd-star ab-pd-star-half"></span>
-        {% else %}
-          <span class="ab-pd-star ab-pd-star-empty"></span>
-        {% endif %}
-      {% endfor %}
-    </div>
-    <span class="ab-pd-reviews-count">({{ reviews_count }})</span>
-  </div>
-  {% endif %}
 
   {% if description and description != "" %}
     <p class="ab-pd-description">{{ description }}</p>
   {% endif %}
 
-  {% comment %} Wishlist & Compare buttons on the product detail page — dispatch toggle events handled by the storefront JS layer
+  {% assign stock_msg = theme_data.pdp_stock_message | strip %}
+  {% if stock_msg != blank %}
+    <p class="ab-pd-inventory{% unless theme_data.pdp_stock_pulse == false %} ab-pd-inventory--pulse{% endunless %}">
+      <span class="ab-pd-inventory-dot" aria-hidden="true"></span>
+      <span class="ab-pd-inventory-text">{{ stock_msg }}</span>
+    </p>
+  {% endif %}
+
+  {% if theme_data.pdp_trust_lines and theme_data.pdp_trust_lines.size > 0 %}
+    <ul class="ab-pd-trust-list">
+      {% for line in theme_data.pdp_trust_lines %}
+        {% assign t = line.text | strip %}
+        {% if t != blank %}
+          <li class="ab-pd-trust-item">
+            {% if line.icon != blank %}
+              <img class="ab-pd-trust-icon" src="{{ line.icon }}" alt="" width="20" height="20" loading="lazy" decoding="async" />
+            {% endif %}
+            <span class="ab-pd-trust-text">{{ t }}</span>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if theme_data.pdp_pairs_well and theme_data.pdp_pairs_well.size > 0 %}
+    {% assign pwh = theme_data.pdp_pairs_well_heading | strip | default: "Pairs well with" %}
+    <aside class="ab-pd-pairs-well" aria-label="{{ pwh }}">
+      <h2 class="ab-pd-pairs-well-heading">{{ pwh }}</h2>
+      <div class="ab-pd-pairs-well-track">
+        {% for pair in theme_data.pdp_pairs_well %}
+          {% assign pt = pair.title | strip %}
+          {% assign pu = pair.url | strip %}
+          {% assign pim = pair.image | strip %}
+          {% if pt != blank and pu != blank and pim != blank %}
+            {% if pu contains "://" %}
+              {% assign phref = pu %}
+            {% else %}
+              {% assign phref = "/products/" | append: pu %}
+            {% endif %}
+            <a href="{{ phref }}" class="ab-pd-pairs-well-card">
+              <span class="ab-pd-pairs-well-media">
+                <img src="{{ pim }}" alt="{{ pt }}" loading="lazy" decoding="async" width="100" height="100" />
+              </span>
+              <span class="ab-pd-pairs-well-body">
+                {% assign pc = pair.category | strip %}
+                {% if pc != blank %}
+                  <span class="ab-pd-pairs-well-cat">{{ pc }}</span>
+                {% endif %}
+                <span class="ab-pd-pairs-well-title">{{ pt }}</span>
+                {% assign pp = pair.price | strip %}
+                {% if pp != blank %}
+                  <span class="ab-pd-pairs-well-price">{{ pp }}</span>
+                {% endif %}
+              </span>
+              <span class="ab-pd-pairs-well-chevron" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+              </span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </aside>
+  {% endif %}
+
+  {% comment %} Wishlist & Compare — dispatch toggle events handled by storefront JS
   <div class="ab-pd-actions">
     <button
       class="ab-pd-wishlist-btn"

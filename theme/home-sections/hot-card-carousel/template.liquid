@@ -1,0 +1,440 @@
+{% assign hcc_slides = section_data.slides %}
+{% if hcc_slides and hcc_slides.size > 0 %}
+{% assign hcc_visible_count = 0 %}
+{% for slide in hcc_slides %}
+  {% if slide.image != blank %}
+    {% assign hcc_visible_count = hcc_visible_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+{% if hcc_visible_count > 0 %}
+{% assign hcc_pt = section_data.section_padding_top | default: 100 %}
+{% assign hcc_pb = section_data.section_padding_bottom | default: 0 %}
+{% assign hcc_h = section_data.card_min_height | default: 482 %}
+{% assign hcc_gap = section_data.slide_gap | default: 10 %}
+{% assign hcc_peek = section_data.peek_vw | default: 34 %}
+{% assign hcc_max_rem = section_data.slide_max_rem | default: 59 %}
+{% assign hcc_card_bg = section_data.card_bg | default: '#f1d7d0' %}
+{% assign hcc_text = section_data.card_text_color | default: '#111111' %}
+{% assign hcc_cta_bg = section_data.cta_bg | default: '#111111' %}
+{% assign hcc_cta_text = section_data.cta_text_color | default: '#ffffff' %}
+<section
+  class="ps-hot-cards ps-hot-cards--slider"
+  data-ps-hot-cards
+  style="
+    padding-top: {{ hcc_pt }}px;
+    padding-bottom: {{ hcc_pb }}px;
+    --ps-hcc-item-min-h: {{ hcc_h }}px;
+    --ps-hcc-gap: {{ hcc_gap }}px;
+    --ps-hcc-peek-vw: {{ hcc_peek }}vw;
+    --ps-hcc-slide-max: {{ hcc_max_rem }}rem;
+    --ps-hcc-radius: {{ section_data.card_radius | default: 24 }}px;
+    --ps-hcc-card-bg: {{ hcc_card_bg }};
+    --ps-hcc-text: {{ hcc_text }};
+    --ps-hcc-cta-bg: {{ hcc_cta_bg }};
+    --ps-hcc-cta-text: {{ hcc_cta_text }};
+    --ps-hcc-heading: {{ section_data.heading_color | default: '#111111' }};
+    --page-pad: max(1.25rem, var(--page-padding, 1.5rem));
+  "
+>
+  <div class="ps-hot-cards__shell">
+    <header class="ps-hot-cards__head">
+      {% if section_data.heading != blank %}
+        <h2 class="ps-hot-cards__section-title">{{ section_data.heading }}</h2>
+      {% endif %}
+      {% if hcc_visible_count > 1 %}
+        <div class="ps-hot-cards__arrows" aria-hidden="false">
+          <button
+            type="button"
+            class="ps-hot-cards__nav-btn"
+            data-ps-hot-cards-prev
+            aria-label="{{ section_data.prev_label | default: 'Previous slide' | escape }}"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12.75 16.2505L6.5 10.0005L12.75 3.75049" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="ps-hot-cards__nav-btn"
+            data-ps-hot-cards-next
+            aria-label="{{ section_data.next_label | default: 'Next slide' | escape }}"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M7.5 3.74121L13.75 9.99121L7.5 16.2412" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
+    </header>
+
+    <div class="ps-hot-cards__content">
+      <div
+        class="ps-hot-cards__track"
+        data-ps-hot-cards-track
+        tabindex="0"
+        role="region"
+        aria-label="{{ section_data.heading | default: 'Promo' | escape }}"
+      >
+        {% assign hcc_si = 0 %}
+        {% for slide in hcc_slides %}
+          {% if slide.image != blank %}
+            {% assign hcc_href = slide.link_url | strip | default: '/collections/all' %}
+            <article class="ps-hot-cards__slide" data-ps-hot-cards-slide data-index="{{ hcc_si }}">
+              <a href="{{ hcc_href }}" class="ps-hot-cards__card-link" aria-label="{{ slide.title | default: slide.cta_label | default: 'Shop' | escape }}">
+                <div
+                  class="ps-hot-cards__card"
+                  {% if slide.panel_bg != blank %}
+                    style="--ps-hcc-slide-bg: {{ slide.panel_bg }};"
+                  {% endif %}
+                >
+                  <div class="ps-hot-cards__bg" aria-hidden="true">
+                    <picture class="ps-hot-cards__picture">
+                      {% if slide.image_mobile != blank %}
+                        <source media="(max-width: 767px)" srcset="{{ slide.image_mobile }}" />
+                      {% endif %}
+                      <img
+                        src="{{ slide.image }}"
+                        alt=""
+                        width="1200"
+                        height="800"
+                        loading="{% if hcc_si == 0 %}eager{% else %}lazy{% endif %}"
+                        decoding="async"
+                        class="ps-hot-cards__img"
+                        draggable="false"
+                      />
+                    </picture>
+                  </div>
+                  <div class="ps-hot-cards__scrim" aria-hidden="true"></div>
+                  <div class="ps-hot-cards__copy">
+                    {% if slide.eyebrow != blank %}
+                      <p class="ps-hot-cards__eyebrow">{{ slide.eyebrow }}</p>
+                    {% endif %}
+                    {% if slide.title != blank %}
+                      <h3 class="ps-hot-cards__card-title">{{ slide.title }}</h3>
+                    {% endif %}
+                    {% if slide.description != blank %}
+                      <div class="ps-hot-cards__desc"><p>{{ slide.description }}</p></div>
+                    {% endif %}
+                    {% if slide.cta_label != blank %}
+                      <span class="ps-hot-cards__cta">{{ slide.cta_label }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            </article>
+            {% assign hcc_si = hcc_si | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if hcc_visible_count > 1 %}
+        <div class="ps-hot-cards__pagination" data-ps-hot-cards-dots role="tablist" aria-label="{{ section_data.heading | default: 'Slides' | escape }}">
+          {% assign hcc_di = 0 %}
+          {% for slide in hcc_slides %}
+            {% if slide.image != blank %}
+              <button
+                type="button"
+                class="ps-hot-cards__dot{% if hcc_di == 0 %} ps-hot-cards__dot--active{% endif %}"
+                data-ps-hot-cards-go="{{ hcc_di }}"
+                aria-label="Slide {{ hcc_di | plus: 1 }}"
+                {% if hcc_di == 0 %}aria-current="true"{% endif %}
+              ></button>
+              {% assign hcc_di = hcc_di | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ps-hot-cards {
+    box-sizing: border-box;
+    width: 100%;
+    margin-inline: auto;
+    font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .ps-hot-cards *,
+  .ps-hot-cards *::before,
+  .ps-hot-cards *::after {
+    box-sizing: border-box;
+  }
+
+  .ps-hot-cards__shell {
+    width: 100%;
+  }
+
+  .ps-hot-cards__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  @media (min-width: 768px) {
+    .ps-hot-cards__head {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .ps-hot-cards__section-title {
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ps-hcc-heading, #111);
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .ps-hot-cards__section-title {
+      text-align: left;
+    }
+  }
+
+  .ps-hot-cards__arrows {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+  @media (min-width: 768px) {
+    .ps-hot-cards__arrows {
+      display: flex;
+    }
+  }
+
+  .ps-hot-cards__nav-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(17, 17, 17, 0.12);
+    background: #ffffff;
+    color: #111111;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  @media (hover: hover) {
+    .ps-hot-cards__nav-btn:hover {
+      background: #f4f4f4;
+      border-color: rgba(17, 17, 17, 0.2);
+    }
+  }
+  .ps-hot-cards__nav-btn:focus-visible {
+    outline: 2px solid var(--ps-hcc-heading, #111);
+    outline-offset: 2px;
+  }
+
+  /* Desktop peek: extend track past inner padding */
+  @media (min-width: 1024px) {
+    .ps-hot-cards__content {
+      margin-inline-end: calc(-1 * var(--page-pad, 1.5rem) - var(--ps-hcc-peek-vw, 34vw));
+    }
+  }
+
+  .ps-hot-cards__track {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--ps-hcc-gap, 10px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 0.35rem;
+  }
+
+  .ps-hot-cards__slide {
+    flex: 0 0 min(var(--ps-hcc-slide-max, 59rem), calc(100vw - var(--page-pad, 1.5rem) * 2 - 1rem));
+    scroll-snap-align: start;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: var(--ps-hcc-radius, 24px);
+  }
+  @media (max-width: 767.98px) {
+    .ps-hot-cards__slide {
+      flex-basis: min(100%, calc(100vw - var(--page-pad, 1.25rem) * 2));
+    }
+  }
+
+  /* Clip everything to rounded promo card (fixes image/text escaping corners) */
+  .ps-hot-cards__card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--ps-hcc-radius, 24px);
+    overflow: hidden;
+    outline-offset: 4px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+    -webkit-mask-image: -webkit-radial-gradient(#fff, #000);
+    mask-image: radial-gradient(#fff, #000);
+  }
+
+  .ps-hot-cards__card {
+    position: relative;
+    isolation: isolate;
+    min-height: var(--ps-hcc-item-min-h, 480px);
+    border-radius: inherit;
+    overflow: hidden;
+    background-color: var(--ps-hcc-slide-bg, var(--ps-hcc-card-bg, #f1d7d0));
+    transform: translateZ(0);
+  }
+
+  /* Full-bleed background photo */
+  .ps-hot-cards__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  .ps-hot-cards__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ps-hot-cards__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    transform: scale(1.001);
+  }
+
+  /* Soft wash on the left so typography stays readable on busy photos */
+  .ps-hot-cards__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: inherit;
+    background: var(--ps-hcc-slide-bg, var(--ps-hcc-card-bg, #f1d7d0));
+    opacity: 0.5;
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 72%);
+    mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 72%);
+  }
+
+  .ps-hot-cards__copy {
+    position: relative;
+    z-index: 2;
+    min-height: var(--ps-hcc-item-min-h, 480px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    gap: clamp(0.65rem, 2vw, 1rem);
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+    padding-inline-end: min(12%, 4rem);
+    color: var(--ps-hcc-text, #111111);
+    max-width: min(36rem, 92%);
+  }
+
+  @media (max-width: 767.98px) {
+    .ps-hot-cards__copy {
+      min-height: calc(var(--ps-hcc-item-min-h, 480px) * 0.92);
+      align-items: center;
+      text-align: center;
+      max-width: 100%;
+      padding-inline: clamp(1.35rem, 5vw, 2rem);
+      padding-inline-end: clamp(1.35rem, 5vw, 2rem);
+      padding-bottom: 2.75rem;
+    }
+  }
+
+  .ps-hot-cards__eyebrow {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: 0.03em;
+    color: var(--ps-hcc-text, #111);
+  }
+
+  .ps-hot-cards__card-title {
+    margin: 0;
+    font-size: clamp(1.65rem, 4.2vw, 2.55rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--ps-hcc-text, #111);
+    max-width: 16ch;
+  }
+
+  .ps-hot-cards__desc {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.55;
+    max-width: 38ch;
+    opacity: 0.96;
+  }
+  .ps-hot-cards__desc p {
+    margin: 0;
+  }
+
+  .ps-hot-cards__cta {
+    margin-top: 0.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.68rem 1.75rem;
+    border-radius: 624.9375rem;
+    background: var(--ps-hcc-cta-bg, #111111);
+    color: var(--ps-hcc-cta-text, #ffffff);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  .ps-hot-cards__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.35rem;
+  }
+  @media (min-width: 768px) {
+    .ps-hot-cards__pagination {
+      display: none;
+    }
+  }
+
+  .ps-hot-cards__dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(17, 17, 17, 0.22);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  .ps-hot-cards__dot--active {
+    background: var(--ps-hcc-heading, #111111);
+    transform: scale(1.2);
+  }
+  .ps-hot-cards__dot:focus-visible {
+    outline: 2px solid var(--ps-hcc-heading, #111);
+    outline-offset: 2px;
+  }
+</style>
+{% endif %}
+{% endif %}

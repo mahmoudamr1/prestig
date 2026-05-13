@@ -21,12 +21,28 @@
     {% endif %}
     <div class="runway-hero__actions">
       {% if section_data.primary_label != blank %}
-        <a class="runway-hero__btn runway-hero__btn--primary" href="{{ section_data.primary_url | default: '/products' }}">
+        <a
+          class="runway-hero__btn runway-hero__btn--primary"
+          href="{% if section_data.primary_category_id != blank %}#{% else %}/products{% endif %}"
+          {% if section_data.primary_category_id != blank %}
+            data-eo-hs-cta="1"
+            data-eo-hs-cta-entity="categories"
+            data-eo-hs-cta-id="{{ section_data.primary_category_id }}"
+          {% endif %}
+        >
           {{ section_data.primary_label }}
         </a>
       {% endif %}
       {% if section_data.secondary_label != blank %}
-        <a class="runway-hero__btn runway-hero__btn--ghost" href="{{ section_data.secondary_url | default: '#' }}">
+        <a
+          class="runway-hero__btn runway-hero__btn--ghost"
+          href="#"
+          {% if section_data.secondary_page_id != blank %}
+            data-eo-hs-cta="1"
+            data-eo-hs-cta-entity="pages"
+            data-eo-hs-cta-id="{{ section_data.secondary_page_id }}"
+          {% endif %}
+        >
           {{ section_data.secondary_label }}
         </a>
       {% endif %}

@@ -1,0 +1,220 @@
+<section
+  class="ps-split-duo-hero"
+  style="
+    --ps-sdh-radius: {{ section_data.shell_radius | default: 28 }}px;
+    --ps-sdh-left-bg: {{ section_data.left_bg | default: '#ebe4d8' }};
+    --ps-sdh-right-bg: {{ section_data.right_bg | default: '#a85c42' }};
+    --ps-sdh-left-text: {{ section_data.left_text | default: '#111111' }};
+    --ps-sdh-cta-bg: {{ section_data.cta_bg | default: '#111111' }};
+    --ps-sdh-cta-text: {{ section_data.cta_text | default: '#ffffff' }};
+  "
+>
+  <div class="ps-split-duo-hero__shell">
+    <div class="ps-split-duo-hero__grid">
+      <div class="ps-split-duo-hero__copy">
+        {% if section_data.kicker != blank %}
+          <p class="ps-split-duo-hero__kicker">{{ section_data.kicker }}</p>
+        {% endif %}
+        {% if section_data.headline != blank %}
+          <h2 class="ps-split-duo-hero__title">{{ section_data.headline }}</h2>
+        {% endif %}
+        {% if section_data.body != blank %}
+          <p class="ps-split-duo-hero__body">{{ section_data.body }}</p>
+        {% endif %}
+        {% if section_data.cta_label != blank %}
+          <a class="ps-split-duo-hero__cta" href="{{ section_data.cta_url | default: '/collections/all' }}">
+            {{ section_data.cta_label }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="ps-split-duo-hero__visual{% if section_data.show_slider_rail != false %} ps-split-duo-hero__visual--rail{% endif %}">
+        {% if section_data.image != blank %}
+          <div class="ps-split-duo-hero__media">
+            <img
+              class="ps-split-duo-hero__img"
+              src="{{ section_data.image }}"
+              alt="{{ section_data.image_alt | default: '' }}"
+              width="900"
+              height="1100"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ps-split-duo-hero {
+    box-sizing: border-box;
+    width: 100%;
+    font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ps-split-duo-hero__shell {
+    margin: 0 auto;
+    border-radius: var(--ps-sdh-radius, 28px);
+    overflow: hidden;
+    box-sizing: border-box;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  }
+
+  .ps-split-duo-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-height: min(72vh, 640px);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 768px) {
+    .ps-split-duo-hero__grid {
+      grid-template-columns: 1fr 1fr;
+      min-height: clamp(380px, 58vh, 560px);
+    }
+  }
+
+  .ps-split-duo-hero__copy {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: clamp(0.75rem, 2vw, 1.125rem);
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+    background: var(--ps-sdh-left-bg, #ebe4d8);
+    color: var(--ps-sdh-left-text, #111111);
+    box-sizing: border-box;
+  }
+
+  .ps-split-duo-hero__kicker {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    line-height: 1.35;
+  }
+
+  .ps-split-duo-hero__title {
+    margin: 0;
+    max-width: 14ch;
+    font-size: clamp(1.75rem, 4.2vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+
+  .ps-split-duo-hero__body {
+    margin: 0;
+    max-width: 36ch;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.6;
+    opacity: 0.92;
+  }
+
+  .ps-split-duo-hero__cta {
+    margin-top: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1.75rem;
+    border-radius: 624.9375rem;
+    background: var(--ps-sdh-cta-bg, #111111);
+    color: var(--ps-sdh-cta-text, #ffffff);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  @media (hover: hover) {
+    .ps-split-duo-hero__cta:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+  }
+
+  .ps-split-duo-hero__cta:focus-visible {
+    outline: 2px solid var(--ps-sdh-left-text, #111111);
+    outline-offset: 3px;
+  }
+
+  .ps-split-duo-hero__visual {
+    order: 1;
+    position: relative;
+    background: var(--ps-sdh-right-bg, #a85c42);
+    min-height: 280px;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
+    .ps-split-duo-hero__visual {
+      min-height: 0;
+    }
+  }
+
+  .ps-split-duo-hero__visual--rail::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 4px;
+    height: clamp(48px, 12vh, 96px);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.35);
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .ps-split-duo-hero__media {
+    position: relative;
+    flex: 1 1 auto;
+    z-index: 3;
+    min-height: 220px;
+    margin-top: 0;
+  }
+
+  @media (min-width: 768px) {
+    .ps-split-duo-hero__media {
+      min-height: 0;
+      margin-top: 0;
+    }
+  }
+
+  .ps-split-duo-hero__img {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    object-fit: cover;
+    object-position: center 15%;
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .ps-split-duo-hero__img {
+      position: absolute;
+      inset: 0;
+      min-height: 100%;
+      object-position: center 12%;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ps-split-duo-hero__img {
+      min-height: 320px;
+    }
+  }
+</style>

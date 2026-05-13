@@ -1,0 +1,171 @@
+{
+  "icon": "https://api.iconify.design/lucide:images.svg",
+  "label": "Hot card carousel",
+  "section_schema": [
+    {
+      "name": "heading",
+      "type": "string",
+      "default": "Hot this week",
+      "description": "Section title"
+    },
+    {
+      "name": "section_padding_top",
+      "type": "number",
+      "default": 100,
+      "description": "Top padding (px) — maps to theme section--padding"
+    },
+    {
+      "name": "section_padding_bottom",
+      "type": "number",
+      "default": 0,
+      "description": "Bottom padding (px)"
+    },
+    {
+      "name": "card_min_height",
+      "type": "number",
+      "default": 482,
+      "description": "Minimum card / media height (px)"
+    },
+    {
+      "name": "card_radius",
+      "type": "number",
+      "default": 24,
+      "description": "Corner radius on each slide card (px)"
+    },
+    {
+      "name": "slide_gap",
+      "type": "number",
+      "default": 10,
+      "description": "Gap between slides (px)"
+    },
+    {
+      "name": "peek_vw",
+      "type": "number",
+      "default": 34,
+      "description": "Desktop peek: extra vw pulled past page padding (1024px+)"
+    },
+    {
+      "name": "slide_max_rem",
+      "type": "number",
+      "default": 59,
+      "description": "Approx max slide width in rem units (desktop)"
+    },
+    {
+      "name": "heading_color",
+      "type": "color",
+      "default": "#111111",
+      "description": "Section title color"
+    },
+    {
+      "name": "card_bg",
+      "type": "color",
+      "default": "#f1d7d0",
+      "description": "Slide panel background (peach wash behind copy + image blend)"
+    },
+    {
+      "name": "card_text_color",
+      "type": "color",
+      "default": "#111111",
+      "description": "Eyebrow, headline, and body text on the card"
+    },
+    {
+      "name": "cta_bg",
+      "type": "color",
+      "default": "#111111",
+      "description": "Pill button background"
+    },
+    {
+      "name": "cta_text_color",
+      "type": "color",
+      "default": "#ffffff",
+      "description": "Pill button label"
+    },
+    {
+      "name": "prev_label",
+      "type": "string",
+      "default": "Previous slide",
+      "description": "Prev button aria-label"
+    },
+    {
+      "name": "next_label",
+      "type": "string",
+      "default": "Next slide",
+      "description": "Next button aria-label"
+    },
+    {
+      "name": "slides",
+      "type": "object_array",
+      "description": "Promo cards",
+      "default": [
+        {
+          "image": "https://files.easy-orders.net/1777458784428286068.webp",
+          "image_mobile": "",
+          "eyebrow": "The Vacation Shop",
+          "title": "Care for Your Beauty",
+          "description": "We create safe products that really work and are designed to make you feel good.",
+          "cta_label": "Shop Skincare",
+          "link_url": "/collections/all"
+        },
+        {
+          "image": "https://files.easy-orders.net/1777459074541071075.webp",
+          "image_mobile": "",
+          "eyebrow": "The Vacation Shop",
+          "title": "Show your Sparkle",
+          "description": "We create safe products that really work and are designed to make you feel good.",
+          "cta_label": "Shop Makeup",
+          "link_url": "/collections/all"
+        }
+      ],
+      "fields": [
+        {
+          "name": "image",
+          "type": "image",
+          "default": "",
+          "description": "Desktop image URL"
+        },
+        {
+          "name": "image_mobile",
+          "type": "image",
+          "default": "",
+          "description": "Optional mobile image (<768px)"
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "",
+          "description": "Small line above title"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "Card headline"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "Supporting text"
+        },
+        {
+          "name": "cta_label",
+          "type": "string",
+          "default": "Shop now",
+          "description": "Button label"
+        },
+        {
+          "name": "link_url",
+          "type": "string",
+          "default": "/collections/all",
+          "description": "Card link (collection or internal URL)"
+        },
+        {
+          "name": "panel_bg",
+          "type": "color",
+          "default": "",
+          "description": "Optional: override slide background (empty uses section card_bg)"
+        }
+      ]
+    }
+  ]
+}
