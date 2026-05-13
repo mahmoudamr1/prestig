@@ -2035,25 +2035,34 @@
    */
   var eoHsCurrencySymbolCache = "";
 
+  /** Single read of `props.pageProps.appSettings` from `#__NEXT_DATA__` (EasyOrders storefront). */
+  function prestigeReadAppSettingsFromNextData() {
+    try {
+      var nd = document.getElementById("__NEXT_DATA__");
+      if (!nd) {
+        return null;
+      }
+      var data = JSON.parse(nd.textContent || "{}");
+      var app =
+        data &&
+        data.props &&
+        data.props.pageProps &&
+        data.props.pageProps.appSettings;
+      return app || null;
+    } catch (eNd) {
+      return null;
+    }
+  }
+
   function resolveEoHsCurrencySymbol() {
     if (eoHsCurrencySymbolCache) {
       return eoHsCurrencySymbolCache;
     }
-    try {
-      var nd = document.getElementById("__NEXT_DATA__");
-      if (nd) {
-        var data = JSON.parse(nd.textContent || "{}");
-        var app =
-          data &&
-          data.props &&
-          data.props.pageProps &&
-          data.props.pageProps.appSettings;
-        if (app && app.currency_symbol) {
-          eoHsCurrencySymbolCache = String(app.currency_symbol);
-          return eoHsCurrencySymbolCache;
-        }
-      }
-    } catch (eSym) {}
+    var app = prestigeReadAppSettingsFromNextData();
+    if (app && app.currency_symbol) {
+      eoHsCurrencySymbolCache = String(app.currency_symbol);
+      return eoHsCurrencySymbolCache;
+    }
     var probe = document.querySelector(
       ".ps-pgrid-price-current, .ps-plist-price-current, .ps-featured-price-current, .eo-hs-card__meta, .ab-pgrid-price, .ab-pd-price, .ab-plist-price, .ab-featured-price, .ab-price-old"
     );
@@ -2065,6 +2074,47 @@
       }
     }
     return "";
+  }
+
+  /**
+   * Store locale primary subtag — `appSettings.lang` from `prestigeReadAppSettingsFromNextData()`, else `<html lang>`.
+   */
+  function prestigeResolveStoreLang() {
+    var app = prestigeReadAppSettingsFromNextData();
+    if (app && app.lang != null && String(app.lang).trim() !== "") {
+      return String(app.lang)
+        .trim()
+        .toLowerCase()
+        .split("-")[0];
+    }
+    try {
+      var hl = (document.documentElement.getAttribute("lang") || "")
+        .trim()
+        .toLowerCase();
+      if (hl) {
+        return hl.split("-")[0];
+      }
+    } catch (e2) {}
+    return "";
+  }
+
+  /** Mirrors storefront language to `html.ps-app-lang-ar` + `body.ps-doc-rtl` for theme CSS (RTL, chevrons, Arabic typography). */
+  function prestigeSyncStoreLangOnHtml() {
+    var lang = prestigeResolveStoreLang();
+    var root = document.documentElement;
+    var body = document.body;
+    var isAr = lang === "ar";
+    if (isAr) {
+      root.classList.add("ps-app-lang-ar");
+      if (body) {
+        body.classList.add("ps-doc-rtl");
+      }
+    } else {
+      root.classList.remove("ps-app-lang-ar");
+      if (body) {
+        body.classList.remove("ps-doc-rtl");
+      }
+    }
   }
 
   function resolveEoHsApiBase(fromEl) {
@@ -2881,6 +2931,7 @@
 
   function init() {
     try {
+      prestigeSyncStoreLangOnHtml();
       prestigeSyncAnimationsFlagToHtml();
       syncPrestigeThemeStack();
       initPrestigeHeaderScroll();
@@ -2906,6 +2957,7 @@
 
   document.addEventListener(MOUNT_EVENT, function () {
     try {
+      prestigeSyncStoreLangOnHtml();
       prestigeSyncAnimationsFlagToHtml();
     } catch (e) {
       /* ignore */
@@ -2915,6 +2967,7 @@
 
   window.addEventListener("popstate", function () {
     try {
+      prestigeSyncStoreLangOnHtml();
       prestigeSyncAnimationsFlagToHtml();
     } catch (e) {
       /* ignore */
@@ -3062,6 +3115,11 @@
   });
 
   window.addEventListener("load", function () {
+    try {
+      prestigeSyncStoreLangOnHtml();
+    } catch (eLangLoad) {
+      /* ignore */
+    }
     try {
       schedulePrestigeScrollRevealAnimations();
     } catch (e) {

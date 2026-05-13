@@ -62,11 +62,17 @@
   }
 }
 
-/* Arabic storefront: __NEXT_DATA__ `appSettings.lang` → `ps-app-lang-ar` on html (sync in header.liquid + script.js). */
+/* Arabic storefront: __NEXT_DATA__ `appSettings.lang` → `ps-app-lang-ar` on html (sync in script.js: prestigeSyncStoreLangOnHtml). */
 html.ps-app-lang-ar,
 html.ps-app-lang-ar body {
   direction: rtl;
   text-align: right;
+}
+
+/* Arabic: letter-spacing from Latin-oriented UI rules harms readability — neutralize on the whole document */
+html.ps-app-lang-ar,
+html.ps-app-lang-ar * {
+  letter-spacing: normal !important;
 }
 
 span,
