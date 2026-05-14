@@ -71,6 +71,7 @@
       <div
         class="ps-hot-cards__track"
         data-ps-hot-cards-track
+        dir="ltr"
         tabindex="0"
         role="region"
         aria-label="{{ section_data.heading | default: 'Promo' | escape }}"
@@ -105,7 +106,7 @@
                     </picture>
                   </div>
                   <div class="ps-hot-cards__scrim" aria-hidden="true"></div>
-                  <div class="ps-hot-cards__copy">
+                  <div class="ps-hot-cards__copy" dir="auto">
                     {% if slide.eyebrow != blank %}
                       <p class="ps-hot-cards__eyebrow">{{ slide.eyebrow }}</p>
                     {% endif %}
@@ -155,7 +156,6 @@
     margin-inline: auto;
     font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
-    overflow: hidden;
   }
   .ps-hot-cards *,
   .ps-hot-cards *::before,
@@ -164,6 +164,13 @@
   }
 
   .ps-hot-cards__shell {
+    min-width: 0;
+    max-width: 100%;
+    container-type: inline-size;
+    container-name: ps-hcc-shell;
+  }
+
+  .ps-hot-cards__content {
     width: 100%;
   }
 
@@ -234,37 +241,52 @@
     outline-offset: 2px;
   }
 
-  /* Desktop peek: extend track past inner padding */
-  @media (min-width: 1024px) {
-    .ps-hot-cards__content {
-      margin-inline-end: calc(-1 * var(--page-pad, 1.5rem) - var(--ps-hcc-peek-vw, 34vw));
-    }
-  }
-
+  /* dir=ltr + direction: stable scrollLeft/scrollbar on RTL locales */
   .ps-hot-cards__track {
+    direction: ltr;
+    unicode-bidi: isolate;
+    touch-action: pan-x;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-flow: row nowrap;
+    align-items: stretch;
     gap: var(--ps-hcc-gap, 10px);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
+    scroll-padding-inline-end: var(--page-pad, 1.5rem);
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     padding-bottom: 0.35rem;
+    overscroll-behavior-x: contain;
+  }
+
+  .ps-hot-cards__track::-webkit-scrollbar {
+    display: none;
   }
 
   .ps-hot-cards__slide {
-    flex: 0 0 min(var(--ps-hcc-slide-max, 59rem), calc(100vw - var(--page-pad, 1.5rem) * 2 - 1rem));
+    --hcc-peek: clamp(1.25rem, min(5vw, 3rem), 3.5rem);
+    flex: 0 0 min(var(--ps-hcc-slide-max, 59rem), calc(100% - var(--hcc-peek)));
+    flex-shrink: 0;
     scroll-snap-align: start;
-    min-width: 0;
     overflow: hidden;
     border-radius: var(--ps-hcc-radius, 24px);
   }
+
+  @supports (width: 1cqi) {
+    .ps-hot-cards__slide {
+      flex-basis: min(var(--ps-hcc-slide-max, 59rem), calc(100cqi - var(--hcc-peek)));
+    }
+  }
+
   @media (max-width: 767.98px) {
     .ps-hot-cards__slide {
-      flex-basis: min(100%, calc(100vw - var(--page-pad, 1.25rem) * 2));
+      --hcc-peek: clamp(1rem, 4vw, 2.5rem);
     }
   }
 

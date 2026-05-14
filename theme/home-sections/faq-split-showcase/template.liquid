@@ -1,8 +1,11 @@
 {% if section_data.items and section_data.items.size > 0 %}
+<div
+  class="faq-split-showcase-wrap"
+  style="--fs-bg: {{ section_data.bg_color | default: '#f0ebe3' }};"
+>
 <section
   class="faq-split-showcase"
   data-ps-faq-split
-  style="--fs-bg: {{ section_data.bg_color | default: '#f0ebe3' }};"
 >
   <div class="faq-split-showcase__inner">
     <div class="faq-split-showcase__grid">
@@ -71,21 +74,97 @@
     </div>
   </div>
 </section>
+</div>
 
 <style>
-  .faq-split-showcase {
+  /* `.content_container` بعرض الصفحة عند وجود هذا القسم (مثل السلايدر في style.css) */
+  .content_container:has(.faq-split-showcase-wrap),
+  .content_container:has(.faq-split-showcase) {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* خلفية القسم فقط — العرض الكامل؛ المحتوى والحواف على `.faq-split-showcase` */
+  .faq-split-showcase-wrap {
     box-sizing: border-box;
     width: 100%;
-    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2rem);
     background: var(--fs-bg, #f0ebe3);
+  }
+
+  /* يطابق `.content_container` في theme/style.css (عرض + حواف) */
+  .faq-split-showcase {
+    --bs-gutter-x: 2rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
+    padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
     color: #111111;
     font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
+  @media (max-width: 767.98px) {
+    .faq-split-showcase {
+      --bs-gutter-x: 1rem;
+      padding-left: max(14px, env(safe-area-inset-left, 0px));
+      padding-right: max(14px, env(safe-area-inset-right, 0px));
+    }
+  }
+
+  @media (min-width: 576px) {
+    .faq-split-showcase {
+      max-width: 680px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .faq-split-showcase {
+      max-width: 900px;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .faq-split-showcase {
+      max-width: 1160px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .faq-split-showcase {
+      max-width: 1320px;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .faq-split-showcase {
+      max-width: 1520px;
+    }
+  }
+
+  /* داخل `.content_container`: بدون مضاعفة عرض/حواف على الغلاف */
+  .content_container > .faq-split-showcase-wrap {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
   .faq-split-showcase__inner {
-    max-width: 1200px;
-    margin: 0 auto;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    width: 100%;
     box-sizing: border-box;
   }
 
@@ -93,7 +172,8 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1.15fr);
     gap: clamp(1.5rem, 4vw, 3rem);
-    align-items: start;
+    align-items: center;
+    justify-items: stretch;
   }
 
   @media (max-width: 991px) {

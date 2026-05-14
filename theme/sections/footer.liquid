@@ -21,13 +21,18 @@
   {% assign ps_footer_about_button = "Learn more" %}
 {% endif %}
 
-{% assign ps_footer_col_count = 2 %}
+{% comment %}Menu columns: shop + pages + about + optional contact (newsletter is separate).{% endcomment %}
+{% assign ps_footer_menu_cols = 1 %}
 {% if categories.size > 0 %}
-  {% assign ps_footer_col_count = ps_footer_col_count | plus: 1 %}
+  {% assign ps_footer_menu_cols = ps_footer_menu_cols | plus: 1 %}
 {% endif %}
 {% if pages.size > 0 %}
-  {% assign ps_footer_col_count = ps_footer_col_count | plus: 1 %}
+  {% assign ps_footer_menu_cols = ps_footer_menu_cols | plus: 1 %}
 {% endif %}
+{% if has_contact %}
+  {% assign ps_footer_menu_cols = ps_footer_menu_cols | plus: 1 %}
+{% endif %}
+{% assign ps_footer_col_total = ps_footer_menu_cols | plus: 1 %}
 
 {% assign ps_footer_title_shop = theme_data.footer_quick_links | strip %}
 {% if ps_footer_title_shop == blank %}
@@ -65,14 +70,13 @@
     {% endif %}
   {% endif %}
 >
-  <div class="ps-footer-divider ps-footer-divider--edge" aria-hidden="true"></div>
   <div class="content_container ps-footer-inner">
     <div
-      class="ps-footer-top ps-footer-split"
-      style="--ps-footer-menu-cols: {{ ps_footer_col_count | minus: 1 }}"
-      data-footer-cols="{{ ps_footer_col_count }}"
+      class="ps-footer-top ps-footer-grid"
+      style="--ps-footer-grid-cols: {{ ps_footer_col_total }}"
+      data-footer-cols="{{ ps_footer_col_total }}"
     >
-      <div class="ps-footer-subscribe-col ps-footer-split__newsletter">
+      <div class="ps-footer-grid__cell ps-footer-grid__cell--newsletter ps-footer-subscribe-col">
         <h3 class="ps-footer-heading ps-footer-heading--lead">{{ ps_footer_title_newsletter }}</h3>
         <p class="ps-footer-newsletter-desc">Subscribe for store updates and discounts.</p>
         <form
@@ -105,50 +109,73 @@
         </form>
       </div>
 
-      <div class="ps-footer-split__menus">
-        <div class="ps-footer-menus-desktop">
-          {% if categories.size > 0 %}
-            <div class="ps-footer-col ps-footer-col--quick">
-              <h4 class="ps-footer-heading">{{ ps_footer_title_shop }}</h4>
-              <ul class="ps-footer-links">
-                {% for cat in categories %}
-                  <li><a href="/collections/{{ cat.slug }}">{{ cat.name }}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
-          {% if pages.size > 0 %}
-            <div class="ps-footer-col ps-footer-col--support">
-              <h4 class="ps-footer-heading">{{ ps_footer_title_pages }}</h4>
-              <ul class="ps-footer-links">
-                {% for page in pages %}
-                  <li><a href="/pages/{{ page.slug }}">{{ page.title }}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
-          <div class="ps-footer-about-col">
-            <h4 class="ps-footer-heading">{{ ps_footer_about_title }}</h4>
-            <div class="ps-footer-about-body">
-              {% if ps_footer_about_text != blank %}
-                <p>{{ ps_footer_about_text }}</p>
-              {% endif %}
-              {% if ps_footer_about_page_id != blank %}
-                <a
-                  href="#"
-                  class="ps-footer-link-underline"
-                  data-eo-hs-cta="1"
-                  data-eo-hs-cta-entity="pages"
-                  data-eo-hs-cta-id="{{ ps_footer_about_page_id }}"
-                >{{ ps_footer_about_button }}</a>
-              {% else %}
-                <span class="ps-footer-link-underline ps-footer-link-underline--static">{{ ps_footer_about_button }}</span>
-              {% endif %}
-            </div>
+      {% if categories.size > 0 %}
+        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--quick">
+          <h4 class="ps-footer-heading">{{ ps_footer_title_shop }}</h4>
+          <ul class="ps-footer-links">
+            {% for cat in categories %}
+              <li><a href="/collections/{{ cat.slug }}">{{ cat.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% if pages.size > 0 %}
+        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--support">
+          <h4 class="ps-footer-heading">{{ ps_footer_title_pages }}</h4>
+          <ul class="ps-footer-links">
+            {% for page in pages %}
+              <li><a href="/pages/{{ page.slug }}">{{ page.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+            {% if has_contact %}
+        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--contact">
+          <h4 class="ps-footer-heading">{{ ps_footer_contact_heading }}</h4>
+          <div class="ps-footer-contact ps-footer-contact--column">
+            {% if phone != "" %}
+              <span class="ps-footer-contact-inline">
+                <span class="ps-footer-contact-k">{{ theme_data.footer_phone_label | default: "Phone" }}</span>
+                <a href="tel:{{ phone }}" dir="ltr">{{ phone }}</a>
+              </span>
+            {% endif %}
+            {% if email != "" %}
+              <span class="ps-footer-contact-inline">
+                <span class="ps-footer-contact-k">{{ theme_data.footer_email_label | default: "Email" }}</span>
+                <a href="mailto:{{ email }}">{{ email }}</a>
+              </span>
+            {% endif %}
+            {% if address != "" %}
+              <span class="ps-footer-contact-inline">
+                <span class="ps-footer-contact-k">{{ theme_data.footer_address_label | default: "Address" }}</span>
+                <span>{{ address }}</span>
+              </span>
+            {% endif %}
           </div>
         </div>
+      {% endif %}
+      <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-about-col">
+        <h4 class="ps-footer-heading">{{ ps_footer_about_title }}</h4>
+        <div class="ps-footer-about-body">
+          {% if ps_footer_about_text != blank %}
+            <p>{{ ps_footer_about_text }}</p>
+          {% endif %}
+          {% if ps_footer_about_page_id != blank %}
+            <a
+              href="#"
+              class="ps-footer-link-underline"
+              data-eo-hs-cta="1"
+              data-eo-hs-cta-entity="pages"
+              data-eo-hs-cta-id="{{ ps_footer_about_page_id }}"
+            >{{ ps_footer_about_button }}</a>
+          {% else %}
+            <span class="ps-footer-link-underline ps-footer-link-underline--static">{{ ps_footer_about_button }}</span>
+          {% endif %}
+        </div>
+      </div>
 
-        <div class="ps-footer-menus-mobile">
+
+      <div class="ps-footer-grid__cell ps-footer-grid__cell--mobile ps-footer-menus-mobile">
           {% if categories.size > 0 %}
             <details class="ps-footer-details" id="ps-footer-acc-shop">
               <summary class="ps-footer-details__summary">
@@ -218,43 +245,59 @@
               </div>
             </div>
           </details>
-        </div>
+          {% if has_contact %}
+            <details class="ps-footer-details" id="ps-footer-acc-contact">
+              <summary class="ps-footer-details__summary">
+                <span class="ps-footer-details__title">{{ ps_footer_contact_heading }}</span>
+                <span class="ps-footer-details__icon" aria-hidden="true">
+                  <svg class="ps-footer-acc-svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="ps-footer-acc-svg-h" d="M3.125 10H16.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path class="ps-footer-acc-svg-v" d="M10 3.125L10 16.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="ps-footer-details__content">
+                <div class="ps-footer-contact ps-footer-contact--column">
+                  {% if phone != "" %}
+                    <span class="ps-footer-contact-inline">
+                      <span class="ps-footer-contact-k">{{ theme_data.footer_phone_label | default: "Phone" }}</span>
+                      <a href="tel:{{ phone }}" dir="ltr">{{ phone }}</a>
+                    </span>
+                  {% endif %}
+                  {% if email != "" %}
+                    <span class="ps-footer-contact-inline">
+                      <span class="ps-footer-contact-k">{{ theme_data.footer_email_label | default: "Email" }}</span>
+                      <a href="mailto:{{ email }}">{{ email }}</a>
+                    </span>
+                  {% endif %}
+                  {% if address != "" %}
+                    <span class="ps-footer-contact-inline">
+                      <span class="ps-footer-contact-k">{{ theme_data.footer_address_label | default: "Address" }}</span>
+                      <span>{{ address }}</span>
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+            </details>
+          {% endif %}
       </div>
     </div>
 
-    {% if has_contact %}
-      <div class="ps-footer-contact-strip">
-        <h4 class="ps-footer-heading ps-footer-heading--strip">{{ ps_footer_contact_heading }}</h4>
-        <div class="ps-footer-contact ps-footer-contact--inline">
-          {% if phone != "" %}
-            <span class="ps-footer-contact-inline">
-              <span class="ps-footer-contact-k">{{ theme_data.footer_phone_label | default: "Phone" }}</span>
-              <a href="tel:{{ phone }}" dir="ltr">{{ phone }}</a>
-            </span>
-          {% endif %}
-          {% if email != "" %}
-            <span class="ps-footer-contact-inline">
-              <span class="ps-footer-contact-k">{{ theme_data.footer_email_label | default: "Email" }}</span>
-              <a href="mailto:{{ email }}">{{ email }}</a>
-            </span>
-          {% endif %}
-          {% if address != "" %}
-            <span class="ps-footer-contact-inline">
-              <span class="ps-footer-contact-k">{{ theme_data.footer_address_label | default: "Address" }}</span>
-              <span>{{ address }}</span>
-            </span>
-          {% endif %}
+    {% assign si_known = "|facebook|instagram|x|linkedin|tiktok|youtube|pinterest|threads|snapchat|whatsapp|telegram|discord|reddit|github|google|vimeo|medium|dribbble|behance|mastodon|twitch|skype|slack|line|wechat|vk|rss|spotify|soundcloud|apple|etsy|shopify|" %}
+    <div class="ps-footer-sleek-bottom{% unless social and social.size > 0 %} ps-footer-sleek-bottom--no-social{% endunless %}">
+      <div class="ps-footer-pay-slot">
+        <div class="ps-footer-payment-wrap" aria-label="Payment methods">
+          <span class="ps-footer-payment-item ps-footer-payment-single">
+            <img
+              src="{{ ps_footer_payment_img }}"
+              alt="Accepted payment methods"
+              loading="lazy"
+            />
+          </span>
         </div>
       </div>
-    {% endif %}
-
-    <div class="ps-footer-divider" aria-hidden="true"></div>
-
-    {% if social and social.size > 0 %}
-      <div class="ps-footer-sleek-bottom">
-        <div class="ps-footer-row ps-footer-row--social">
-          <span class="ps-footer-row-spacer" aria-hidden="true"></span>
-          {% assign si_known = "|facebook|instagram|x|linkedin|tiktok|youtube|pinterest|threads|snapchat|whatsapp|telegram|discord|reddit|github|google|vimeo|medium|dribbble|behance|mastodon|twitch|skype|slack|line|wechat|vk|rss|spotify|soundcloud|apple|etsy|shopify|" %}
+      {% if social and social.size > 0 %}
+        <div class="ps-footer-social-slot">
           <div class="ps-footer-socials" aria-label="{% if follow_label != blank %}{{ follow_label }}{% else %}Social{% endif %}">
             {% for item in social %}
               {% assign s_url = item.url | strip %}
@@ -283,44 +326,24 @@
             {% endfor %}
           </div>
         </div>
-    {% else %}
-      <div class="ps-footer-sleek-bottom">
-    {% endif %}
-
-        <div class="ps-footer-row ps-footer-row--legal">
-          <div class="ps-footer-legal-left">
-            <p class="ps-footer-copy">
-              &copy; {{ year }}
-              <a class="ps-footer-store-link" href="/">{{ store_name }}</a>.
-              {% if rights_label != blank %}{{ rights_label }}{% endif %}
-            </p>
+      {% endif %}
+      <div class="ps-footer-row ps-footer-row--legal ps-footer-row--legal-bottom">
+        <div class="ps-footer-legal-left">
+          <p class="ps-footer-copy">
+            &copy; {{ year }}
+            <a class="ps-footer-store-link" href="/">{{ store_name }}</a>.
+            {% if rights_label != blank %}{{ rights_label }}{% endif %}
+          </p>
+        </div>
+        {% if show_powered %}
+          <div class="ps-footer-legal-right">
             <p class="ps-footer-powered">
               {{ theme_data.footer_powered_by | default: "Powered by" }}
               <a href="https://www.easy-orders.net" target="_blank" rel="noreferrer">Easy Orders</a>
             </p>
           </div>
-          <div class="ps-footer-legal-right">
-            {% if ps_footer_privacy_url != '#' or ps_footer_terms_url != '#' %}
-              <ul class="ps-footer-policy-links">
-                {% if ps_footer_privacy_url != '#' %}
-                  <li><a href="{{ ps_footer_privacy_url }}">Privacy Policy</a></li>
-                {% endif %}
-                {% if ps_footer_terms_url != '#' %}
-                  <li><a href="{{ ps_footer_terms_url }}">Terms of Service</a></li>
-                {% endif %}
-              </ul>
-            {% endif %}
-            <div class="ps-footer-payment-wrap" aria-label="Payment methods">
-              <span class="ps-footer-payment-item ps-footer-payment-single">
-                <img
-                  src="{{ ps_footer_payment_img }}"
-                  alt="Accepted payment methods"
-                  loading="lazy"
-                />
-              </span>
-            </div>
-          </div>
-        </div>
+        {% endif %}
       </div>
+    </div>
   </div>
 </footer>

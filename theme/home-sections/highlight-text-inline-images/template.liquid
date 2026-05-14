@@ -1,0 +1,273 @@
+{% assign hti_t1 = section_data.text_1 | strip %}
+{% assign hti_t2 = section_data.text_2 | strip %}
+{% assign hti_t3 = section_data.text_3 | strip %}
+{% assign hti_i1 = section_data.image_1 | strip %}
+{% assign hti_i2 = section_data.image_2 | strip %}
+{% assign hti_i3 = section_data.image_3 | strip %}
+{% if hti_t1 != blank or hti_t2 != blank or hti_t3 != blank or hti_i1 != blank or hti_i2 != blank or hti_i3 != blank %}
+{% assign hti_pt = section_data.section_padding_top | default: 50 %}
+{% assign hti_pb = section_data.section_padding_bottom | default: 50 %}
+{% assign hti_bg = section_data.bg_color | default: '#ffffff' %}
+{% assign hti_tc = section_data.text_color | default: '#111111' %}
+{% assign hti_align = section_data.text_align | default: 'center' %}
+{% if hti_align != 'start' and hti_align != 'center' %}
+  {% assign hti_align = 'center' %}
+{% endif %}
+{% assign hti_level = section_data.heading_level | default: 'h2' %}
+{% if hti_level != 'h1' and hti_level != 'h2' %}
+  {% assign hti_level = 'h2' %}
+{% endif %}
+{% assign w_d = section_data.image_width_desktop | default: 220 %}
+{% assign w_m = section_data.image_width_mobile | default: 110 %}
+<section
+  class="ps-hti ps-hti--align-{{ hti_align }}"
+  data-ps-highlight-text-inline
+  style="
+    --hti-pt: {{ hti_pt }}px;
+    --hti-pb: {{ hti_pb }}px;
+    --hti-bg: {{ hti_bg }};
+    --hti-text: {{ hti_tc }};
+    --ps-hti-w: {{ w_d }}px;
+    --ps-hti-w-m: {{ w_m }}px;
+    --ps-hti-pill-h-m: calc(min(var(--ps-hti-w-m, 110px), 32vw) * 0.52);
+    --ps-hti-pill-h-d: calc(var(--ps-hti-w, 220px) * 0.55);
+  "
+>
+  <div class="ps-hti__inner">
+    {% capture hti_headline_inner %}
+      {% if hti_t1 != blank %}
+        <span class="ps-hti__segment ps-hti__segment--text">{{ section_data.text_1 }}</span>
+      {% endif %}
+      {% if hti_i1 != blank %}
+        {% if section_data.category_id_1 != blank %}
+          <a
+            class="ps-hti__pill ps-hti__pill--link"
+            href="#"
+            data-eo-hs-cta="1"
+            data-eo-hs-cta-entity="categories"
+            data-eo-hs-cta-id="{{ section_data.category_id_1 }}"
+            aria-label="{{ 'Collection' | escape }}"
+          >
+            <span class="ps-hti__pill-frame" aria-hidden="true">
+              <img class="ps-hti__pill-img" src="{{ hti_i1 }}" alt="" width="300" height="164" loading="lazy" decoding="async" draggable="false" />
+            </span>
+          </a>
+        {% else %}
+          <span class="ps-hti__pill ps-hti__pill--static" role="img" aria-label="{{ 'Image' | escape }}">
+            <span class="ps-hti__pill-frame" aria-hidden="true">
+              <img class="ps-hti__pill-img" src="{{ hti_i1 }}" alt="" width="300" height="164" loading="lazy" decoding="async" draggable="false" />
+            </span>
+          </span>
+        {% endif %}
+      {% endif %}
+      {% if hti_t2 != blank %}
+        <span class="ps-hti__segment ps-hti__segment--text">{{ section_data.text_2 }}</span>
+      {% endif %}
+      {% if hti_i2 != blank %}
+        {% if section_data.category_id_2 != blank %}
+          <a
+            class="ps-hti__pill ps-hti__pill--link"
+            href="#"
+            data-eo-hs-cta="1"
+            data-eo-hs-cta-entity="categories"
+            data-eo-hs-cta-id="{{ section_data.category_id_2 }}"
+            aria-label="{{ 'Collection' | escape }}"
+          >
+            <span class="ps-hti__pill-frame" aria-hidden="true">
+              <img class="ps-hti__pill-img" src="{{ hti_i2 }}" alt="" width="300" height="164" loading="lazy" decoding="async" draggable="false" />
+            </span>
+          </a>
+        {% else %}
+          <span class="ps-hti__pill ps-hti__pill--static" role="img" aria-label="{{ 'Image' | escape }}">
+            <span class="ps-hti__pill-frame" aria-hidden="true">
+              <img class="ps-hti__pill-img" src="{{ hti_i2 }}" alt="" width="300" height="164" loading="lazy" decoding="async" draggable="false" />
+            </span>
+          </span>
+        {% endif %}
+      {% endif %}
+      {% if hti_t3 != blank %}
+        <span class="ps-hti__segment ps-hti__segment--text">{{ section_data.text_3 }}</span>
+      {% endif %}
+      {% if hti_i3 != blank %}
+        {% if section_data.category_id_3 != blank %}
+          <a
+            class="ps-hti__pill ps-hti__pill--link"
+            href="#"
+            data-eo-hs-cta="1"
+            data-eo-hs-cta-entity="categories"
+            data-eo-hs-cta-id="{{ section_data.category_id_3 }}"
+            aria-label="{{ 'Collection' | escape }}"
+          >
+            <span class="ps-hti__pill-frame" aria-hidden="true">
+              <img class="ps-hti__pill-img" src="{{ hti_i3 }}" alt="" width="300" height="164" loading="lazy" decoding="async" draggable="false" />
+            </span>
+          </a>
+        {% else %}
+          <span class="ps-hti__pill ps-hti__pill--static" role="img" aria-label="{{ 'Image' | escape }}">
+            <span class="ps-hti__pill-frame" aria-hidden="true">
+              <img class="ps-hti__pill-img" src="{{ hti_i3 }}" alt="" width="300" height="164" loading="lazy" decoding="async" draggable="false" />
+            </span>
+          </span>
+        {% endif %}
+      {% endif %}
+    {% endcapture %}
+    {% if hti_level == 'h1' %}
+      <h1 class="ps-hti__headline">{{ hti_headline_inner }}</h1>
+    {% else %}
+      <h2 class="ps-hti__headline">{{ hti_headline_inner }}</h2>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .ps-hti {
+    box-sizing: border-box;
+    width: 100%;
+    padding-top: var(--hti-pt, 50px);
+    padding-bottom: var(--hti-pb, 50px);
+    padding-left: max(1rem, var(--page-padding, 1.5rem));
+    padding-right: max(1rem, var(--page-padding, 1.5rem));
+    background: var(--hti-bg, #ffffff);
+    color: var(--hti-text, #111111);
+    font-family: var(--ps-ff-primary), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ps-hti--align-center {
+    text-align: center;
+  }
+
+  .ps-hti--align-start {
+    text-align: start;
+  }
+
+  .ps-hti__inner {
+    max-width: min(72rem, 100%);
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .ps-hti--align-center .ps-hti__headline {
+    justify-content: center;
+  }
+
+  .ps-hti--align-start .ps-hti__headline {
+    justify-content: flex-start;
+  }
+
+  .ps-hti__headline {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    column-gap: 0.45rem;
+    row-gap: max(1rem, calc(var(--ps-hti-pill-h-m, 58px) * 0.45));
+    font-weight: 700;
+    font-size: clamp(1.75rem, 2.2vw + 1.1rem, 3.15rem);
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    color: var(--hti-text, #111111);
+    word-break: break-word;
+    overflow: visible;
+  }
+
+  .ps-hti__segment--text {
+    display: inline-block;
+    max-width: 100%;
+    line-height: 1.62;
+    padding-block: 0.08em;
+  }
+
+  .ps-hti__pill {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.1em;
+    margin-block: 0.28rem;
+    border-radius: 9999px;
+    overflow: hidden;
+    line-height: 0;
+    box-sizing: border-box;
+    width: min(var(--ps-hti-w-m, 110px), 32vw);
+    height: var(--ps-hti-pill-h-m, 58px);
+    max-width: 100%;
+  }
+
+  @media (max-width: 767.98px) {
+    .ps-hti__headline {
+      font-size: clamp(1.35rem, 3.8vw + 0.75rem, 2.35rem);
+      line-height: 1.52;
+      row-gap: max(1.15rem, calc(var(--ps-hti-pill-h-m, 58px) * 0.55));
+      column-gap: 0.35rem;
+    }
+
+    .ps-hti__segment--text {
+      line-height: 1.68;
+      padding-block: 0.12em;
+    }
+
+    .ps-hti__pill {
+      margin-block: 0.35rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .ps-hti__headline {
+      row-gap: max(1.1rem, calc(var(--ps-hti-pill-h-d, 121px) * 0.28));
+      column-gap: 0.5rem;
+    }
+
+    .ps-hti__pill {
+      width: var(--ps-hti-w, 220px);
+      height: var(--ps-hti-pill-h-d, 121px);
+      margin-block: 0.2rem;
+    }
+  }
+
+  .ps-hti__pill--link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  @media (hover: hover) {
+    .ps-hti__pill--link:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .ps-hti__pill--link:focus-visible {
+    outline: 2px solid var(--hti-text, #111111);
+    outline-offset: 4px;
+  }
+
+  .ps-hti__pill-frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: inherit;
+    background: rgba(17, 17, 17, 0.04);
+  }
+
+  .ps-hti__pill-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transition: transform 0.45s cubic-bezier(0.3, 1, 0.3, 1);
+  }
+
+  @media (hover: hover) {
+    .ps-hti__pill--link:hover .ps-hti__pill-img {
+      transform: scale(1.05);
+    }
+  }
+</style>{% endif %}

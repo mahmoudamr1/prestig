@@ -1,0 +1,113 @@
+{
+  "icon": "https://api.iconify.design/lucide:text-cursor-input.svg",
+  "label": "Highlight text + inline images",
+  "section_schema": [
+    {
+      "name": "section_padding_top",
+      "type": "number",
+      "default": 100,
+      "description": "Padding top (px)"
+    },
+    {
+      "name": "section_padding_bottom",
+      "type": "number",
+      "default": 100,
+      "description": "Padding bottom (px)"
+    },
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#ffffff",
+      "description": "Section background"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#111111",
+      "description": "Headline text color"
+    },
+    {
+      "name": "text_align",
+      "type": "select",
+      "default": "center",
+      "description": "Headline alignment",
+      "options": [
+        { "label": "Center", "value": "center" },
+        { "label": "Start", "value": "start" }
+      ]
+    },
+    {
+      "name": "heading_level",
+      "type": "select",
+      "default": "h2",
+      "description": "Semantic heading (prefer h2 if the page already has an h1)",
+      "options": [
+        { "label": "Heading 1", "value": "h1" },
+        { "label": "Heading 2", "value": "h2" }
+      ]
+    },
+    {
+      "name": "image_width_desktop",
+      "type": "number",
+      "default": 220,
+      "description": "Pill image width on desktop (px), all three pills"
+    },
+    {
+      "name": "image_width_mobile",
+      "type": "number",
+      "default": 110,
+      "description": "Pill image width on mobile (px), all three pills"
+    },
+    {
+      "name": "text_1",
+      "type": "string",
+      "default": "Make you look ",
+      "description": "Copy before the 1st pill. Use a real line break in the next field for a new line."
+    },
+    {
+      "name": "image_1",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1778755722360570490.avif",
+      "description": "1st inline pill image"
+    },
+    {
+      "name": "category_id_1",
+      "type": "category_single_select",
+      "description": "Collection for the 1st pill (when set, the pill is clickable)"
+    },
+    {
+      "name": "text_2",
+      "type": "string",
+      "default": " and \nfeel glowy ",
+      "description": "Copy between 1st and 2nd pills. Newlines become line breaks."
+    },
+    {
+      "name": "image_2",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1778755722246130407.avif",
+      "description": "2nd inline pill image"
+    },
+    {
+      "name": "category_id_2",
+      "type": "category_single_select",
+      "description": "Collection for the 2nd pill"
+    },
+    {
+      "name": "text_3",
+      "type": "string",
+      "default": " and healthy ",
+      "description": "Copy before the 3rd pill"
+    },
+    {
+      "name": "image_3",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1778755722213299662.avif",
+      "description": "3rd inline pill image"
+    },
+    {
+      "name": "category_id_3",
+      "type": "category_single_select",
+      "description": "Collection for the 3rd pill"
+    }
+  ]
+}
