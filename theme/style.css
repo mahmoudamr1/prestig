@@ -2207,8 +2207,29 @@ main.container_class {
   flex-shrink: 0;
 }
 
+.ps-plist-add.ps-product-stock-x,
+.ps-pgrid-add.ps-product-stock-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  cursor: default;
+}
+
+.ps-product-stock-x__icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) saturate(100%) invert(24%) sepia(95%) saturate(7154%)
+    hue-rotate(349deg) brightness(92%) contrast(97%);
+}
+
 @media (min-width: 1025px) {
-  .ps-product-quick-add {
+  .ps-product-quick-add,
+  .ps-product-stock-x {
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
@@ -2220,10 +2241,24 @@ main.container_class {
   .ps-rp-card:hover .ps-product-quick-add,
   .ps-rp-card:focus-within .ps-product-quick-add,
   .ps-pgrid-card:hover .ps-product-quick-add,
-  .ps-pgrid-card:focus-within .ps-product-quick-add {
+  .ps-pgrid-card:focus-within .ps-product-quick-add,
+  .ps-plist-card:hover .ps-product-stock-x,
+  .ps-plist-card:focus-within .ps-product-stock-x,
+  .ps-rp-card:hover .ps-product-stock-x,
+  .ps-rp-card:focus-within .ps-product-stock-x,
+  .ps-pgrid-card:hover .ps-product-stock-x,
+  .ps-pgrid-card:focus-within .ps-product-stock-x {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+  }
+
+  .ps-plist-card:hover .ps-product-quick-add,
+  .ps-plist-card:focus-within .ps-product-quick-add,
+  .ps-rp-card:hover .ps-product-quick-add,
+  .ps-rp-card:focus-within .ps-product-quick-add,
+  .ps-pgrid-card:hover .ps-product-quick-add,
+  .ps-pgrid-card:focus-within .ps-product-quick-add {
     pointer-events: auto;
   }
 }
@@ -6040,11 +6075,19 @@ html:lang(it)
 }
 
 @media (max-width: 1024.98px) {
-  .collection_container .ps-pgrid-section .ps-pgrid-card .ps-product-quick-add {
+  .collection_container .ps-pgrid-section .ps-pgrid-card .ps-product-quick-add,
+  .collection_container .ps-pgrid-section .ps-pgrid-card .ps-product-stock-x {
     opacity: 1 !important;
     visibility: visible !important;
-    pointer-events: auto !important;
     transform: none !important;
+  }
+
+  .collection_container .ps-pgrid-section .ps-pgrid-card .ps-product-quick-add {
+    pointer-events: auto !important;
+  }
+
+  .collection_container .ps-pgrid-section .ps-pgrid-card .ps-product-stock-x {
+    pointer-events: none !important;
   }
 }
 
