@@ -412,6 +412,7 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   flex-shrink: 0;
   width: 14px;
   height: 14px;
+  filter: invert(1);
 }
 
 .ps-announce-mc-nav:focus-visible {
