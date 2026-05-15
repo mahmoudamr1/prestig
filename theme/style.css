@@ -475,7 +475,7 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
 }
 
 /*
- * قبل التمرير: أبيض فوق الهيرو فقط — `.ps-slider--under-nav` يُسحب تحت الهيدر (انظر `.ps-slider.ps-slider--under-nav`).
+ * قبل التمرير: أبيض فوق الهيرو فقط — أول `.ps-slider--under-nav` في الصفحة يُسحب تحت الهيدر (كلاس `ps-slider--under-nav-first` من script.js).
  * بدون ذلك الهيدر شفاف فوق خلفية فاتحة (مثل PDP) والأبيض يختفي. لا يُطبَّق داخل معاينة `.builder-section-reset`.
  */
 body:not(:has(.builder-section-reset #eo-header)):has(.ps-slider.ps-slider--under-nav)
@@ -922,11 +922,16 @@ main.container_class {
   margin: clamp(20px, 3vw, 40px) 0;
 }
 
-/* Pull hero under the fixed header stack so transparent nav sits on imagery, not page bg. */
+/* Under-nav sliders: default spacing; negative pull only on the first (see .ps-slider--under-nav-first). */
 .content_container .ps-slider.ps-slider--under-nav {
-  margin-top: calc(-1 * (var(--ps-announce-h, 0px) + var(--ps-header-h, 74px)));
+  margin-top: clamp(20px, 3vw, 40px);
   margin-bottom: clamp(20px, 3vw, 40px);
   z-index: 0;
+}
+
+/* Pull hero under the fixed header stack so transparent nav sits on imagery, not page bg. */
+.content_container .ps-slider.ps-slider--under-nav.ps-slider--under-nav-first {
+  margin-top: calc(-1 * (var(--ps-announce-h, 0px) + var(--ps-header-h, 74px)));
 }
 
 .ps-slider-track {
@@ -2329,6 +2334,9 @@ main.container_class {
   background: var(--ps-card-ink, #1d242d);
   border-color: var(--ps-card-ink, #1d242d);
   color: var(--ps-surface, #fff);
+}
+.ps-plist-arrow.ps-plist-arrow-next img{
+  filter: invert(1);
 }
 
 @media (max-width: 1199.98px) {

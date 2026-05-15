@@ -642,6 +642,9 @@
   }
 
   function initPrestigeSlider() {
+    document.querySelectorAll(".content_container .ps-slider.ps-slider--under-nav").forEach(function (el, i) {
+      el.classList.toggle("ps-slider--under-nav-first", i === 0);
+    });
     document.querySelectorAll(".ps-slider").forEach(function (slider) {
       if (slider.getAttribute("data-ps-slider-init")) {
         return;
