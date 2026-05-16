@@ -2206,6 +2206,45 @@ main.container_class {
   z-index: 3;
 }
 
+/* OOS strip: always visible at bottom of card media (CTA hidden when no stock + disable_orders). */
+.ps-plist .ps-plist-stock-badge,
+.ps-pgrid-section .ps-pgrid-stock-badge,
+.ps-related-products .ps-pgrid-stock-badge,
+.ps-featured-grid .ps-pgrid-stock-badge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  margin: 0;
+  display: block;
+  text-align: center;
+  font-family: var(--ps-ff-ui), sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.35;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ps-surface, #fff);
+  background: rgba(28, 28, 28, 0.88);
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 768px) {
+  .ps-plist .ps-plist-stock-badge,
+  .ps-pgrid-section .ps-pgrid-stock-badge,
+  .ps-related-products .ps-pgrid-stock-badge,
+  .ps-featured-grid .ps-pgrid-stock-badge {
+    font-size: 9px;
+    padding: 6px 10px;
+    letter-spacing: 0.1em;
+  }
+}
+
 .ps-product-quick-add .ps-product-plus-icon {
   width: 14px;
   height: 14px;

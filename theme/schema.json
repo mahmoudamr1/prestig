@@ -252,6 +252,13 @@
     "default": "Save"
   },
   {
+    "name": "out_of_stock_card_label",
+    "type": "string",
+    "group": "Products",
+    "description": "Product cards: text shown on the image when stock is empty and ordering is disabled (no add button).",
+    "default": "Out of stock"
+  },
+  {
     "name": "featured_products_header_subtitle",
     "type": "string",
     "group": "Featured products",
