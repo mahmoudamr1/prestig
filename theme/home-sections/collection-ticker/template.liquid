@@ -38,7 +38,7 @@
                 >
                   {% if item.image != blank %}
                     <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
-                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />
                     </span>
                   {% endif %}
                   {% if item.label != blank %}
@@ -49,7 +49,7 @@
                 <div class="collection-ticker__item collection-ticker__item--static">
                   {% if item.image != blank %}
                     <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
-                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />
                     </span>
                   {% endif %}
                   {% if item.label != blank %}
@@ -71,7 +71,7 @@
                 >
                   {% if item.image != blank %}
                     <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
-                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />
                     </span>
                   {% endif %}
                   {% if item.label != blank %}
@@ -82,7 +82,7 @@
                 <div class="collection-ticker__item collection-ticker__item--static">
                   {% if item.image != blank %}
                     <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
-                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                      <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />
                     </span>
                   {% endif %}
                   {% if item.label != blank %}
@@ -108,7 +108,7 @@
               >
                 {% if item.image != blank %}
                   <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
-                    <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                    <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />
                   </span>
                 {% endif %}
                 {% if item.label != blank %}
@@ -119,7 +119,7 @@
               <div class="collection-ticker__item collection-ticker__item--static">
                 {% if item.image != blank %}
                   <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
-                    <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="48" height="48" loading="lazy" decoding="async" />
+                    <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />
                   </span>
                 {% endif %}
                 {% if item.label != blank %}
@@ -224,8 +224,8 @@
 
   .collection-ticker__thumb {
     flex-shrink: 0;
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.06);
     display: block;
@@ -251,12 +251,23 @@
   }
 
   .collection-ticker__label {
-    font-size: 0.8125rem;
+    font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.01em;
     line-height: 1.3;
     white-space: nowrap;
     color: var(--ct-text, #141218);
+  }
+
+  @media (min-width: 1024px) {
+    .collection-ticker__thumb {
+      width: 80px;
+      height: 80px;
+    }
+
+    .collection-ticker__label {
+      font-size: 23px;
+    }
   }
 
   @keyframes collection-ticker-marquee {

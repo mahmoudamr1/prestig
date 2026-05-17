@@ -1821,11 +1821,16 @@
       function scrollByStep(dir) {
         var step = cardStep();
         if (!step) return;
-        var maxL = Math.max(0, track.scrollWidth - track.clientWidth);
-        var cur = track.scrollLeft;
-        var target =
-          dir > 0 ? Math.min(maxL, cur + step) : Math.max(0, cur - step);
-        track.scrollTo({ left: target, behavior: "smooth" });
+        /* scrollBy respects writing-mode / RTL; avoids wrong min/max with negative scrollLeft */
+        if (typeof track.scrollBy === "function") {
+          track.scrollBy({ left: dir * step, behavior: "smooth" });
+        } else {
+          var maxL = Math.max(0, track.scrollWidth - track.clientWidth);
+          var cur = track.scrollLeft;
+          var target =
+            dir > 0 ? Math.min(maxL, cur + step) : Math.max(0, cur - step);
+          track.scrollTo({ left: target, behavior: "smooth" });
+        }
       }
 
       function onPrev() {
@@ -2226,35 +2231,70 @@
   }
 
   function initRelatedProductsCarousel() {
-    document.querySelectorAll(".ab-plist--related").forEach(function (section) {
-      if (section.dataset.abPlistInit === "1") return;
-      var track = section.querySelector(".ab-plist-track");
-      var prev = section.querySelector(".ab-plist-prev");
-      var next = section.querySelector(".ab-plist-next");
-      if (!track || !prev || !next) return;
-
-      function scrollAmount() {
-        var card = track.querySelector(".ab-plist-card");
-        var gap = 10;
-        var w = card ? card.getBoundingClientRect().width + gap : 280;
-        return Math.max(140, Math.min(track.clientWidth * 0.85, w * 2));
-      }
-
-      function rtlFactor() {
-        return getComputedStyle(section).direction === "rtl" ? -1 : 1;
-      }
-
-      prev.addEventListener("click", function () {
-        var amt = scrollAmount() * rtlFactor();
-        track.scrollBy({ left: -amt, behavior: "smooth" });
-      });
-      next.addEventListener("click", function () {
-        var amt = scrollAmount() * rtlFactor();
-        track.scrollBy({ left: amt, behavior: "smooth" });
-      });
-
-      section.dataset.abPlistInit = "1";
+    initPrestigeSnapCarouselGroup({
+      rootSelector: ".ab-plist--related",
+      initAttr: "data-ab-related-plist-init",
+      trackSelector: ".ab-plist-track",
+      prevSelector: ".ab-plist-prev",
+      nextSelector: ".ab-plist-next",
+      cardSelector: ".ab-plist-card",
+      alwaysBindArrows: true,
+      /* Bind drag whenever a mouse is used (handler still ignores touch/pen). */
+      desktopMediaQuery: "(min-width: 1px)",
+      dragSensitivity: 1.72,
+      dragThresholdPx: 4,
     });
+
+    document.querySelectorAll(".ab-plist--related").forEach(function (section) {
+      if (section.getAttribute("data-ab-related-dragstart")) {
+        return;
+      }
+      var track = section.querySelector(".ab-plist-track");
+      if (!track) {
+        return;
+      }
+      section.setAttribute("data-ab-related-dragstart", "1");
+      section.addEventListener(
+        "dragstart",
+        function (e) {
+          var t = e.target;
+          if (!track.contains(t)) {
+            return;
+          }
+          if (t.closest && (t.closest("img") || t.closest("a[href]"))) {
+            e.preventDefault();
+          }
+        },
+        true
+      );
+    });
+  }
+
+  /**
+   * Horizontal strips used `touch-action: pan-x` so vertical page scroll did not start when the
+   * finger began on the strip (mobile). Allow pan-y alongside pan-x on these tracks/viewports.
+   * Re-run after dynamic Liquid/SPA mounts (see runPrestigeDynamicInits).
+   */
+  function applyPrestigeTouchPanForHorizontalTracks() {
+    var val = "pan-x pan-y";
+    document.querySelectorAll("[data-ps-hot-cards-track]").forEach(function (el) {
+      el.style.setProperty("touch-action", val);
+    });
+    document
+      .querySelectorAll(".ps-slider.ps-slider--under-nav .ps-slider-viewport")
+      .forEach(function (el) {
+        el.style.setProperty("touch-action", val);
+      });
+    document
+      .querySelectorAll(".ab-plist.ab-plist--related .ab-plist-track")
+      .forEach(function (el) {
+        el.style.setProperty("touch-action", val);
+      });
+    document
+      .querySelectorAll("[data-ps-plist-showcase] [data-ps-plist-carousel]")
+      .forEach(function (el) {
+        el.style.setProperty("touch-action", val);
+      });
   }
 
   function initLegacyGallery() {
@@ -3860,6 +3900,11 @@
       initLegacyDescriptionTabs();
     } catch (e) {
       console.warn("[Prestige] Product sections init error:", e);
+    }
+    try {
+      applyPrestigeTouchPanForHorizontalTracks();
+    } catch (e) {
+      console.warn("[Prestige] Horizontal track touch-action:", e);
     }
   }
 

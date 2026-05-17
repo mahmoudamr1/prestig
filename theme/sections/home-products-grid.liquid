@@ -123,13 +123,18 @@
               <div class="ps-pgrid-swatches">
                 {% if color_variation and color_variation.props %}
                   {% for prop in color_variation.props limit: 6 %}
-                    <span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
+                    <a
+                      href="/products/{{ product.slug }}"
+                      class="ps-pgrid-swatch"
+                      style="background: {{ prop.value }}"
+                      title="{{ prop.name }}"
+                    ></a>
                   {% endfor %}
                 {% elsif image_variation and image_variation.props %}
                   {% for prop in image_variation.props limit: 6 %}
-                    <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                    <a href="/products/{{ product.slug }}" class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
                       <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
-                    </span>
+                    </a>
                   {% endfor %}
                 {% endif %}
                 {% if swatch_total > 6 %}

@@ -1,13 +1,17 @@
 {% if section_data.reviews and section_data.reviews.size > 0 %}
-<section
-  class="ps-rev-carousel"
-  data-ps-rev-showcase
+<div
+  class="ps-rev-carousel-shell"
   style="
-    --ps-rc-bg: {{ section_data.bg_color | default: '#f5f1ee' }};
+    --ps-rc-bg: {{ section_data.bg_color | default: '#f3eeea' }};
     --ps-rc-heading: {{ section_data.heading_color | default: '#111111' }};
     --ps-rc-radius: {{ section_data.card_radius | default: 18 }}px;
     --ps-rc-gap: {{ section_data.track_gap | default: 18 }}px;
   "
+>
+<div class="ps-rev-carousel-slot">
+<section
+  class="ps-rev-carousel"
+  data-ps-rev-showcase
 >
   <div class="ps-rev-carousel__inner">
     <div class="ps-rev-carousel__head">
@@ -169,20 +173,45 @@
     </div>
   </div>
 </section>
+</div>
+</div>
 
 <style>
-  .ps-rev-carousel {
+  /* أب أول: خلفية بعرض الصف. أب ثاني: كونتينر الصفحة (max-width + حواف). Full-bleed: theme/style.css */
+  .ps-rev-carousel-shell {
     box-sizing: border-box;
     width: 100%;
-    padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2rem);
-    background: var(--ps-rc-bg, #f5f1ee);
+    padding-top: clamp(2rem, 5vw, 3.5rem);
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+    background: var(--ps-rc-bg, #f3eeea);
     font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
+  .ps-rev-carousel-slot {
+    --bs-gutter-x: 2rem;
+    --ps-rc-inline-pad: calc(var(--bs-gutter-x) * 0.5);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--ps-rc-inline-pad);
+    padding-right: var(--ps-rc-inline-pad);
+  }
+
+  .ps-rev-carousel {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
   .ps-rev-carousel__inner {
-    max-width: 1280px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
     box-sizing: border-box;
   }
 
@@ -247,8 +276,8 @@
   }
 
   .ps-rev-carousel__viewport {
-    margin-inline: calc(-1 * clamp(1rem, 4vw, 2rem));
-    padding-inline: clamp(1rem, 4vw, 2rem);
+    margin-inline: calc(-1 * var(--ps-rc-inline-pad));
+    padding-inline: var(--ps-rc-inline-pad);
     box-sizing: border-box;
   }
 
@@ -314,7 +343,7 @@
     position: relative;
     flex: 0 0 auto;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    {% comment %} aspect-ratio: 4 / 3; {% endcomment %}
     min-height: 160px;
     background: #ebe8e4;
     overflow: hidden;
@@ -509,6 +538,47 @@
     }
     100% {
       background-position: -100% 0;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .ps-rev-carousel-slot {
+      --bs-gutter-x: 1rem;
+      --ps-rc-inline-pad: max(
+        14px,
+        env(safe-area-inset-left, 0px),
+        env(safe-area-inset-right, 0px)
+      );
+    }
+  }
+
+  @media (min-width: 576px) {
+    .ps-rev-carousel-slot {
+      max-width: 680px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .ps-rev-carousel-slot {
+      max-width: 900px;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .ps-rev-carousel-slot {
+      max-width: 1160px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .ps-rev-carousel-slot {
+      max-width: 1320px;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .ps-rev-carousel-slot {
+      max-width: 1520px;
     }
   }
 </style>

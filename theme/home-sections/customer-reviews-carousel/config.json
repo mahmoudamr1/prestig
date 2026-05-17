@@ -11,7 +11,7 @@
     {
       "name": "bg_color",
       "type": "color",
-      "default": "#f5f1ee",
+      "default": "#f3eeea",
       "description": "Section background"
     },
     {

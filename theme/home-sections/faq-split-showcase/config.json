@@ -5,7 +5,7 @@
     {
       "name": "bg_color",
       "type": "color",
-      "default": "#f0ebe3",
+      "default": "#f3eeea",
       "description": "Section background (warm neutral)"
     },
     {

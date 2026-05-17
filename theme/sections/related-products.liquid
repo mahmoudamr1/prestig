@@ -7,6 +7,8 @@
 {% endif %}
 <section class="ab-plist ab-plist--related">
 
+  <div class="product_container">
+
   <div class="ab-plist-header">
 
     {% if section_title %}
@@ -15,15 +17,19 @@
 
     {% endif %}
 
+  </div>
+
+  <div class="ab-plist-carousel-shell">
+
     <div class="ab-plist-arrows">
 
-      <button class="ab-plist-arrow ab-plist-prev" aria-label="Previous">
+      <button class="ab-plist-arrow ab-plist-prev" type="button" aria-label="Previous">
 
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
 
       </button>
 
-      <button class="ab-plist-arrow ab-plist-next" aria-label="Next">
+      <button class="ab-plist-arrow ab-plist-next" type="button" aria-label="Next">
 
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
 
@@ -31,38 +37,22 @@
 
     </div>
 
-  </div>
-
-
-
-  <div class="ab-plist-track">
+    <div class="ab-plist-track">
 
     {% for product in products %}
-
-      {% assign color_variation = product.variations | where: "type", "color" | first %}
-
-      {% assign image_variation = product.variations | where: "type", "image" | first %}
-
-      {% assign swatch_total = 0 %}
-      {% if color_variation and color_variation.props %}
-        {% assign swatch_total = color_variation.props.size %}
-      {% elsif image_variation and image_variation.props %}
-        {% assign swatch_total = image_variation.props.size %}
-      {% endif %}
 
       <a href="/products/{{ product.slug }}" class="ab-plist-card ab-reveal ps-store-card" style="animation-delay: {{ forloop.index | times: 0.04 }}s">
 
         <div class="ab-plist-media">
-
-          {% if product.sale_price and product.sale_price < product.price %}
-
-            {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
-
-            <span class="ab-plist-badge ab-sale-badge ps-sale-badge">-{{ discount }}%</span>
-
-          {% endif %}
-
-
+          <div class="ab-plist-badges">
+            {% if product.sale_price and product.sale_price < product.price %}
+              {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+              <span class="ps-product-badge ps-sale-badge">-{{ discount }}%</span>
+            {% endif %}
+            {% if product.product_theme_data.custom_badge_title != blank %}
+              <span class="ps-product-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title | strip }}</span>
+            {% endif %}
+          </div>
 
           <img class="ab-plist-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
 
@@ -134,25 +124,6 @@
 
           <p class="ab-plist-name">{{ product.name }}</p>
 
-          {% unless theme_data.product_card_show_swatches == false %}
-          <div class="ps-pgrid-swatches">
-            {% if color_variation and color_variation.props %}
-              {% for prop in color_variation.props limit: 6 %}
-                <span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>
-              {% endfor %}
-            {% elsif image_variation and image_variation.props %}
-              {% for prop in image_variation.props limit: 6 %}
-                <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
-                  <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
-                </span>
-              {% endfor %}
-            {% endif %}
-            {% if swatch_total > 6 %}
-              <span class="ps-pgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
-            {% endif %}
-          </div>
-          {% endunless %}
-
           <div class="ab-plist-price-row">
 
             {% if product.sale_price and product.sale_price < product.price %}
@@ -174,6 +145,10 @@
       </a>
 
     {% endfor %}
+
+  </div>
+
+  </div>
 
   </div>
 

@@ -412,12 +412,6 @@
     "default": "The order confirmation has been sent to"
   },
   {
-    "name": "brand_name",
-    "type": "string",
-    "description": "PDP: optional vendor/brand line above the product title. Empty hides.",
-    "default": ""
-  },
-  {
     "name": "pdp_shipping_note",
     "type": "string",
     "description": "PDP: optional line under price (e.g. Shipping calculated at checkout). Empty hides.",

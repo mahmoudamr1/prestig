@@ -66,7 +66,6 @@
   "thanks_title_fallback": "Thank you!",
   "thanks_subtitle_fallback": "Your order has been received.",
   "thanks_confirmation_prefix": "The order confirmation has been sent to",
-  "brand_name": "",
   "pdp_shipping_note": "",
   "pdp_stock_message": "",
   "pdp_stock_pulse": true,

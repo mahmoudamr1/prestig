@@ -1,6 +1,6 @@
 {% if section_data.items and section_data.items.size > 0 %}
-<section
-  class="ps-featured-press"
+<div
+  class="ps-featured-press-slot{% if section_data.show_divider != false %} ps-featured-press-slot--ruled{% endif %}"
   style="
     --ps-fp-bg: {{ section_data.bg_color | default: '#ffffff' }};
     --ps-fp-heading: {{ section_data.heading_color | default: '#111111' }};
@@ -8,6 +8,7 @@
     --ps-fp-divider: {{ section_data.divider_color | default: '#e8e8e8' }};
   "
 >
+<section class="ps-featured-press">
   <div class="ps-featured-press__inner">
     {% if section_data.heading != blank %}
       <h2 class="ps-featured-press__title">{{ section_data.heading }}</h2>
@@ -40,23 +41,51 @@
       {% endfor %}
     </div>
   </div>
-  {% if section_data.show_divider != false %}
-    <div class="ps-featured-press__rule" aria-hidden="true"></div>
-  {% endif %}
 </section>
+</div>
 
 <style>
-  .ps-featured-press {
+  /* `.content_container` بعرض الصفحة عند وجود القسم (مثل السلايدر في theme/style.css) */
+  .content_container:has(.ps-featured-press) {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Full width of content_container row — border sits under the whole slot, not only the centered section */
+  .ps-featured-press-slot {
     box-sizing: border-box;
     width: 100%;
+  }
+
+  .ps-featured-press-slot--ruled {
+    border-bottom: 1px solid var(--ps-fp-divider, #e8e8e8);
+  }
+
+  .ps-featured-press {
+    --bs-gutter-x: 2rem;
+    --ps-fp-inline-pad: calc(var(--bs-gutter-x) * 0.5);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+    padding-bottom: clamp(2rem, 5vw, 3.25rem);
+    padding-left: var(--ps-fp-inline-pad);
+    padding-right: var(--ps-fp-inline-pad);
     background: var(--ps-fp-bg, var(--body-bg, #ffffff));
     font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
-    padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 5vw, 3.25rem);
+    -webkit-font-smoothing: antialiased;
   }
 
   .ps-featured-press__inner {
-    max-width: 1100px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
     box-sizing: border-box;
   }
 
@@ -112,7 +141,7 @@
     font-size: 0.9375rem;
     font-weight: 400;
     line-height: 1.65;
-    color: var(--ps-fp-quote, var(--body-text, #4b4b4b));
+    color: var(--ps-fp-quote, #4b4b4b);
     max-width: 34ch;
   }
 
@@ -120,14 +149,16 @@
     font-weight: 500;
   }
 
-  .ps-featured-press__rule {
-    height: 0;
-    margin: 0 clamp(1rem, 4vw, 2rem);
-    border: 0;
-    border-bottom: 1px solid var(--ps-fp-divider, #e8e8e8);
-  }
+  @media (max-width: 767.98px) {
+    .ps-featured-press {
+      --bs-gutter-x: 1rem;
+      --ps-fp-inline-pad: max(
+        14px,
+        env(safe-area-inset-left, 0px),
+        env(safe-area-inset-right, 0px)
+      );
+    }
 
-  @media (max-width: 767px) {
     .ps-featured-press__track {
       display: flex;
       flex-direction: row;
@@ -138,8 +169,8 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
-      margin-inline: calc(-1 * clamp(1rem, 4vw, 2rem));
-      padding-inline: clamp(1rem, 4vw, 2rem);
+      margin-inline: calc(-1 * var(--ps-fp-inline-pad));
+      padding-inline: var(--ps-fp-inline-pad);
       padding-bottom: 0.25rem;
     }
 
@@ -150,6 +181,36 @@
 
     .ps-featured-press__quote {
       max-width: none;
+    }
+  }
+
+  @media (min-width: 576px) {
+    .ps-featured-press {
+      max-width: 680px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .ps-featured-press {
+      max-width: 900px;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .ps-featured-press {
+      max-width: 1160px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .ps-featured-press {
+      max-width: 1320px;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .ps-featured-press {
+      max-width: 1520px;
     }
   }
 </style>

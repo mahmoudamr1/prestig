@@ -24,6 +24,57 @@
       </div>
 
       <div class="ps-rev-summary">
+        {% assign ps_rev_use_backend_rows = false %}
+        {% if rating_rows and rating_rows.size > 0 %}
+          {% assign ps_rev_use_backend_rows = true %}
+        {% endif %}
+        {% unless ps_rev_use_backend_rows %}
+          {% assign ps_rev_c1 = 0 %}
+          {% assign ps_rev_c2 = 0 %}
+          {% assign ps_rev_c3 = 0 %}
+          {% assign ps_rev_c4 = 0 %}
+          {% assign ps_rev_c5 = 0 %}
+          {% for review in reviews %}
+            {% assign rr = review.rating %}
+            {% if rr == blank %}
+              {% assign rr = review.stars %}
+            {% endif %}
+            {% if rr == blank %}
+              {% assign rr = 0 %}
+            {% endif %}
+            {% assign rv = rr | plus: 0 %}
+            {% if rv > 5 %}
+              {% assign rv = 5 %}
+            {% endif %}
+            {% if rv < 0 %}
+              {% assign rv = 0 %}
+            {% endif %}
+            {% if rv > 0 %}
+              {% assign bn = rv | round %}
+              {% if bn < 1 %}
+                {% assign bn = 1 %}
+              {% endif %}
+              {% if bn > 5 %}
+                {% assign bn = 5 %}
+              {% endif %}
+              {% if bn == 5 %}
+                {% assign ps_rev_c5 = ps_rev_c5 | plus: 1 %}
+              {% elsif bn == 4 %}
+                {% assign ps_rev_c4 = ps_rev_c4 | plus: 1 %}
+              {% elsif bn == 3 %}
+                {% assign ps_rev_c3 = ps_rev_c3 | plus: 1 %}
+              {% elsif bn == 2 %}
+                {% assign ps_rev_c2 = ps_rev_c2 | plus: 1 %}
+              {% else %}
+                {% assign ps_rev_c1 = ps_rev_c1 | plus: 1 %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% assign ps_rev_den = reviews.size %}
+          {% if ps_rev_den == 0 %}
+            {% assign ps_rev_den = 1 %}
+          {% endif %}
+        {% endunless %}
         <div class="ps-rev-summary-left">
           <div class="ps-rev-score-ring" aria-hidden="true">
             <span class="ps-rev-score-ring-value">{{ average_rating_display | default: average_rating | default: "—" }}</span>
@@ -46,7 +97,7 @@
           </div>
         </div>
         <div class="ps-rev-bars" role="list">
-          {% if rating_rows and rating_rows.size > 0 %}
+          {% if ps_rev_use_backend_rows %}
             {% for row in rating_rows %}
               <div class="ps-rev-bar-row" role="listitem">
                 <div class="ps-rev-bar-label">
@@ -59,30 +110,35 @@
               </div>
             {% endfor %}
           {% else %}
+            {% assign ps_p5 = ps_rev_c5 | times: 100 | divided_by: ps_rev_den %}
+            {% assign ps_p4 = ps_rev_c4 | times: 100 | divided_by: ps_rev_den %}
+            {% assign ps_p3 = ps_rev_c3 | times: 100 | divided_by: ps_rev_den %}
+            {% assign ps_p2 = ps_rev_c2 | times: 100 | divided_by: ps_rev_den %}
+            {% assign ps_p1 = ps_rev_c1 | times: 100 | divided_by: ps_rev_den %}
             <div class="ps-rev-bar-row" role="listitem">
               <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">5</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
-              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
-              <span class="ps-rev-bar-pct">0%</span>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: {{ ps_p5 | round: 1 }}%;"></div></div>
+              <span class="ps-rev-bar-pct">{{ ps_p5 | round: 1 }}%</span>
             </div>
             <div class="ps-rev-bar-row" role="listitem">
               <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">4</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
-              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
-              <span class="ps-rev-bar-pct">0%</span>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: {{ ps_p4 | round: 1 }}%;"></div></div>
+              <span class="ps-rev-bar-pct">{{ ps_p4 | round: 1 }}%</span>
             </div>
             <div class="ps-rev-bar-row" role="listitem">
               <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">3</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
-              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
-              <span class="ps-rev-bar-pct">0%</span>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: {{ ps_p3 | round: 1 }}%;"></div></div>
+              <span class="ps-rev-bar-pct">{{ ps_p3 | round: 1 }}%</span>
             </div>
             <div class="ps-rev-bar-row" role="listitem">
               <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">2</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
-              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
-              <span class="ps-rev-bar-pct">0%</span>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: {{ ps_p2 | round: 1 }}%;"></div></div>
+              <span class="ps-rev-bar-pct">{{ ps_p2 | round: 1 }}%</span>
             </div>
             <div class="ps-rev-bar-row" role="listitem">
               <div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">1</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div>
-              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div>
-              <span class="ps-rev-bar-pct">0%</span>
+              <div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: {{ ps_p1 | round: 1 }}%;"></div></div>
+              <span class="ps-rev-bar-pct">{{ ps_p1 | round: 1 }}%</span>
             </div>
           {% endif %}
         </div>
@@ -92,13 +148,9 @@
         {% for review in reviews %}
           <article class="ps-rev-card">
             <div class="ps-rev-card-head">
-              {% if review.image and review.image != "" %}
-                <img src="{{ review.image }}" alt="" class="ps-rev-avatar ps-rev-avatar-img" loading="lazy" width="80" height="80" />
-              {% else %}
-                <span class="ps-rev-avatar ps-rev-avatar-fallback" aria-hidden="true">
-                  {{ review.avatar_initial | default: review.user_name | default: review.name | slice: 0, 1 | default: theme_data.reviews_avatar_placeholder }}
-                </span>
-              {% endif %}
+              <span class="ps-rev-avatar ps-rev-avatar-fallback" aria-hidden="true">
+                {{ review.avatar_initial | default: review.user_name | default: review.name | slice: 0, 1 | default: theme_data.reviews_avatar_placeholder }}
+              </span>
               <div class="ps-rev-meta">
                 <span class="ps-rev-name">{{ review.user_name | default: review.name | default: theme_data.reviews_anonymous_name }}</span>
                 {% if review.location and review.location != "" %}
@@ -106,15 +158,58 @@
                 {% endif %}
               </div>
             </div>
-            <div class="ps-rev-card-stars">
+            {% assign r_raw = review.rating %}
+            {% if r_raw == blank %}
+              {% assign r_raw = review.stars %}
+            {% endif %}
+            {% if r_raw == blank %}
+              {% assign r_raw = 0 %}
+            {% endif %}
+            {% assign r_val = r_raw | plus: 0 %}
+            {% if r_val > 5 %}
+              {% assign r_val = 5 %}
+            {% endif %}
+            {% if r_val < 0 %}
+              {% assign r_val = 0 %}
+            {% endif %}
+            {% assign full_stars = r_val | floor %}
+            {% assign dec = r_val | minus: full_stars %}
+            {% assign has_half = false %}
+            {% if dec >= 0.25 and dec < 0.75 %}
+              {% assign has_half = true %}
+            {% elsif dec >= 0.75 %}
+              {% assign full_stars = full_stars | plus: 1 %}
+            {% endif %}
+            {% if full_stars > 5 %}
+              {% assign full_stars = 5 %}
+            {% endif %}
+            {% assign half_i = full_stars | plus: 1 %}
+            <div
+              class="ps-rev-card-stars"
+              role="img"
+              aria-label="Rating {{ r_val | round: 1 }} out of 5"
+            >
               {% for i in (1..5) %}
-                {% if i <= review.rating | default: 5 %}
+                {% if i <= full_stars %}
                   <span class="ab-pd-star ab-pd-star-filled ps-rev-star"></span>
+                {% elsif has_half and i == half_i %}
+                  <span class="ab-pd-star ab-pd-star-half ps-rev-star"></span>
                 {% else %}
                   <span class="ab-pd-star ab-pd-star-empty ps-rev-star"></span>
                 {% endif %}
               {% endfor %}
             </div>
+            {% if review.image and review.image != "" %}
+              <figure class="ps-rev-body-media">
+                <img
+                  src="{{ review.image }}"
+                  alt=""
+                  class="ps-rev-body-media__img"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            {% endif %}
             <p class="ps-rev-comment ab-review-comment" data-review-comment>{{ review.comment }}</p>
           </article>
         {% endfor %}
