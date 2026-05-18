@@ -1986,62 +1986,32 @@ main.container_class {
 /* ============================================================================
  * ============================================================================
  *   SCOPE: HOME PRODUCTS GRID — `.ab-pgrid`, `.ps-product-*` (شبكة الصفحة الرئيسية)
- *   Grid utilities بنمط Tailwind (`grid-cols-*`, `gap-4`) مع تعريفات محلية فقط.
  * ============================================================================
  * ============================================================================ */
 
-.ab-pgrid .ab-pgrid-wrap.grid {
+.ab-pgrid .ab-pgrid-wrap {
   display: grid;
-  align-items: stretch;
   box-sizing: border-box;
-}
-
-.ab-pgrid .ab-pgrid-wrap.gap-4 {
-  gap: 1rem;
-}
-
-.ab-pgrid .grid-cols-2 {
+  align-items: stretch;
+  gap: 10px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 @media (min-width: 768px) {
-  .ab-pgrid .md\:grid-cols-3 {
+  .ab-pgrid .ab-pgrid-wrap {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1024px) {
-  .ab-pgrid .lg\:grid-cols-4 {
+  .ab-pgrid .ab-pgrid-wrap {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-.ab-pgrid .items-stretch {
-  align-items: stretch;
-}
-
-.ab-pgrid .min-w-0 {
+.ab-pgrid .ab-pgrid-wrap > * {
   min-width: 0;
-}
-
-.ab-pgrid .col-span-2 {
-  grid-column: span 2 / span 2;
-}
-
-@media (min-width: 768px) {
-  .ab-pgrid .md\:col-span-3 {
-    grid-column: span 3 / span 3;
-  }
-}
-
-@media (min-width: 1024px) {
-  .ab-pgrid .lg\:col-span-1 {
-    grid-column: span 1 / span 1;
-  }
-
-  .ab-pgrid .lg\:col-span-4 {
-    grid-column: span 4 / span 4;
-  }
+  height: 100%;
 }
 
 .ps-ab-pgrid-shell {
@@ -2392,7 +2362,7 @@ padding: 0;
  * Unified store product card (grid, list, home, related) — reference UI
  * -------------------------------------------------------------------------- */
 :root {
-  --ps-store-card-bg: #f7f7f7;
+  /* --ps-store-card-bg: set from theme_data in header.liquid (.ps-theme-root) */
   --ps-store-card-radius: 20px;
   --ps-store-badge-bg: #d63a2f;
   --ps-store-badge-font-size: 0.9rem;
@@ -2454,7 +2424,7 @@ padding: 0;
 .ps-store-card .ab-plist-info {
   align-items: flex-start !important;
   text-align: start !important;
-  padding: 16px 18px 20px !important;
+  padding: 0 18px 20px !important;
   box-sizing: border-box;
 }
 
@@ -2722,7 +2692,7 @@ padding: 0;
 }
 
 .ps-store-card.ps-product-card:hover {
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
   transform: none;
 }
 
@@ -5237,6 +5207,7 @@ div:has(> .ab-plist.ab-plist--related) {
   padding: clamp(28px, 8%, 48px) clamp(24px, 9%, 46px);
   box-sizing: border-box;
   overflow: hidden;
+  border-radius: var(--ps-store-card-radius, 20px);
 }
 
 .ps-featured-banner.ps-featured-hero::before {
@@ -5252,6 +5223,10 @@ div:has(> .ab-plist.ab-plist--related) {
   box-sizing: border-box;
   pointer-events: none;
   z-index: 2;
+  border-radius: max(
+    0px,
+    calc(var(--ps-store-card-radius, 20px) - 16px)
+  );
 }
 
 .ps-featured-banner.ps-featured-hero > .ps-featured-banner-bg-img {
@@ -5422,7 +5397,7 @@ div:has(> .ab-plist.ab-plist--related) {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 32px;
+  gap: 10px;
   align-content: start;
 }
 
@@ -5460,6 +5435,7 @@ div:has(> .ab-plist.ab-plist--related) {
   height: 100%;
   align-self: stretch;
   text-align: center;
+  border-radius: var(--ps-store-card-radius, 20px);
 }
 
 .ps-featured-grid > .ps-featured-banner.ps-featured-hero::before {
@@ -5474,6 +5450,10 @@ div:has(> .ab-plist.ab-plist--related) {
   box-sizing: border-box;
   pointer-events: none;
   z-index: 2;
+  border-radius: max(
+    0px,
+    calc(var(--ps-store-card-radius, 20px) - 12px)
+  );
 }
 
 .ps-featured-grid > .ps-featured-banner.ps-featured-hero > .ps-featured-banner-bg-img {
@@ -5531,6 +5511,10 @@ div:has(> .ab-plist.ab-plist--related) {
 
   .ps-featured-grid > .ps-featured-banner.ps-featured-hero::after {
     inset: clamp(6px, 2.5vw, 10px);
+    border-radius: max(
+      0px,
+      calc(var(--ps-store-card-radius, 20px) - clamp(6px, 2.5vw, 10px))
+    );
   }
 
   .ps-featured-grid > .ps-featured-banner.ps-featured-hero > .ps-featured-banner-bg-img {
@@ -17277,7 +17261,6 @@ body:has(.checkout_order_summary) .ps-footer {
 }
 
 .ab-plist.ab-plist--related .ps-store-card {
-  --ps-store-card-bg: #f6f6f6;
   --ps-store-card-radius: 14px;
 }
 

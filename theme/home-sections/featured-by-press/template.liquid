@@ -168,10 +168,15 @@
       overflow-y: hidden;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
       margin-inline: calc(-1 * var(--ps-fp-inline-pad));
       padding-inline: var(--ps-fp-inline-pad);
       padding-bottom: 0.25rem;
+    }
+
+    .ps-featured-press__track::-webkit-scrollbar {
+      display: none;
     }
 
     .ps-featured-press__cell {

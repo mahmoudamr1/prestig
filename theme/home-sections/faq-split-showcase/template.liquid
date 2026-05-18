@@ -1,8 +1,5 @@
 {% if section_data.items and section_data.items.size > 0 %}
-<div
-  class="faq-split-showcase-wrap"
-  style="--fs-bg: {{ section_data.bg_color | default: '#f3eeea' }};"
->
+<div class="faq-split-showcase-wrap">
 <section
   class="faq-split-showcase"
   data-ps-faq-split
@@ -92,7 +89,7 @@
   .faq-split-showcase-wrap {
     box-sizing: border-box;
     width: 100%;
-    background: var(--fs-bg, #f3eeea);
+    background: #f3eeea;
   }
 
   /* يطابق `.content_container` في theme/style.css (عرض + حواف) */

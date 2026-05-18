@@ -1,9 +1,9 @@
 {% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
-{% assign _pc_ch1 = theme_data.product_card_choose_label | strip %}
+{% assign _pc_ch1 = theme_data.product_card_choose_label | default: '' | strip %}
 {% if _pc_ch1 != blank %}
   {% assign _pc_choose = _pc_ch1 %}
 {% else %}
-  {% assign _pc_choose = theme_data.grid_products_choose_options_label | strip | default: add | default: 'Choose options' %}
+  {% assign _pc_choose = theme_data.grid_products_choose_options_label | default: add | default: 'Choose options' | strip %}
 {% endif %}
 <section class="ab-plist ab-plist--related">
 

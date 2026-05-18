@@ -1,11 +1,11 @@
 
 <section class="ab-pgrid ps-pgrid-section">
   {% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
-  {% assign _pc_ch1 = theme_data.product_card_choose_label | strip %}
+  {% assign _pc_ch1 = theme_data.product_card_choose_label | default: '' | strip %}
   {% if _pc_ch1 != blank %}
     {% assign _pc_choose = _pc_ch1 %}
   {% else %}
-    {% assign _pc_choose = theme_data.grid_products_choose_options_label | strip | default: add | default: 'Choose options' %}
+    {% assign _pc_choose = theme_data.grid_products_choose_options_label | default: add | default: 'Choose options' | strip %}
   {% endif %}
   {% assign _hp_title = section_title | strip %}
   {% if _hp_title == blank %}
@@ -33,7 +33,7 @@
       {% endif %}
     </div>
     {% endif %}
-    <div class="ab-pgrid-wrap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-stretch">
+    <div class="ab-pgrid-wrap">
       {% for product in products limit: 8 %}
         {% assign color_variation = product.variations | where: "type", "color" | first %}
         {% assign image_variation = product.variations | where: "type", "image" | first %}
@@ -51,7 +51,7 @@
           {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
         {% endif %}
 
-        <div class="min-w-0 h-full">
+        <div>
           <div class="ps-product-card ps-store-card ps-u-h-full">
             <a
               href="/products/{{ product.slug }}"
@@ -120,6 +120,7 @@
               </span>
 
               {% unless theme_data.product_card_show_swatches == false %}
+              {% if swatch_total > 0 %}
               <div class="ps-pgrid-swatches">
                 {% if color_variation and color_variation.props %}
                   {% for prop in color_variation.props limit: 6 %}
@@ -141,6 +142,7 @@
                   <span class="ps-pgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
                 {% endif %}
               </div>
+              {% endif %}
               {% endunless %}
 
               <div class="ps-product-price">

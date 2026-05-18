@@ -1,8 +1,9 @@
 {% if categories and categories.size > 0 %}
-{% assign _cat_kicker = theme_data.categories_header_subtitle | strip %}
-{% assign _cat_heading = theme_data.categories_header_title | strip %}
-{% assign _cat_desc = theme_data.categories_section_description | strip %}
-{% assign _cat_items_word = theme_data.categories_items_label | strip | default: 'items' %}
+{% comment %}Defaults match schema.json when theme_data keys are missing (e.g. live store before first save).{% endcomment %}
+{% assign _cat_kicker = theme_data.categories_header_subtitle | default: 'Care For Your Skin' | strip %}
+{% assign _cat_heading = theme_data.categories_header_title | default: 'Natural self care products' | strip %}
+{% assign _cat_desc = theme_data.categories_section_description | default: 'Thoughtfully chosen routines and essentials to care for your skin every day.' | strip %}
+{% assign _cat_items_word = theme_data.categories_items_label | default: 'items' | strip %}
 <div
   class="category-section-wrapper ab-categories-section ps-sr-scope"
   data-ps-cat-showcase

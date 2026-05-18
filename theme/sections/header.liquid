@@ -1,4 +1,4 @@
-{% comment %} Dynamic Google Fonts + --ps-ff-* from theme_data — see schema (font_google_families / font_google_weights / font_family_*). {% endcomment %}
+{% comment %} Dynamic Google Fonts + --ps-ff-* + --ps-store-card-bg from theme_data — see schema. {% endcomment %}
 {% assign _fgw = theme_data.font_google_weights | default: '400;500;600;700' | strip %}
 {% assign _fgs = theme_data.font_google_families | default: 'DM Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display, Instrument Sans' | strip %}
 {% assign _fam_parts = _fgs | split: ',' %}
@@ -45,6 +45,11 @@
   {% assign _fan = 'DM Sans' %}
 {% endif %}
 
+{% assign _store_card_bg = theme_data.store_product_card_background | strip %}
+{% if _store_card_bg == blank %}
+  {% assign _store_card_bg = '#f7f7f7' %}
+{% endif %}
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="{{ prestig_google_font_url }}" />
@@ -56,6 +61,11 @@
     --ps-ff-display: "{{ _fd }}";
     --ps-ff-arabic: "{{ _fb }}";
     --ps-ff-announce: "{{ _fan }}", var(--ps-ff-ui), system-ui, sans-serif;
+  }
+  /* Product cards (.ps-store-card) inherit — scoped here so theme_data wins over static style.css :root. */
+  .ps-theme.ps-theme-root,
+  .ps-theme-root {
+    --ps-store-card-bg: {{ _store_card_bg }};
   }
   html[lang="ar"] .ps-theme,
   .ps-theme[lang="ar"] {

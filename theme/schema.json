@@ -48,6 +48,12 @@
     "default": "DM Sans"
   },
   {
+    "name": "store_product_card_background",
+    "type": "color",
+    "description": "خلفية بطاقة المنتج (الشبكة، القائمة، الرئيسية، ذات الصلة) — Store product card background.",
+    "default": "#f7f7f7"
+  },
+  {
     "name": "header_hamburger_icon",
     "type": "image",
     "description": "Header: mobile menu (hamburger) image URL.",
@@ -270,19 +276,19 @@
   {
     "name": "categories_header_subtitle",
     "type": "string",
-    "description": "Categories section: small eyebrow above the heading (left column). Leave empty to hide.",
+    "description": "Categories section: small eyebrow above the heading (left column). If unset or blank in saved theme data, the default below is shown in the storefront.",
     "default": "Care For Your Skin"
   },
   {
     "name": "categories_header_title",
     "type": "string",
-    "description": "Categories section: main heading (left column). Leave empty to hide.",
+    "description": "Categories section: main heading (left column). If unset or blank in saved theme data, the default below is shown in the storefront.",
     "default": "Natural self care products"
   },
   {
     "name": "categories_section_description",
     "type": "string",
-    "description": "Categories showcase: paragraph under the heading (left column). Leave empty to hide.",
+    "description": "Categories showcase: paragraph under the heading (left column). If unset or blank in saved theme data, the default below is shown in the storefront.",
     "default": "Thoughtfully chosen routines and essentials to care for your skin every day."
   },
   {
@@ -354,7 +360,7 @@
   {
     "name": "grid_products_choose_options_label",
     "type": "string",
-    "description": "Home products grid: pill button label (desktop hover) for quick add.",
+    "description": "Product cards (grids, lists, related): quick-add pill label on desktop hover. If unset or blank in saved theme data, the theme falls back to the storefront quick-add string then «Choose options».",
     "default": "Choose options"
   },
   {
@@ -366,7 +372,7 @@
   {
     "name": "product_card_choose_label",
     "type": "string",
-    "description": "كروت المنتجات: نص زر «Choose options» على سطح المكتب (الهوفر). فارغ يستخدم grid_products_choose_options_label ثم add.",
+    "description": "كروت المنتجات: نص مخصص لزر التسمية على سطح المكتب (الهوفر) بدل النص الافتراضي. إذا كان فارغاً أو غير محفوظ: يُستخدم grid_products_choose_options_label ثم نص الإضافة السريعة من المنصة ثم «Choose options».",
     "default": ""
   },
   {

@@ -1,10 +1,10 @@
 <section class="ps-pgrid-section" data-ps-pgrid>
   {% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
-  {% assign _pc_ch1 = theme_data.product_card_choose_label | strip %}
+  {% assign _pc_ch1 = theme_data.product_card_choose_label | default: '' | strip %}
   {% if _pc_ch1 != blank %}
     {% assign _pc_choose = _pc_ch1 %}
   {% else %}
-    {% assign _pc_choose = theme_data.grid_products_choose_options_label | strip | default: add | default: 'Choose options' %}
+    {% assign _pc_choose = theme_data.grid_products_choose_options_label | default: add | default: 'Choose options' | strip %}
   {% endif %}
   <div class="ps-pgrid-inner">
     <div class="ps-pgrid-main">
@@ -66,6 +66,7 @@
               {% endif %}
               <span class="ps-pgrid-name">{{ product.name }}</span>
               {% unless theme_data.product_card_show_swatches == false %}
+              {% if swatch_total > 0 %}
               <div class="ps-pgrid-swatches">
                 {% if color_variation and color_variation.props %}
                   {% for prop in color_variation.props limit: 6 %}
@@ -83,6 +84,7 @@
                   <span class="ps-pgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
                 {% endif %}
               </div>
+              {% endif %}
               {% endunless %}
 
               <div class="ps-pgrid-price-row">

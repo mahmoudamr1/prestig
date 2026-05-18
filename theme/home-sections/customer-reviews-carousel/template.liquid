@@ -2,10 +2,9 @@
 <div
   class="ps-rev-carousel-shell"
   style="
-    --ps-rc-bg: {{ section_data.bg_color | default: '#f3eeea' }};
     --ps-rc-heading: {{ section_data.heading_color | default: '#111111' }};
     --ps-rc-radius: {{ section_data.card_radius | default: 18 }}px;
-    --ps-rc-gap: {{ section_data.track_gap | default: 18 }}px;
+    --ps-rc-gap: {{ section_data.track_gap | default: 20 }}px;
   "
 >
 <div class="ps-rev-carousel-slot">
@@ -183,7 +182,7 @@
     width: 100%;
     padding-top: clamp(2rem, 5vw, 3.5rem);
     padding-bottom: clamp(2rem, 5vw, 3.5rem);
-    background: var(--ps-rc-bg, #f3eeea);
+    background: #f3eeea;
     font-family: var(--ps-ff-primary), var(--ps-ff-ui), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -291,7 +290,7 @@
   .ps-rev-carousel__track {
     display: flex;
     flex-direction: row;
-    gap: var(--ps-rc-gap, 18px);
+    gap: var(--ps-rc-gap, 20px);
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -328,14 +327,13 @@
     border-radius: var(--ps-rc-radius, 18px);
     overflow: hidden;
     background: #ffffff;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
     box-sizing: border-box;
     min-height: 0;
   }
 
   @media (min-width: 1025px) {
     .ps-rev-carousel__card {
-      flex: 0 0 clamp(280px, 30vw, 340px);
+      flex: 0 0 clamp(280px, 30vw, 400px);
     }
   }
 
@@ -368,7 +366,7 @@
 
   .ps-rev-carousel__meta {
     margin: 0;
-    font-size: 0.875rem;
+    font-size: clamp(0.8125rem, 0.32vw + 0.74rem, 0.9375rem);
     line-height: 1.4;
     display: flex;
     flex-wrap: wrap;
@@ -378,18 +376,22 @@
 
   .ps-rev-carousel__name {
     font-weight: 700;
+    font-size: clamp(1rem, 0.48vw + 0.86rem, 1.125rem);
+    line-height: 1.35;
     color: var(--product-name-text, #111111);
   }
 
   .ps-rev-carousel__verified {
     font-weight: 400;
-    font-size: 0.8125rem;
-    color: rgba(17, 17, 17, 0.48);
+    font-size: clamp(0.75rem, 0.28vw + 0.68rem, 0.875rem);
+    line-height: 1.4;
+    color: var(--body-text, #333333);
+    opacity: 0.72;
   }
 
   .ps-rev-carousel__text {
     margin: 0;
-    font-size: 0.875rem;
+    font-size: clamp(0.875rem, 0.38vw + 0.78rem, 1rem);
     font-weight: 400;
     line-height: 1.55;
     color: var(--body-text, #333333);
@@ -429,7 +431,7 @@
   }
 
   .ps-rev-carousel__pname {
-    font-size: 0.8125rem;
+    font-size: clamp(0.8125rem, 0.32vw + 0.74rem, 0.9375rem);
     font-weight: 700;
     line-height: 1.35;
     color: var(--product-name-text, #111111);
@@ -516,7 +518,7 @@
   }
 
   .ps-rev-carousel__product-mount .eo-hs-card--product .eo-hs-card__title {
-    font-size: 0.8125rem;
+    font-size: clamp(0.8125rem, 0.32vw + 0.74rem, 0.9375rem);
     font-weight: 700;
     line-height: 1.35;
     color: var(--product-name-text, #111111);
@@ -580,6 +582,46 @@
     .ps-rev-carousel-slot {
       max-width: 1520px;
     }
+  }
+
+  /* Hydrated host markup (testimonial row + product title link) — same palette as cards above */
+  .ps-rev-carousel-shell h4.testimonial__name,
+  .ps-rev-carousel-shell .testimonial__name.h5,
+  .ps-rev-carousel-shell .testimonial__name {
+    font-size: clamp(1rem, 0.55vw + 0.84rem, 1.125rem);
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--product-name-text, #111111);
+    -webkit-text-fill-color: var(--product-name-text, #111111);
+  }
+
+  .ps-rev-carousel-shell .testimonial__bio,
+  .ps-rev-carousel-shell .testimonial__bio.text-subtext,
+  .ps-rev-carousel-shell .testimonial__bio.text-sm,
+  .ps-rev-carousel-shell div.testimonial__bio.text-subtext.text-sm {
+    font-size: clamp(0.75rem, 0.3vw + 0.68rem, 0.9rem);
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--body-text, #333333);
+    opacity: 0.72;
+  }
+
+  .ps-rev-carousel-shell a .reversed-link,
+  .ps-rev-carousel-shell .reversed-link {
+    font-size: clamp(0.875rem, 0.42vw + 0.78rem, 1.0625rem);
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--product-name-text, #111111);
+    -webkit-text-fill-color: var(--product-name-text, #111111);
+  }
+
+  .ps-rev-carousel-shell .testimonial__content p,
+  .ps-rev-carousel-shell .testimonial p,
+  .ps-rev-carousel-shell .card__content p {
+    font-size: clamp(0.875rem, 0.38vw + 0.78rem, 1rem);
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--body-text, #333333);
   }
 </style>
 {% endif %}

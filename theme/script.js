@@ -1875,6 +1875,7 @@
         var hasDragged = false;
         var suppressClickUntil = 0;
         var activePointerId = null;
+        var pointerDownTarget = null;
 
         function isClickSuppressed() {
           return Date.now() < suppressClickUntil;
@@ -1890,6 +1891,16 @@
           if (!evt.isPrimary) {
             return;
           }
+          var t = evt.target;
+          if (
+            t &&
+            t.closest &&
+            t.closest("button, input, textarea, select, label")
+          ) {
+            pointerDownTarget = null;
+            return;
+          }
+          pointerDownTarget = t;
           isPointerDown = true;
           hasDragged = false;
           dragStartX = evt.clientX;
@@ -1920,12 +1931,14 @@
           if (evt.pointerId !== activePointerId) {
             return;
           }
+          var didDrag = hasDragged;
+          var isCancel = evt.type === "pointercancel";
           isPointerDown = false;
           activePointerId = null;
           if (hasDragged) {
             suppressClickFor(280);
-            hasDragged = false;
           }
+          hasDragged = false;
           try {
             track.releasePointerCapture(evt.pointerId);
           } catch (e) {
@@ -1934,6 +1947,40 @@
           track.removeEventListener("pointermove", onTrackPointerMove);
           track.removeEventListener("pointerup", onTrackPointerUp);
           track.removeEventListener("pointercancel", onTrackPointerUp);
+
+          var pendingLink = null;
+          if (
+            !didDrag &&
+            !isCancel &&
+            pointerDownTarget &&
+            pointerDownTarget.closest &&
+            !evt.ctrlKey &&
+            !evt.metaKey &&
+            !evt.shiftKey &&
+            !evt.altKey
+          ) {
+            var linkEl = pointerDownTarget.closest("a[href]");
+            if (linkEl && root.contains(linkEl)) {
+              var hrefAttr = linkEl.getAttribute("href");
+              if (hrefAttr != null && String(hrefAttr).trim() !== "") {
+                pendingLink = linkEl;
+              }
+            }
+          }
+          pointerDownTarget = null;
+
+          if (pendingLink) {
+            window.requestAnimationFrame(function () {
+              if (!pendingLink || !pendingLink.getAttribute("href")) {
+                return;
+              }
+              if (pendingLink.target === "_blank") {
+                window.open(pendingLink.href, "_blank", "noopener,noreferrer");
+              } else {
+                pendingLink.click();
+              }
+            });
+          }
         }
         function onTrackWheel(evt) {
           if (Math.abs(evt.deltaX) > 4 || Math.abs(evt.deltaY) > 4) {

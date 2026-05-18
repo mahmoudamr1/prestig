@@ -3,12 +3,6 @@
   "label": "FAQ split showcase",
   "section_schema": [
     {
-      "name": "bg_color",
-      "type": "color",
-      "default": "#f3eeea",
-      "description": "Section background (warm neutral)"
-    },
-    {
       "name": "heading",
       "type": "string",
       "default": "We're answerable!",

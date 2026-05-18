@@ -9,12 +9,6 @@
       "description": "Section title (header row)"
     },
     {
-      "name": "bg_color",
-      "type": "color",
-      "default": "#f3eeea",
-      "description": "Section background"
-    },
-    {
       "name": "heading_color",
       "type": "color",
       "default": "#111111",
@@ -29,7 +23,7 @@
     {
       "name": "track_gap",
       "type": "number",
-      "default": 18,
+      "default": 20,
       "description": "Gap between cards (px)"
     },
     {
