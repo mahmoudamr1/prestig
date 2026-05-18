@@ -321,9 +321,9 @@
               aria-label="Account"
               onclick="this.dispatchEvent(new CustomEvent('register-click',{bubbles:true})); return false;"
             >
-              <svg class="ps-icon-image ps-account-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 21a8 8 0 1 1 16 0"/>
-              </svg>
+              <img width="22" height="22" class="ps-icon-image ps-account-icon" aria-hidden="true" src="https://files.easy-orders.net/1779102257908220564sx013.svg" alt="" loading="lazy" decoding="async" />
+
+
             </a>
           {% endif %}
           <button
@@ -364,10 +364,9 @@
           {% endif %}
         </a>
         <button id="eo-mobile-close" class="ps-mobile-close" type="button" aria-label="Close menu">
-          <svg class="ps-close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-            <path d="M18.75 5.13496L5.25 18.8544" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M18.75 18.8544L5.25 5.13496" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <img width="24" height="24" class="ps-close-icon" aria-hidden="true" src="https://files.easy-orders.net/1779102257874401432sx014.svg" alt="" loading="lazy" decoding="async" />
+
+
         </button>
       </div>
 
@@ -398,9 +397,9 @@
               <div class="ps-mobile-accordion">
                 <button class="ps-mobile-link ps-accordion-trigger" type="button">
                   <span>{{ category.name }}</span>
-                  <svg class="ps-mobile-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                    <path d="M7.5 3.74121L13.75 9.99121L7.5 16.2412" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <img width="20" height="20" class="ps-mobile-chevron" aria-hidden="true" src="https://files.easy-orders.net/1779102257897549210sx015.svg" alt="" loading="lazy" decoding="async" />
+
+
                 </button>
                 <div class="ps-accordion-panel">
                   <a href="{{ cat_href }}" class="ps-mobile-sublink">All {{ category.name }}</a>
@@ -430,9 +429,9 @@
         <div class="ps-mobile-accordion ps-mobile-accordion--pages">
           <button class="ps-mobile-link ps-mobile-link--pages-row ps-accordion-trigger" type="button">
             <span class="ps-mobile-link__label">{{ theme_data.header_pages_menu_label | strip | default: 'Pages' }}</span>
-            <svg class="ps-mobile-pages-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <path d="M7.5 3.74121L13.75 9.99121L7.5 16.2412" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <img width="20" height="20" class="ps-mobile-pages-arrow" aria-hidden="true" src="https://files.easy-orders.net/1779102257880218891sx016.svg" alt="" loading="lazy" decoding="async" />
+
+
           </button>
           <div class="ps-accordion-panel">
             {% for page in pages %}
@@ -482,9 +481,9 @@
           type="button"
         >
           <span class="ps-mobile-link__label">{{ theme_data.header_language_menu_label | strip | default: 'Language' }}</span>
-          <svg class="ps-mobile-pages-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-            <path d="M7.5 3.74121L13.75 9.99121L7.5 16.2412" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <img width="20" height="20" class="ps-mobile-pages-arrow" aria-hidden="true" src="https://files.easy-orders.net/1779102257880218891sx016.svg" alt="" loading="lazy" decoding="async" />
+
+
         </button>
         <div class="ps-accordion-panel">
           {% assign _ps_lang_opts = theme_data.header_language_options %}

@@ -30,6 +30,132 @@
     console.error(head, err);
   }
 
+  /**
+   * Builds `https://fonts.googleapis.com/css2?...&display=swap` from comma-separated family names + weight spec
+   * (same rules as header.liquid URL loop). Used when `data-ps-gf-href` is absent or invalid.
+   */
+  function prestigeBuildGoogleFontsCss2Href(familiesStr, weightsStr) {
+    var w = String(weightsStr || "")
+      .trim()
+      .replace(/^;+|;+$/g, "");
+    if (!w) {
+      w = "400;500;600;700";
+    }
+    var raw = String(familiesStr || "").trim();
+    var parts = [];
+    if (raw) {
+      raw.split(",").forEach(function (seg) {
+        var one = String(seg || "")
+          .trim()
+          .replace(/["']/g, "");
+        if (!one) {
+          return;
+        }
+        var enc = one.replace(/\s+/g, "+");
+        parts.push("family=" + enc + ":wght@" + w);
+      });
+    }
+    var q = parts.length ? parts.join("&") : "family=DM+Sans:wght@" + w;
+    return "https://fonts.googleapis.com/css2?" + q + "&display=swap";
+  }
+
+  /**
+   * Copy `data-ps-ff-*` from `.ps-theme` to `<html style>` (`--ps-ff-*`); set `--ps-store-card-bg` on the wrap.
+   * Removes legacy `#prestige-theme-font-vars` if present.
+   */
+  function prestigeApplyFontRoleVarsFromPsTheme(wrap) {
+    if (!wrap) {
+      return;
+    }
+    function readFontRole(attr, fallback) {
+      var v = wrap.getAttribute(attr);
+      v = v != null ? String(v).trim().replace(/["']/g, "") : "";
+      if (!v) {
+        return fallback;
+      }
+      return v;
+    }
+    function quotedFontCssValue(name) {
+      return '"' + String(name || "").replace(/"/g, "") + '"';
+    }
+    var root = document.documentElement;
+    root.style.setProperty("--ps-ff-primary", quotedFontCssValue(readFontRole("data-ps-ff-primary", "DM Sans")));
+    root.style.setProperty("--ps-ff-ui", quotedFontCssValue(readFontRole("data-ps-ff-ui", "Manrope")));
+    root.style.setProperty("--ps-ff-alt", quotedFontCssValue(readFontRole("data-ps-ff-alt", "Nunito")));
+    root.style.setProperty("--ps-ff-display", quotedFontCssValue(readFontRole("data-ps-ff-display", "Playfair Display")));
+    root.style.setProperty("--ps-ff-arabic", quotedFontCssValue(readFontRole("data-ps-ff-arabic", "Almarai")));
+    var announceName = readFontRole("data-ps-ff-announce", "DM Sans");
+    root.style.setProperty(
+      "--ps-ff-announce",
+      quotedFontCssValue(announceName) + ", var(--ps-ff-ui), system-ui, sans-serif"
+    );
+    var cardBg = (wrap.getAttribute("data-ps-store-card-bg") || "").trim();
+    if (cardBg) {
+      try {
+        wrap.style.setProperty("--ps-store-card-bg", cardBg);
+      } catch (eBg) {
+        /* ignore */
+      }
+    }
+    var legacyFontVars = document.getElementById("prestige-theme-font-vars");
+    if (legacyFontVars && legacyFontVars.parentNode) {
+      legacyFontVars.parentNode.removeChild(legacyFontVars);
+    }
+  }
+
+  function prestigeInjectThemeFonts() {
+    var wrap = document.querySelector(".ps-theme");
+    if (!wrap) {
+      return;
+    }
+    prestigeApplyFontRoleVarsFromPsTheme(wrap);
+    var hrefLegacy = (wrap.getAttribute("data-ps-gf-href") || "").trim();
+    var href = hrefLegacy;
+    if (!href || href.indexOf("https://fonts.googleapis.com/css2") !== 0) {
+      href = prestigeBuildGoogleFontsCss2Href(
+        wrap.getAttribute("data-ps-gf-families"),
+        wrap.getAttribute("data-ps-gf-weights")
+      );
+    }
+    if (!href || href.indexOf("https://fonts.googleapis.com/css2") !== 0) {
+      return;
+    }
+    var head = document.head || document.getElementsByTagName("head")[0];
+    if (!head) {
+      return;
+    }
+    function ensurePreconnect(url, crossOrigin) {
+      var id =
+        "prestige-font-preconnect-" +
+        (url.indexOf("gstatic") >= 0 ? "gstatic" : "googleapis");
+      if (document.getElementById(id)) {
+        return;
+      }
+      var l = document.createElement("link");
+      l.id = id;
+      l.rel = "preconnect";
+      l.href = url;
+      if (crossOrigin) {
+        l.setAttribute("crossorigin", "");
+      }
+      head.insertBefore(l, head.firstChild);
+    }
+    ensurePreconnect("https://fonts.googleapis.com", false);
+    ensurePreconnect("https://fonts.gstatic.com", true);
+
+    var idCss = "prestige-google-fonts-stylesheet";
+    var linkEl = document.getElementById(idCss);
+    if (!linkEl) {
+      linkEl = document.createElement("link");
+      linkEl.id = idCss;
+      linkEl.rel = "stylesheet";
+      head.appendChild(linkEl);
+    }
+    if (linkEl.getAttribute("href") !== href) {
+      linkEl.setAttribute("href", href);
+    }
+  }
+
   function readPrestigeScrollY(scrollRoot) {
     if (!scrollRoot || scrollRoot === window) {
       return window.scrollY || document.documentElement.scrollTop || 0;
@@ -171,14 +297,31 @@
     });
   }
 
+  /** How the bar was rendered in Liquid — do not trust data-ann-type alone (can be stale). */
+  function detectPrestigeAnnounceMode(root) {
+    if (!root || !root.querySelector) {
+      return "simple";
+    }
+    if (root.querySelector(".ps-announce-marquee")) {
+      return "marquee";
+    }
+    if (root.querySelector(".ps-announce-slider")) {
+      return "slider";
+    }
+    if (root.querySelector(".ps-announce-simple")) {
+      return "simple";
+    }
+    return "simple";
+  }
+
   function collectAnnounceItems(root) {
-    var type = root.getAttribute("data-ann-type");
+    var mode = detectPrestigeAnnounceMode(root);
     var out = [];
-    if (type === "marquee") {
+    if (mode === "marquee") {
       root.querySelectorAll('.ps-announce-marquee-item:not([aria-hidden="true"])').forEach(function (el) {
         out.push(el.innerHTML);
       });
-    } else if (type === "slider") {
+    } else if (mode === "slider") {
       root.querySelectorAll(".ps-announce-slide").forEach(function (el) {
         out.push(el.innerHTML);
       });
@@ -206,6 +349,9 @@
   }
 
   function setupAnnounceCarousel(root) {
+    if (detectPrestigeAnnounceMode(root) !== "slider") {
+      return;
+    }
     teardownAnnounceCarousel(root);
     var items = collectAnnounceItems(root);
     if (items.length < 2) {
@@ -296,9 +442,27 @@
     });
     clearPrestigeAnnounceSliders();
     document.querySelectorAll("[data-ps-announce]").forEach(function (root) {
+      var mode = detectPrestigeAnnounceMode(root);
       var items = collectAnnounceItems(root);
-      if (items.length > 1) {
+      if (mode === "slider" && items.length >= 2) {
         setupAnnounceCarousel(root);
+      }
+    });
+    document.querySelectorAll("[data-ps-announce]").forEach(function (root) {
+      if (detectPrestigeAnnounceMode(root) !== "slider") {
+        teardownAnnounceCarousel(root);
+      }
+    });
+    requestAnimationFrame(function () {
+      document.querySelectorAll("[data-ps-announce]").forEach(function (root) {
+        if (detectPrestigeAnnounceMode(root) !== "slider") {
+          teardownAnnounceCarousel(root);
+        }
+      });
+      try {
+        syncPrestigeThemeStack();
+      } catch (eStack) {
+        prestigeThemeError("announce-bar-theme-stack", eStack);
       }
     });
     syncPrestigeThemeStack();
@@ -3971,6 +4135,11 @@
 
   function runPrestigeDynamicInits() {
     try {
+      prestigeInjectThemeFonts();
+    } catch (eFonts) {
+      prestigeThemeError("theme-fonts-inject-dynamic", eFonts);
+    }
+    try {
       initEasyOrdersHsCtaLinks();
       initEasyOrdersHsHydration();
     } catch (e) {
@@ -4106,6 +4275,7 @@
 
   function init() {
     try {
+      prestigeInjectThemeFonts();
       syncPrestigeThemeStack();
       initPrestigeHeaderScroll();
       initPrestigeSearchRedirect();

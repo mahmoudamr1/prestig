@@ -90,11 +90,15 @@
     {% if images.size > 1 %}
       <nav class="ab-gallery-pager" aria-label="{{ product_name }} — gallery">
         <button type="button" class="ab-gallery-pager__btn" data-ab-gallery-prev aria-label="Previous image">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          <img width="24" height="24" aria-hidden="true" src="https://files.easy-orders.net/1779102257843364554sx010.svg" alt="" loading="lazy" decoding="async" />
+
+
         </button>
         <span class="ab-gallery-pager__counter" data-ab-gallery-counter aria-live="polite">{{ ab_gallery_active_idx | plus: 1 }} / {{ images.size }}</span>
         <button type="button" class="ab-gallery-pager__btn" data-ab-gallery-next aria-label="Next image">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+          <img width="24" height="24" aria-hidden="true" src="https://files.easy-orders.net/1779102257941988629sx011.svg" alt="" loading="lazy" decoding="async" />
+
+
         </button>
       </nav>
     {% endif %}
@@ -109,17 +113,23 @@
       <nav class="ab-lightbox-toolbar" aria-label="{{ product_name }} — preview">
         {% if images.size > 1 %}
           <button type="button" class="ab-lightbox-fab ab-lightbox-prev" data-lightbox-prev aria-label="Previous image">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            <img width="24" height="24" aria-hidden="true" src="https://files.easy-orders.net/1779102257843364554sx010.svg" alt="" loading="lazy" decoding="async" />
+
+
           </button>
         {% else %}
           <span class="ab-lightbox-fab-spacer" aria-hidden="true"></span>
         {% endif %}
         <button type="button" class="ab-lightbox-fab ab-lightbox-fab--close" data-lightbox-close aria-label="Close preview">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          <img width="24" height="24" aria-hidden="true" src="https://files.easy-orders.net/1779102257885285201sx012.svg" alt="" loading="lazy" decoding="async" />
+
+
         </button>
         {% if images.size > 1 %}
           <button type="button" class="ab-lightbox-fab ab-lightbox-next" data-lightbox-next aria-label="Next image">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+            <img width="24" height="24" aria-hidden="true" src="https://files.easy-orders.net/1779102257941988629sx011.svg" alt="" loading="lazy" decoding="async" />
+
+
           </button>
         {% else %}
           <span class="ab-lightbox-fab-spacer" aria-hidden="true"></span>

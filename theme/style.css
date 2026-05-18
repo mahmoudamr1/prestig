@@ -423,6 +423,12 @@ dt {
   box-sizing: border-box;
 }
 
+/* --ps-store-card-bg: set on .ps-theme from theme_data via script.js (prestigeInjectThemeFonts). */
+html[lang="ar"] .ps-theme,
+.ps-theme[lang="ar"] {
+  font-family: var(--ps-ff-arabic), var(--ps-ff-primary), sans-serif;
+}
+
 /* In-flow placeholder: fixed announce + fixed header do not consume layout height. */
 .ps-theme-layout-spacer {
   width: 100%;
@@ -2142,6 +2148,17 @@ padding: 0;
 /* Home grid: full card navigates to PDP; stretch link under media, buttons stay clickable */
 .ps-product-card.ps-store-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+
+.ps-product-card.ps-store-card .ps-product-media,
+.ps-product-card.ps-store-card .ps-product-info {
+  flex: 0 0 auto;
+  min-height: 0;
 }
 
 .ps-store-card-stretch-link {
@@ -2362,7 +2379,7 @@ padding: 0;
  * Unified store product card (grid, list, home, related) — reference UI
  * -------------------------------------------------------------------------- */
 :root {
-  /* --ps-store-card-bg: set from theme_data in header.liquid (.ps-theme-root) */
+  /* --ps-store-card-bg: set from theme_data on .ps-theme via script.js (prestigeInjectThemeFonts) */
   --ps-store-card-radius: 20px;
   --ps-store-badge-bg: #d63a2f;
   --ps-store-badge-font-size: 0.9rem;
@@ -2423,6 +2440,7 @@ padding: 0;
 .ps-store-card .ps-product-info,
 .ps-store-card .ab-plist-info {
   align-items: flex-start !important;
+  justify-content: flex-start !important;
   text-align: start !important;
   padding: 0 18px 20px !important;
   box-sizing: border-box;
@@ -2704,8 +2722,16 @@ padding: 0;
 .ps-store-card.ab-plist-card {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 16px;
+  justify-content: flex-start;
+  align-content: flex-start;
   background: var(--ps-store-card-bg, #f7f7f7) !important;
+}
+
+.ps-store-card.ab-plist-card .ab-plist-media,
+.ps-store-card.ab-plist-card .ab-plist-info {
+  flex: 0 0 auto;
+  min-height: 0;
 }
 
 .ps-store-card .ab-plist-img-primary {
@@ -2917,6 +2943,12 @@ padding: 0;
   outline-offset: 2px;
 }
 
+.ab-categories-section .category-carousel-btn__icon {
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
 .ab-categories-section .category-slider-col {
   flex: 1 1 auto;
   min-width: 0;
@@ -3013,8 +3045,11 @@ padding: 0;
   overflow: hidden;
 }
 
-.ab-categories-section .category-card__link .category-card__img,
-.ab-categories-section .category-card__link img {
+.ab-categories-section .category-card__media--empty {
+  min-height: clamp(180px, 42vw, 260px);
+}
+
+.ab-categories-section .category-card__media img {
   position: static;
   inset: auto;
   width: 100%;
@@ -3069,9 +3104,18 @@ padding: 0;
   pointer-events: none;
 }
 
+.ab-categories-section .category-card__arrow-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
 [dir="rtl"] .ab-categories-section .category-card__arrow {
   right: auto;
   left: 16px;
+}
+
+[dir="rtl"] .ab-categories-section .category-card__arrow-icon {
+  transform: scaleX(-1);
 }
 
 [dir="rtl"] .ab-categories-section .category-card__name {
@@ -5089,10 +5133,20 @@ div:has(> .ab-plist.ab-plist--related) {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  justify-content: flex-start;
+  align-content: flex-start;
   align-items: stretch;
   width: 100%;
   min-width: 0;
   overflow: hidden;
+}
+
+/* Keep image + details locked to natural heights so row-stretched grid cells
+   do not “inflate” the info block and center its text (looked like uneven gaps). */
+.ps-pgrid-card.ps-store-card .ps-pgrid-media,
+.ps-pgrid-card.ps-store-card .ps-pgrid-info {
+  flex: 0 0 auto;
+  min-height: 0;
 }
 
 .ps-pgrid-footer {
