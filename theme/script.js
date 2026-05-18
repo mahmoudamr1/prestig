@@ -59,6 +59,19 @@
     return "https://fonts.googleapis.com/css2?" + q + "&display=swap";
   }
 
+  function prestigeReadThemeRuntimeConfig() {
+    var el = document.getElementById("prestige-theme-runtime-config");
+    if (!el) {
+      return null;
+    }
+    try {
+      return JSON.parse(el.textContent || "{}");
+    } catch (err) {
+      prestigeThemeError("theme-runtime-config", err);
+    }
+    return null;
+  }
+
   /**
    * Copy `data-ps-ff-*` from `.ps-theme` to `<html style>` (`--ps-ff-*`); set `--ps-store-card-bg` on the wrap.
    * Removes legacy `#prestige-theme-font-vars` if present.
@@ -67,8 +80,12 @@
     if (!wrap) {
       return;
     }
-    function readFontRole(attr, fallback) {
-      var v = wrap.getAttribute(attr);
+    var cfg = prestigeReadThemeRuntimeConfig() || {};
+    function readFontRole(configKey, attr, fallback) {
+      var v = cfg[configKey];
+      if (v == null || String(v).trim() === "") {
+        v = wrap.getAttribute(attr);
+      }
       v = v != null ? String(v).trim().replace(/["']/g, "") : "";
       if (!v) {
         return fallback;
@@ -79,17 +96,17 @@
       return '"' + String(name || "").replace(/"/g, "") + '"';
     }
     var root = document.documentElement;
-    root.style.setProperty("--ps-ff-primary", quotedFontCssValue(readFontRole("data-ps-ff-primary", "DM Sans")));
-    root.style.setProperty("--ps-ff-ui", quotedFontCssValue(readFontRole("data-ps-ff-ui", "Manrope")));
-    root.style.setProperty("--ps-ff-alt", quotedFontCssValue(readFontRole("data-ps-ff-alt", "Nunito")));
-    root.style.setProperty("--ps-ff-display", quotedFontCssValue(readFontRole("data-ps-ff-display", "Playfair Display")));
-    root.style.setProperty("--ps-ff-arabic", quotedFontCssValue(readFontRole("data-ps-ff-arabic", "Almarai")));
-    var announceName = readFontRole("data-ps-ff-announce", "DM Sans");
+    root.style.setProperty("--ps-ff-primary", quotedFontCssValue(readFontRole("fontFamilyPrimary", "data-ps-ff-primary", "DM Sans")));
+    root.style.setProperty("--ps-ff-ui", quotedFontCssValue(readFontRole("fontFamilyUi", "data-ps-ff-ui", "Manrope")));
+    root.style.setProperty("--ps-ff-alt", quotedFontCssValue(readFontRole("fontFamilyAlt", "data-ps-ff-alt", "Nunito")));
+    root.style.setProperty("--ps-ff-display", quotedFontCssValue(readFontRole("fontFamilyDisplay", "data-ps-ff-display", "Playfair Display")));
+    root.style.setProperty("--ps-ff-arabic", quotedFontCssValue(readFontRole("fontFamilyArabic", "data-ps-ff-arabic", "Almarai")));
+    var announceName = readFontRole("fontFamilyAnnounce", "data-ps-ff-announce", "DM Sans");
     root.style.setProperty(
       "--ps-ff-announce",
       quotedFontCssValue(announceName) + ", var(--ps-ff-ui), system-ui, sans-serif"
     );
-    var cardBg = (wrap.getAttribute("data-ps-store-card-bg") || "").trim();
+    var cardBg = (cfg.storeProductCardBackground || wrap.getAttribute("data-ps-store-card-bg") || "").trim();
     if (cardBg) {
       try {
         wrap.style.setProperty("--ps-store-card-bg", cardBg);
@@ -108,13 +125,14 @@
     if (!wrap) {
       return;
     }
+    var cfg = prestigeReadThemeRuntimeConfig() || {};
     prestigeApplyFontRoleVarsFromPsTheme(wrap);
-    var hrefLegacy = (wrap.getAttribute("data-ps-gf-href") || "").trim();
+    var hrefLegacy = (cfg.googleFontsHref || wrap.getAttribute("data-ps-gf-href") || "").trim();
     var href = hrefLegacy;
     if (!href || href.indexOf("https://fonts.googleapis.com/css2") !== 0) {
       href = prestigeBuildGoogleFontsCss2Href(
-        wrap.getAttribute("data-ps-gf-families"),
-        wrap.getAttribute("data-ps-gf-weights")
+        cfg.googleFontFamilies || wrap.getAttribute("data-ps-gf-families"),
+        cfg.googleFontWeights || wrap.getAttribute("data-ps-gf-weights")
       );
     }
     if (!href || href.indexOf("https://fonts.googleapis.com/css2") !== 0) {

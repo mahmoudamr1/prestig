@@ -834,7 +834,7 @@ html[lang="ar"] .ps-announce,
  * Hero under fixed header (`.ps-slider--under-nav`): flush until scroll — no border/shadow at top.
  */
 .ps-header:not(.ps-scrolled) {
-  background: var(--hd-bg, #ffffff28) !important;
+  background: var(--hd-bg, #fff) !important;
   border-bottom-color: var(--ps-border-e3, #e3e3e3) !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
@@ -987,6 +987,13 @@ button.ps-desktop-nav-link.ps-nav-dropdown-trigger--btn {
   padding: 0;
 } */
 
+button.ps-desktop-nav-link.ps-nav-dropdown-trigger--btn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
 .ps-desktop-nav-link::after {
   content: "";
   position: absolute;
@@ -1138,7 +1145,7 @@ left: 50%;
 }
 
 .ps-logo img {
-  height: 46px;
+  height: var(--ps-logo-img-h, 46px);
   width: auto;
   object-fit: contain;
 }
@@ -1438,6 +1445,8 @@ button.ps-icon-btn .ps-lang-icon {
   .ps-header-inner {
     min-height: 66px;
     height: 66px;
+    /* Wider center track: logo stays visually centered but gets more horizontal room than the side tracks. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr) minmax(0, 1fr);
   }
 
   .ps-menu-btn {
@@ -1446,6 +1455,10 @@ button.ps-icon-btn .ps-lang-icon {
 
   .ps-logo span {
     font-size: clamp(20px, 7vw, 30px);
+  }
+
+  .ps-header-inner > .ps-header-tools {
+    padding-inline-end: 12px;
   }
 }
 
@@ -9800,8 +9813,19 @@ html:lang(it)
   height: 15px;
 }
 
+/* Filled star: SVG as <img> ignores `color`; mask + fill matches exact gold. */
 .ab-pd-star-icon--on {
-  color: var(--ps-rating-star, #f6c34a);
+  display: block;
+  box-sizing: border-box;
+  background-color: #ebbf20;
+  -webkit-mask-image: url("https://files.easy-orders.net/1779102257963483924sx020.svg");
+  mask-image: url("https://files.easy-orders.net/1779102257963483924sx020.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .ab-pd-star-icon--off {
@@ -16537,10 +16561,6 @@ body:has(.checkout_order_summary) .ps-footer {
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 6px;
-}
-
-.p_details_container .ab-pd-star-icon--on {
-  color: var(--ps-rating-star, #f6c34a);
 }
 
 .p_details_container .ab-pd-star-icon--off {

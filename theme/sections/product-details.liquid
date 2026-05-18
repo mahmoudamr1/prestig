@@ -11,7 +11,7 @@
         {% for i in (1..5) %}
           {% assign prev = i | minus: 1 %}
           {% if r_stars >= i %}
-            <img width="18" height="15" class="ab-pd-star-icon ab-pd-star-icon--on" aria-hidden="true" src="https://files.easy-orders.net/1779102257963483924sx020.svg" alt="" loading="lazy" decoding="async" />
+            <span class="ab-pd-star-icon ab-pd-star-icon--on" aria-hidden="true"></span>
 
 
           {% elsif r_stars > prev %}
@@ -21,7 +21,7 @@
 
 
               <span class="ab-pd-star-fill" style="width: calc(100% * {{ frac }});">
-                <img width="18" height="15" class="ab-pd-star-icon ab-pd-star-icon--on" aria-hidden="true" src="https://files.easy-orders.net/1779102257963483924sx020.svg" alt="" loading="lazy" decoding="async" />
+                <span class="ab-pd-star-icon ab-pd-star-icon--on" aria-hidden="true"></span>
 
 
               </span>

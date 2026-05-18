@@ -4,8 +4,6 @@
       <a href="/">{{ home_text }}</a>
       <span class="ab-breadcrumbs-sep" aria-hidden="true">
         <img width="14" height="14" class="ps-mobile-pages-arrow ab-breadcrumbs-arrow" src="https://files.easy-orders.net/1779102257818802313sx001.svg" alt="" loading="lazy" decoding="async" />
-
-
       </span>
     </li>
     {% for crumb in categories %}
@@ -13,8 +11,6 @@
         <a href="/collections/{{ crumb.slug }}">{{ crumb.name }}</a>
         <span class="ab-breadcrumbs-sep" aria-hidden="true">
           <img width="14" height="14" class="ps-mobile-pages-arrow ab-breadcrumbs-arrow" src="https://files.easy-orders.net/1779102257818802313sx001.svg" alt="" loading="lazy" decoding="async" />
-
-
         </span>
       </li>
     {% endfor %}
