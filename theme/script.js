@@ -1256,7 +1256,8 @@
   function initLegacyGallery() {
     document.querySelectorAll(".ab-gallery").forEach(function (gallery) {
       if (gallery.dataset.galleryInit) return;
-      gallery.dataset.galleryInit = "1";
+      try {
+        gallery.dataset.galleryInit = "1";
 
       var slider = gallery.querySelector("[data-ab-gallery-slider]");
       var slides = gallery.querySelectorAll(".ab-gallery-slide");
@@ -1490,6 +1491,7 @@
       var lbIndex = 0;
 
       function showLbImage(idx) {
+        if (!images || images.length === 0) return;
         lbIndex = ((idx % images.length) + images.length) % images.length;
         if (lbImg) lbImg.src = images[lbIndex];
         if (lbCounter) lbCounter.textContent = lbIndex + 1 + " / " + images.length;
@@ -1552,6 +1554,9 @@
           }
         });
       });
+      } catch (eGallery) {
+        console.warn("[Prestige] Legacy gallery (single .ab-gallery root) init error:", eGallery, gallery);
+      }
     });
   }
 
@@ -1560,22 +1565,26 @@
     window.__psGalleryKeyInit = true;
 
     document.addEventListener("keydown", function (e) {
-      var lb = document.querySelector("body > .ab-lightbox.ab-open");
-      if (!lb) return;
+      try {
+        var lb = document.querySelector("body > .ab-lightbox.ab-open");
+        if (!lb) return;
 
-      if (e.key === "Escape") {
-        lb.classList.remove("ab-open");
-        document.body.style.overflow = "";
-        return;
-      }
-      if (e.key === "ArrowLeft") {
-        var prev = lb.querySelector("[data-lightbox-prev]");
-        if (prev) prev.click();
-        return;
-      }
-      if (e.key === "ArrowRight") {
-        var next = lb.querySelector("[data-lightbox-next]");
-        if (next) next.click();
+        if (e.key === "Escape") {
+          lb.classList.remove("ab-open");
+          document.body.style.overflow = "";
+          return;
+        }
+        if (e.key === "ArrowLeft") {
+          var prev = lb.querySelector("[data-lightbox-prev]");
+          if (prev) prev.click();
+          return;
+        }
+        if (e.key === "ArrowRight") {
+          var next = lb.querySelector("[data-lightbox-next]");
+          if (next) next.click();
+        }
+      } catch (eLbKey) {
+        console.warn("[Prestige] Lightbox keyboard handler error:", eLbKey);
       }
     });
   }
@@ -2992,13 +3001,15 @@
         initEasyOrdersHsCtaLinks();
         initEasyOrdersHsHydration();
       } catch (eEoRaf) {
-        /* ignore */
+        console.warn("[Prestige] EasyOrders home-section hydration (rAF):", eEoRaf);
       }
     });
-    try {
-      initPrestigeQuickViewScope();
-    } catch (e) {
-      console.warn("[Prestige] Quick View scope error:", e);
+    if (typeof initPrestigeQuickViewScope === "function") {
+      try {
+        initPrestigeQuickViewScope();
+      } catch (eQv) {
+        console.warn("[Prestige] Quick View scope error:", eQv);
+      }
     }
     try {
       initCollectionFiltersShell();
@@ -3033,17 +3044,53 @@
     }
     try {
       initLegacyGallery();
+    } catch (eGal) {
+      console.warn("[Prestige] Legacy gallery init error:", eGal);
+    }
+    try {
       initLegacyGalleryKeyboard();
+    } catch (eGalKb) {
+      console.warn("[Prestige] Legacy gallery keyboard init error:", eGalKb);
+    }
+    try {
       initLegacyReviews();
+    } catch (eRev) {
+      console.warn("[Prestige] Legacy reviews init error:", eRev);
+    }
+    try {
       initPromoCountdownHeroTimers();
+    } catch (ePch) {
+      console.warn("[Prestige] Promo countdown hero (calendar) init error:", ePch);
+    }
+    try {
       initPromoCountdownHeroRollingTimers();
+    } catch (ePchRoll) {
+      console.warn("[Prestige] Promo countdown hero (rolling) init error:", ePchRoll);
+    }
+    try {
       initPrestigeProductCompareSliders();
+    } catch (ePsc) {
+      console.warn("[Prestige] Product compare sliders init error:", ePsc);
+    }
+    try {
       initLegacyFakeCounters();
+    } catch (eFc) {
+      console.warn("[Prestige] Legacy fake counters init error:", eFc);
+    }
+    try {
       initLegacyFakeVisitors();
+    } catch (eFv) {
+      console.warn("[Prestige] Legacy fake visitors init error:", eFv);
+    }
+    try {
       initLegacyDescriptionAccordion();
+    } catch (eAcc) {
+      console.warn("[Prestige] Legacy description accordion init error:", eAcc);
+    }
+    try {
       initLegacyDescriptionTabs();
-    } catch (e) {
-      console.warn("[Prestige] Product sections init error:", e);
+    } catch (eTabs) {
+      console.warn("[Prestige] Legacy description tabs init error:", eTabs);
     }
     try {
       schedulePrestigeScrollRevealAnimations();
@@ -3118,112 +3165,116 @@
   });
 
   var observer = new MutationObserver(function (mutations) {
-    for (var i = 0; i < mutations.length; i++) {
-      var m = mutations[i];
-      if (m.type === "attributes") {
-        var pname = m.attributeName;
-        if (pname === "data-eo-hs-ids") {
-          var eoRoot = m.target;
+    try {
+      for (var i = 0; i < mutations.length; i++) {
+        var m = mutations[i];
+        if (m.type === "attributes") {
+          var pname = m.attributeName;
+          if (pname === "data-eo-hs-ids") {
+            var eoRoot = m.target;
+            if (
+              eoRoot &&
+              eoRoot.nodeType === 1 &&
+              eoRoot.matches &&
+              eoRoot.matches("[data-eo-hs-ids]")
+            ) {
+              eoRoot.removeAttribute("data-eo-hs-fetched");
+              scheduleDynamicInits();
+              return;
+            }
+          }
           if (
-            eoRoot &&
-            eoRoot.nodeType === 1 &&
-            eoRoot.matches &&
-            eoRoot.matches("[data-eo-hs-ids]")
+            pname === "data-end" ||
+            pname === "data-hours" ||
+            pname === "data-pch-mode" ||
+            pname === "data-storage-key"
           ) {
-            eoRoot.removeAttribute("data-eo-hs-fetched");
+            var at = m.target;
+            if (
+              at &&
+              at.nodeType === 1 &&
+              at.matches &&
+              at.matches(".promo-countdown-hero__timer")
+            ) {
+              scheduleDynamicInits();
+              return;
+            }
+          }
+          continue;
+        }
+        if (m.type !== "childList") {
+          continue;
+        }
+        var nodes = m.addedNodes;
+        for (var j = 0; j < nodes.length; j++) {
+          var el = nodes[j];
+          if (el.nodeType !== 1) continue;
+          if (
+            el.matches &&
+            (el.matches("[data-anim]") ||
+              el.matches(".ps-slider") ||
+              el.matches("[data-ps-featured-carousel]") ||
+              el.matches("[data-ps-plist]") ||
+              el.matches(".ab-gallery") ||
+              el.matches(".ab-reviews") ||
+              el.matches(".ps-rev-section") ||
+              el.matches(".psc-compare") ||
+              el.matches(".promo-countdown-hero__timer") ||
+              el.matches(".ab-fake-counter") ||
+              el.matches(".ab-fake-visitor") ||
+              el.matches(".lq-desc-accordion") ||
+              el.matches(".lq-desc-tabs") ||
+              el.matches(".ps-cl-section") ||
+              el.matches(".ps-announce-slider") ||
+              el.matches("[data-ps-announce]") ||
+              el.matches(".ps-theme") ||
+              el.matches(".ps-header") ||
+              el.matches("#eo-header") ||
+              el.matches("[data-liquid-thanks]") ||
+              el.matches("[data-eo-hs-ids]") ||
+              el.matches("a[data-eo-hs-cta]") ||
+              el.matches(".shop-the-look") ||
+              el.matches(".category-mosaic") ||
+              (el.id && el.id.indexOf("headlessui-dialog-panel") === 0))
+          ) {
+            scheduleDynamicInits();
+            return;
+          }
+          if (
+            el.querySelector &&
+            (el.querySelector("[data-anim]") ||
+              el.querySelector(".ps-slider") ||
+              el.querySelector("[data-ps-featured-carousel]") ||
+              el.querySelector("[data-ps-plist]") ||
+              el.querySelector(".ab-gallery") ||
+              el.querySelector(".ab-reviews") ||
+              el.querySelector(".ps-rev-section") ||
+              el.querySelector(".psc-compare") ||
+              el.querySelector(".promo-countdown-hero__timer") ||
+              el.querySelector(".ab-fake-counter") ||
+              el.querySelector(".ab-fake-visitor") ||
+              el.querySelector(".lq-desc-accordion") ||
+              el.querySelector(".lq-desc-tabs") ||
+              el.querySelector(".ps-cl-section") ||
+              el.querySelector(".ps-announce-slider") ||
+              el.querySelector("[data-ps-announce]") ||
+              el.querySelector(".ps-theme") ||
+              el.querySelector(".ps-header") ||
+              el.querySelector("#eo-header") ||
+              el.querySelector("[data-liquid-thanks]") ||
+              el.querySelector("[data-eo-hs-ids]") ||
+              el.querySelector("a[data-eo-hs-cta]") ||
+              el.querySelector(".shop-the-look") ||
+              el.querySelector(".category-mosaic") ||
+              el.querySelector('[id^="headlessui-dialog-panel"]'))
+          ) {
             scheduleDynamicInits();
             return;
           }
         }
-        if (
-          pname === "data-end" ||
-          pname === "data-hours" ||
-          pname === "data-pch-mode" ||
-          pname === "data-storage-key"
-        ) {
-          var at = m.target;
-          if (
-            at &&
-            at.nodeType === 1 &&
-            at.matches &&
-            at.matches(".promo-countdown-hero__timer")
-          ) {
-            scheduleDynamicInits();
-            return;
-          }
-        }
-        continue;
       }
-      if (m.type !== "childList") {
-        continue;
-      }
-      var nodes = m.addedNodes;
-      for (var j = 0; j < nodes.length; j++) {
-        var el = nodes[j];
-        if (el.nodeType !== 1) continue;
-        if (
-          el.matches &&
-          (el.matches("[data-anim]") ||
-            el.matches(".ps-slider") ||
-            el.matches("[data-ps-featured-carousel]") ||
-            el.matches("[data-ps-plist]") ||
-            el.matches(".ab-gallery") ||
-            el.matches(".ab-reviews") ||
-            el.matches(".ps-rev-section") ||
-            el.matches(".psc-compare") ||
-            el.matches(".promo-countdown-hero__timer") ||
-            el.matches(".ab-fake-counter") ||
-            el.matches(".ab-fake-visitor") ||
-            el.matches(".lq-desc-accordion") ||
-            el.matches(".lq-desc-tabs") ||
-            el.matches(".ps-cl-section") ||
-            el.matches(".ps-announce-slider") ||
-            el.matches("[data-ps-announce]") ||
-            el.matches(".ps-theme") ||
-            el.matches(".ps-header") ||
-            el.matches("#eo-header") ||
-            el.matches("[data-liquid-thanks]") ||
-            el.matches("[data-eo-hs-ids]") ||
-            el.matches("a[data-eo-hs-cta]") ||
-            el.matches(".shop-the-look") ||
-            el.matches(".category-mosaic") ||
-            (el.id && el.id.indexOf("headlessui-dialog-panel") === 0))
-        ) {
-          scheduleDynamicInits();
-          return;
-        }
-        if (
-          el.querySelector &&
-          (el.querySelector("[data-anim]") ||
-            el.querySelector(".ps-slider") ||
-            el.querySelector("[data-ps-featured-carousel]") ||
-            el.querySelector("[data-ps-plist]") ||
-            el.querySelector(".ab-gallery") ||
-            el.querySelector(".ab-reviews") ||
-            el.querySelector(".ps-rev-section") ||
-            el.querySelector(".psc-compare") ||
-            el.querySelector(".promo-countdown-hero__timer") ||
-            el.querySelector(".ab-fake-counter") ||
-            el.querySelector(".ab-fake-visitor") ||
-            el.querySelector(".lq-desc-accordion") ||
-            el.querySelector(".lq-desc-tabs") ||
-            el.querySelector(".ps-cl-section") ||
-            el.querySelector(".ps-announce-slider") ||
-            el.querySelector("[data-ps-announce]") ||
-            el.querySelector(".ps-theme") ||
-            el.querySelector(".ps-header") ||
-            el.querySelector("#eo-header") ||
-            el.querySelector("[data-liquid-thanks]") ||
-            el.querySelector("[data-eo-hs-ids]") ||
-            el.querySelector("a[data-eo-hs-cta]") ||
-            el.querySelector(".shop-the-look") ||
-            el.querySelector(".category-mosaic") ||
-            el.querySelector('[id^="headlessui-dialog-panel"]'))
-        ) {
-          scheduleDynamicInits();
-          return;
-        }
-      }
+    } catch (eMo) {
+      console.warn("[Prestige] Theme MutationObserver error:", eMo);
     }
   });
 
