@@ -7446,14 +7446,15 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
 .ab-lightbox-backdrop {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: rgba(0, 0, 0, 0.88);
 }
 
 .ab-lightbox-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 3;
+  top: max(16px, env(safe-area-inset-top, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+  z-index: 5;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -7465,6 +7466,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 0;
   background: var(--ps-surface, #fff);
   color: var(--ps-ink, #101010);
   cursor: pointer;
@@ -7472,50 +7474,87 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
 }
 
 .ab-lightbox-close__icon {
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: 20px;
+  height: 20px;
   margin: 0;
   padding: 0;
-  font-size: 26px;
-  font-weight: 400;
-  color: inherit;
+  flex: 0 0 auto;
+  object-fit: contain;
+  object-position: center;
   pointer-events: none;
 }
 
 .ab-lightbox-body {
   position: relative;
   z-index: 2;
-  max-width: 90vw;
+  width: 100%;
+  max-width: min(90vw, 100%);
   max-height: 90vh;
+  min-height: 0;
+  margin-inline: auto;
+  box-sizing: border-box;
+  padding-inline: max(12px, env(safe-area-inset-left, 0px))
+    max(12px, env(safe-area-inset-right, 0px));
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .ab-lightbox-img {
-  max-width: 90vw;
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
   max-height: 88vh;
+  max-height: min(88vh, 88dvh);
+  margin-inline: auto;
   object-fit: contain;
+  object-position: center center;
   border-radius: 8px;
+}
+
+.ab-lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ps-surface, #fff);
+  color: var(--ps-ink, #101010);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
 .ab-lightbox-arrow img {
   display: block;
   width: 24px;
   height: 24px;
+  pointer-events: none;
 }
 
 .ab-lightbox-prev {
-  left: 16px;
+  left: max(12px, env(safe-area-inset-left, 0px));
 }
 
 .ab-lightbox-next {
-  right: 16px;
+  right: max(12px, env(safe-area-inset-right, 0px));
 }
 
 .ab-lightbox-counter {
   position: absolute;
-  bottom: 20px;
+  bottom: max(20px, env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
