@@ -562,6 +562,8 @@ html[lang="ar"] .ps-announce,
   overflow: hidden;
   width: 100%;
   max-width: 100%;
+  /* One full loop (translate -50%); higher = slower. Override inline if needed. */
+  --ps-announce-marquee-dur: 42s;
 }
 
 .ps-announce-marquee-track {
@@ -570,7 +572,7 @@ html[lang="ar"] .ps-announce,
   align-items: center;
   gap: 2.5rem;
   width: max-content;
-  animation: ps-announce-marquee 3s linear infinite;
+  animation: ps-announce-marquee var(--ps-announce-marquee-dur, 42s) linear infinite;
 }
 
 .ps-announce-marquee-item {
