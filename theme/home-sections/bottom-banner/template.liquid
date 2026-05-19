@@ -1,0 +1,308 @@
+{% assign bb_image = section_data.image | default: '' %}
+{% assign bb_mobile = section_data.mobile_image | default: bb_image %}
+{% assign bb_kicker = section_data.kicker | default: 'Written In Time.' %}
+{% assign bb_body = section_data.body | default: '' %}
+{% assign bb_cta = section_data.cta_label | default: 'EXPLORE NOW' %}
+{% assign bb_url = section_data.cta_url | default: '/collections/all' %}
+{% assign bb_overlay = section_data.overlay_strength | default: 25 %}
+{% assign bb_grad = section_data.mobile_gradient_strength | default: 60 %}
+
+<section
+  class="bottom-banner ps-sr-scope"
+  aria-label="{{ bb_kicker | escape }}"
+  style="--bb-overlay: {{ bb_overlay | divided_by: 100.0 }}; --bb-grad: {{ bb_grad | divided_by: 100.0 }};"
+>
+  <div class="bottom-banner__frame">
+    <div class="bottom-banner__media" aria-hidden="true">
+      {% if bb_image != '' %}
+        <picture class="bottom-banner__picture bottom-banner__picture--desktop">
+          <img
+            class="bottom-banner__img"
+            src="{{ bb_image }}"
+            alt=""
+            width="1440"
+            height="720"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      {% endif %}
+      {% if bb_mobile != '' %}
+        <picture class="bottom-banner__picture bottom-banner__picture--mobile">
+          <img
+            class="bottom-banner__img"
+            src="{{ bb_mobile }}"
+            alt=""
+            width="402"
+            height="402"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      {% endif %}
+      <div class="bottom-banner__overlay" aria-hidden="true"></div>
+      <div class="bottom-banner__gradient" aria-hidden="true"></div>
+    </div>
+
+    <div class="bottom-banner__inner">
+      <div class="bottom-banner__copy">
+        {% if bb_kicker != '' %}
+          <p class="bottom-banner__kicker">{{ bb_kicker }}</p>
+        {% endif %}
+        {% if bb_body != '' %}
+          <p class="bottom-banner__body">{{ bb_body }}</p>
+        {% endif %}
+      </div>
+
+      {% if bb_cta != '' and bb_url != '' %}
+        <a
+          class="bottom-banner__cta"
+          href="{{ bb_url }}"
+          data-eo-hs-cta
+        >{{ bb_cta }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .bottom-banner {
+    --bb-overlay: 0.25;
+    --bb-grad: 0.6;
+    width: 100%;
+    background: var(--body-bg, #fff);
+    box-sizing: border-box;
+  }
+
+  .bottom-banner *,
+  .bottom-banner *::before,
+  .bottom-banner *::after {
+    box-sizing: border-box;
+  }
+
+  .bottom-banner__frame {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    min-height: 402px;
+    display: flex;
+    flex-direction: column;
+    border: 0.55px solid #000;
+    padding: 5.5px;
+    overflow: hidden;
+  }
+
+  .bottom-banner__media {
+    position: absolute;
+    inset: 5.5px;
+    overflow: hidden;
+    border: 0.55px solid #000;
+    pointer-events: none;
+  }
+
+  .bottom-banner__picture {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+
+  .bottom-banner__picture--desktop {
+    display: none;
+  }
+
+  .bottom-banner__picture--mobile {
+    display: block;
+  }
+
+  .bottom-banner__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+
+  .bottom-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--bb-overlay, 0.25));
+    pointer-events: none;
+  }
+
+  .bottom-banner__gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, var(--bb-grad, 0.6)) 0%,
+      rgba(0, 0, 0, 0) 55%
+    );
+    pointer-events: none;
+  }
+
+  .bottom-banner__inner {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    width: 100%;
+    min-height: 390px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    gap: 13px;
+    padding: 0 16px 28px;
+  }
+
+  .bottom-banner__copy,
+  .bottom-banner__cta {
+    width: min(100%, 334px);
+    margin-inline: auto;
+  }
+
+  .bottom-banner__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .bottom-banner__kicker,
+  .bottom-banner__body {
+    margin: 0;
+    font-family: var(--ps-ff-primary, 'Hauora', sans-serif);
+    color: #000;
+    text-transform: capitalize;
+  }
+
+  .bottom-banner__kicker {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 10.8px;
+    letter-spacing: 0;
+  }
+
+  .bottom-banner__body {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 10.8px;
+    text-transform: none;
+  }
+
+  .bottom-banner__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 27px;
+    padding: 3px 35px;
+    font-family: var(--ps-ff-primary, 'Hauora', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 17px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    color: #000;
+    background: transparent;
+    box-shadow: inset 0 0 0 1.1px #000;
+    transition: opacity 0.2s ease;
+  }
+
+  .bottom-banner__cta:hover {
+    opacity: 0.85;
+  }
+
+  .bottom-banner__cta:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .bottom-banner__frame {
+      min-height: 720px;
+      border: none;
+      padding: 8px 40px;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .bottom-banner__media {
+      inset: 0;
+      border: none;
+    }
+
+    .bottom-banner__picture--desktop {
+      display: block;
+    }
+
+    .bottom-banner__picture--mobile {
+      display: none;
+    }
+
+    .bottom-banner__gradient {
+      display: none;
+    }
+
+    .bottom-banner__inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      min-height: 704px;
+    }
+
+    .bottom-banner__copy,
+    .bottom-banner__cta {
+      width: auto;
+      margin-inline: 0;
+    }
+
+    .bottom-banner__copy {
+      flex: 0 1 auto;
+      max-width: min(520px, 55%);
+      gap: 15px;
+    }
+
+    .bottom-banner__kicker,
+    .bottom-banner__body {
+      color: #fff;
+    }
+
+    .bottom-banner__kicker {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19.6px;
+    }
+
+    .bottom-banner__body {
+      font-size: 13.6px;
+      font-weight: 500;
+      line-height: 19.6px;
+    }
+
+    .bottom-banner__cta {
+      flex: 0 0 auto;
+      width: auto;
+      min-height: 0;
+      padding: 5px 63px;
+      font-size: 22px;
+      line-height: 1.2;
+      color: #fff;
+      box-shadow: inset 0 0 0 2px #fff;
+    }
+
+    .bottom-banner__cta:focus-visible {
+      outline-color: #fff;
+    }
+  }
+</style>

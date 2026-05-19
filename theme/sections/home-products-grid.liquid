@@ -1,40 +1,165 @@
 {% liquid
-  assign _pg_sub = theme_data.grid_products_header_subtitle | default: shop_label | strip
   assign _pg_title = theme_data.grid_products_header_title | default: section_title | strip
+  assign _view_all = shop_now | default: 'View all'
 %}
-<section class="ps-pgrid-section ps-sr-scope" data-ps-pgrid><div class="ps-pgrid-inner">{% if _pg_sub != blank or _pg_title != blank %}<header class="ps-pgrid-header">{% if _pg_sub != blank %}<p class="ps-pgrid-label" data-anim="fadeInDown" data-seq="0">{{ _pg_sub }}</p>{% endif %}{% if _pg_title != blank %}<h2 class="ps-pgrid-title" data-anim="slideInUp" data-seq="1">{{ _pg_title }}</h2>{% endif %}</header>{% endif %}<div class="ps-pgrid-main"><div class="ps-pgrid-grid">
-{% for product in products %}
-{% unless forloop.index > 8 %}
-{% liquid
-  assign color_variation = product.variations | where: "type", "color" | first
-  assign image_variation = product.variations | where: "type", "image" | first
-  assign swatch_total = 0
-  if color_variation and color_variation.props
-    assign swatch_total = color_variation.props.size
-  elsif image_variation and image_variation.props
-    assign swatch_total = image_variation.props.size
-  endif
-  assign has_variations = false
-  if product.variations and product.variations.size > 0
-    assign has_variations = true
-  endif
-  assign qty = product.quantity | plus: 0
-  assign show_card_cta = false
-  assign use_quick_view = false
-  if has_variations
-    assign show_card_cta = true
-    assign use_quick_view = true
-  elsif product.disable_orders_for_no_stock
-    if qty >= 1
-      assign show_card_cta = true
-      assign use_quick_view = false
-    endif
-  else
-    assign show_card_cta = true
-    assign use_quick_view = false
-  endif
-%}
-<a href="/products/{{ product.slug }}" class="ps-pgrid-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 2 }}"><div class="ps-pgrid-media">{% if product.sale_price and product.sale_price < product.price %}{% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}<span class="ps-pgrid-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: "Save" }} -{{ discount }}%</span>{% endif %}{% if product.product_theme_data.custom_badge_title and product.product_theme_data.custom_badge_title != "" %}<span class="ps-pgrid-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>{% endif %}<img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />{% if product.images[0] %}<img class="ps-pgrid-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />{% endif %}{% if show_card_cta %}{% if use_quick_view %}<button type="button" class="ps-pgrid-add ps-product-quick-add" aria-label="Quick view" onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-view',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"><img class="ps-product-plus-icon" src="https://files.easy-orders.net/1778659565003721866prestig-product-card-icon-quick-add-plus.svg" alt="" width="14" height="14" loading="lazy" aria-hidden="true" /></button>{% else %}<button type="button" class="ps-pgrid-add ps-product-quick-add" aria-label="Add to cart" onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"><img class="ps-product-plus-icon" src="https://files.easy-orders.net/1778659565003721866prestig-product-card-icon-quick-add-plus.svg" alt="" width="14" height="14" loading="lazy" aria-hidden="true" /></button>{% endif %}{% elsif product.disable_orders_for_no_stock and has_variations == false and qty < 1 %}<span class="ps-pgrid-stock-badge" role="status">{{ theme_data.out_of_stock_card_label | strip | default: "Out of stock" }}</span>{% endif %}</div><div class="ps-pgrid-info">{% if swatch_total > 0 %}<div class="ps-pgrid-swatches">{% if color_variation and color_variation.props %}{% for prop in color_variation.props limit: 6 %}<span class="ps-pgrid-swatch" style="background: {{ prop.value }}" title="{{ prop.name }}"></span>{% endfor %}{% elsif image_variation and image_variation.props %}{% for prop in image_variation.props limit: 6 %}<span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}"><img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" /></span>{% endfor %}{% endif %}{% if swatch_total > 6 %}<span class="ps-hpgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>{% endif %}</div>{% endif %}<span class="ps-pgrid-name">{{ product.name }}</span><div class="ps-pgrid-price-row">{% if product.sale_price and product.sale_price < product.price %}<span class="ps-pgrid-price-current">{{ product.sale_price }} {{ currency }}</span><span class="ps-pgrid-price-old">{{ product.price }} {{ currency }}</span>{% else %}<span class="ps-pgrid-price-current">{{ product.price }} {{ currency }}</span>{% endif %}</div></div></a>
-{% endunless %}
-{% endfor %}
-</div>{% if category.slug %}<div class="ps-pgrid-footer" data-anim="rotateIn" data-seq="10"><a href="/collections/{{ category.slug }}" class="ps-pgrid-view-all gap-2"><span>{{ shop_now }}</span><img src="https://files.easy-orders.net/1773832247629050805.webp" alt="" class="ps-viewall-arrow" width="20" height="20" loading="lazy" /></a></div>{% endif %}</div></div></section>
+<section class="ps-pgrid-section ps-pgrid-section--home ps-sr-scope" data-ps-pgrid>
+  <div class="ps-pgrid-inner">
+    {% if _pg_title != blank or category and category.slug %}
+      <header class="ps-pgrid-header ps-pgrid-header--home">
+        {% if _pg_title != blank %}
+          <h2 class="ps-pgrid-title ps-pgrid-title--home" data-anim="fadeInLeft" data-seq="0">{{ _pg_title }}</h2>
+        {% endif %}
+        {% if category and category.slug %}
+          <a href="/collections/{{ category.slug }}" class="ps-pgrid-view-all-link" data-anim="fadeInRight" data-seq="1">{{ _view_all }}</a>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    <div class="ps-pgrid-main">
+      <div class="ps-pgrid-grid ps-pgrid-grid--home">
+        {% for product in products %}
+          {% unless forloop.index > 8 %}
+            {% liquid
+              assign color_variation = product.variations | where: 'type', 'color' | first
+              assign image_variation = product.variations | where: 'type', 'image' | first
+              assign swatch_total = 0
+              if color_variation and color_variation.props
+                assign swatch_total = color_variation.props.size
+              elsif image_variation and image_variation.props
+                assign swatch_total = image_variation.props.size
+              endif
+              assign has_variations = false
+              if product.variations and product.variations.size > 0
+                assign has_variations = true
+              endif
+              assign qty = product.quantity | plus: 0
+              assign show_card_cta = false
+              assign use_quick_view = false
+              if has_variations
+                assign show_card_cta = true
+                assign use_quick_view = true
+              elsif product.disable_orders_for_no_stock
+                if qty >= 1
+                  assign show_card_cta = true
+                  assign use_quick_view = false
+                endif
+              else
+                assign show_card_cta = true
+                assign use_quick_view = false
+              endif
+              assign _card_imgs = product.thumb
+              if product.images and product.images.size > 0
+                for image in product.images limit: 12
+                  if image != blank and image != product.thumb
+                    assign _card_imgs = _card_imgs | append: '|' | append: image
+                  endif
+                endfor
+              endif
+              assign _card_img_count = _card_imgs | split: '|' | size
+              assign _card_cta = theme_data.product_card_cta_label | strip
+              if _card_cta == blank
+                assign _card_cta = add | default: 'Add'
+              endif
+              assign _card_cta_hover = theme_data.product_card_cta_label_hover | strip
+              if _card_cta_hover == blank
+                assign _card_cta_hover = _card_cta
+              endif
+            %}
+            <a
+              href="/products/{{ product.slug }}"
+              class="ps-pgrid-card"
+              data-anim="cycle"
+              data-cycle="{{ forloop.index0 }}"
+              data-seq="{{ forloop.index0 | plus: 2 }}"
+            >
+              <div
+                class="ps-pgrid-media{% if _card_img_count > 1 %} ps-card-media--carousel{% endif %}"
+                data-ps-card-media
+                {% if _card_img_count > 1 %}data-ps-card-images="{{ _card_imgs | escape }}"{% endif %}
+              >
+                {% if product.sale_price and product.sale_price < product.price %}
+                  {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
+                  <span class="ps-pgrid-badge ps-sale-badge">{{ theme_data.sale_badge_label | strip | default: sale | default: 'Save' }} -{{ discount }}%</span>
+                {% endif %}
+                {% if product.product_theme_data.custom_badge_title and product.product_theme_data.custom_badge_title != '' %}
+                  <span class="ps-pgrid-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>
+                {% endif %}
+                <img class="ps-pgrid-img-primary ps-card-media__img" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+                {% if _card_img_count > 1 %}
+                  <div class="ps-card-media__nav" aria-hidden="false">
+                    <button type="button" class="ps-card-media__arrow ps-card-media__arrow--prev" data-ps-card-prev aria-label="Previous image">
+                      <img src="https://files.easy-orders.net/1779188833025272262www.svg" alt="" width="42" height="18" decoding="async" aria-hidden="true" />
+                    </button>
+                    <button type="button" class="ps-card-media__arrow ps-card-media__arrow--next" data-ps-card-next aria-label="Next image">
+                      <img src="https://files.easy-orders.net/1779188833025272262www.svg" alt="" width="42" height="18" decoding="async" aria-hidden="true" />
+                    </button>
+                  </div>
+                {% elsif product.images[0] and product.images[0] != product.thumb %}
+                  <img class="ps-pgrid-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+                {% endif %}
+                {% if show_card_cta %}
+                  {% if use_quick_view %}
+                    <button
+                      type="button"
+                      class="ps-pgrid-add ps-product-quick-add"
+                      aria-label="Quick view"
+                      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-view',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+                    >
+                      <span class="ps-product-quick-add__icon" aria-hidden="true"><img class="ps-product-plus-icon" src="https://files.easy-orders.net/1778659565003721866prestig-product-card-icon-quick-add-plus.svg" alt="" width="12" height="12" loading="lazy" /></span>
+                      <span class="ps-product-quick-add__label" aria-hidden="true"><span class="ps-product-quick-add__text ps-product-quick-add__text--rest">{{ _card_cta }}</span><span class="ps-product-quick-add__text ps-product-quick-add__text--hover">{{ _card_cta_hover }}</span></span>
+                    </button>
+                  {% else %}
+                    <button
+                      type="button"
+                      class="ps-pgrid-add ps-product-quick-add"
+                      aria-label="{{ _card_cta_hover }}"
+                      onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+                    >
+                      <span class="ps-product-quick-add__icon" aria-hidden="true"><img class="ps-product-plus-icon" src="https://files.easy-orders.net/1778659565003721866prestig-product-card-icon-quick-add-plus.svg" alt="" width="12" height="12" loading="lazy" /></span>
+                      <span class="ps-product-quick-add__label" aria-hidden="true"><span class="ps-product-quick-add__text ps-product-quick-add__text--rest">{{ _card_cta }}</span><span class="ps-product-quick-add__text ps-product-quick-add__text--hover">{{ _card_cta_hover }}</span></span>
+                    </button>
+                  {% endif %}
+                {% elsif product.disable_orders_for_no_stock and has_variations == false and qty < 1 %}
+                  <span class="ps-pgrid-stock-badge" role="status">{{ theme_data.out_of_stock_card_label | strip | default: 'Out of stock' }}</span>
+                {% endif %}
+              </div>
+
+              <div class="ps-pgrid-info">
+                <div class="ps-pgrid-desc">
+                  <span class="ps-pgrid-name">{{ product.name }}</span>
+                  <div class="ps-pgrid-price-row">
+                    {% if product.sale_price and product.sale_price < product.price %}
+                      <span class="ps-pgrid-price-current">{{ product.sale_price }} {{ currency }}</span>
+                      <span class="ps-pgrid-price-old">{{ product.price }} {{ currency }}</span>
+                    {% else %}
+                      <span class="ps-pgrid-price-current">{{ product.price }} {{ currency }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+
+                {% if swatch_total > 0 %}
+                  <div class="ps-pgrid-swatches">
+                    {% if color_variation and color_variation.props %}
+                      {% for prop in color_variation.props limit: 5 %}
+                        <span class="ps-pgrid-swatch" style="--ps-swatch-color: {{ prop.value }}" title="{{ prop.name }}"></span>
+                      {% endfor %}
+                    {% elsif image_variation and image_variation.props %}
+                      {% for prop in image_variation.props limit: 5 %}
+                        <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                          <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy" />
+                        </span>
+                      {% endfor %}
+                    {% endif %}
+                    {% if swatch_total > 5 %}
+                      <span class="ps-pgrid-swatch-more" aria-hidden="true">+</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </a>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

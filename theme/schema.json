@@ -4,7 +4,7 @@
     "type": "string",
     "group": "Typography",
     "description": "خطوط جوجل للتحميل: أسماء متعددة مفصولة بفاصلة كما في موقع Google Fonts.",
-    "default": "Instrument Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display"
+    "default": "Hauora, Almarai"
   },
   {
     "name": "font_google_weights",
@@ -17,29 +17,29 @@
     "name": "font_family_primary",
     "type": "string",
     "group": "Typography",
-    "description": "النص الأساسي — بدلاً من Instrument Sans.",
-    "default": "Instrument Sans"
+    "description": "النص الأساسي — بدلاً من Hauora.",
+    "default": "Hauora"
   },
   {
     "name": "font_family_ui",
     "type": "string",
     "group": "Typography",
     "description": "إعلانات وواجهة ضيقة — بدلاً من Manrope.",
-    "default": "Manrope"
+    "default": "Hauora"
   },
   {
     "name": "font_family_alt",
     "type": "string",
     "group": "Typography",
     "description": "نص ثانوي وتسميات — بدلاً من Nunito.",
-    "default": "Nunito"
+    "default": "Hauora"
   },
   {
     "name": "font_family_display",
     "type": "string",
     "group": "Typography",
     "description": "عناوين عرض كبيرة — بدلاً من Playfair Display.",
-    "default": "Playfair Display"
+    "default": "Hauora"
   },
   {
     "name": "font_family_arabic",
@@ -60,7 +60,7 @@
     "type": "number",
     "group": "Header",
     "description": "ارتفاع صورة الشعار في شريط التنقل (بكسل).",
-    "default": 46
+    "default": 40
   },
   {
     "name": "footer_quick_links",
@@ -257,6 +257,20 @@
     "group": "Products",
     "description": "Product cards: text shown on the image when stock is empty and ordering is disabled (no add button).",
     "default": "Out of stock"
+  },
+  {
+    "name": "product_card_cta_label",
+    "type": "string",
+    "group": "Products",
+    "description": "Product cards: add button label when expanded on hover (e.g. Add). Empty uses the platform “add” translation.",
+    "default": "Add"
+  },
+  {
+    "name": "product_card_cta_label_hover",
+    "type": "string",
+    "group": "Products",
+    "description": "Product cards: add button label on full hover (solid dark pill, e.g. Add to cart). Empty uses the label above.",
+    "default": "Add to cart"
   },
   {
     "name": "featured_products_header_subtitle",

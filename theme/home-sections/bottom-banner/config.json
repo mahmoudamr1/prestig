@@ -1,0 +1,54 @@
+{
+  "icon": "https://api.iconify.design/lucide:image.svg",
+  "label": "Bottom banner",
+  "section_schema": [
+    {
+      "name": "image",
+      "type": "image",
+      "default": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1440&h=720&fit=crop",
+      "description": "Desktop background (recommended 1440×720)"
+    },
+    {
+      "name": "mobile_image",
+      "type": "image",
+      "default": "",
+      "description": "Mobile background (optional; falls back to desktop image)"
+    },
+    {
+      "name": "kicker",
+      "type": "string",
+      "default": "Written In Time.",
+      "description": "Short headline above the body"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "default": "Built in depth, not detail, 06D explores denim as a layered identity rather than a surface.",
+      "description": "Supporting copy"
+    },
+    {
+      "name": "cta_label",
+      "type": "string",
+      "default": "EXPLORE NOW",
+      "description": "Call-to-action button label"
+    },
+    {
+      "name": "cta_url",
+      "type": "string",
+      "default": "/collections/all",
+      "description": "CTA link (category, page, or full URL)"
+    },
+    {
+      "name": "overlay_strength",
+      "type": "number",
+      "default": 25,
+      "description": "Dark overlay opacity 0–100 (desktop; Figma 25%)"
+    },
+    {
+      "name": "mobile_gradient_strength",
+      "type": "number",
+      "default": 60,
+      "description": "Bottom gradient opacity 0–100 on mobile (Figma 60%)"
+    }
+  ]
+}

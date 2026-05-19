@@ -1,373 +1,307 @@
 ---
-description: EasyOrders custom themes — expanded official docs (structure, palette, schema, Liquid, events, all sections)
+description: EasyOrders custom themes — مرجع عملي (LiquidJS، palette، schema، events، 20 section) — مزامن مع الدوكس الرسمية
 alwaysApply: true
 ---
 
-# EasyOrders custom themes — expanded reference
+# EasyOrders custom themes — مرجع عملي
 
-**Official docs:** [Custom Themes](https://themes-docs.easy-orders.net/docs/category/custom-themes) · [Getting Started](https://themes-docs.easy-orders.net/docs/custom-themes/getting-started) · [Palette](https://themes-docs.easy-orders.net/docs/custom-themes/palette) · [Dynamic Theme Data](https://themes-docs.easy-orders.net/docs/custom-themes/dynamic-theme-data) · [Liquid Reference](https://themes-docs.easy-orders.net/docs/custom-themes/liquid-reference) · [Events & Data Attributes](https://themes-docs.easy-orders.net/docs/custom-themes/events-reference)
+**المصدر الرسمي:** [Custom Themes](https://themes-docs.easy-orders.net/docs/category/custom-themes) · [Getting Started](https://themes-docs.easy-orders.net/docs/custom-themes/getting-started) · [Palette](https://themes-docs.easy-orders.net/docs/custom-themes/palette) · [Dynamic Theme Data](https://themes-docs.easy-orders.net/docs/custom-themes/dynamic-theme-data) · [Liquid Reference](https://themes-docs.easy-orders.net/docs/custom-themes/liquid-reference) · [Events & Data Attributes](https://themes-docs.easy-orders.net/docs/custom-themes/events-reference) · [Layout](https://themes-docs.easy-orders.net/docs/custom-themes/sections/layout-sections) · [Product](https://themes-docs.easy-orders.net/docs/custom-themes/sections/product-sections) · [Home](https://themes-docs.easy-orders.net/docs/custom-themes/sections/home-sections) · [Utility](https://themes-docs.easy-orders.net/docs/custom-themes/sections/utility-sections)
 
-**Liquid engine:** [LiquidJS](https://liquidjs.com/) (EasyOrders renders each `.liquid` section with store data in context.)
-
-**Section docs:** [Layout](https://themes-docs.easy-orders.net/docs/custom-themes/sections/layout-sections) · [Product](https://themes-docs.easy-orders.net/docs/custom-themes/sections/product-sections) · [Home](https://themes-docs.easy-orders.net/docs/custom-themes/sections/home-sections) · [Utility](https://themes-docs.easy-orders.net/docs/custom-themes/sections/utility-sections)
+**محرك القوالب:** [LiquidJS](https://liquidjs.com/) — كل `.liquid` يُعرض مع بيانات المتجر في السياق.
 
 ---
 
-## 1) What a custom theme is
+## 1) ما هو الثيم المخصص
 
-- A **full** custom theme means you own **every** storefront section via **Liquid** + **CSS** + **JS** from scratch (not a CSS-only overlay on a fixed skeleton). The platform ships **20** Liquid section files under `sections/` plus global `style.css`, `script.js`, and `schema.json`.
-- The storefront renders each section with **LiquidJS** and injects store data (products, categories, merchant settings).
-- **`style.css`** and **`script.js`** load on **every** page (often minified on upload).
-- **Quick start (docs):** use the published **Allbirds-style example** as a reference implementation for all sections, then customize.
+- **Liquid** (20 ملف في `sections/`) + **`style.css`** + **`script.js`** + **`schema.json`**
+- CSS/JS يُحمَّلان على **كل** الصفحات (غالباً بعد minify عند الرفع)
+- أسماء ملفات `sections/` **ثابتة** — الرفع path-based
+- مرجع بداية: [Getting Started — Allbirds example](https://themes-docs.easy-orders.net/docs/custom-themes/getting-started)
 
----
-
-## 2) Folder structure and admin field mapping
-
-| Path | Admin field | Type | Description |
-|------|-------------|------|-------------|
-| `sections/header.liquid` | `header` | Section | Store header with nav, cart, language |
-| `sections/footer.liquid` | `footer` | Section | Store footer with links, newsletter |
-| `sections/gallery.liquid` | `gallery` | Section | Product image gallery |
-| `sections/product-details.liquid` | `product_details` | Section | Product name, price, rating |
-| `sections/product-description.liquid` | `product_description` | Section | Product description block |
-| `sections/featured-products.liquid` | `featured_products` | Section | Featured products grid |
-| `sections/list-products.liquid` | `list_products` | Section | Products in list layout |
-| `sections/home-products-grid.liquid` | `home_products_grid` | Section | Homepage product grid with hero |
-| `sections/products-grid.liquid` | `products_grid` | Section | Product grid for search & collections |
-| `sections/related-products.liquid` | `related_products` | Section | Related products on product page |
-| `sections/slider.liquid` | `slider` | Section | Hero / image slider |
-| `sections/categories.liquid` | `categories` | Section | Category listing |
-| `sections/reviews.liquid` | `reviews` | Section | Product reviews |
-| `sections/fake-visitor.liquid` | `fake_visitor` | Section | Fake visitor counter |
-| `sections/fake-stock.liquid` | `fake_stock` | Section | Fake stock indicator |
-| `sections/fake-counter.liquid` | `fake_counter` | Section | Countdown timer |
-| `sections/breadcrumbs.liquid` | `breadcrumbs` | Section | Breadcrumb navigation |
-| `sections/fixed-buy-button.liquid` | `fixed_buy_button` | Section | Sticky buy bar |
-| `sections/thanks.liquid` | `thanks` | Section | Thank-you page |
-| `sections/order-invoice.liquid` | `order_invoice` | Section | Order invoice view |
-| `style.css` | `theme_style` | Asset | Global CSS (minified on upload) |
-| `script.js` | `theme_script` | Asset | Global JS (minified on upload) |
-| `schema.json` | `theme_data_schema` | Schema | Dynamic settings schema |
-
-**Do not rename expected filenames** unless the platform mapping changes — upload mapping is path-based.
-
-**Upload:** Zip / folder upload maps files by path, or edit individual files in the admin code editor.
-
-**Rendering notes (layout docs):**
-
-- **Header** HTML is rendered **server-side** on first load (`header_html`) for fast paint; the app injects it and wires IDs, events, and link interception.
-- **Footer** is rendered **client-side** and supports newsletter dispatch via `footer-subscribe`.
-
-**Prestig repo (`theme/home-sections/`):** Homepage **composer sections** packaged as one folder each: `template.liquid` + `config.json` (`section_schema`). The storefront/renderer passes flattened settings as **`section_data`** inside that Liquid (not `theme_data` unless bridged globally). Icons and labels in `config.json` power the picker UI when the CLI or admin lists blocks. Extend this folder with new presets; keep **BEM-style class roots** stable if `script.js` or tests target them.
-
----
-
-## 3) Palette — 22 merchant colors on `:root`
-
-The storefront injects variables on **`:root`**. **Always** use `var(--variable-name, #fallback)` so the UI stays usable if a value is missing or empty.
-
-| CSS variable | Purpose |
-|--------------|---------|
-| `--hd-bg`, `--hd-text` | Header background & text |
-| `--ann-bg`, `--ann-text` | Announcement bar |
-| `--ft-bg`, `--ft-text` | Footer |
-| `--buy-btn-bg`, `--buy-btn-text`, `--buy-btn-border` | Buy / add-to-cart |
-| `--crt-btn-bg`, `--crt-btn-text`, `--crt-btn-border` | Cart button |
-| `--product-name-text`, `--product-price-text`, `--product-sale-price-text` | Product typography |
-| `--body-bg`, `--body-text` | Page base |
-| `--input-border`, `--input-bg`, `--input-text` | Inputs (normal + focus); checkout inputs often use `.checkout-form .global_input` in examples |
-| `--checkout-form-bg`, `--checkout-heading-text` | Checkout shell & headings |
-
-**Practice:** Prefer **palette variables** for colors merchants should control from the dashboard. Use **`theme_data`** for settings beyond those 22 colors (copy, toggles, repeatable lists, layout options).
-
-**Prestig repo note:** `style.css` may define additional **`--ps-*`** design tokens. When styling surfaces tied to merchant-facing palette (buttons, header, footer, checkout), **wire through palette vars** (or values derived from them) so admin color changes still apply.
-
----
-
-## 4) `schema.json` and `theme_data`
-
-**Flow:** You author `schema.json` (array of fields) → **Home builder / theme settings** renders a form from the schema → merchants save values as flat **`theme_data`** → **every** `.liquid` section receives `theme_data` automatically in its render context.
-
-### Field types
-
-| Type | Admin UI | Value in Liquid |
-|------|----------|-----------------|
-| `string` | Text input | string |
-| `number` | Number input | number |
-| `color` | Color picker | string (hex, e.g. `#1A1A2E`) |
-| `boolean` | Toggle | true/false |
-| `checkbox` | Checkbox | true/false |
-| `select` | Dropdown | single string |
-| `multi_select` | Multi-select | string array |
-| `object_array` | Repeatable groups | array of objects |
-
-**`object_array` constraint:** Nested fields may only be primitives, `select`, or `multi_select` — **no nested `object_array`**.
-
-### Field properties (reference)
-
-| Property | Required | Type | Description |
-|----------|----------|------|-------------|
-| `name` | Yes | string | Unique key → `theme_data.{name}` in Liquid |
-| `type` | Yes | string | One of the types above |
-| `description` | Yes | string | Merchant-facing label |
-| `default` | No | varies | Default when unset |
-| `options` | For select / multi_select | array | `[{ "label", "value" }]` |
-| `fields` | For object_array | array | Nested field definitions |
-
-### Accessing values in Liquid
-
-- Simple: `{{ theme_data.hero_headline }}`
-- Conditional: `{% if theme_data.hero_show_overlay %}`
-- Select: `class="scheme-{{ theme_data.color_scheme }}"`
-- Multi-select: `{% for badge_type in theme_data.product_badge_types %}`
-- Object array: `{% for slide in theme_data.hero_slides %}` then `{{ slide.title }}`
-
-### Bridging `theme_data` to CSS
-
-Set custom properties on a section root in Liquid:
-
-```liquid
-<section style="--primary: {{ theme_data.color_primary }}; --font-base: {{ theme_data.font_size_base }}px;">
+```text
+my-theme/
+├── sections/     ← 20 قسم منصة
+├── style.css
+├── script.js
+└── schema.json
 ```
 
-Then in `style.css`: `.hero { color: var(--primary); font-size: var(--font-base); }`
-
-**Platform tip:** For global storefront colors, prefer the **palette** on `:root`; use **`theme_data`** for settings that go beyond the built-in palette — fonts, toggles, content strings, repeatable items, etc.
-
-### Prestig: Google Fonts (تلخيص)
-
-**تحميل**
-
-| الحقل | معنى |
-|------|------|
-| **`font_google_families`** | أسماء خطوط Google متعددة مفصولة بفاصلة (كما في الموقع). |
-| **`font_google_weights`** | أوزان لكل الخطوط معًا، مثل `400;500;600;700`. |
-
-**تعيين الأدوار**
-
-| **`theme_data`** | الاستخدام المعتاد (القديم افتراضيًا) | CSS |
-|------------------|----------------------------------------|-----|
-| **`font_family_primary`** | النص الأساسي — Instrument Sans | `--ps-ff-primary` |
-| **`font_family_ui`** | إعلان وواجهة ضيقة — Manrope | `--ps-ff-ui` |
-| **`font_family_alt`** | نص ثانوي — Nunito | `--ps-ff-alt` |
-| **`font_family_display`** | عناوين عرض — Playfair Display | `--ps-ff-display` |
-| **`font_family_arabic`** | العربية — Almarai؛ لخط واحد للعربي والإنجليزي ضع نفس الاسم هنا وفي **`font_family_primary`**. | `--ps-ff-arabic` |
-
-**تنفيذ:** `sections/header.liquid` يولِّد رابط **`fonts.googleapis.com/css2`** ويضمن **`var(--ps-ff-*)`** على `:root`; **`style.css`** يستخدم **`var`** فقط. أي اسم خط خام ما زال موجودًا في الشفرة القديمة (Montserrat/Jost…) يُضاف إلى **`font_google_families`**.
+كل قسم `.liquid` يستقبل متغيرات المنصة + **`theme_data`** من `schema.json` تلقائياً.
 
 ---
 
-## 5) Liquid (LiquidJS) — practical summary
+## 2) ربط الملفات بالمنصة
 
-- **Output:** `{{ variable }}`
-- **Logic:** `{% if %}`, `{% elsif %}`, `{% else %}`, `{% endif %}`, `{% unless %}`, `{% case %}`, `{% for %}`, `{% assign %}`
-- **Comments:** `{% comment %} … {% endcomment %}`
-- **`for`:** `limit: n`; **`forloop`**: `index`, `index0`, `first`, `last`, `length`
+| Path | Admin | وصف |
+|------|-------|-----|
+| `sections/header.liquid` | `header` | إعلان + هيدر + قائمة موبايل |
+| `sections/footer.liquid` | `footer` | فوتر + newsletter |
+| `sections/gallery.liquid` | `gallery` | معرض صور المنتج |
+| `sections/product-details.liquid` | `product_details` | اسم، سعر، تقييم |
+| `sections/product-description.liquid` | `product_description` | وصف + سياسات |
+| `sections/featured-products.liquid` | `featured_products` | شبكة مميزة |
+| `sections/list-products.liquid` | `list_products` | قائمة/كاروسيل أفقي |
+| `sections/home-products-grid.liquid` | `home_products_grid` | شبكة + hero تصنيف |
+| `sections/products-grid.liquid` | `products_grid` | بحث/تصنيفات |
+| `sections/related-products.liquid` | `related_products` | منتجات مشابهة |
+| `sections/slider.liquid` | `slider` | سلايدر متعدد |
+| `sections/categories.liquid` | `categories` | تصنيفات |
+| `sections/reviews.liquid` | `reviews` | تقييمات |
+| `sections/breadcrumbs.liquid` | `breadcrumbs` | مسار تنقل |
+| `sections/fixed-buy-button.liquid` | `fixed_buy_button` | شريط شراء ثابت |
+| `sections/fake-visitor.liquid` | `fake_visitor` | عداد زوار |
+| `sections/fake-stock.liquid` | `fake_stock` | مخزون وهمي |
+| `sections/fake-counter.liquid` | `fake_counter` | عدّاد تنازلي PDP |
+| `sections/thanks.liquid` | `thanks` | شكراً |
+| `sections/order-invoice.liquid` | `order_invoice` | فاتورة |
+| `style.css` | `theme_style` | CSS عام |
+| `script.js` | `theme_script` | JS عام |
+| `schema.json` | `theme_data_schema` | إعدادات التاجر |
 
-### Common filters
-
-Chain with `|`. Includes: `default`, `floor`, `ceil`, `round`, `plus`, `minus`, `times`, `divided_by`, `modulo`, `size`, `first`, `last`, `where`, `join`, `split`, `upcase`, `downcase`, `strip`, `replace` — use `contains` inside `{% if url contains ".mp4" %}`.
-
-### Patterns from the docs
-
-- Image vs video: `{% if mainImage contains '.mp4' %}` → `<video controls playsinline autoplay muted preload="metadata">` else `<img>`.
-- Discount %: `price | minus: sale_price | times: 100 | divided_by: price | floor`.
-- Color / image swatches: `product.variations | where: "type", "color" | first` (and similarly `"image"` for image swatches).
-- **Star rating (with half star):** compute `full_stars = rating | floor`, `decimal = rating | minus: full_stars`, set `has_half` when `decimal` is between `0.25` and `0.75`, bump full star when `decimal >= 0.75`, then loop `{% for i in (1..5) %}` with filled / half / empty classes (see Liquid Reference).
-- **Wishlist / compare on cards & PDP:** dispatch `toggle-wishlist` / `toggle-compare` with `bubbles: true` and `detail: { productId: '{{ product.id }}' }` (use `preventDefault` + `stopPropagation` on nested controls).
-
----
-
-## 6) Link interception (SPA)
-
-- Same-origin links like `/products/...`, `/collections/...`, `/search`, etc. use **client-side navigation** in sections where interception is enabled — docs list **header, footer, categories, products, slider, breadcrumbs** among typical cases.
-- **Not** intercepted: external domains, `target="_blank"`, links with `download`.
-- Use normal `<a href="...">` for internal routes; no extra attributes required.
-
----
-
-## 7) Custom events — golden rules
-
-1. Use **`new CustomEvent('event-name', { bubbles: true, detail: {...} })`**.
-2. **`bubbles: true` is required** — the app listens on the section container (`useLiquidEvents`), not only the clicked node.
-3. Dispatch from **inline `onclick`** or **`script.js`** on an element inside the section.
-
-### Complete event table (official)
-
-| Event | Section / context | `detail` | Behavior |
-|-------|-------------------|----------|----------|
-| `cart-click` | Header | — | Opens side cart drawer |
-| `lang-click` | Header | `{ anchor: HTMLElement }` **recommended** | Language UI — pass the opening control as `detail.anchor` |
-| `register-click` | Header | — | Client-side `/register` when `is_register_active`; use `register-btn` |
-| `footer-subscribe` | Footer | `{ email: string }` | Newsletter — **trimmed** email |
-| `review-open` | Reviews | — | Opens review modal |
-| `buy-now` | Fixed buy | — | Buy / add flow |
-| `increment-quantity` | Fixed buy | — | +1 |
-| `decrement-quantity` | Fixed buy | — | -1 |
-| `quick-add` | Product listings | `{ productId: string }` | Quick add to cart |
-| `quick-view` | Product listings | `{ productId: string }` | Quick view modal |
-| `toggle-wishlist` | Products / PDP | `{ productId: string }` | Wishlist toggle |
-| `toggle-compare` | Products / PDP | `{ productId: string }` | Compare + modal |
-| `compare-click` | Header | — | Opens compare modal |
-| `go-home` | Thanks | — | Home navigation |
-| `copy-tracking-link` | Order invoice | `{ link: string }` | Copy tracking URL + toast |
-
-On product cards, use `event.preventDefault(); event.stopPropagation();` before `dispatchEvent` for add / wishlist / compare buttons.
-
-**Event flow (docs):** Liquid / `script.js` → `CustomEvent` bubbles → React section wrapper → `useLiquidEvents` → app logic.
+**عرض:** Header SSR أول مرة (`header_html`)؛ Footer CSR. لا تُعاد تسمية الملفات المتوقعة.
 
 ---
 
-## 8) Header contract (layout docs summary)
+## 3) Palette — 22 لون على `:root`
 
-**Key variables:** `logo`, `store_name`, `categories` (`name`, `url`, optional `children[]` with `name`, `url`), `announcement_config` (`text` string[], `type`: simple / slider / marquee), `announcement_text`, `cart_count`, `compare_count`, `wishlist_count`, `is_register_active`, `theme_data`.
+استخدم دائماً `var(--name, #fallback)`.
 
-**SSR:** Initial counts for cart / compare / wishlist should match badge text and `hidden` at SSR time; the client keeps **`#header-cart-count`**, **`#header-compare-count`**, and **`#header-wishlist-count`** in sync on updates (same pattern as cart).
+| متغير | استخدام |
+|-------|---------|
+| `--hd-bg`, `--hd-text` | هيدر |
+| `--ann-bg`, `--ann-text` | إعلان |
+| `--ft-bg`, `--ft-text` | فوتر |
+| `--buy-btn-bg/text/border` | شراء / إضافة للسلة |
+| `--crt-btn-bg/text/border` | زر السلة |
+| `--product-name-text`, `--product-price-text`, `--product-sale-price-text` | بطاقة منتج |
+| `--body-bg`, `--body-text` | الصفحة |
+| `--input-border/bg/text` | حقول |
+| `--checkout-form-bg`, `--checkout-heading-text` | checkout |
 
-**CSS hooks (examples in docs):** `cart-btn`, `lang-btn`, `register-btn`, `search-btn` — events must still bubble from the interactive control.
+```css
+.buy-button {
+  background: var(--buy-btn-bg, #e94560);
+  color: var(--buy-btn-text, #fff);
+  border: 1px solid var(--buy-btn-border, transparent);
+}
+```
 
-**IDs to preserve:**
-
-| ID | Purpose |
-|----|---------|
-| `header-cart-count` | Cart badge; storefront updates text and `hidden` |
-| `header-compare-count` | Compare badge; pair with `compare-click` on parent button |
-| `header-wishlist-count` | Inside `<a href="/wishlist">`; no custom event |
-| `header-lang-btn`, `header-lang-mobile` | Language controls (hidden if plugin inactive) |
-| `header-register`, `header-register-mobile` | Reserved for future storefront features; **current:** `register-btn` + `register-click` |
-
-IDs must be **unique** in the document (one cart badge, one desktop lang control, at most one mobile lang, etc.).
-
-**Events:** `cart-click` on cart control, `lang-click` with `{ bubbles: true, detail: { anchor: this } }` recommended, `register-click` on `register-btn`, `compare-click` on compare control.
-
-**Doc warnings:** Without `cart-click`, the cart drawer won’t open. Without `id="header-cart-count"`, counts won’t sync. Without `compare-click`, the compare modal won’t open from the header.
-
----
-
-## 9) Footer contract (summary)
-
-**Variables:** `logo`, `store_name`, `categories` (`name`, `slug`), `pages` (`title`, `slug`), `social` (`type`, `url`, `label`, `icon`), `year`, `payment_img`, `phone`, `email`, `address`, `has_contact`, `shop_label`, `help_label`, `subscribe_label`, `email_placeholder`, `follow_label`, `rights_label`, `show_powered`, `theme_data`.
-
-**Newsletter form:** class `footer-subscribe-form`, `novalidate`, HTML5 validation (`autocomplete`, `inputmode`, `pattern`, `required`, `aria-required`), trim email, then `CustomEvent('footer-subscribe', { bubbles: true, detail: { email } })` and `this.reset()`.
+للألوان خارج الـ palette استخدم **`theme_data`** (انظر §4).
 
 ---
 
-## 10) Product sections — quick variable index
+## 4) `schema.json` → `theme_data`
 
-### `breadcrumbs.liquid`
+`schema.json` (مصفوفة حقول) → نموذج في الأدمن → قيم محفوظة → **`theme_data` في كل `.liquid`**.
 
-`categories` (`name`, `slug`), `product_name`, `home_text`. Internal links use SPA interception. Placement inside product details may follow admin flag `is_breadcrumbs_in_details`.
+| النوع | في Liquid |
+|-------|-----------|
+| `string`, `number`, `color` | `{{ theme_data.key }}` |
+| `boolean`, `checkbox` | `{% if theme_data.flag %}` |
+| `select` | string واحد |
+| `multi_select` | مصفوفة strings |
+| `object_array` | `{% for item in theme_data.items %}` — **بدون** `object_array` متداخل |
 
-### `gallery.liquid`
+حقول الحقل: `name`, `type`, `description`, `default`, `options` (للـ select), `fields` (للـ object_array).
 
-`images[]`, `mainImage`, `product_name`, `theme_data`. Video: `contains '.mp4'`. Thumbnail / swipe behavior is local Liquid + `script.js` unless the parent re-renders variant data. No custom events to the app.
+ربط CSS من Liquid:
 
-### `product-details.liquid`
-
-`product_name`, `price`, `sale_price`, `currency`, `rating`, `reviews_count`, `description` (when `is_description_in_details`), `theme_data`, **`product_id`** for wishlist / compare (must match storefront product id).
-
-Events: `toggle-wishlist`, `toggle-compare` with `detail: { productId: '{{ product_id }}' }`.
-
-### `product-description.liquid`
-
-`description` (HTML), `description_label`, `policies[]` (`icon`, `title`, `content`), `theme_data`. Optional merge into details per `is_description_in_details`. Accordion vs tabs is theme-defined.
-
-### `fixed-buy-button.liquid`
-
-`product_name`, `price`, `sale_price`, `currency`, `thumb`, `buy_now_text`, `quantity`, `disabled`, `hide_quantity`, `increase_disabled`, `theme_data`.
-
-Required events with `bubbles: true`: `buy-now`, `increment-quantity`, `decrement-quantity`.
-
-### `reviews.liquid`
-
-`reviews[]` (`rating`, `user_name`, `comment`, `image`), `reviews_count`, `average_rating`, `average_rating_display`, `t_users_reviews`, `t_reviews`, `t_share_your_review`, `t_no_reviews`, `theme_data`.
-
-Open modal: `data-review-open` on the button, or dispatch `review-open` per events reference.
-
-### `related-products.liquid`
-
-Same product contract as homepage listings: `products`, `category`, `section_title`, `currency`, `add`, `shop_now`, `sale`, `theme_data`. Shown when the product is not `hide_related_products` and has a category; storefront typically passes up to ~5 products.
-
-**Events:** `quick-add`, `quick-view` only (horizontal scroll recommended).
+```liquid
+<section style="--primary: {{ theme_data.color_primary }};">
+```
 
 ---
 
-## 11) Home sections — summary
+## 5) Liquid — ملخص سريع
 
-### `slider.liquid`
+- **إخراج:** `{{ var }}` · **منطق:** `{% if %}`, `{% for %}`, `{% assign %}`, `{% unless %}`, `{% case %}`
+- **`theme_data`** ومتغيرات القسم تلقائياً في كل section
+- **فلاتر شائعة:** `default`, `floor`, `where`, `contains` (داخل `{% if %}`), `plus/minus/times/divided_by`, `size`, `limit: n`
+- **`forloop`:** `index`, `index0`, `first`, `last`, `length`
 
-`slides[]`: `image`, `mobile_image` (optional, ≤425px), `url`, `alt`. If `url` is blank, use `<div>` not `<a>`. Use `<picture>` + `<source media>`. First slide `loading="eager"`, rest `lazy`. Docs suggest `alt="{{ slide.alt | default: 'Slide image' }}"`.
+**أنماط متكررة:**
 
-### `categories.liquid`
+```liquid
+{% if mainImage contains '.mp4' %}
+  <video src="{{ mainImage }}" controls playsinline muted preload="metadata"></video>
+{% else %}
+  <img src="{{ mainImage }}" alt="{{ product_name }}" />
+{% endif %}
+```
 
-`categories[]`: `name`, `slug`, `thumb`. Section may present as grid or carousel; links go to `/collections/{{ slug }}`.
+```liquid
+{% assign color_var = product.variations | where: "type", "color" | first %}
+{% assign discount = price | minus: sale_price | times: 100 | divided_by: price | floor %}
+```
 
-### `featured-products.liquid` / `list-products.liquid` / `home-products-grid.liquid`
+```liquid
+{% for i in (1..5) %}
+  {% if i <= rating | floor %}<span class="star filled"></span>{% else %}<span class="star"></span>{% endif %}
+{% endfor %}
+```
+
+---
+
+## 6) اعتراض الروابط (SPA)
+
+تُعترض: روابط نفس النطاق (`/products/`, `/collections/`, `/search`, …) في أقسام مفعّلة (هيدر، فوتر، تصنيفات، منتجات، سلايدر، breadcrumbs، وغيرها).
+
+لا تُعترض: خارجي، `target="_blank"`, `download`.
+
+استخدم `<a href="/products/{{ slug }}">` عادي — بدون attributes خاصة.
+
+---
+
+## 7) الأحداث المخصصة — قواعد ذهبية
+
+1. `new CustomEvent('name', { bubbles: true, detail: {...} })`
+2. **`bubbles: true` إلزامي** — المنصة تستمع على غلاف القسم (`useLiquidEvents`)
+3. على بطاقات المنتج: `preventDefault` + `stopPropagation` قبل `dispatchEvent`
+
+| حدث | أين | `detail` |
+|-----|-----|----------|
+| `cart-click` | هيدر | — |
+| `lang-click` | هيدر | `{ anchor: HTMLElement }` موصى به |
+| `register-click` | هيدر (`register-btn`) | — |
+| `compare-click` | هيدر | — |
+| `footer-subscribe` | فوتر | `{ email: string }` مُقتطع |
+| `review-open` | تقييمات | — |
+| `buy-now` | شراء ثابت | — |
+| `increment-quantity` / `decrement-quantity` | شراء ثابت | — |
+| `quick-add` | قوائم منتجات | `{ productId }` |
+| `quick-view` | قوائم منتجات | `{ productId }` |
+| `toggle-wishlist` / `toggle-compare` | بطاقات / PDP | `{ productId }` |
+| `go-home` | شكراً | — |
+| `copy-tracking-link` | فاتورة | `{ link: string }` |
+
+**مثال بطاقة:**
+
+```html
+onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}))"
+```
+
+**مثال فوتر:**
+
+```html
+<form class="footer-subscribe-form" novalidate onsubmit="event.preventDefault();if(!this.checkValidity()){this.reportValidity();return;}var e=this.elements.email.value.trim();this.dispatchEvent(new CustomEvent('footer-subscribe',{bubbles:true,detail:{email:e}}));this.reset();">
+```
+
+**التدفق:** Liquid/JS → حدث يفقاع → React section → منطق التطبيق.
+
+---
+
+## 8) Header (`sections/header.liquid`)
+
+**SSR** أول تحميل؛ المنصة تربط IDs والأحداث.
+
+### متغيرات
+
+`logo`, `store_name`, `categories[]` (`name`, `url`, `children[]`), `announcement_config` (`text[]`, `type`: simple/slider/marquee), `announcement_text`, `cart_count`, `compare_count`, `wishlist_count`, `is_register_active`, `theme_data`.
+
+### IDs إلزامية
+
+| ID | الغرض |
+|----|--------|
+| `header-cart-count` | شارة السلة (نص + `hidden`) |
+| `header-compare-count` | شارة المقارنة |
+| `header-wishlist-count` | داخل `<a href="/wishlist">` — بدون حدث |
+| `header-lang-btn`, `header-lang-mobile` | لغة |
+| `header-register`, `header-register-mobile` | محجوزة؛ الفعلي: `register-btn` + `register-click` |
+
+### أحداث وكلاسات
+
+- أحداث: `cart-click`, `compare-click`, `lang-click` (يفضل `detail.anchor`), `register-click` على `register-btn`
+- كلاسات للربط: `cart-btn`, `lang-btn`, `register-btn`, `search-btn`
+
+**تحذير:** بدون `cart-click` لا تُفتح السلة؛ بدون `#header-cart-count` لا يتحدث العدد.
+
+أمثلة كاملة: [Layout — Header](https://themes-docs.easy-orders.net/docs/custom-themes/sections/layout-sections).
+
+---
+
+## 9) Footer (`sections/footer.liquid`)
+
+**CSR** — `footer-subscribe-form` + حدث `footer-subscribe`.
+
+`logo`, `store_name`, `categories[]` (`name`, `slug`), `pages[]` (`title`, `slug`), `social[]`, `year`, `payment_img`, `phone`, `email`, `address`, `has_contact`, تسميات مترجمة، `show_powered`, `theme_data`.
+
+أمثلة كاملة: [Layout — Footer](https://themes-docs.easy-orders.net/docs/custom-themes/sections/layout-sections).
+
+---
+
+## 10) Product sections (PDP)
+
+| ملف | متغيرات رئيسية | أحداث |
+|-----|----------------|-------|
+| `breadcrumbs` | `categories`, `product_name`, `home_text` | — |
+| `gallery` | `images[]`, `mainImage`, `product_name` | — (فيديو: `contains '.mp4'`) |
+| `product-details` | `product_name`, `price`, `sale_price`, `currency`, `rating`, `reviews_count`, `description?`, **`product_id`** | `toggle-wishlist`, `toggle-compare` |
+| `product-description` | `description` (HTML), `policies[]`, `description_label` | — |
+| `fixed-buy-button` | `product_name`, `price`, `sale_price`, `currency`, `thumb`, `buy_now_text`, `quantity`, `disabled`, `hide_quantity`, `increase_disabled` | `buy-now`, `increment-quantity`, `decrement-quantity` |
+| `reviews` | `reviews[]`, `average_rating`, ترجمات `t_*` | `review-open` أو `data-review-open` |
+| `related-products` | نفس عقد قوائم المنتجات | `quick-add`, `quick-view` |
+
+`product_id` في التفاصيل يجب أن يطابق معرف المنتج في المنصة. وصف المنتج: accordion أو tabs حسب تصميم الثيم.
+
+تفاصيل: [Product sections](https://themes-docs.easy-orders.net/docs/custom-themes/sections/product-sections).
+
+---
+
+## 11) Home sections
+
+| ملف | ملاحظات |
+|-----|---------|
+| `slider.liquid` | `slides[]`: `image`, `mobile_image?`, `url?`, `alt` — `<picture>`؛ أول slide `loading="eager"` |
+| `categories.liquid` | `categories[]`: `name`, `slug`, `thumb` |
+| `featured-products.liquid` | بطاقات + hero اختياري |
+| `list-products.liquid` | قائمة أفقية / كاروسيل |
+| `home-products-grid.liquid` | شبكة منتجات مع hero تصنيف |
+| `products-grid.liquid` | بحث/تصنيفات؛ `hide_view_all` دائماً true؛ **Load more** خارج Liquid (React) |
+
+### عقد منتج مشترك (قوائم)
 
 `products[]`, `category`, `section_title`, `currency`, `add`, `shop_now`, `sale`, `hide_view_all`, `theme_data`.
 
-**Product shape:** `id`, `name`, `slug`, `price`, `sale_price`, `thumb`, `images[]`, `variations[]` (`type`, `props[]` with `name`, `value` for swatches).
+**المنتج:** `id`, `name`, `slug`, `price`, `sale_price`, `thumb`, `images[]`, `variations[]` (`type`: `color`|`image`, `props[]`: `name`, `value`).
 
-**Events:** `quick-add`, `quick-view`, `toggle-wishlist`, `toggle-compare` with `productId`.
+**أحداث البطاقة:** `quick-add`, `quick-view`, `toggle-wishlist`, `toggle-compare` — كلها مع `productId`.
 
-### `products-grid.liquid` (search & collections)
-
-Same product contract; `hide_view_all` is always `true` here. The **Load more** button is rendered **outside** Liquid by React; each fetch re-renders this template with the **accumulated** product list.
-
-### Prestig: `promo-countdown-hero` (`theme/home-sections/promo-countdown-hero/`)
-
-Full-width promo hero modeled after layered lifestyle photography: gradient overlay (`overlay_strength` 0–100), left column for eyebrow (**kicker**), **headline**, **description**, and a solid CTA (**cta_label** / **cta_url**). Optional horizontal countdown on the opposite side (**show_countdown**).
-
-| Merchant concern | Setting / mechanism |
-|------------------|---------------------|
-| Background | **image** URL (defaults to Prestig demo asset); optional **mobile_image** for smaller viewports (`background-image`, `cover`; desktop uses **`image`** again at `min-width: 768px`). **bg_position** controls focal point (`center`, `center right`, `center left`). |
-| Typography & contrast | **text_color** for headline, description, countdown digits/labels; **kicker_color** for the eyebrow (falls back to **text_color**). Darkening is from the overlay, not replacing product palette slots. Use **palette**/`theme_data` on other pages as usual. |
-| CTA look | **button_bg** and **button_text** (defaults: white / near-black) read as CSS variables on `.promo-countdown-hero__btn`. |
-| Countdown modes | **`countdown_mode`**: **`calendar_day`** uses **`countdown_end_date`** (`data-pch-mode="calendar"`, **`data-end`**) — **day–month–year**, end-of-local-day (see **`parsePromoCountdownEndMs`**). **`rolling_hours`** uses **`rolling_duration_hours`**, **`data-pch-mode="rolling"`**, **`data-hours`**, **`data-storage-key`** — **fake urgency** persisted in **`localStorage`** (`pch-promo-roll-{key}-h{N}` like PDP **`fake-counter`**). Only **one** mode renders; picking mode is **`select`**, mutually exclusive fields in admin messaging. |
-| Client JS | **`initPromoCountdownHeroTimers()`** calendar; **`initPromoCountdownHeroRollingTimers()`** rolling. Observer attributes: **`data-end`**, **`data-hours`**, **`data-pch-mode`**, **`data-storage-key`**. |
-
-**Distinction:** Platform **`sections/fake-counter.liquid`** stays for **product** PDP. **`promo-countdown-hero`** **`rolling_hours`** mirrors that behaviour **on the homepage** with a customizable storage key (`rolling_storage_key`).
-
-### Prestig: `product-compare-slider` (`theme/home-sections/product-compare-slider/`)
-
-قبل/بعد بصورة واحدة للفرق بين لونين أو منتجين: **`image_left_url`** (طبقة علوية مُقصّة من اليمين)، **`image_right_url`** كخلفية كاملة جهة اليمنى. هيد **eyebrow** + **heading**، أسفل الصورة تعليقات **caption_left/right** مع روابط. **`initial_split_percent`** يضبط المحبب الأولي؛ **`initPrestigeProductCompareSliders()`** يحدّث **`--psc-split`** عن طريق **`pointer`** على `.psc-compare__media`.
+تفاصيل: [Home sections](https://themes-docs.easy-orders.net/docs/custom-themes/sections/home-sections).
 
 ---
 
 ## 12) Utility sections
 
-| File | Essentials |
-|------|------------|
-| `fake-visitor.liquid` | `min`, `max`, `watching_text`, `theme_data`. Root: `data-min`, `data-max` for client animation. |
-| `fake-stock.liquid` | `text` message + optional progress bar |
-| `fake-counter.liquid` | `hours`, `product_id`, `title`, `label_days`, `label_hours`, `label_minutes`, `label_seconds`, `theme_data`. Root: `data-hours`, `data-product-id`. Digit spans: `data-unit="days"` / `"hours"` / `"minutes"` / `"seconds"` |
-| `thanks.liquid` | `content`, `show_home_button`, `thanks_title`, `thanks_message`, `phone_message`, `go_home_text`, `offers_text`, `theme_data`; `go-home` event |
-| `order-invoice.liquid` | `order` (see docs: `full_name`, `phone`, `email`, `country`, `government`, `address`, `payment_method`, `transfer_receipt`, `status_label`, `created_at`, `cart_items[]`, `cost`, `shipping_cost`, `total_cost`, `is_digital`, `coupon_code`, `coupon_discount`), `order_notes[]` (`note`, `created_at`), `currency`, `logo`, `store_name`, `tracking_link`, `has_contact`, `contact_phone`, `contact_email`, `contact_address`, translation strings (`t_copy_tracking_link`, `t_phone`, …); `copy-tracking-link` with `detail.link` |
+| ملف | data attributes / أحداث |
+|-----|-------------------------|
+| `fake-visitor` | `data-min`, `data-max` على الجذر |
+| `fake-stock` | نص + شريط تقدم (ثيم) |
+| `fake-counter` | `data-hours`, `data-product-id`; أرقام `data-unit="days|hours|minutes|seconds"` |
+| `thanks` | `go-home` |
+| `order-invoice` | `copy-tracking-link` مع `detail.link`; `order.*`, `cart_items[]`, `t_*` ترجمات |
+
+تفاصيل: [Utility sections](https://themes-docs.easy-orders.net/docs/custom-themes/sections/utility-sections).
 
 ---
 
-## 13) Performance & a11y (from official examples)
+## 13) أداء وإمكانية وصول
 
-- Slider images: **eager** first slide, **lazy** the rest.
-- Gallery / slides: meaningful **alt** from `product_name` or `slide.alt`.
-- Video in gallery: `playsinline` / `preload="metadata"` where appropriate.
-- Newsletter inputs: `autocomplete`, `inputmode`, `pattern`, `required`, `aria-required`.
-- **iOS Safari:** keep real text **input/textarea** font-size at least **~16px** on focus to reduce auto-zoom.
+- سلايدر: أول صورة `eager`، الباقي `lazy`
+- `alt` من `product_name` أو `slide.alt`
+- فيديو المعرض: `playsinline`, `preload="metadata"`
+- newsletter: `autocomplete`, `inputmode`, `pattern`, `required`, `aria-required`
+- iOS: حجم خط حقول نص ~**16px+** على focus لتقليل zoom
 
 ---
 
-## 14) Event flow (from docs)
+## 14) تدفق الأحداث (ملخص)
 
+```text
+Liquid / script.js → CustomEvent({ bubbles: true }) → غلاف القسم (React) → useLiquidEvents → منطق التطبيق
 ```
-Liquid template / script.js
-  → dispatch CustomEvent({ bubbles: true })
-  → bubbles to section container (React)
-  → useLiquidEvents / app handlers
-```
 
-When adding interactions: **do not invent new event names** — stick to the table above or the current platform docs.
+لا تُخترَع أسماء أحداث جديدة — التزم بجدول §7 أو [Events Reference](https://themes-docs.easy-orders.net/docs/custom-themes/events-reference).
 
 ---
 
-*Aligned with [EasyOrders Themes documentation](https://themes-docs.easy-orders.net/docs/category/custom-themes) — Custom Themes category, Layout / Product / Home / Utility sections, Events & Data Attributes, and Liquid Reference (2026). For full prose, warnings, and long copy-paste examples, use the links at the top of this file.*
+*مزامن مع [EasyOrders Custom Themes](https://themes-docs.easy-orders.net/docs/category/custom-themes) — للأمثلة الكاملة والتحذيرات، راجع صفحات الدوكس المرتبطة أعلاه.*

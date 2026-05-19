@@ -1,12 +1,12 @@
-{% comment %}Contract: .ps-theme(data-ps-*); .ps-announce[data-ps-announce]; #eo-header.ps-header; .ps-theme-layout-spacer; aside#eo-mobile-menu; #eo-menu-btn,#header-cart-count,#header-lang-*; palette on :root. Google Fonts URL built in script.js from data-ps-gf-families + data-ps-gf-weights.{% endcomment %}
+{% comment %}Contract: .ps-theme(data-ps-*); .ps-announce[data-ps-announce]; #eo-header.ps-header; .ps-theme-layout-spacer; aside#eo-mobile-menu; #eo-menu-btn,#header-cart-count,#header-lang-btn,#header-lang-mobile,#header-register,#header-register-mobile; is_register_active gates register UI; lang buttons hidden until platform shows; cart-count hidden when 0. Google Fonts from data-ps-gf-*.{% endcomment %}
 {% liquid
   assign _ps_anim_on = true
   if theme_data.enable_theme_animations == false
     assign _ps_anim_on = false
   endif
-  assign _logo_h = theme_data.header_logo_height | default: 46 | plus: 0
+  assign _logo_h = theme_data.header_logo_height | default: 40 | plus: 0
   if _logo_h < 1
-    assign _logo_h = 46
+    assign _logo_h = 40
   endif
   assign ann_cfg = announcement_config
   if ann_cfg == nil or ann_cfg.text == nil or ann_cfg.text.size == 0
@@ -26,7 +26,7 @@
     assign ann_type_key = 'simple'
   endif
 %}
-<div class="ps-theme" data-ps-animations="{% if _ps_anim_on %}1{% else %}0{% endif %}" data-ps-gf-families="{{ theme_data.font_google_families | default: 'Instrument Sans' | escape }}" data-ps-gf-weights="{{ theme_data.font_google_weights | default: '400;500;600;700' | escape }}" data-ps-ff-primary="{{ theme_data.font_family_primary | default: 'Instrument Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-ui="{{ theme_data.font_family_ui | default: 'Manrope' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-alt="{{ theme_data.font_family_alt | default: 'Nunito' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-display="{{ theme_data.font_family_display | default: 'Playfair Display' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-arabic="{{ theme_data.font_family_arabic | default: 'Almarai' | strip | replace: '"', '' | replace: "'", '' | escape }}">
+<div class="ps-theme" data-ps-animations="{% if _ps_anim_on %}1{% else %}0{% endif %}" data-ps-gf-families="{{ theme_data.font_google_families | default: 'Hauora, Almarai' | escape }}" data-ps-gf-weights="{{ theme_data.font_google_weights | default: '400;500;600;700' | escape }}" data-ps-ff-primary="{{ theme_data.font_family_primary | default: 'Hauora' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-ui="{{ theme_data.font_family_ui | default: 'Hauora' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-alt="{{ theme_data.font_family_alt | default: 'Hauora' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-display="{{ theme_data.font_family_display | default: 'Hauora' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-arabic="{{ theme_data.font_family_arabic | default: 'Almarai' | strip | replace: '"', '' | replace: "'", '' | escape }}">
   {% if ann_count > 0 %}
     <div class="ps-announce" data-ps-announce data-ann-type="{{ ann_type_key }}" role="region" aria-label="Announcement">
       {% if ann_type_key == 'marquee' %}
@@ -41,18 +41,20 @@
   {% elsif announcement_text and announcement_text != "" %}
     <div class="ps-announce" data-ps-announce data-ann-type="simple" role="region" aria-label="Announcement"><div class="ps-announce-inner ps-announce-simple"><span>{{ announcement_text }}</span></div></div>
   {% endif %}
-  <header id="eo-header" class="ps-header"><div class="ps-header-inner">
-    <div class="ps-left-group" data-anim="fadeInRight" data-seq="1">
-      <button id="eo-menu-btn" class="ps-menu-btn" type="button" aria-label="Open menu"><img src="https://files.easy-orders.net/1773672562651251535hamburger.svg" alt="" class="ps-menu-icon" /></button>
+  <header id="eo-header" class="ps-header"><div class="ps-header-inner"><div class="ps-header-row">
+    <div class="ps-left-group">
+      <button id="eo-menu-btn" class="ps-menu-btn" type="button" aria-label="Open menu"><img src="https://files.easy-orders.net/1779172066400485068header-drawer-details-slot-summary-menu-svg.svg" alt="" class="ps-menu-icon" width="14" height="20" /></button>
+      <a href="/search" class="ps-icon-btn search-btn ps-header-search-mobile" aria-label="Search" data-eo="search-btn"><img src="https://files.easy-orders.net/1779172066425800515svg.svg" alt="" class="ps-icon-image" width="22" height="22" /></a>
       <nav class="ps-desktop-nav" aria-label="Main navigation">{% for category in categories %}{% assign cat_href = category.url %}{% if cat_href == blank %}{% if category.slug != blank %}{% assign cat_href = "/collections/" | append: category.slug %}{% else %}{% assign cat_href = "#" %}{% endif %}{% endif %}{% assign cat_children_n = category.children | size %}{% if cat_children_n > 0 %}<div class="ps-nav-dropdown"><a href="{{ cat_href }}" class="ps-desktop-nav-link ps-nav-dropdown-trigger">{{ category.name }}</a><div class="ps-nav-dropdown-panel">{% for child in category.children %}{% assign child_href = child.url %}{% if child_href == blank %}{% if child.slug != blank %}{% assign child_href = "/collections/" | append: child.slug %}{% else %}{% assign child_href = "#" %}{% endif %}{% endif %}<a href="{{ child_href }}">{{ child.name }}</a>{% endfor %}</div></div>{% else %}<a href="{{ cat_href }}" class="ps-desktop-nav-link">{{ category.name }}</a>{% endif %}{% endfor %}</nav>
     </div>
-    <a href="/" class="ps-logo" style="--ps-logo-img-h: {{ _logo_h }}px;" aria-label="{{ store_name }}" data-anim="zoomIn" data-seq="0">{% if logo != blank %}<img src="{{ logo }}" alt="{{ store_name }}" />{% else %}<span>{{ store_name }}</span>{% endif %}</a>
-    <div class="ps-right-group" data-anim="fadeInLeft" data-seq="2">
-      <a href="/search" class="ps-icon-btn search-btn" aria-label="Search" data-eo="search-btn"><img src="https://files.easy-orders.net/1773672173685851777search.svg" alt="" class="ps-icon-image" /></a>
-      <button type="button" id="header-lang-btn" class="ps-icon-btn lang-btn" aria-label="Change language" onclick="this.dispatchEvent(new CustomEvent('lang-click',{bubbles:true}))"><svg class="ps-icon-image ps-lang-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg></button>
-      <button type="button" class="ps-icon-btn cart-btn" aria-label="Cart" onclick="this.dispatchEvent(new CustomEvent('cart-click',{bubbles:true}))"><img src="https://files.easy-orders.net/1773672173697877890card.svg" alt="" class="ps-icon-image" /><span id="header-cart-count" class="ps-cart-count" {% if cart_count == 0 %}hidden{% endif %} aria-hidden="true">{{ cart_count }}</span></button>
+    <a href="/" class="ps-logo" style="--ps-logo-img-h: {{ _logo_h }}px;" aria-label="{{ store_name }}">{% if logo != blank %}<img src="{{ logo }}" alt="{{ store_name }}" />{% else %}<span>{{ store_name }}</span>{% endif %}</a>
+    <div class="ps-right-group">
+      <button type="button" id="header-lang-btn" class="ps-icon-btn lang-btn" aria-label="Change language" hidden onclick="this.dispatchEvent(new CustomEvent('lang-click',{bubbles:true}))"><svg class="ps-icon-image ps-lang-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg></button>
+      <a href="/search" class="ps-icon-btn search-btn ps-header-search-desktop" aria-label="Search" data-eo="search-btn"><img src="https://files.easy-orders.net/1779172066425800515svg.svg" alt="" class="ps-icon-image" width="22" height="22" /></a>
+      {% if is_register_active %}<button type="button" id="header-register" class="ps-icon-btn register-btn" aria-label="Register" onclick="this.dispatchEvent(new CustomEvent('register-click',{bubbles:true}))"><img src="https://files.easy-orders.net/1779172066420412752anchored-popover-component-buttondialog-account-svg.svg" alt="" class="ps-icon-image" width="22" height="22" /></button>{% endif %}
+      <button type="button" class="ps-icon-btn cart-btn" aria-label="Cart" onclick="this.dispatchEvent(new CustomEvent('cart-click',{bubbles:true}))"><img src="https://files.easy-orders.net/1779172066410453648cart-icon-svg.svg" alt="" class="ps-icon-image" width="22" height="22" /><span id="header-cart-count" class="ps-cart-count" {% if cart_count == 0 %}hidden{% endif %}>{{ cart_count }}</span></button>
     </div>
-  </div></header>
+  </div></div></header>
   <div class="ps-theme-layout-spacer" aria-hidden="true"></div>
   <div id="eo-mobile-overlay" class="ps-mobile-overlay"></div>
   <aside id="eo-mobile-menu" class="ps-mobile-menu" aria-label="Mobile menu">
@@ -61,8 +63,9 @@
       <a href="/" class="ps-logo ps-mobile-logo" aria-label="{{ store_name }}">{% if logo != blank %}<img src="{{ logo }}" alt="{{ store_name }}" />{% else %}<span>{{ store_name }}</span>{% endif %}</a>
     </div>
     <nav class="ps-mobile-nav" aria-label="Mobile navigation">{% for category in categories %}{% assign cat_href = category.url %}{% if cat_href == blank %}{% if category.slug != blank %}{% assign cat_href = "/collections/" | append: category.slug %}{% else %}{% assign cat_href = "#" %}{% endif %}{% endif %}{% assign cat_children_n = category.children | size %}{% if cat_children_n > 0 %}<div class="ps-mobile-accordion"><button class="ps-mobile-link ps-accordion-trigger" type="button"><span>{{ category.name }}</span><img src="https://files.easy-orders.net/1778659562990248523prestig-header-mobile-accordion-chevron.svg" alt="" width="12" height="12" class="ps-arrow-icon" aria-hidden="true" /></button><div class="ps-accordion-panel"><a href="{{ cat_href }}" class="ps-mobile-sublink">All {{ category.name }}</a>{% for child in category.children %}{% assign child_href = child.url %}{% if child_href == blank %}{% if child.slug != blank %}{% assign child_href = "/collections/" | append: child.slug %}{% else %}{% assign child_href = "#" %}{% endif %}{% endif %}<a href="{{ child_href }}" class="ps-mobile-sublink">{{ child.name }}</a>{% endfor %}</div></div>{% else %}<a href="{{ cat_href }}" class="ps-mobile-link"><span>{{ category.name }}</span></a>{% endif %}{% endfor %}
-      <a href="/search" class="ps-mobile-link ps-mobile-link--iconrow" data-eo="search-btn"><span>Search</span><img class="ps-mobile-row-icon" src="https://files.easy-orders.net/1778659565008229748prestig-header-mobile-icon-search.svg" alt="" width="20" height="20" aria-hidden="true" /></a>
-      <a id="header-lang-mobile" href="#" class="ps-mobile-link ps-mobile-link--iconrow lang-btn" onclick="this.dispatchEvent(new CustomEvent('lang-click',{bubbles:true}));return false;"><span>Language</span><svg class="ps-mobile-row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg></a>
+      <a href="/search" class="ps-mobile-link ps-mobile-link--iconrow" data-eo="search-btn"><span>Search</span><img class="ps-mobile-row-icon" src="https://files.easy-orders.net/1779172066425800515svg.svg" alt="" width="22" height="22" aria-hidden="true" /></a>
+      {% if is_register_active %}<button type="button" id="header-register-mobile" class="ps-mobile-link register-btn" aria-label="Register" onclick="this.dispatchEvent(new CustomEvent('register-click',{bubbles:true}))"><span>Register</span><img src="https://files.easy-orders.net/1779172066420412752anchored-popover-component-buttondialog-account-svg.svg" alt="" class="ps-mobile-row-icon" width="22" height="22" aria-hidden="true" /></button>{% endif %}
+      <button type="button" id="header-lang-mobile" class="ps-mobile-link ps-mobile-link--iconrow lang-btn" hidden onclick="this.dispatchEvent(new CustomEvent('lang-click',{bubbles:true}))"><span>Language</span><svg class="ps-mobile-row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg></button>
     </nav>
   </aside>
 </div>
