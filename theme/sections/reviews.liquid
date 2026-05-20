@@ -1,1 +1,248 @@
-<section class="ps-rev-section ps-sr-scope" data-ps-reviews data-reviews-read-more="{{ theme_data.reviews_read_more_label | escape }}" data-reviews-show-less="{{ theme_data.reviews_show_less_label | escape }}"><div class="ps-rev-inner product_container">{% if reviews and reviews.size > 0 %}<div class="ps-rev-head"><h2 class="ps-rev-title" data-anim="fadeInDown" data-seq="0"><span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span><span class="ps-rev-title-count">({{ reviews_count_display | default: reviews_count | default: reviews.size }})</span></h2><div class="ps-rev-head-actions"><button type="button" class="ps-rev-write-btn" data-review-open onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}));" data-anim="fadeInRight" data-seq="1">{{ t_share_your_review | default: theme_data.reviews_share_cta_fallback }}</button></div></div><div class="ps-rev-summary" data-anim="fadeInScale" data-seq="2"><div class="ps-rev-summary-left"><div class="ps-rev-score-ring" aria-hidden="true"><span class="ps-rev-score-ring-value">{{ average_rating_display | default: average_rating | default: "—" }}</span></div><div class="ps-rev-stars-meta"><div class="ps-rev-summary-stars">{% for i in (1..5) %}{% if average_rating != blank and i <= average_rating %}<span class="ab-pd-star ab-pd-star-filled ps-rev-star"></span>{% else %}<span class="ab-pd-star ab-pd-star-empty ps-rev-star"></span>{% endif %}{% endfor %}</div><p class="ps-rev-count-line">{{ average_rating_display | default: average_rating }} ({{ reviews_count_display | default: reviews_count | default: reviews.size }} {{ t_reviews | default: theme_data.reviews_count_word }})</p></div></div><div class="ps-rev-bars" role="list">{% if rating_rows and rating_rows.size > 0 %}{% for row in rating_rows %}<div class="ps-rev-bar-row" role="listitem"><div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">{{ row.stars }}</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div><div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: {{ row.percent | round: 1 }}%;"></div></div><span class="ps-rev-bar-pct">{{ row.percent | round: 1 }}%</span></div>{% endfor %}{% else %}<div class="ps-rev-bar-row" role="listitem"><div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">5</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div><div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div><span class="ps-rev-bar-pct">0%</span></div><div class="ps-rev-bar-row" role="listitem"><div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">4</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div><div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div><span class="ps-rev-bar-pct">0%</span></div><div class="ps-rev-bar-row" role="listitem"><div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">3</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div><div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div><span class="ps-rev-bar-pct">0%</span></div><div class="ps-rev-bar-row" role="listitem"><div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">2</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div><div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div><span class="ps-rev-bar-pct">0%</span></div><div class="ps-rev-bar-row" role="listitem"><div class="ps-rev-bar-label"><span class="ps-rev-bar-label-text"><span class="ps-rev-bar-num">1</span><span class="ps-rev-bar-star-icon" aria-hidden="true"></span></span></div><div class="ps-rev-bar-track"><div class="ps-rev-bar-fill" style="width: 0%;"></div></div><span class="ps-rev-bar-pct">0%</span></div>{% endif %}</div></div><div class="ps-rev-grid">{% for review in reviews %}<article class="ps-rev-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 3 }}"><div class="ps-rev-card-head">{% if review.image and review.image != "" %}<img src="{{ review.image }}" alt="" class="ps-rev-avatar ps-rev-avatar-img" loading="lazy" width="80" height="80" />{% else %}<span class="ps-rev-avatar ps-rev-avatar-fallback" aria-hidden="true">{{ review.avatar_initial | default: review.user_name | default: review.name | slice: 0, 1 | default: theme_data.reviews_avatar_placeholder }}</span>{% endif %}<div class="ps-rev-meta"><span class="ps-rev-name">{{ review.user_name | default: review.name | default: theme_data.reviews_anonymous_name }}</span>{% if review.location and review.location != "" %}<span class="ps-rev-location">{{ review.location }}</span>{% endif %}</div></div>{% assign r_raw = review.rating %}{% if r_raw == blank %}{% assign r_raw = review.stars %}{% endif %}{% if r_raw == blank %}{% assign r_raw = 0 %}{% endif %}{% assign r_val = r_raw | plus: 0 %}{% if r_val > 5 %}{% assign r_val = 5 %}{% endif %}{% if r_val < 0 %}{% assign r_val = 0 %}{% endif %}{% assign full_stars = r_val | floor %}{% assign dec = r_val | minus: full_stars %}{% assign has_half = false %}{% if dec >= 0.25 and dec < 0.75 %}{% assign has_half = true %}{% elsif dec >= 0.75 %}{% assign full_stars = full_stars | plus: 1 %}{% endif %}{% if full_stars > 5 %}{% assign full_stars = 5 %}{% endif %}{% assign half_i = full_stars | plus: 1 %}<div class="ps-rev-card-stars" role="img" aria-label="Rating {{ r_val | round: 1 }} out of 5">{% for i in (1..5) %}{% if i <= full_stars %}<span class="ab-pd-star ab-pd-star-filled ps-rev-star"></span>{% elsif has_half and i == half_i %}<span class="ab-pd-star ab-pd-star-half ps-rev-star"></span>{% else %}<span class="ab-pd-star ab-pd-star-empty ps-rev-star"></span>{% endif %}{% endfor %}</div><p class="ps-rev-comment ab-review-comment" data-review-comment>{{ review.comment }}</p></article>{% endfor %}</div>{% if show_load_more %}<div class="ps-rev-load-wrap"><button type="button" class="ps-rev-load-more" data-ps-rev-load-more>{{ t_load_more_reviews | default: theme_data.reviews_load_more_label }}</button></div>{% endif %}{% else %}<div class="ps-rev-empty-state" data-anim="fadeInUp" data-seq="0"><h2 class="ps-rev-title"><span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span></h2><p class="ps-rev-empty">{{ t_no_reviews | default: theme_data.reviews_empty_message }}</p><button type="button" class="ps-rev-write-btn" data-review-open onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}));">{{ t_share_your_review | default: theme_data.reviews_share_cta_fallback }}</button></div>{% endif %}</div></section>
+<section
+  class="ps-rev-section ps-sr-scope"
+  data-ps-reviews
+  data-reviews-read-more="{{ theme_data.reviews_read_more_label | escape }}"
+  data-reviews-show-less="{{ theme_data.reviews_show_less_label | escape }}"
+>
+  <div class="ps-rev-inner product_container">
+    {% if reviews and reviews.size > 0 %}
+      {% assign _rev_total = reviews.size %}
+      {% if reviews_count != blank %}
+        {% assign _rev_total = reviews_count | plus: 0 %}
+      {% endif %}
+      {% if _rev_total < 1 %}
+        {% assign _rev_total = reviews.size %}
+      {% endif %}
+      {% assign _c5 = 0 %}
+      {% assign _c4 = 0 %}
+      {% assign _c3 = 0 %}
+      {% assign _c2 = 0 %}
+      {% assign _c1 = 0 %}
+      {% for review in reviews %}
+        {% assign r_raw = review.rating %}
+        {% if r_raw == blank %}
+          {% assign r_raw = review.stars %}
+        {% endif %}
+        {% if r_raw == blank %}
+          {% assign r_raw = 0 %}
+        {% endif %}
+        {% assign r_val = r_raw | plus: 0 %}
+        {% if r_val > 5 %}
+          {% assign r_val = 5 %}
+        {% endif %}
+        {% if r_val < 1 %}
+          {% assign r_val = 1 %}
+        {% endif %}
+        {% assign star_bucket = r_val | round %}
+        {% if star_bucket == 5 %}
+          {% assign _c5 = _c5 | plus: 1 %}
+        {% elsif star_bucket == 4 %}
+          {% assign _c4 = _c4 | plus: 1 %}
+        {% elsif star_bucket == 3 %}
+          {% assign _c3 = _c3 | plus: 1 %}
+        {% elsif star_bucket == 2 %}
+          {% assign _c2 = _c2 | plus: 1 %}
+        {% else %}
+          {% assign _c1 = _c1 | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+
+      <div class="ps-rev-head">
+        <h2 class="ps-rev-title" data-anim="fadeInDown" data-seq="0">
+          <span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span>
+          <span class="ps-rev-title-count">({{ reviews_count_display | default: reviews_count | default: reviews.size }})</span>
+        </h2>
+        <div class="ps-rev-head-actions">
+          <button
+            type="button"
+            class="ps-rev-write-btn"
+            data-review-open
+            onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}));"
+            data-anim="fadeInRight"
+            data-seq="1"
+          >
+            {{ t_share_your_review | default: theme_data.reviews_share_cta_fallback }}
+          </button>
+        </div>
+      </div>
+
+      <div class="ps-rev-summary">
+        <div class="ps-rev-summary-left" data-anim="fadeInLeft" data-seq="2">
+          <div class="ps-rev-score-ring" aria-hidden="true">
+            <span class="ps-rev-score-ring-value">{{ average_rating_display | default: average_rating | default: '—' }}</span>
+          </div>
+          <div class="ps-rev-stars-meta">
+            <div class="ps-rev-summary-stars">
+              {% for i in (1..5) %}
+                {% if average_rating != blank and i <= average_rating %}
+                  <span class="ab-pd-star ab-pd-star-filled ps-rev-star"></span>
+                {% else %}
+                  <span class="ab-pd-star ab-pd-star-empty ps-rev-star"></span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <p class="ps-rev-count-line">
+              {{ average_rating_display | default: average_rating }}
+              ({{ reviews_count_display | default: reviews_count | default: reviews.size }}
+              {{ t_reviews | default: theme_data.reviews_count_word }})
+            </p>
+          </div>
+        </div>
+
+        <div class="ps-rev-bars" role="list" data-ps-rev-bars data-ps-rev-bars-sync data-anim="fadeInRight" data-seq="3">
+          {% for i in (1..5) %}
+            {% assign stars = 6 | minus: i %}
+            {% if stars == 5 %}
+              {% assign _count = _c5 %}
+            {% elsif stars == 4 %}
+              {% assign _count = _c4 %}
+            {% elsif stars == 3 %}
+              {% assign _count = _c3 %}
+            {% elsif stars == 2 %}
+              {% assign _count = _c2 %}
+            {% else %}
+              {% assign _count = _c1 %}
+            {% endif %}
+            {% assign _pct = 0 %}
+            {% if _rev_total > 0 %}
+              {% assign _pct = _count | times: 100 | divided_by: _rev_total %}
+            {% endif %}
+            <div class="ps-rev-bar-row" role="listitem" data-ps-rev-bar-row data-stars="{{ stars }}">
+              <div class="ps-rev-bar-label">
+                <span class="ps-rev-bar-label-text">
+                  <span class="ps-rev-bar-num">{{ stars }}</span>
+                  <span class="ps-rev-bar-star-icon" aria-hidden="true"></span>
+                </span>
+              </div>
+              <div class="ps-rev-bar-track">
+                <div class="ps-rev-bar-fill" data-ps-rev-bar-fill style="width: {{ _pct }}%;"></div>
+              </div>
+              <span class="ps-rev-bar-pct" data-ps-rev-bar-pct>{{ _pct }}%</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="ps-rev-grid ps-rev-grid--cards">
+        {% for review in reviews %}
+          {% assign r_raw = review.rating %}
+          {% if r_raw == blank %}
+            {% assign r_raw = review.stars %}
+          {% endif %}
+          {% if r_raw == blank %}
+            {% assign r_raw = 0 %}
+          {% endif %}
+          {% assign r_val = r_raw | plus: 0 %}
+          {% if r_val > 5 %}
+            {% assign r_val = 5 %}
+          {% endif %}
+          {% if r_val < 0 %}
+            {% assign r_val = 0 %}
+          {% endif %}
+          {% assign full_stars = r_val | floor %}
+          {% assign dec = r_val | minus: full_stars %}
+          {% assign has_half = false %}
+          {% if dec >= 0.25 and dec < 0.75 %}
+            {% assign has_half = true %}
+          {% elsif dec >= 0.75 %}
+            {% assign full_stars = full_stars | plus: 1 %}
+          {% endif %}
+          {% if full_stars > 5 %}
+            {% assign full_stars = 5 %}
+          {% endif %}
+          {% assign half_i = full_stars | plus: 1 %}
+          <article
+            class="ps-rev-card"
+            data-review-rating="{{ r_val }}"
+            data-anim="cycle"
+            data-cycle="{{ forloop.index0 }}"
+            data-seq="{{ forloop.index0 | plus: 4 }}"
+          >
+            <div class="ps-rev-card-top">
+              <div class="ps-rev-card-head">
+                <span class="ps-rev-avatar ps-rev-avatar-fallback" aria-hidden="true">
+                  {{ review.avatar_initial | default: review.user_name | default: review.name | slice: 0, 1 | default: theme_data.reviews_avatar_placeholder }}
+                </span>
+                <div class="ps-rev-meta">
+                  <span class="ps-rev-name">{{ review.user_name | default: review.name | default: theme_data.reviews_anonymous_name }}</span>
+                  {% if review.location and review.location != '' %}
+                    <span class="ps-rev-location">{{ review.location }}</span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="ps-rev-card-stars" role="img" aria-label="Rating {{ r_val | round: 1 }} out of 5">
+                {% for i in (1..5) %}
+                  {% if i <= full_stars %}
+                    <span class="ab-pd-star ab-pd-star-filled ps-rev-star"></span>
+                  {% elsif has_half and i == half_i %}
+                    <span class="ab-pd-star ab-pd-star-half ps-rev-star"></span>
+                  {% else %}
+                    <span class="ab-pd-star ab-pd-star-empty ps-rev-star"></span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="ps-rev-card-body">
+              {% if review.image and review.image != '' %}
+                {% unless review.image contains '.mp4' %}
+                  {% assign rev_photo_alt = review.user_name | default: review.name | default: theme_data.reviews_anonymous_name %}
+                  <button
+                    type="button"
+                    class="ps-rev-photo-btn"
+                    data-ps-rev-photo
+                    data-full-src="{{ review.image }}"
+                    aria-label="{{ theme_data.reviews_photo_open_label | default: 'View review photo' }} — {{ rev_photo_alt }}"
+                  >
+                    <img
+                      src="{{ review.image }}"
+                      alt=""
+                      class="ps-rev-photo"
+                      loading="lazy"
+                      decoding="async"
+                      width="72"
+                      height="72"
+                    />
+                  </button>
+                {% endunless %}
+              {% endif %}
+              <p class="ps-rev-comment ab-review-comment" data-review-comment>{{ review.comment }}</p>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      {% if show_load_more %}
+        <div class="ps-rev-load-wrap">
+          <button type="button" class="ps-rev-load-more" data-ps-rev-load-more>
+            {{ t_load_more_reviews | default: theme_data.reviews_load_more_label }}
+          </button>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="ps-rev-empty-state" data-anim="fadeInUp" data-seq="0">
+        <h2 class="ps-rev-title">
+          <span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span>
+        </h2>
+        <p class="ps-rev-empty">{{ t_no_reviews | default: theme_data.reviews_empty_message }}</p>
+        <button
+          type="button"
+          class="ps-rev-write-btn"
+          data-review-open
+          onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}));"
+        >
+          {{ t_share_your_review | default: theme_data.reviews_share_cta_fallback }}
+        </button>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ab-lightbox ps-rev-lightbox" data-ps-rev-lightbox hidden aria-hidden="true">
+    <div class="ab-lightbox-backdrop" data-ps-rev-lightbox-close tabindex="-1" aria-hidden="true"></div>
+    <button type="button" class="ab-lightbox-close" data-ps-rev-lightbox-close aria-label="{{ theme_data.reviews_photo_close_label | default: 'Close' }}">
+      <img src="https://files.easy-orders.net/1773672706842218072x.svg" alt="" class="ab-lightbox-close__icon" width="20" height="20" decoding="async" />
+    </button>
+    <div class="ab-lightbox-body">
+      <img class="ab-lightbox-img" data-ps-rev-lightbox-img alt="" />
+    </div>
+  </div>
+</section>

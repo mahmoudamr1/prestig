@@ -1690,10 +1690,185 @@
     });
   }
 
+  function buildReviewRatingBarRow(stars) {
+    var row = document.createElement("div");
+    row.className = "ps-rev-bar-row";
+    row.setAttribute("role", "listitem");
+    row.setAttribute("data-ps-rev-bar-row", "");
+    row.setAttribute("data-stars", String(stars));
+
+    row.innerHTML =
+      '<div class="ps-rev-bar-label">' +
+      '<span class="ps-rev-bar-label-text">' +
+      '<span class="ps-rev-bar-num">' +
+      stars +
+      "</span>" +
+      '<span class="ps-rev-bar-star-icon" aria-hidden="true"></span>' +
+      "</span></div>" +
+      '<div class="ps-rev-bar-track">' +
+      '<div class="ps-rev-bar-fill" data-ps-rev-bar-fill style="width:0%;"></div>' +
+      "</div>" +
+      '<span class="ps-rev-bar-pct" data-ps-rev-bar-pct>0%</span>';
+
+    return row;
+  }
+
+  function ensureReviewRatingBars(section) {
+    var barsRoot = section.querySelector("[data-ps-rev-bars]");
+    if (!barsRoot) return;
+
+    if (!barsRoot.querySelector("[data-ps-rev-bar-row]")) {
+      for (var s = 5; s >= 1; s--) {
+        barsRoot.appendChild(buildReviewRatingBarRow(s));
+      }
+      barsRoot.setAttribute("data-ps-rev-bars-sync", "");
+    }
+  }
+
+  function syncReviewRatingBars(section) {
+    ensureReviewRatingBars(section);
+
+    var barsRoot = section.querySelector("[data-ps-rev-bars][data-ps-rev-bars-sync]");
+    if (!barsRoot) return;
+
+    var rows = barsRoot.querySelectorAll("[data-ps-rev-bar-row]");
+    if (!rows.length) return;
+
+    var counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    var cards = section.querySelectorAll(".ps-rev-card[data-review-rating]");
+    var total = 0;
+
+    cards.forEach(function (card) {
+      var raw = parseFloat(card.getAttribute("data-review-rating"));
+      if (!isFinite(raw) || raw < 0) return;
+      total += 1;
+      var bucket = Math.round(raw);
+      if (bucket < 1) bucket = 1;
+      if (bucket > 5) bucket = 5;
+      counts[bucket] += 1;
+    });
+
+    if (total < 1) return;
+
+    rows.forEach(function (row) {
+      var stars = parseInt(row.getAttribute("data-stars"), 10);
+      if (!stars || stars < 1 || stars > 5) return;
+      var pct = Math.round((counts[stars] / total) * 1000) / 10;
+      var fill = row.querySelector("[data-ps-rev-bar-fill]");
+      var label = row.querySelector("[data-ps-rev-bar-pct]");
+      if (fill) {
+        fill.style.width = pct + "%";
+      }
+      if (label) {
+        label.textContent = pct + "%";
+      }
+    });
+  }
+
+  function ensureReviewPhotoLightbox() {
+    var lb = document.querySelector("[data-ps-rev-lightbox]");
+    if (!lb) {
+      lb = document.createElement("div");
+      lb.className = "ab-lightbox ps-rev-lightbox";
+      lb.setAttribute("data-ps-rev-lightbox", "");
+      lb.setAttribute("aria-hidden", "true");
+      lb.innerHTML =
+        '<div class="ab-lightbox-backdrop" data-ps-rev-lightbox-close tabindex="-1" aria-hidden="true"></div>' +
+        '<button type="button" class="ab-lightbox-close" data-ps-rev-lightbox-close aria-label="Close">' +
+        '<img src="https://files.easy-orders.net/1773672706842218072x.svg" alt="" class="ab-lightbox-close__icon" width="20" height="20" decoding="async" />' +
+        "</button>" +
+        '<div class="ab-lightbox-body"><img class="ab-lightbox-img" data-ps-rev-lightbox-img alt="" /></div>';
+      document.body.appendChild(lb);
+    } else if (lb.parentNode !== document.body) {
+      document.body.appendChild(lb);
+    }
+    return lb;
+  }
+
+  function closeReviewPhotoLightbox() {
+    var lb = document.querySelector("[data-ps-rev-lightbox]");
+    if (!lb) {
+      return;
+    }
+    var lbImg = lb.querySelector("[data-ps-rev-lightbox-img]");
+    lb.classList.remove("ab-open");
+    lb.setAttribute("hidden", "");
+    lb.setAttribute("aria-hidden", "true");
+    if (lbImg) {
+      lbImg.removeAttribute("src");
+      lbImg.alt = "";
+    }
+    document.body.style.overflow = "";
+  }
+
+  function openReviewPhotoLightbox(src, alt) {
+    if (!src) {
+      return;
+    }
+    var lb = ensureReviewPhotoLightbox();
+    var lbImg = lb.querySelector("[data-ps-rev-lightbox-img]");
+    if (!lbImg) {
+      return;
+    }
+    lbImg.src = src;
+    lbImg.alt = alt || "";
+    lb.removeAttribute("hidden");
+    lb.classList.add("ab-open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function initReviewPhotoLightbox() {
+    if (window.__psRevLightboxBound) {
+      return;
+    }
+    window.__psRevLightboxBound = 1;
+
+    document.addEventListener(
+      "click",
+      function (e) {
+        var btn = e.target.closest("[data-ps-rev-photo]");
+        if (!btn) {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        var src = btn.getAttribute("data-full-src");
+        if (!src) {
+          var thumb = btn.querySelector("img");
+          src = thumb && (thumb.currentSrc || thumb.getAttribute("src"));
+        }
+        openReviewPhotoLightbox(src, btn.getAttribute("aria-label") || "");
+      },
+      true
+    );
+
+    document.addEventListener("click", function (e) {
+      if (e.target.closest("[data-ps-rev-lightbox-close]")) {
+        closeReviewPhotoLightbox();
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        var lb = document.querySelector("[data-ps-rev-lightbox].ab-open");
+        if (lb) {
+          closeReviewPhotoLightbox();
+        }
+      }
+    });
+  }
+
   function initLegacyReviews() {
+    initReviewPhotoLightbox();
+    ensureReviewPhotoLightbox();
+
     document.querySelectorAll(".ab-reviews, .ps-rev-section").forEach(function (section) {
       if (section.getAttribute("data-reviews-init")) return;
       section.setAttribute("data-reviews-init", "1");
+
+      ensureReviewPhotoLightbox();
+      syncReviewRatingBars(section);
 
       var readMoreLabel =
         section.getAttribute("data-reviews-read-more") || "...Read more";
