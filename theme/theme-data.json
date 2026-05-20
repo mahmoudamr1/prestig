@@ -40,6 +40,8 @@
   "featured_products_header_subtitle": "Shop",
   "featured_products_banner_description": "Discover our handpicked products designed for everyday style and comfort.",
   "thanks_title_fallback": "Thank you!",
-  "thanks_subtitle_fallback": "Your order has been received.",
-  "thanks_confirmation_prefix": "The order confirmation has been sent to"
+  "thanks_subtitle_fallback": "Your order is confirmed",
+  "thanks_confirmation_prefix": "The order confirmation has been sent to",
+  "thanks_illustration_url": "",
+  "thanks_confirmation_label": "Confirmation"
 }

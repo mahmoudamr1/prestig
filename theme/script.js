@@ -1349,6 +1349,9 @@
       var slides = gallery.querySelectorAll(".ab-gallery-slide");
       var thumbs = gallery.querySelectorAll(".ab-gallery-thumb");
       var dots = gallery.querySelectorAll(".ab-gallery-dot");
+      var counterCurrent = gallery.querySelector(
+        "[data-ab-gallery-counter-current]"
+      );
       var images = [];
 
       if (slider) {
@@ -1362,6 +1365,11 @@
           d.classList.toggle("is-active", on);
           d.setAttribute("aria-selected", on ? "true" : "false");
         });
+      }
+
+      function syncSlideCounter(idx) {
+        if (!counterCurrent) return;
+        counterCurrent.textContent = String(idx + 1);
       }
 
       thumbs.forEach(function (thumb) {
@@ -1463,6 +1471,7 @@
                 t.classList.toggle("ab-active", thumbIndex(t) === ix);
               });
               syncDots(ix);
+              syncSlideCounter(ix);
               syncSlideMedia(ix);
               var src = images[ix];
               if (src) {
@@ -1490,6 +1499,7 @@
           t.classList.toggle("ab-active", thumbIndex(t) === idx);
         });
         syncDots(idx);
+        syncSlideCounter(idx);
         syncSlideMedia(idx);
         if (isStackLayout()) {
           scrollStackToIndex(idx, false);
@@ -1525,6 +1535,7 @@
             t.classList.toggle("ab-active", thumbIndex(t) === idx);
           });
           syncDots(idx);
+          syncSlideCounter(idx);
           var src = images[idx];
           if (src) {
             gallery.dispatchEvent(
@@ -1631,12 +1642,16 @@
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
           bindStackObserver();
+          var ri = getActiveMediaIndex();
           if (slider && window.innerWidth <= 768 && slides.length) {
-            var ri = getActiveMediaIndex();
             scrollSliderToIndex(ri, true);
             syncDots(ri);
+            syncSlideCounter(ri);
           } else if (dots.length) {
-            syncDots(getActiveMediaIndex());
+            syncDots(ri);
+            syncSlideCounter(ri);
+          } else {
+            syncSlideCounter(ri);
           }
         });
       });
@@ -2134,6 +2149,80 @@
     }
   }
 
+  var PS_PDP_ATC_ICON =
+    "https://files.easy-orders.net/1779260760569197919add-to-card.svg";
+  var PS_PDP_QTY_MINUS =
+    "https://files.easy-orders.net/1778659563085756467prestig-sticky-buy-icon-minus.svg";
+  var PS_PDP_QTY_PLUS =
+    "https://files.easy-orders.net/1778659565013915611prestig-sticky-buy-icon-plus.svg";
+
+  function prestigeEnsurePdpBtnIconImg(btn, src, className, size) {
+    if (!btn || btn.getAttribute("data-ps-pdp-icon-done") === "1") {
+      return;
+    }
+    var existingImg = btn.querySelector("img." + className);
+    if (existingImg) {
+      existingImg.width = size;
+      existingImg.height = size;
+      btn.setAttribute("data-ps-pdp-icon-done", "1");
+      return;
+    }
+    if (btn.querySelector("img, svg")) {
+      btn.setAttribute("data-ps-pdp-icon-done", "1");
+      return;
+    }
+    var img = document.createElement("img");
+    img.src = src;
+    img.alt = "";
+    img.width = size;
+    img.height = size;
+    img.className = className;
+    img.setAttribute("aria-hidden", "true");
+    img.setAttribute("loading", "lazy");
+    img.setAttribute("decoding", "async");
+    btn.insertBefore(img, btn.firstChild);
+    btn.setAttribute("data-ps-pdp-icon-done", "1");
+  }
+
+  /** PDP product form — Figma 10:2655 / 25:2402 (ATC icon + qty ± icons). */
+  function initPrestigePdpProductForm() {
+    var root = document.querySelector(
+      ".p_content_container:has([data-ps-pdp-gallery])"
+    );
+    if (!root) {
+      return;
+    }
+
+    root
+      .querySelectorAll(
+        ".add_to_cart_btn, .product_form_checkout button.button.button--outline"
+      )
+      .forEach(function (btn) {
+        prestigeEnsurePdpBtnIconImg(btn, PS_PDP_ATC_ICON, "ps-pdp-atc-icon", 20);
+      });
+
+    root.querySelectorAll(".quantity_btn_container").forEach(function (wrap) {
+      var buttons = wrap.querySelectorAll("button");
+      buttons.forEach(function (btn, idx) {
+        var label = (btn.getAttribute("aria-label") || "").toLowerCase();
+        var isPlus =
+          label.indexOf("increase") !== -1 || label.indexOf("plus") !== -1;
+        var isMinus =
+          label.indexOf("decrease") !== -1 || label.indexOf("minus") !== -1;
+        if (!isPlus && !isMinus && buttons.length >= 2) {
+          isMinus = idx === 0;
+          isPlus = idx === buttons.length - 1;
+        }
+        prestigeEnsurePdpBtnIconImg(
+          btn,
+          isPlus ? PS_PDP_QTY_PLUS : PS_PDP_QTY_MINUS,
+          "ps-pdp-qty-icon",
+          16
+        );
+      });
+    });
+  }
+
   function initLegacyDescriptionAccordion() {
     var accordions = document.querySelectorAll(".lq-desc-accordion");
     for (var i = 0; i < accordions.length; i++) {
@@ -2592,6 +2681,22 @@
       return (q.get("order_id") || q.get("orderId") || "").trim();
     } catch (e) {
       return "";
+    }
+  }
+
+  function initPrestigeThanksHeroRef() {
+    var orderId = getThanksOrderIdFromSearch();
+    if (!orderId) return;
+
+    var sections = document.querySelectorAll("[data-liquid-thanks][data-ps-thanks]");
+    for (var s = 0; s < sections.length; s++) {
+      var root = sections[s];
+      var confirmEl = root.querySelector("[data-thanks-confirm-ref]");
+      if (!confirmEl || !confirmEl.hasAttribute("hidden")) continue;
+
+      var label = (root.getAttribute("data-thanks-confirm-label") || "Confirmation").trim();
+      confirmEl.textContent = label + " #" + orderId;
+      confirmEl.removeAttribute("hidden");
     }
   }
 
@@ -3129,6 +3234,11 @@
       console.warn("[Prestige] Product card media carousel init error:", e);
     }
     try {
+      initPrestigeThanksHeroRef();
+    } catch (e) {
+      console.warn("[Prestige] Thanks hero ref error:", e);
+    }
+    try {
       initPrestigeThanksOrderFetch();
     } catch (e) {
       console.warn("[Prestige] Thanks order fetch error:", e);
@@ -3137,6 +3247,11 @@
       initLegacyGallery();
     } catch (eGal) {
       console.warn("[Prestige] Legacy gallery init error:", eGal);
+    }
+    try {
+      initPrestigePdpProductForm();
+    } catch (ePdpForm) {
+      console.warn("[Prestige] PDP product form init error:", ePdpForm);
     }
     try {
       initLegacyGalleryKeyboard();
@@ -3247,6 +3362,11 @@
       scheduleDynamicInits();
     } catch (ePs) {
       /* ignore */
+    }
+    try {
+      initPrestigeThanksHeroRef();
+    } catch (e) {
+      console.warn("[Prestige] Thanks hero ref (popstate):", e);
     }
     try {
       initPrestigeThanksOrderFetch();

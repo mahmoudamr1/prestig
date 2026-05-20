@@ -298,7 +298,7 @@
     "type": "string",
     "group": "Thank you page",
     "description": "Thank-you page: subtitle fallback.",
-    "default": "Your order has been received."
+    "default": "Your order is confirmed"
   },
   {
     "name": "thanks_confirmation_prefix",
@@ -306,5 +306,19 @@
     "group": "Thank you page",
     "description": "Thank-you page: text before customer email.",
     "default": "The order confirmation has been sent to"
+  },
+  {
+    "name": "thanks_illustration_url",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: signpost illustration image URL (Figma 17:1495 / 25:3973).",
+    "default": ""
+  },
+  {
+    "name": "thanks_confirmation_label",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: order reference label (e.g. Confirmation).",
+    "default": "Confirmation"
   }
 ]
