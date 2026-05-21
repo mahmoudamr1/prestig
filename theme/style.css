@@ -550,7 +550,7 @@ body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-und
 .ps-desktop-nav {
   display: flex;
   align-items: center;
-  gap: 34px;
+  gap: 25px;
   height: 100%;
 }
 
