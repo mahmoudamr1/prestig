@@ -1,0 +1,65 @@
+{
+  "icon": "https://api.iconify.design/lucide:video.svg",
+  "label": "Hero video",
+  "section_schema": [
+    {
+      "name": "video_src_desktop",
+      "type": "string",
+      "default": "https://files.easy-orders.net/1778763301021675089.mp4",
+      "description": "Desktop MP4 URL (.mp4)"
+    },
+    {
+      "name": "video_src_mobile",
+      "type": "string",
+      "default": "",
+      "description": "Optional mobile MP4 (uses desktop URL if empty)"
+    },
+    {
+      "name": "poster_image",
+      "type": "image",
+      "default": "",
+      "description": "Poster frame before playback (recommended)"
+    },
+    {
+      "name": "pull_under_header",
+      "type": "boolean",
+      "default": true,
+      "description": "Pull video under transparent header (first block on page)"
+    },
+    {
+      "name": "min_height",
+      "type": "select",
+      "default": "tall",
+      "description": "Section height preset",
+      "options": [
+        { "label": "Compact", "value": "compact" },
+        { "label": "Tall", "value": "tall" },
+        { "label": "Near full screen", "value": "screen" },
+        { "label": "Custom (use % fields)", "value": "custom" }
+      ]
+    },
+    {
+      "name": "height_desktop",
+      "type": "number",
+      "default": 72,
+      "description": "Custom desktop height (% viewport) when preset is Custom"
+    },
+    {
+      "name": "height_mobile",
+      "type": "number",
+      "default": 72,
+      "description": "Custom mobile height (% viewport) when preset is Custom"
+    },
+    {
+      "name": "focal_point",
+      "type": "select",
+      "default": "center",
+      "description": "Video crop focal point",
+      "options": [
+        { "label": "Center", "value": "center" },
+        { "label": "Top", "value": "top" },
+        { "label": "Bottom", "value": "bottom" }
+      ]
+    }
+  ]
+}

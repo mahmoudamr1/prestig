@@ -1,0 +1,211 @@
+{% comment %}Prestig home section: full-width autoplay hero video. Uses section_data; optional pull_under_header for transparent header stack.{% endcomment %}
+{% liquid
+  assign _vid_d = section_data.video_src_desktop | strip
+  assign _vid_m = section_data.video_src_mobile | strip
+  if _vid_m == blank
+    assign _vid_m = _vid_d
+  endif
+  if _vid_d == blank
+    assign _vid_d = _vid_m
+  endif
+  assign _has_video = false
+  if _vid_d != blank
+    assign _has_video = true
+  endif
+  assign _pull_under = true
+  if section_data.pull_under_header == false
+    assign _pull_under = false
+  endif
+  assign _h_d = 72
+  assign _h_m = 72
+  assign _min_h = section_data.min_height | default: 'tall' | strip
+  if _min_h == 'compact'
+    assign _h_d = 52
+    assign _h_m = 52
+  elsif _min_h == 'screen'
+    assign _h_d = 92
+    assign _h_m = 92
+  elsif _min_h == 'custom'
+    assign _h_d = section_data.height_desktop | default: 72 | plus: 0
+    assign _h_m = section_data.height_mobile | default: _h_d | plus: 0
+    if _h_d < 40
+      assign _h_d = 72
+    endif
+    if _h_m < 40
+      assign _h_m = _h_d
+    endif
+  endif
+  assign _focal = 'center center'
+  if section_data.focal_point == 'top'
+    assign _focal = 'center top'
+  elsif section_data.focal_point == 'bottom'
+    assign _focal = 'center bottom'
+  endif
+  assign _poster = section_data.poster_image | strip
+%}
+<section
+  class="hero-video{% if _pull_under %} hero-video--under-nav{% endif %} hero-video--focal-{{ section_data.focal_point | default: 'center' }}"
+  style="--hv-h-desktop: {{ _h_d }}vh; --hv-h-mobile: {{ _h_m }}vh; --hv-focal: {{ _focal }};"
+  aria-label="Hero video"
+>
+  {% if _has_video %}
+    <div
+      class="hero-video__frame"
+      {% if _poster != blank %}
+        style="background-image: url('{{ _poster }}');"
+      {% endif %}
+    >
+      {% if _vid_m != blank and _vid_m != _vid_d %}
+        <video
+          class="hero-video__player hero-video__player--mobile"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          {% if _poster != blank %}
+            poster="{{ _poster }}"
+          {% endif %}
+          aria-hidden="true"
+        >
+          {% if _vid_m contains '.mp4' %}
+            <source src="{{ _vid_m }}" type="video/mp4">
+          {% else %}
+            <source src="{{ _vid_m }}">
+          {% endif %}
+        </video>
+        <video
+          class="hero-video__player hero-video__player--desktop"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          {% if _poster != blank %}
+            poster="{{ _poster }}"
+          {% endif %}
+          aria-hidden="true"
+        >
+          {% if _vid_d contains '.mp4' %}
+            <source src="{{ _vid_d }}" type="video/mp4">
+          {% else %}
+            <source src="{{ _vid_d }}">
+          {% endif %}
+        </video>
+      {% else %}
+        <video
+          class="hero-video__player"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          {% if _poster != blank %}
+            poster="{{ _poster }}"
+          {% endif %}
+          aria-hidden="true"
+        >
+          {% if _vid_d contains '.mp4' %}
+            <source src="{{ _vid_d }}" type="video/mp4">
+          {% else %}
+            <source src="{{ _vid_d }}">
+          {% endif %}
+        </video>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="hero-video__empty" role="status">
+      <span class="hero-video__empty-icon" aria-hidden="true">
+        <img src="https://api.iconify.design/lucide/video-off.svg?width=32&height=32&color=%23888" alt="" width="32" height="32" />
+      </span>
+      <p class="hero-video__empty-text">Add a desktop or mobile video URL in section settings.</p>
+    </div>
+  {% endif %}
+</section>
+
+<style>
+  .hero-video {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--ps-ff-ui, "Manrope"), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero-video__frame {
+    position: relative;
+    width: 100%;
+    height: var(--hv-h-mobile, 72vh);
+    min-height: 260px;
+    max-height: none;
+    overflow: hidden;
+    border-radius: 0;
+    background: #121212 center / cover no-repeat;
+    isolation: isolate;
+  }
+
+  .hero-video__player {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--hv-focal, center center);
+    display: block;
+    pointer-events: none;
+  }
+
+  .hero-video__player--desktop {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .hero-video__frame {
+      height: var(--hv-h-desktop, 72vh);
+      min-height: 320px;
+    }
+
+    .hero-video__player--mobile {
+      display: none;
+    }
+
+    .hero-video__player--desktop {
+      display: block;
+    }
+  }
+
+  .hero-video__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 280px;
+    padding: 2rem 1.5rem;
+    border-radius: 0;
+    background: var(--body-bg, #efefef);
+    color: #555;
+    text-align: center;
+  }
+
+  .hero-video__empty-text {
+    margin: 0;
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    max-width: 22rem;
+    line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video__player {
+      display: none !important;
+    }
+
+    .hero-video__frame {
+      background-size: cover;
+      background-position: var(--hv-focal, center center);
+    }
+  }
+</style>

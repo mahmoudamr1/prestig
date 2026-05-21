@@ -475,22 +475,21 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
 }
 
 /*
- * قبل التمرير: أبيض فوق الهيرو فقط — أول `.ps-slider--under-nav` في الصفحة يُسحب تحت الهيدر (كلاس `ps-slider--under-nav-first` من script.js).
- * بدون ذلك الهيدر شفاف فوق خلفية فاتحة (مثل PDP) والأبيض يختفي. لا يُطبَّق داخل معاينة `.builder-section-reset`.
+ * قبل التمرير: أبيض فوق الهيرو فقط — أول سلايدر أو hero-video تحت الهيدر (.ps-under-nav-first من syncPrestigeUnderNavFirst).
  */
-body:not(:has(.builder-section-reset #eo-header)):has(.ps-slider.ps-slider--under-nav)
+body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-under-nav-first)
   #eo-header:not(.ps-scrolled)
   :is(.ps-desktop-nav-link, .ps-logo, .ps-icon-btn) {
   color: #fff !important;
 }
 
-body:not(:has(.builder-section-reset #eo-header)):has(.ps-slider.ps-slider--under-nav)
+body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-under-nav-first)
   #eo-header:not(.ps-scrolled)
   :is(.ps-icon-btn img.ps-icon-image, .ps-menu-btn .ps-menu-icon) {
   filter: brightness(0) invert(1) !important;
 }
 
-body:not(:has(.builder-section-reset #eo-header)):has(.ps-slider.ps-slider--under-nav)
+body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-under-nav-first)
   #eo-header:not(.ps-scrolled)
   :is(.ps-cart-count, .ps-icon-btn #header-cart-count) {
   background: #fff !important;
@@ -562,6 +561,17 @@ body:not(:has(.builder-section-reset #eo-header)):has(.ps-slider.ps-slider--unde
   align-items: center;
 }
 
+/* Invisible bridge: keeps :hover alive while moving from trigger to panel (no dead gap). */
+.ps-nav-dropdown::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 14px;
+  z-index: 59;
+}
+
 .ps-desktop-nav-link {
   text-decoration: none;
   color: var(--hd-text, #0f0f0f);
@@ -599,23 +609,23 @@ body:not(:has(.builder-section-reset #eo-header)):has(.ps-slider.ps-slider--unde
 
 .ps-nav-dropdown-panel {
   position: absolute;
-  top: calc(100% + 4px);
+  top: 100%;
   left: 0;
   min-width: 200px;
   max-height: 70vh;
   overflow-y: auto;
   padding: 10px 0;
+  margin-top: 0;
   background: var(--ps-surface, #fff);
   border: 1px solid var(--ps-border-e3, #e3e3e3);
   box-shadow: 0 12px 32px rgba(16, 16, 16, 0.08);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-4px);
+  transform: translateY(0);
   transition:
-    opacity 0.2s ease,
-    visibility 0.2s ease,
-    transform 0.2s ease;
+    opacity 0.18s ease 0.12s,
+    visibility 0.18s ease 0.12s;
   z-index: 60;
 }
 
@@ -635,11 +645,13 @@ body:not(:has(.builder-section-reset #eo-header)):has(.ps-slider.ps-slider--unde
 }
 
 .ps-nav-dropdown:hover .ps-nav-dropdown-panel,
-.ps-nav-dropdown:focus-within .ps-nav-dropdown-panel {
+.ps-nav-dropdown:focus-within .ps-nav-dropdown-panel,
+.ps-nav-dropdown-panel:hover {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+  transition-delay: 0s;
 }
 
 [dir="rtl"] .ps-nav-dropdown-panel {
@@ -922,16 +934,29 @@ main.container_class {
   margin: clamp(20px, 3vw, 40px) 0;
 }
 
-/* Under-nav sliders: default spacing; negative pull only on the first (see .ps-slider--under-nav-first). */
-.content_container .ps-slider.ps-slider--under-nav {
-  margin-top: clamp(20px, 3vw, 40px);
-  margin-bottom: clamp(20px, 3vw, 40px);
+/* Under-nav blocks: normal spacing unless they are the first hero under the header. */
+.content_container .ps-slider.ps-slider--under-nav,
+.content_container .hero-video.hero-video--under-nav {
   z-index: 0;
 }
 
-/* Pull hero under the fixed header stack so transparent nav sits on imagery, not page bg. */
-.content_container .ps-slider.ps-slider--under-nav.ps-slider--under-nav-first {
+.content_container .ps-slider.ps-slider--under-nav:not(.ps-under-nav-first),
+.content_container .hero-video.hero-video--under-nav:not(.ps-under-nav-first) {
+  margin-top: clamp(20px, 3vw, 40px);
+  margin-bottom: clamp(20px, 3vw, 40px);
+}
+
+/* Pull only the first under-nav hero (slider or video) under the fixed header stack. */
+.content_container .ps-under-nav-first {
   margin-top: calc(-1 * (var(--ps-announce-h, 0px) + var(--ps-header-h, 74px)));
+}
+
+.content_container .ps-slider.ps-slider--under-nav.ps-under-nav-first {
+  margin-bottom: clamp(20px, 3vw, 40px);
+}
+
+.content_container .hero-video.hero-video--under-nav.ps-under-nav-first {
+  margin-bottom: 0;
 }
 
 .ps-slider-track {
@@ -9197,7 +9222,9 @@ padding: 0 !important;
 }
 
 .content_container:has(.ps-slider),
-.product_container:has(.ps-slider) {
+.product_container:has(.ps-slider),
+.content_container:has(.hero-video),
+.product_container:has(.hero-video) {
   max-width: none !important;
   width: 100% !important;
   padding-left: 0 !important;
@@ -13229,7 +13256,14 @@ body:has(.checkout_order_summary) .ps-footer {
 }
 
 .ps-theme .ps-header {
-  overflow-y: visible;
+  overflow: visible;
+}
+
+.ps-header-inner,
+.ps-left-group,
+.ps-desktop-nav,
+.ps-nav-dropdown {
+  overflow: visible;
 }
 
 /* Hide pending elements — !important beats host/Tailwind utilities (e.g. opacity-100). */
