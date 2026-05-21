@@ -641,10 +641,62 @@
     );
   }
 
+  var PS_UNDER_NAV_PULL_SEL =
+    ".ps-slider.ps-slider--under-nav, .hero-video.hero-video--under-nav";
+
+  function findUnderNavPullInBlock(block) {
+    if (!block || block.nodeType !== 1) {
+      return null;
+    }
+    if (block.matches) {
+      if (block.matches(".ps-slider.ps-slider--under-nav")) {
+        return block;
+      }
+      if (block.matches(".hero-video.hero-video--under-nav")) {
+        return block;
+      }
+    }
+    return block.querySelector(PS_UNDER_NAV_PULL_SEL);
+  }
+
+  /** Negative pull + transparent header: only the first home block under the header stack. */
+  function syncUnderNavPullFirst() {
+    document
+      .querySelectorAll(".ps-slider--under-nav-first, .hero-video--under-nav-first")
+      .forEach(function (el) {
+        el.classList.remove("ps-slider--under-nav-first", "hero-video--under-nav-first");
+      });
+
+    var container =
+      document.querySelector("main.container_class > .content_container") ||
+      document.querySelector("main.container_class .content_container") ||
+      document.querySelector(".content_container");
+    if (!container) {
+      return;
+    }
+
+    var firstPull = null;
+    var kids = container.children;
+    for (var i = 0; i < kids.length; i++) {
+      firstPull = findUnderNavPullInBlock(kids[i]);
+      if (firstPull) {
+        break;
+      }
+    }
+
+    if (!firstPull) {
+      return;
+    }
+
+    if (firstPull.classList.contains("ps-slider")) {
+      firstPull.classList.add("ps-slider--under-nav-first");
+    } else {
+      firstPull.classList.add("hero-video--under-nav-first");
+    }
+  }
+
   function initPrestigeSlider() {
-    document.querySelectorAll(".content_container .ps-slider.ps-slider--under-nav").forEach(function (el, i) {
-      el.classList.toggle("ps-slider--under-nav-first", i === 0);
-    });
+    syncUnderNavPullFirst();
     document.querySelectorAll(".ps-slider").forEach(function (slider) {
       if (slider.getAttribute("data-ps-slider-init")) {
         return;
@@ -3387,6 +3439,11 @@
       syncPrestigeAnnounceBar();
     } catch (e) {
       console.warn("[Prestige] Announce bar sync error:", e);
+    }
+    try {
+      syncUnderNavPullFirst();
+    } catch (ePull) {
+      console.warn("[Prestige] Under-nav pull sync error:", ePull);
     }
     try {
       initPrestigeSlider();
