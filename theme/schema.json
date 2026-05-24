@@ -54,6 +54,30 @@
     "default": "#f7f7f7"
   },
   {
+    "name": "product_card_sale_badge_bg",
+    "type": "color",
+    "description": "كروت المنتجات: خلفية بادج التخفيض (مثل -20%).",
+    "default": "#e32c2b"
+  },
+  {
+    "name": "product_card_sale_badge_text",
+    "type": "color",
+    "description": "كروت المنتجات: لون نص بادج التخفيض.",
+    "default": "#ffffff"
+  },
+  {
+    "name": "product_card_custom_badge_bg",
+    "type": "color",
+    "description": "كروت المنتجات: خلفية البادج المخصص (من إعدادات المنتج — مثل New).",
+    "default": "#4fa355"
+  },
+  {
+    "name": "product_card_custom_badge_text",
+    "type": "color",
+    "description": "كروت المنتجات: لون نص البادج المخصص.",
+    "default": "#ffffff"
+  },
+  {
     "name": "header_hamburger_icon",
     "type": "image",
     "description": "Header: mobile menu (hamburger) image URL.",

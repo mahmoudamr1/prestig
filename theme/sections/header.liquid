@@ -7,6 +7,22 @@
   if _store_card_bg == blank
     assign _store_card_bg = '#f7f7f7'
   endif
+  assign _sale_badge_bg = theme_data.product_card_sale_badge_bg | strip
+  if _sale_badge_bg == blank
+    assign _sale_badge_bg = '#e32c2b'
+  endif
+  assign _sale_badge_text = theme_data.product_card_sale_badge_text | strip
+  if _sale_badge_text == blank
+    assign _sale_badge_text = '#ffffff'
+  endif
+  assign _custom_badge_bg = theme_data.product_card_custom_badge_bg | strip
+  if _custom_badge_bg == blank
+    assign _custom_badge_bg = '#4fa355'
+  endif
+  assign _custom_badge_text = theme_data.product_card_custom_badge_text | strip
+  if _custom_badge_text == blank
+    assign _custom_badge_text = '#ffffff'
+  endif
   assign ann_cfg = announcement_config
   if ann_cfg == nil or ann_cfg.text == nil or ann_cfg.text.size == 0
     if announcement_bar and announcement_bar.text
@@ -47,8 +63,8 @@
     endfor
   endfor
 %}
-<script type="application/json" id="prestige-theme-runtime-config">{"animations":"{% if theme_data.enable_theme_animations == false %}0{% else %}1{% endif %}","googleFontFamilies":"{{ theme_data.font_google_families | default: 'DM Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display, Instrument Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}","googleFontWeights":"{{ theme_data.font_google_weights | default: '400;500;600;700' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyPrimary":"{{ theme_data.font_family_primary | default: 'DM Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyUi":"{{ theme_data.font_family_ui | default: 'Manrope' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyAlt":"{{ theme_data.font_family_alt | default: 'Nunito' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyDisplay":"{{ theme_data.font_family_display | default: 'Playfair Display' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyArabic":"{{ theme_data.font_family_arabic | default: 'Almarai' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyAnnounce":"{{ theme_data.font_family_announce | default: 'DM Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}","storeProductCardBackground":"{{ _store_card_bg | escape }}"}</script>
-<div class="ps-theme ps-theme-root">
+<script type="application/json" id="prestige-theme-runtime-config">{"animations":"{% if theme_data.enable_theme_animations == false %}0{% else %}1{% endif %}","googleFontFamilies":"{{ theme_data.font_google_families | default: 'DM Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display, Instrument Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}","googleFontWeights":"{{ theme_data.font_google_weights | default: '400;500;600;700' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyPrimary":"{{ theme_data.font_family_primary | default: 'DM Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyUi":"{{ theme_data.font_family_ui | default: 'Manrope' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyAlt":"{{ theme_data.font_family_alt | default: 'Nunito' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyDisplay":"{{ theme_data.font_family_display | default: 'Playfair Display' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyArabic":"{{ theme_data.font_family_arabic | default: 'Almarai' | strip | replace: '"', '' | replace: "'", '' | escape }}","fontFamilyAnnounce":"{{ theme_data.font_family_announce | default: 'DM Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}","storeProductCardBackground":"{{ _store_card_bg | escape }}","productCardSaleBadgeBg":"{{ _sale_badge_bg | escape }}","productCardSaleBadgeText":"{{ _sale_badge_text | escape }}","productCardCustomBadgeBg":"{{ _custom_badge_bg | escape }}","productCardCustomBadgeText":"{{ _custom_badge_text | escape }}"}</script>
+<div class="ps-theme ps-theme-root" style="--ps-store-sale-badge-bg: {{ _sale_badge_bg }}; --ps-store-sale-badge-text: {{ _sale_badge_text }}; --ps-store-custom-badge-bg: {{ _custom_badge_bg }}; --ps-store-custom-badge-text: {{ _custom_badge_text }};">
   {% if ann_count > 0 %}
     <div class="ps-announce" data-ps-announce data-ann-type="{{ ann_type_key }}" role="region" aria-label="Announcement">
       {% if ann_type_key == 'marquee' %}

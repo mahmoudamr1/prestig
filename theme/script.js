@@ -11,7 +11,7 @@
   var MOUNT_EVENT = "ps-theme-content-mounted";
 
   /** Default EasyOrders public API v1 base (production). Override via `data-eo-api-origin` / `data-eo-api-base` / `window.__EO_STORE_API_BASE__`. */
-  const PS_EO_API_V1_BASE = "https://api.easyorders.dev/api/v1";
+  const PS_EO_API_V1_BASE = "https://api.easy-orders.net/api/v1";
 
   /**
    * Console trace for theme JS: filter by `[Prestige Theme]` or by `scope`.
@@ -114,6 +114,21 @@
         /* ignore */
       }
     }
+    function applyBadgeVar(configKey, cssVar) {
+      var v = (cfg[configKey] || "").trim();
+      if (!v) {
+        return;
+      }
+      try {
+        wrap.style.setProperty(cssVar, v);
+      } catch (eBadge) {
+        /* ignore */
+      }
+    }
+    applyBadgeVar("productCardSaleBadgeBg", "--ps-store-sale-badge-bg");
+    applyBadgeVar("productCardSaleBadgeText", "--ps-store-sale-badge-text");
+    applyBadgeVar("productCardCustomBadgeBg", "--ps-store-custom-badge-bg");
+    applyBadgeVar("productCardCustomBadgeText", "--ps-store-custom-badge-text");
     var legacyFontVars = document.getElementById("prestige-theme-font-vars");
     if (legacyFontVars && legacyFontVars.parentNode) {
       legacyFontVars.parentNode.removeChild(legacyFontVars);
@@ -2615,16 +2630,6 @@
           var k = images.indexOf(activeSlide.dataset.src);
           if (k !== -1) return k;
         }
-        var activeCell = gallery.querySelector(".ab-gallery-cell.ab-gallery-cell--active");
-        if (activeCell) {
-          var ac = activeCell.getAttribute("data-thumb-index");
-          if (ac !== null && ac !== "") {
-            var acn = parseInt(ac, 10);
-            if (!Number.isNaN(acn) && acn >= 0 && acn < images.length) {
-              return acn;
-            }
-          }
-        }
         var mainEl = gallery.querySelector("#gallery-main-image");
         if (mainEl && mainEl.src) {
           var i = images.indexOf(mainEl.src);
@@ -2634,14 +2639,6 @@
           if (slides[j].classList.contains("is-active")) return j;
         }
         return 0;
-      }
-
-      function syncGridCells(idx) {
-        gallery.querySelectorAll(".ab-gallery-cell").forEach(function (cell) {
-          var ci = cell.getAttribute("data-thumb-index");
-          var cin = ci !== null && ci !== "" ? parseInt(ci, 10) : NaN;
-          cell.classList.toggle("ab-gallery-cell--active", !Number.isNaN(cin) && cin === idx);
-        });
       }
 
       function syncMainMobileFromIndex(idx) {
@@ -2724,7 +2721,6 @@
               thumbs.forEach(function (t) {
                 t.classList.toggle("ab-active", thumbIndex(t) === ix);
               });
-              syncGridCells(ix);
               syncDots(ix);
               syncCounter(ix);
               syncSlideMedia(ix);
@@ -2754,7 +2750,6 @@
         thumbs.forEach(function (t) {
           t.classList.toggle("ab-active", thumbIndex(t) === idx);
         });
-        syncGridCells(idx);
         syncDots(idx);
         syncCounter(idx);
         syncSlideMedia(idx);
@@ -2792,7 +2787,6 @@
           thumbs.forEach(function (t) {
             t.classList.toggle("ab-active", thumbIndex(t) === idx);
           });
-          syncGridCells(idx);
           syncDots(idx);
           syncCounter(idx);
           syncMainMobileFromIndex(idx);
@@ -2901,16 +2895,6 @@
         trigger.addEventListener("click", function (e) {
           if (e.target.closest && e.target.closest("video") && !trigger.classList.contains("ab-gallery-zoom"))
             return;
-          var mixCell = trigger.closest && trigger.closest(".ab-gallery-cell");
-          if (mixCell) {
-            var mi = mixCell.getAttribute("data-thumb-index");
-            if (mi !== null && mi !== "") {
-              var pm = parseInt(mi, 10);
-              if (!Number.isNaN(pm)) {
-                setActiveIndex(pm);
-              }
-            }
-          }
           e.preventDefault();
           openLightboxFromTrigger(trigger);
         });

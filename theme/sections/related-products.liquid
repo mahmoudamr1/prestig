@@ -1,160 +1,248 @@
-{% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
+{% assign _pc_search = theme_data.product_card_search_icon_url
+  | strip
+  | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg'
+%}
+
 {% assign _pc_ch1 = theme_data.product_card_choose_label | default: '' | strip %}
+
 {% if _pc_ch1 != blank %}
   {% assign _pc_choose = _pc_ch1 %}
+
 {% else %}
-  {% assign _pc_choose = theme_data.grid_products_choose_options_label | default: add | default: 'Choose options' | strip %}
+  {% assign _pc_choose = theme_data.grid_products_choose_options_label
+    | default: add
+    | default: 'Choose options'
+    | strip
+  %}
 {% endif %}
-<section class="ab-plist ab-plist--related">
 
+<section class="ps-related-products ab-plist ab-plist--related">
   <div class="product_container">
-
-  <div class="ab-plist-header">
-
-    {% if section_title %}
-
-      <h2 class="ab-plist-title ab-reveal">{{ section_title }}</h2>
-
-    {% endif %}
-
-  </div>
-
-  <div class="ab-plist-carousel-shell">
-
-    <div class="ab-plist-arrows">
-
-      <button class="ab-plist-arrow ab-plist-prev" type="button" aria-label="Previous">
-
-        <img width="24" height="24" src="https://files.easy-orders.net/1779102257956421934sx025.svg" alt="" loading="lazy" decoding="async" />
-
-
-
-      </button>
-
-      <button class="ab-plist-arrow ab-plist-next" type="button" aria-label="Next">
-
-        <img width="24" height="24" src="https://files.easy-orders.net/1779102257945901554sx026.svg" alt="" loading="lazy" decoding="async" />
-
-
-
-      </button>
-
+    <div class="ab-plist-header">
+      {% if section_title %}
+        <h2 class="ab-plist-title ab-reveal">{{ section_title }}</h2>
+      {% endif %}
     </div>
 
-    <div class="ab-plist-track">
+    <div class="ab-plist-carousel-shell">
+      <div class="ab-plist-arrows">
+        <button class="ab-plist-arrow ab-plist-prev" type="button" aria-label="Previous">
+          <img
+            width="24"
+            height="24"
+            src="https://files.easy-orders.net/1779102257956421934sx025.svg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          >
+        </button>
 
-    {% for product in products %}
+        <button class="ab-plist-arrow ab-plist-next" type="button" aria-label="Next">
+          <img
+            width="24"
+            height="24"
+            src="https://files.easy-orders.net/1779102257945901554sx026.svg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          >
+        </button>
+      </div>
 
-      <a href="/products/{{ product.slug }}" class="ab-plist-card ab-reveal ps-store-card" style="animation-delay: {{ forloop.index | times: 0.04 }}s">
+      <div class="ab-plist-track">
+        {% for product in products %}
+          {% assign color_variation = product.variations | where: 'type', 'color' | first %}
 
-        <div class="ab-plist-media">
-          <div class="ab-plist-badges">
-            {% if product.sale_price and product.sale_price < product.price %}
-              {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
-              <span class="ps-product-badge ps-sale-badge">-{{ discount }}%</span>
-            {% endif %}
-            {% if product.product_theme_data.custom_badge_title != blank %}
-              <span class="ps-product-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title | strip }}</span>
-            {% endif %}
-          </div>
+          {% assign image_variation = product.variations | where: 'type', 'image' | first %}
 
-          <img class="ab-plist-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
+          {% assign swatch_total = 0 %}
 
-          {% if product.images[0] %}
+          {% if color_variation and color_variation.props %}
+            {% assign swatch_total = color_variation.props.size %}
 
-            <img class="ab-plist-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
-
+          {% elsif image_variation and image_variation.props %}
+            {% assign swatch_total = image_variation.props.size %}
           {% endif %}
 
-          <button
-
-            type="button"
-
-            class="ps-card-qview"
-
-            aria-label="Quick view"
-
-            onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-view',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-
-          >
-
-            <img src="{{ _pc_search }}" alt="" class="ps-card-qview-img" width="20" height="20" loading="lazy" decoding="async" />
-
-          </button>
-
-          <button
-
-            type="button"
-
-            class="ps-card-choose ps-product-quick-add"
-
-            aria-label="{{ _pc_choose }}"
-
-            onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-
-          >
-
-            {{ _pc_choose }}
-
-          </button>
-
-          <button
-
-            type="button"
-
-            class="ps-card-mcart ps-product-quick-add"
-
-            aria-label="Add to cart"
-
-            onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
-
-          >
-
-            <img src="{{ theme_data.header_cart_icon | strip | default: 'https://files.easy-orders.net/1777884423251467919cart.svg' }}" alt="" class="ps-icon-image ps-card-mcart-icon" width="20" height="20" loading="lazy" decoding="async" />
-
-          </button>
-
-        </div>
-
-
-
-        <div class="ab-plist-info">
-
-          {% if product.type != blank %}
-
-            <p class="ps-store-card__cat">{{ product.type }}</p>
-
+          {% assign hover_image = '' %}
+          {% if product.gallery and product.gallery.size > 1 %}
+            {% assign hover_image = product.gallery[1].thumbnail %}
+          {% elsif product.gallery and product.gallery.size > 0 %}
+            {% if product.gallery[0].thumbnail != product.thumb %}
+              {% assign hover_image = product.gallery[0].thumbnail %}
+            {% endif %}
+          {% endif %}
+          {% if hover_image == '' and product.images and product.images.size > 1 %}
+            {% assign hover_image = product.images[1] %}
+          {% elsif hover_image == ''
+            and product.images
+            and product.images.size > 0
+            and product.images[0] != product.thumb
+          %}
+            {% assign hover_image = product.images[0] %}
           {% endif %}
 
-          <p class="ab-plist-name">{{ product.name }}</p>
+          <a
+            href="/products/{{ product.slug }}"
+            class="ab-plist-card ps-pgrid-card ab-reveal ps-store-card"
+            style="animation-delay: {{ forloop.index | times: 0.04 }}s"
+          >
+            <div class="ps-pgrid-media">
+              {% assign _card_custom_badge = product.product_theme_data.custom_badge_title | strip %}
 
-          <div class="ab-plist-price-row">
+              {% assign _card_on_sale = false %}
 
-            {% if product.sale_price and product.sale_price < product.price %}
+              {% if product.sale_price and product.price and product.sale_price < product.price %}
+                {% assign _card_on_sale = true %}
 
-              <span class="ab-plist-price ab-price-sale">{{ product.sale_price }} {{ currency }}</span>
+                {% assign discount = product.price
+                  | minus: product.sale_price
+                  | times: 100
+                  | divided_by: product.price
+                  | floor
+                %}
+              {% endif %}
 
-              <span class="ab-price-old">{{ product.price }} {{ currency }}</span>
+              {% if _card_on_sale or _card_custom_badge != blank %}
+                <div class="ps-store-card-badges">
+                  {% if _card_on_sale %}
+                    <span class="ps-store-card-badge ps-sale-badge">-{{ discount }}%</span>
+                  {% endif %}
 
-            {% else %}
+                  {% if _card_custom_badge != blank %}
+                    {% assign _ptd = product.product_theme_data %}
 
-              <span class="ab-plist-price">{{ product.price }} {{ currency }}</span>
+                    {% assign _badge_bg = _ptd.custom_badge_bg | default: _ptd.custom_badge_background | strip %}
 
-            {% endif %}
+                    {% assign _badge_text = _ptd.custom_badge_text | default: _ptd.custom_badge_color | strip %}
 
-          </div>
+                    <span
+                      class="ps-store-card-badge ps-product-custom-badge"
+                      {% if _badge_bg != blank or _badge_text != blank %}
+                        style="{% if _badge_bg != blank %}--ps-product-custom-badge-bg: {{ _badge_bg }};{% endif %}{% if _badge_text != blank %}--ps-product-custom-badge-text: {{ _badge_text }};{% endif %}"
+                      {% endif %}
+                    >
+                      {{- _card_custom_badge -}}
+                    </span>
+                  {% endif %}
+                </div>
+              {% endif %}
 
-        </div>
+              <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy">
+              {% if hover_image != '' and hover_image != product.thumb %}
+                <img class="ps-pgrid-img-hover" src="{{ hover_image }}" alt="{{ product.name }}" loading="lazy">
+              {% endif %}
 
-      </a>
+              <button
+                type="button"
 
-    {% endfor %}
+                class="ps-card-qview"
 
+                aria-label="Quick view"
+
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-view',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                <img
+                  src="{{ _pc_search }}"
+                  alt=""
+                  class="ps-card-qview-img"
+                  width="20"
+                  height="20"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </button>
+
+              <button
+                type="button"
+
+                class="ps-card-choose ps-product-quick-add"
+
+                aria-label="{{ _pc_choose }}"
+
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                {{ _pc_choose }}
+              </button>
+
+              <button
+                type="button"
+
+                class="ps-card-mcart ps-product-quick-add"
+
+                aria-label="Add to cart"
+
+                onclick="event.preventDefault();event.stopPropagation();this.dispatchEvent(new CustomEvent('quick-add',{bubbles:true,detail:{productId:'{{ product.id }}'}}));"
+              >
+                <img
+                  src="{{ theme_data.header_cart_icon | strip | default: 'https://files.easy-orders.net/1777884423251467919cart.svg' }}"
+                  alt=""
+                  class="ps-icon-image ps-card-mcart-icon"
+                  width="20"
+                  height="20"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </button>
+            </div>
+
+            <div class="ps-pgrid-info">
+              {% if product.type != blank %}
+                <p class="ps-store-card__cat">{{ product.type }}</p>
+              {% endif %}
+
+              <span class="ps-pgrid-name">{{ product.name }}</span>
+
+              {% unless theme_data.product_card_show_swatches == false %}
+                {% if swatch_total > 0 %}
+                  <div class="ps-pgrid-swatches">
+                    {% if color_variation and color_variation.props %}
+                      {% for prop in color_variation.props limit: 6 %}
+                        <span
+                          class="ps-pgrid-swatch"
+                          style="background: {{ prop.value }}"
+                          title="{{ prop.name }}"
+                        ></span>
+                      {% endfor %}
+
+                    {% elsif image_variation and image_variation.props %}
+                      {% for prop in image_variation.props limit: 6 %}
+                        <span class="ps-pgrid-swatch ps-pgrid-swatch-image" title="{{ prop.name }}">
+                          <img src="{{ prop.value }}" alt="{{ prop.name }}" loading="lazy">
+                        </span>
+                      {% endfor %}
+                    {% endif %}
+
+                    {% if swatch_total > 6 %}
+                      <span class="ps-pgrid-swatch-more">+{{ swatch_total | minus: 6 }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endunless %}
+
+              <div class="ps-pgrid-price-row">
+                {% if product.sale_price and product.price and product.sale_price < product.price %}
+                  <span class="ps-pgrid-price-current">
+                    {{- product.sale_price }}
+                    {{ currency -}}
+                  </span>
+
+                  <span class="ps-pgrid-price-old">
+                    {{- product.price }}
+                    {{ currency -}}
+                  </span>
+
+                {% else %}
+                  <span class="ps-pgrid-price-current">
+                    {{- product.price }}
+                    {{ currency -}}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
   </div>
-
-  </div>
-
-  </div>
-
 </section>
-

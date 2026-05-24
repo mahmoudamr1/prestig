@@ -19,18 +19,45 @@
             {% assign swatch_total = image_variation.props.size %}
           {% endif %}
 
+          {% assign hover_image = "" %}
+          {% if product.gallery and product.gallery.size > 1 %}
+            {% assign hover_image = product.gallery[1].thumbnail | default: product.gallery[1].url | strip %}
+          {% elsif product.gallery and product.gallery.size > 0 %}
+            {% assign _g0 = product.gallery[0].thumbnail | default: product.gallery[0].url | strip %}
+            {% if _g0 != "" and _g0 != product.thumb %}
+              {% assign hover_image = _g0 %}
+            {% endif %}
+          {% endif %}
+          {% if hover_image == "" and product.images and product.images.size > 1 %}
+            {% assign hover_image = product.images[1] %}
+          {% elsif hover_image == "" and product.images and product.images.size > 0 and product.images[0] != product.thumb %}
+            {% assign hover_image = product.images[0] %}
+          {% endif %}
+
           <a href="/products/{{ product.slug }}" class="ps-pgrid-card ps-store-card">
             <div class="ps-pgrid-media">
+              {% assign _card_custom_badge = product.product_theme_data.custom_badge_title | strip %}
+              {% assign _card_on_sale = false %}
               {% if product.sale_price and product.sale_price < product.price %}
+                {% assign _card_on_sale = true %}
                 {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
-                <span class="ps-pgrid-badge ps-sale-badge">-{{ discount }}%</span>
               {% endif %}
-              {% if product.product_theme_data.custom_badge_title != blank %}
-                <span class="ps-pgrid-badge ps-product-custom-badge">{{ product.product_theme_data.custom_badge_title }}</span>
+              {% if _card_on_sale or _card_custom_badge != blank %}
+                <div class="ps-store-card-badges">
+                  {% if _card_on_sale %}
+                    <span class="ps-store-card-badge ps-sale-badge">-{{ discount }}%</span>
+                  {% endif %}
+                  {% if _card_custom_badge != blank %}
+                    {% assign _ptd = product.product_theme_data %}
+                    {% assign _badge_bg = _ptd.custom_badge_bg | default: _ptd.custom_badge_background | strip %}
+                    {% assign _badge_text = _ptd.custom_badge_text | default: _ptd.custom_badge_color | strip %}
+                    <span class="ps-store-card-badge ps-product-custom-badge"{% if _badge_bg != blank or _badge_text != blank %} style="{% if _badge_bg != blank %}--ps-product-custom-badge-bg: {{ _badge_bg }};{% endif %}{% if _badge_text != blank %}--ps-product-custom-badge-text: {{ _badge_text }};{% endif %}"{% endif %}>{{ _card_custom_badge }}</span>
+                  {% endif %}
+                </div>
               {% endif %}
               <img class="ps-pgrid-img-primary" src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy" />
-              {% if product.images[0] %}
-                <img class="ps-pgrid-img-hover" src="{{ product.images[0] }}" alt="{{ product.name }}" loading="lazy" />
+              {% if hover_image != "" and hover_image != product.thumb %}
+                <img class="ps-pgrid-img-hover" src="{{ hover_image }}" alt="{{ product.name }}" loading="lazy" />
               {% endif %}
               <button
                 type="button"

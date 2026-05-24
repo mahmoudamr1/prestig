@@ -843,10 +843,10 @@ html[lang="ar"] .ps-announce,
   -webkit-backdrop-filter: none !important;
 }
 
-body:has(.ps-slider--under-nav) .ps-header:not(.ps-scrolled) {
+/* body:has(.ps-slider--under-nav) .ps-header:not(.ps-scrolled) {
   border-bottom-color: transparent !important;
   box-shadow: none !important;
-}
+} */
 
 .ps-header.ps-scrolled {
   background: var(--hd-bg, rgba(255, 255, 255, 0.96));
@@ -964,7 +964,7 @@ body:has(.ps-slider--under-nav) .ps-header:not(.ps-scrolled) {
   font-family: var(--ps-ff-primary), sans-serif;
   text-decoration: none;
   color: var(--hd-text, #0f0f0f);
-  text-transform: uppercase;
+  text-transform: capitalize;
   font-size: 16px;
   letter-spacing: 0.18em;
   min-height: 40px;
@@ -995,7 +995,6 @@ button.ps-desktop-nav-link.ps-nav-dropdown-trigger--btn {
   cursor: pointer;
   padding: 0;
   color: var(--hd-text, #0f0f0f);
-  font: inherit;
 }
 
 .ps-desktop-nav-link::after {
@@ -1664,9 +1663,9 @@ main.container_class {
   --ps-ind-hover-bg: #b0b0b0;
 }
 
-/* Hero تحت الـ الهيدر: مسافة علوية بسيطة (بدون سحب تحت الناف بار) */
+/* Hero تحت الـ الهيدر: نفس المسافة فوق وتحت */
 .ps-slider--under-nav {
-  margin-top: 0;
+  margin-top: clamp(20px, 3vw, 40px);
   margin-bottom: clamp(20px, 3vw, 40px);
   z-index: 0;
   overflow: hidden;
@@ -2303,23 +2302,10 @@ padding: 0;
   transition: opacity 0.4s ease;
 }
 
-.ps-product-img-hover {
-  position: absolute;
-  top: 0;
-  left: 0;
+.ps-product-media > .ps-product-img-hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.ps-product-card:hover .ps-product-img-primary {
-  opacity: 0;
-}
-
-.ps-product-card:hover .ps-product-img-hover {
-  opacity: 1;
 }
 
 .ps-product-badge {
@@ -2457,8 +2443,11 @@ padding: 0;
 :root {
   /* --ps-store-card-bg: set from theme_data on .ps-theme via script.js (prestigeInjectThemeFonts) */
   --ps-store-card-radius: 20px;
-  --ps-store-badge-bg: #d63a2f;
-  --ps-store-badge-font-size: 0.9rem;
+  --ps-store-sale-badge-bg: #e32c2b;
+  --ps-store-sale-badge-text: #ffffff;
+  --ps-store-custom-badge-bg: #4fa355;
+  --ps-store-custom-badge-text: #ffffff;
+  --ps-store-badge-font-size: 0.75rem;
 }
 
 .ps-store-card {
@@ -2480,20 +2469,73 @@ padding: 0;
   border-radius: var(--ps-store-card-radius, 20px) var(--ps-store-card-radius, 20px) 0 0;
 }
 
-.ps-store-card .ps-sale-badge,
-.ps-store-card .ps-product-badge.ps-sale-badge,
-.ps-store-card .ab-sale-badge {
-  background: var(--ps-store-badge-bg, var(--ps-sale-strong, #d63a2f)) !important;
-  color: var(--ps-store-badge-text, var(--ps-surface, #ffffff)) !important;
-  border-radius: 4px !important;
-  font-family: var(--ps-ff-announce, var(--ps-ff-ui), "DM Sans", system-ui, sans-serif) !important;
-  font-weight: 500 !important;
-  font-size: var(--ps-store-badge-font-size, 0.9rem) !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-  padding: 2px 8px !important;
-  margin: 12px !important;
-  line-height: 1.35 !important;
+/* Product card badges — pill row (top-start); colors from theme_data on .ps-theme */
+.ps-store-card-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 5px;
+  max-width: calc(100% - 20px);
+  pointer-events: none;
+}
+
+.ps-store-card-badges > .ps-store-card-badge,
+.ps-store-card-badges > .ps-pgrid-badge,
+.ps-store-card-badges > .ps-plist-badge,
+.ps-store-card-badges > .ps-product-badge {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+}
+
+.ps-store-card-badge,
+.ps-store-card .ps-store-card-badges > .ps-sale-badge,
+.ps-store-card .ps-store-card-badges > .ps-product-custom-badge,
+.ps-store-card .ps-store-card-badges > .ps-pgrid-badge,
+.ps-store-card .ps-store-card-badges > .ps-plist-badge,
+.ps-store-card .ps-store-card-badges > .ps-product-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-family: var(--ps-ff-primary, var(--ps-ff-ui), "DM Sans", system-ui, sans-serif);
+  font-size: var(--ps-store-badge-font-size, 0.75rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: center;
+  white-space: nowrap;
+  max-width: min(100%, 14em);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ps-store-card .ps-store-card-badges > .ps-sale-badge,
+.ps-store-card .ps-store-card-badges > .ps-product-badge.ps-sale-badge,
+.ps-store-card .ps-store-card-badges > .ab-sale-badge {
+  background: var(--ps-store-sale-badge-bg, var(--ps-sale-strong, #e32c2b)) !important;
+  color: var(--ps-store-sale-badge-text, var(--ps-surface, #ffffff)) !important;
+}
+
+.ps-store-card .ps-store-card-badges > .ps-product-custom-badge,
+.ps-store-card .ps-store-card-badges > .ps-product-badge.ps-product-custom-badge {
+  background: var(
+    --ps-product-custom-badge-bg,
+    var(--ps-store-custom-badge-bg, #4fa355)
+  ) !important;
+  color: var(
+    --ps-product-custom-badge-text,
+    var(--ps-store-custom-badge-text, #ffffff)
+  ) !important;
 }
 
 .ps-store-card__cat,
@@ -2817,31 +2859,12 @@ padding: 0;
 }
 
 .ps-store-card .ab-plist-img-hover {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  opacity: 0;
-  transition: opacity 0.45s ease;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .ps-store-card.ab-plist-card:hover .ab-plist-img-hover,
-  .ps-store-card.ab-plist-card:focus-within .ab-plist-img-hover {
-    opacity: 1;
-  }
-
-  .ps-store-card.ab-plist-card:hover .ab-plist-img-primary,
-  .ps-store-card.ab-plist-card:focus-within .ab-plist-img-primary {
-    opacity: 0;
-  }
-}
-
-.ps-store-card .ab-plist-badge {
-  margin: 12px !important;
-}
 
 /* ============================================================================
  *   END SCOPE: HOME PRODUCTS GRID
@@ -3495,10 +3518,17 @@ padding: 0;
   object-fit: cover;
 }
 
+/* Shared product-card image hover motion (grid, list, home, featured, related, collection). */
 .ps-plist-img-hover,
-.ps-pgrid-img-hover {
+.ps-pgrid-img-hover,
+.ps-product-img-hover,
+.ps-featured-img-hover,
+.ps-rp-img-hover,
+.ps-cl-img-hover,
+.ps-store-card .ab-plist-img-hover {
   position: absolute;
   inset: 0;
+  z-index: 1;
   opacity: 0;
   transform: scale(1.08);
   filter: saturate(1.08) contrast(1.04);
@@ -3509,14 +3539,23 @@ padding: 0;
 }
 
 .ps-plist-img-primary,
-.ps-pgrid-img-primary {
+.ps-pgrid-img-primary,
+.ps-product-img-primary,
+.ps-featured-img-primary,
+.ps-rp-img-primary,
+.ps-cl-img-primary,
+.ps-store-card .ab-plist-img-primary {
   transition:
     opacity 0.42s ease,
     transform 0.6s ease;
 }
 
 .ps-plist-media::after,
-.ps-pgrid-media::after {
+.ps-pgrid-media::after,
+.ps-product-media::after,
+.ps-featured-card-media::after,
+.ps-rp-media::after,
+.ps-cl-media::after {
   content: "";
   position: absolute;
   inset: -25% -55%;
@@ -3532,66 +3571,39 @@ padding: 0;
   z-index: 1;
 }
 
-.ps-plist-badge,
-.ps-pgrid-badge {
+/* Legacy badge nodes outside .ps-store-card-badges (fallback absolute stack) */
+.ps-plist-badge:not(.ps-store-card-badges *),
+.ps-pgrid-badge:not(.ps-store-card-badges *) {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 10px;
   z-index: 2;
-  border-radius: 0;
-  padding: 6px 10px;
-  background: #eee;
-  color: var(--ps-charcoal, #0d0d12);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.35;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
-/* Sale + custom product badge: shared typography (matches sale look); backgrounds & placement differ */
-.ps-sale-badge,
-.ps-product-custom-badge {
-  color: var(--ps-surface, #fff);
-  font-family: var(--ps-ff-primary), var(--ps-ff-ui), sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 1.35;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 6px 10px;
-  border-radius: 0;
-}
-
-.ps-sale-badge {
-  background: var(--ps-sale-strong, #e32c2b);
-}
-
-/* theme_data label — top-end; same type treatment as sale, ink background */
-.ps-product-custom-badge {
-  background: var(--ps-ink-secondary, #1c1c1c);
-  left: auto;
-  right: 0;
-  text-align: center;
-  max-width: min(72%, 14em);
-  box-sizing: border-box;
+.ps-product-custom-badge:not(.ps-store-card-badges *) {
+  left: 10px;
+  right: auto;
 }
 
 @media (max-width: 768px) {
-  .ps-sale-badge,
-  .ps-product-custom-badge {
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    padding: 5px 8px;
+  .ps-store-card-badge,
+  .ps-store-card .ps-store-card-badges > .ps-sale-badge,
+  .ps-store-card .ps-store-card-badges > .ps-product-custom-badge {
+    font-size: 0.6875rem;
+    padding: 3px 7px;
+    border-radius: 4px;
+  }
+
+  .ps-store-card-badges {
+    top: 8px;
+    left: 8px;
+    gap: 4px;
+    max-width: calc(100% - 16px);
   }
 }
 
-.ps-rp-media .ps-plist-badge,
-.ps-featured-card-media .ps-plist-badge {
+.ps-rp-media .ps-store-card-badges,
+.ps-featured-card-media .ps-store-card-badges {
   z-index: 3;
 }
 
@@ -4336,7 +4348,7 @@ padding: 0;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: clamp(0.75rem, 2vw, 1rem);
+  gap: clamp(0.625rem, 1.6vw, 0.875rem);
   width: 100%;
   min-width: 0;
 }
@@ -4364,7 +4376,7 @@ padding: 0;
     min-width: 0;
     align-self: center;
     justify-content: center;
-    gap: 1.125rem;
+    gap: 0.9375rem;
   }
 }
 
@@ -4402,7 +4414,7 @@ padding: 0;
   min-width: 0;
 }
 
-.ps-plist--split-showcase .ps-plist-split__thumbnail .ps-plist-badge {
+.ps-plist--split-showcase .ps-plist-split__thumbnail .ps-store-card-badges {
   z-index: 4;
 }
 
@@ -4480,7 +4492,7 @@ padding: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.125rem;
+  gap: 0.9375rem;
   width: 100%;
   font-family: var(--ps-ff-primary, "DM Sans", system-ui), sans-serif;
 }
@@ -4489,7 +4501,7 @@ padding: 0;
 .ps-plist--split-showcase .ps-plist-split__type {
   margin: 0;
   font-family: inherit;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.35;
   color: #000000;
@@ -4517,7 +4529,7 @@ padding: 0;
   overflow: hidden;
   max-width: 100%;
   font-family: var(--ps-ff-primary, "DM Sans", system-ui), sans-serif !important;
-  font-size: clamp(1.5rem, 4.2vw, 3rem) !important;
+  font-size: clamp(1.25rem, 3.5vw, 2.375rem) !important;
   font-weight: 700 !important;
   line-height: 1.12 !important;
   letter-spacing: -0.02em !important;
@@ -4544,7 +4556,7 @@ padding: 0;
 /* Split showcase prices — palette (beat .ps-store-card) */
 .ps-plist--split-showcase .ps-plist-card--split.ps-store-card .ps-plist-split__prices .ps-plist-price-current.ps-plist-split__price-regular {
   font-family: var(--ps-ff-primary, "DM Sans", system-ui), sans-serif !important;
-  font-size: 1.375rem !important;
+  font-size: 1.25rem !important;
   font-weight: 700 !important;
   letter-spacing: 0 !important;
   text-transform: none !important;
@@ -4554,7 +4566,7 @@ padding: 0;
 
 .ps-plist--split-showcase .ps-plist-card--split.ps-store-card .ps-plist-split__prices .ps-plist-price-current.ps-plist-split__price-sale {
   font-family: var(--ps-ff-primary, "DM Sans", system-ui), sans-serif !important;
-  font-size: 1.375rem !important;
+  font-size: 1.25rem !important;
   font-weight: 700 !important;
   letter-spacing: 0 !important;
   text-transform: none !important;
@@ -4564,7 +4576,7 @@ padding: 0;
 
 .ps-plist--split-showcase .ps-plist-card--split.ps-store-card .ps-plist-split__prices .ps-plist-price-old {
   font-family: var(--ps-ff-primary, "DM Sans", system-ui), sans-serif !important;
-  font-size: 1rem !important;
+  font-size: 0.9375rem !important;
   font-weight: 500 !important;
   color: var(
     --ps-price-strike,
@@ -4594,7 +4606,7 @@ padding: 0;
 .ps-plist--split-showcase .ps-plist-split__desc {
   margin: 0;
   font-family: inherit;
-  font-size: 1.2rem;
+  font-size: 1.0625rem;
   line-height: 1.5;
   font-weight: 400;
   color: #000000;
@@ -4614,14 +4626,14 @@ padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.875rem 1.75rem;
-  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  min-height: 44px;
   border-radius: 999px;
   background: #000000;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   font-family: inherit;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: none;
@@ -4690,7 +4702,7 @@ padding: 0;
   }
 
   .ps-plist--split-showcase .ps-plist-split__body {
-    gap: 0.875rem;
+    gap: 0.75rem;
   }
 
   .ps-plist--split-showcase .ps-plist-split__aspect {
@@ -4729,11 +4741,11 @@ padding: 0;
   }
 
   .ps-plist--split-showcase .ps-plist-split__type {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .ps-plist--split-showcase .ps-plist-card--split.ps-store-card .ps-plist-split__title.ps-plist-name {
-    font-size: clamp(1.35rem, 5.5vw, 2.25rem) !important;
+    font-size: clamp(1.125rem, 4.5vw, 1.875rem) !important;
     line-height: 1.12 !important;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -4745,13 +4757,17 @@ padding: 0;
   }
 
   .ps-plist--split-showcase .ps-plist-card--split.ps-store-card .ps-plist-split__prices .ps-plist-price-current {
-    font-size: 1.1875rem !important;
+    font-size: 1.0625rem !important;
+  }
+
+  .ps-plist--split-showcase .ps-plist-card--split.ps-store-card .ps-plist-split__prices .ps-plist-price-old {
+    font-size: 0.875rem !important;
   }
 
   .ps-plist--split-showcase .ps-plist-split__btn-primary {
-    padding: 0.75rem 1.5rem;
-    min-height: 44px;
-    font-size: 0.875rem;
+    padding: 0.6875rem 1.25rem;
+    min-height: 40px;
+    font-size: 0.8125rem;
     width: 100%;
     box-sizing: border-box;
   }
@@ -4761,7 +4777,7 @@ padding: 0;
   }
 
   .ps-plist--split-showcase .ps-plist-split__desc {
-    font-size: 1.0625rem;
+    font-size: 0.9375rem;
   }
 }
 
@@ -4980,20 +4996,10 @@ div:has(> .ab-plist.ab-plist--related) {
   display: block;
 }
 
-.ps-rp-img-hover {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: scale(1.05);
-  transition:
-    opacity 0.36s ease,
-    transform 0.5s ease;
-}
-
-.ps-rp-img-primary {
-  transition:
-    opacity 0.36s ease,
-    transform 0.5s ease;
+.ps-rp-media > .ps-rp-img-hover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .ps-rp-content {
@@ -5107,19 +5113,6 @@ div:has(> .ab-plist.ab-plist--related) {
   justify-content: center;
   cursor: pointer;
   padding: 0;
-}
-
-@media (hover: hover) {
-  .ps-rp-card:hover .ps-rp-img-hover,
-  .ps-rp-card:focus-within .ps-rp-img-hover {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .ps-rp-card:hover .ps-rp-img-primary,
-  .ps-rp-card:focus-within .ps-rp-img-primary {
-    opacity: 0;
-  }
 }
 
 @media (max-width: 1200px) {
@@ -5838,70 +5831,120 @@ div:has(> .ab-plist.ab-plist--related) {
   object-fit: unset;
 }
 
-.ps-featured-img-hover {
-  position: absolute;
-  inset: 0;
+.ps-featured .ps-featured-card-media > .ps-featured-img-hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transform: scale(1.08);
-  filter: saturate(1.08) contrast(1.04);
-  transition:
-    opacity 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.72s cubic-bezier(0.22, 0.61, 0.36, 1),
-    filter 0.52s ease;
-}
-
-.ps-featured-img-primary {
-  transition:
-    opacity 0.42s ease,
-    transform 0.6s ease;
-}
-
-.ps-featured-card-media::after {
-  content: "";
-  position: absolute;
-  inset: -25% -55%;
-  background: linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0) 30%,
-    rgba(255, 255, 255, 0.42) 50%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  transform: translateX(-120%) rotate(10deg);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1;
 }
 
 @media (hover: hover) {
-  .ps-plist-card:hover .ps-plist-img-hover,
-  .ps-plist-card:focus-within .ps-plist-img-hover,
-  .ps-pgrid-card:hover .ps-pgrid-img-hover,
-  .ps-pgrid-card:focus-within .ps-pgrid-img-hover,
-  .ps-featured-card:hover .ps-featured-img-hover,
-  .ps-featured-card:focus-within .ps-featured-img-hover {
+  /* Swap only when a distinct hover image exists in the DOM */
+  .ps-store-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
+  .ps-store-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
+  .ps-store-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
+  .ps-store-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
+  .ps-store-card:hover .ps-product-media:has(.ps-product-img-hover) .ps-product-img-hover,
+  .ps-store-card:focus-within .ps-product-media:has(.ps-product-img-hover) .ps-product-img-hover,
+  .ps-store-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
+  .ps-store-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
+  .ps-store-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
+  .ps-store-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
+  .ps-store-card:hover .ps-product-media:has(.ps-product-img-hover) .ps-product-img-primary,
+  .ps-store-card:focus-within .ps-product-media:has(.ps-product-img-hover) .ps-product-img-primary,
+  .ps-product-card:hover .ps-product-media:has(.ps-product-img-hover) .ps-product-img-primary,
+  .ps-product-card:focus-within .ps-product-media:has(.ps-product-img-hover) .ps-product-img-primary,
+  .ps-rp-card:hover .ps-rp-media:has(.ps-rp-img-hover) .ps-rp-img-primary,
+  .ps-rp-card:focus-within .ps-rp-media:has(.ps-rp-img-hover) .ps-rp-img-primary,
+  .ps-cl-card:hover .ps-cl-media:has(.ps-cl-img-hover) .ps-cl-img-primary,
+  .ps-cl-card:focus-within .ps-cl-media:has(.ps-cl-img-hover) .ps-cl-img-primary,
+
+  .ps-product-card:hover .ps-product-media:has(.ps-product-img-hover) .ps-product-img-hover,
+  .ps-product-card:focus-within .ps-product-media:has(.ps-product-img-hover) .ps-product-img-hover,
+  .ps-rp-card:hover .ps-rp-media:has(.ps-rp-img-hover) .ps-rp-img-hover,
+  .ps-rp-card:focus-within .ps-rp-media:has(.ps-rp-img-hover) .ps-rp-img-hover,
+  .ps-cl-card:hover .ps-cl-media:has(.ps-cl-img-hover) .ps-cl-img-hover,
+  .ps-cl-card:focus-within .ps-cl-media:has(.ps-cl-img-hover) .ps-cl-img-hover,
+  .ps-cl-grid .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
+  .ps-cl-grid .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
+
+  .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
+  .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
+  .ab-plist-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
+  .ab-plist-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
+  .ab-plist-card:hover .ps-pgrid-media:has(.ab-plist-img-hover) .ab-plist-img-hover,
+  .ab-plist-card:focus-within .ps-pgrid-media:has(.ab-plist-img-hover) .ab-plist-img-hover,
+  .ps-pgrid-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
+  .ps-pgrid-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
+  .collection_container
+    .ps-pgrid-section
+    .ps-pgrid-card:hover
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
+    .ps-pgrid-img-hover,
+  .collection_container
+    .ps-pgrid-section
+    .ps-pgrid-card:focus-within
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
+    .ps-pgrid-img-hover,
+  .ps-featured-card:hover .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-hover,
+  .ps-featured-card:focus-within .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-hover,
+  .ps-plist--split-showcase .ps-plist-card--split:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
+  .ps-plist--split-showcase .ps-plist-card--split:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover {
     opacity: 1;
     transform: scale(1);
   }
 
-  .ps-plist-card:hover .ps-plist-img-primary,
-  .ps-plist-card:focus-within .ps-plist-img-primary,
-  .ps-pgrid-card:hover .ps-pgrid-img-primary,
-  .ps-pgrid-card:focus-within .ps-pgrid-img-primary,
-  .ps-featured-card:hover .ps-featured-img-primary,
-  .ps-featured-card:focus-within .ps-featured-img-primary {
+  .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
+  .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
+  .ab-plist-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
+  .ab-plist-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
+  .ab-plist-card:hover .ps-pgrid-media:has(.ab-plist-img-hover) .ab-plist-img-primary,
+  .ab-plist-card:focus-within .ps-pgrid-media:has(.ab-plist-img-hover) .ab-plist-img-primary,
+  .ps-pgrid-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
+  .ps-pgrid-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
+  .collection_container
+    .ps-pgrid-section
+    .ps-pgrid-card:hover
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
+    .ps-pgrid-img-primary,
+  .collection_container
+    .ps-pgrid-section
+    .ps-pgrid-card:focus-within
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
+    .ps-pgrid-img-primary,
+  .ps-featured-card:hover .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-primary,
+  .ps-featured-card:focus-within .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-primary,
+  .ps-plist--split-showcase .ps-plist-card--split:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
+  .ps-plist--split-showcase .ps-plist-card--split:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
+  .ps-cl-grid .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
+  .ps-cl-grid .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary {
     opacity: 0.02;
     transform: scale(1.01);
   }
 
-  .ps-plist-card:hover .ps-plist-media::after,
-  .ps-plist-card:focus-within .ps-plist-media::after,
-  .ps-pgrid-card:hover .ps-pgrid-media::after,
-  .ps-pgrid-card:focus-within .ps-pgrid-media::after,
-  .ps-featured-card:hover .ps-featured-card-media::after,
-  .ps-featured-card:focus-within .ps-featured-card-media::after {
+  .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover)::after,
+  .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover)::after,
+  .ab-plist-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover)::after,
+  .ab-plist-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover)::after,
+  .ps-pgrid-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover)::after,
+  .ps-pgrid-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover)::after,
+  .ps-featured-card:hover .ps-featured-card-media:has(.ps-featured-img-hover)::after,
+  .ps-featured-card:focus-within .ps-featured-card-media:has(.ps-featured-img-hover)::after,
+  .ps-product-card:hover .ps-product-media:has(.ps-product-img-hover)::after,
+  .ps-product-card:focus-within .ps-product-media:has(.ps-product-img-hover)::after,
+  .ps-rp-card:hover .ps-rp-media:has(.ps-rp-img-hover)::after,
+  .ps-rp-card:focus-within .ps-rp-media:has(.ps-rp-img-hover)::after,
+  .ps-cl-card:hover .ps-cl-media:has(.ps-cl-img-hover)::after,
+  .ps-cl-card:focus-within .ps-cl-media:has(.ps-cl-img-hover)::after,
+  .ps-cl-grid .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover)::after,
+  .ps-cl-grid .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover)::after,
+  .collection_container
+    .ps-pgrid-section
+    .ps-pgrid-card:hover
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)::after,
+  .collection_container
+    .ps-pgrid-section
+    .ps-pgrid-card:focus-within
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)::after {
     opacity: 1;
     transform: translateX(120%) rotate(10deg);
     transition:
@@ -8644,13 +8687,66 @@ html:lang(it)
 .collection_container .ps-pgrid-section .ps-pgrid-info {
   display: flex !important;
   flex-direction: column !important;
-  align-items: center !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  text-align: start !important;
   width: 100% !important;
   flex: 0 0 auto !important;
   opacity: 1 !important;
   visibility: visible !important;
   position: relative;
   z-index: 2;
+}
+
+.collection_container .ps-pgrid-section .ps-pgrid-name,
+.collection_container .ps-pgrid-section .ps-pgrid-price-row,
+.collection_container .ps-pgrid-section .ps-pgrid-swatches {
+  align-self: flex-start !important;
+  text-align: start !important;
+  justify-content: flex-start !important;
+}
+
+.collection_container .ps-pgrid-section .ps-pgrid-media {
+  position: relative;
+  overflow: hidden;
+}
+
+.collection_container .ps-pgrid-section .ps-pgrid-media > .ps-pgrid-img-primary {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: unset;
+}
+
+.collection_container .ps-pgrid-section .ps-pgrid-media > .ps-pgrid-img-hover {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.collection_container .ps-pgrid-section .ps-pgrid-card.ps-store-card .ps-pgrid-info {
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  text-align: start !important;
+}
+
+.collection_container .ps-pgrid-section .ps-pgrid-card.ps-store-card .ps-pgrid-name,
+.collection_container .ps-pgrid-section .ps-pgrid-card.ps-store-card .ps-pgrid-price-row,
+.collection_container .ps-pgrid-section .ps-pgrid-card.ps-store-card .ps-pgrid-swatches {
+  align-self: flex-start !important;
+  text-align: start !important;
+  justify-content: flex-start !important;
+  width: 100%;
+}
+
+.collection_container .ps-pgrid-section .ps-pgrid-card.ps-store-card .ps-pgrid-swatches {
+  justify-content: flex-start !important;
 }
 
 .collection_container .ps-pgrid-section .ps-pgrid-name {
@@ -8713,55 +8809,35 @@ html:lang(it)
   }
 }
 
+/* Collection grid: same hover swap + shine as .ps-pgrid-card (only when hover img exists). */
 @media (hover: hover) {
   .collection_container
     .ps-pgrid-section
     .ps-pgrid-card:hover
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
     .ps-pgrid-img-primary,
   .collection_container
     .ps-pgrid-section
     .ps-pgrid-card:focus-within
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
     .ps-pgrid-img-primary {
-    opacity: 1 !important;
-    transform: none !important;
+    opacity: 0.02 !important;
+    transform: scale(1.01) !important;
   }
 
   .collection_container
     .ps-pgrid-section
     .ps-pgrid-card:hover
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
     .ps-pgrid-img-hover,
   .collection_container
     .ps-pgrid-section
     .ps-pgrid-card:focus-within
+    .ps-pgrid-media:has(.ps-pgrid-img-hover)
     .ps-pgrid-img-hover {
-    opacity: 0 !important;
-    transform: scale(1.08) !important;
-  }
-
-  .collection_container
-    .ps-pgrid-section
-    .ps-pgrid-card:hover
-    .ps-pgrid-media::after,
-  .collection_container
-    .ps-pgrid-section
-    .ps-pgrid-card:focus-within
-    .ps-pgrid-media::after {
-    opacity: 0 !important;
-    transform: translateX(-120%) rotate(10deg) !important;
-  }
-}
-
-/* Unified cards: restore secondary image on hover (collection overrides above disabled it). */
-@media (hover: hover) {
-  .collection_container .ps-pgrid-section .ps-store-card:hover .ps-pgrid-img-primary,
-  .collection_container .ps-pgrid-section .ps-store-card:focus-within .ps-pgrid-img-primary {
-    opacity: 0 !important;
-  }
-
-  .collection_container .ps-pgrid-section .ps-store-card:hover .ps-pgrid-img-hover,
-  .collection_container .ps-pgrid-section .ps-store-card:focus-within .ps-pgrid-img-hover {
     opacity: 1 !important;
-    transform: scale(1.08) !important;
+    transform: scale(1) !important;
+    filter: saturate(1.08) contrast(1.04) !important;
   }
 }
 
@@ -9322,20 +9398,10 @@ html:lang(it)
   display: block;
 }
 
-.ps-cl-img-hover {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-@media (hover: hover) {
-  .ps-cl-grid .ps-plist-card:hover .ps-plist-img-hover,
-  .ps-cl-grid .ps-plist-card:focus-within .ps-plist-img-hover,
-  .ps-cl-card:hover .ps-cl-img-hover,
-  .ps-cl-card:focus-within .ps-cl-img-hover {
-    opacity: 1;
-  }
+.ps-cl-media > .ps-cl-img-hover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .ps-cl-add {
@@ -10349,18 +10415,12 @@ html:lang(it)
 
 .ab-gallery-thumb {
   padding: 0;
-  border: 1px solid var(--ps-border-light, #d1d1d1);
+  border: none;
   border-radius: 0;
   overflow: hidden;
   background: #eee;
   cursor: pointer;
-  transition:
-    border-color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.ab-gallery-thumb.ab-active {
-  border-color: var(--ps-ink, #101010);
+  transition: transform 0.25s ease;
 }
 
 .ab-gallery-thumb img,
@@ -12197,11 +12257,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea)
     width: 73px;
     height: 73px;
     border-radius: 0;
-    border: 1px solid transparent;
-  }
-
-  .ab-gallery-thumb.ab-active {
-    border-color: var(--ps-ink, #101010);
+    border: none;
   }
 }
 
@@ -17160,18 +17216,20 @@ body:has(.checkout_order_summary) .ps-footer {
   padding: 0;
   margin: 0;
   border: none;
+  outline: none;
   cursor: zoom-in;
   border-radius: clamp(12px, 1vw, 18px);
   overflow: hidden;
   background: var(--ps-surface-muted, #f5f5f5);
-  transition:
-    box-shadow 0.2s ease,
-    outline-color 0.2s ease;
 }
 
-.ab-gallery-cell--active {
-  outline: 2px solid var(--body-text, var(--ps-ink, #101010));
-  outline-offset: 2px;
+.ab-gallery-cell:focus,
+.ab-gallery-cell:focus-visible,
+.ab-gallery-cell--active,
+.ab-gallery-cell--active:focus,
+.ab-gallery-cell--active:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .ab-gallery-cell-media {
@@ -17370,28 +17428,7 @@ body:has(.checkout_order_summary) .ps-footer {
   height: 0;
 }
 
-.ab-plist.ab-plist--related .ab-plist-badges {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 3;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 8px;
-  max-width: calc(100% - 20px);
-  pointer-events: none;
-}
-
-/* نفس كروت المتجر: ps-pgrid-badge + ps-sale-badge / ps-product-custom-badge — إلغاء absolute الافتراضي داخل صف البادجات */
-.ab-plist.ab-plist--related .ab-plist-badges > .ps-pgrid-badge,
-.ab-plist.ab-plist--related .ab-plist-badges > .ps-product-badge {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  margin: 0 !important;
-}
+/* Related row uses .ps-store-card-badges (shared pill row rules above) */
 
 .ab-plist.ab-plist--related .ab-plist-card {
   scroll-snap-align: start;
@@ -17438,11 +17475,6 @@ body:has(.checkout_order_summary) .ps-footer {
   }
 }
 
-.ab-plist.ab-plist--related .ps-pgrid-swatches,
-.ab-plist.ab-plist--related .ps-pgrid-swatch-more {
-  display: none !important;
-}
-
 .ab-plist.ab-plist--related .ps-store-card {
   --ps-store-card-radius: 14px;
 }
@@ -17459,26 +17491,37 @@ body:has(.checkout_order_summary) .ps-footer {
   color: var(--ps-ink-secondary-muted, #757575);
 }
 
-.ab-plist.ab-plist--related .ab-plist-name {
+.ab-plist.ab-plist--related .ps-pgrid-name {
   font-size: 16px !important;
   font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: var(--ps-ink, #101010) !important;
   -webkit-text-fill-color: var(--ps-ink, #101010) !important;
 }
 
-.ab-plist.ab-plist--related .ab-plist-price:not(.ab-price-sale),
-.ab-plist.ab-plist--related .ab-plist-price-row .ab-plist-price:not(.ab-price-sale) {
+.ab-plist.ab-plist--related .ps-pgrid-price-row:not(:has(.ps-pgrid-price-old)) .ps-pgrid-price-current {
   font-weight: 700 !important;
   color: var(--ps-ink, #101010) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
 }
 
-.ab-plist.ab-plist--related .ab-plist-price.ab-price-sale,
-.ab-plist.ab-plist--related .ps-store-card .ab-plist-price.ab-price-sale {
+.ab-plist.ab-plist--related .ps-pgrid-price-row:has(.ps-pgrid-price-old) .ps-pgrid-price-current {
+  font-weight: 700 !important;
   color: #d32f2f !important;
   -webkit-text-fill-color: #d32f2f !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
 }
 
-.ab-plist.ab-plist--related .ps-store-card .ab-price-old {
+.ab-plist.ab-plist--related .ps-pgrid-price-old {
   color: #757575 !important;
   -webkit-text-fill-color: #757575 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.ab-plist.ab-plist--related .ps-pgrid-swatches {
+  min-height: 13px;
 }

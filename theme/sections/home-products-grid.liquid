@@ -48,6 +48,20 @@
           {% assign discount = product.price | minus: product.sale_price | times: 100 | divided_by: product.price | floor %}
         {% endif %}
 
+        {% assign hover_image = "" %}
+        {% if product.gallery and product.gallery.size > 1 %}
+          {% assign hover_image = product.gallery[1].thumbnail %}
+        {% elsif product.gallery and product.gallery.size > 0 %}
+          {% if product.gallery[0].thumbnail != product.thumb %}
+            {% assign hover_image = product.gallery[0].thumbnail %}
+          {% endif %}
+        {% endif %}
+        {% if hover_image == "" and product.images and product.images.size > 1 %}
+          {% assign hover_image = product.images[1] %}
+        {% elsif hover_image == "" and product.images and product.images.size > 0 and product.images[0] != product.thumb %}
+          {% assign hover_image = product.images[0] %}
+        {% endif %}
+
         <div>
           <div class="ps-product-card ps-store-card ps-u-h-full">
             <a
@@ -56,8 +70,19 @@
               aria-label="{{ product.name }}"
             ></a>
             <div class="ps-product-media">
-              {% if is_on_sale %}
-                <span class="ps-product-badge ps-sale-badge">-{{ discount }}%</span>
+              {% assign _card_custom_badge = product.product_theme_data.custom_badge_title | strip %}
+              {% if is_on_sale or _card_custom_badge != blank %}
+                <div class="ps-store-card-badges">
+                  {% if is_on_sale %}
+                    <span class="ps-store-card-badge ps-sale-badge">-{{ discount }}%</span>
+                  {% endif %}
+                  {% if _card_custom_badge != blank %}
+                    {% assign _ptd = product.product_theme_data %}
+                    {% assign _badge_bg = _ptd.custom_badge_bg | default: _ptd.custom_badge_background | strip %}
+                    {% assign _badge_text = _ptd.custom_badge_text | default: _ptd.custom_badge_color | strip %}
+                    <span class="ps-store-card-badge ps-product-custom-badge"{% if _badge_bg != blank or _badge_text != blank %} style="{% if _badge_bg != blank %}--ps-product-custom-badge-bg: {{ _badge_bg }};{% endif %}{% if _badge_text != blank %}--ps-product-custom-badge-text: {{ _badge_text }};{% endif %}"{% endif %}>{{ _card_custom_badge }}</span>
+                  {% endif %}
+                </div>
               {% endif %}
 
               <img
@@ -67,13 +92,8 @@
                 loading="lazy"
               />
 
-              {% if product.images[0] %}
-                <img
-                  class="ps-product-img-hover"
-                  src="{{ product.images[0] }}"
-                  alt="{{ product.name }}"
-                  loading="lazy"
-                />
+              {% if hover_image != "" and hover_image != product.thumb %}
+                <img class="ps-product-img-hover" src="{{ hover_image }}" alt="{{ product.name }}" loading="lazy" />
               {% endif %}
 
               <button
