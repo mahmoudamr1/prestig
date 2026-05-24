@@ -189,6 +189,129 @@
     }
   }
 
+  function prestigeReadAppSettingsFromNextData() {
+    try {
+      var nd = document.getElementById("__NEXT_DATA__");
+      if (!nd) {
+        return null;
+      }
+      var data = JSON.parse(nd.textContent || "{}");
+      var app =
+        data &&
+        data.props &&
+        data.props.pageProps &&
+        data.props.pageProps.appSettings;
+      return app || null;
+    } catch (eNd) {
+      return null;
+    }
+  }
+
+  /** Store locale primary subtag — `appSettings.lang` from Next data, else `<html lang>`. */
+  function prestigeResolveStoreLang() {
+    var app = prestigeReadAppSettingsFromNextData();
+    if (app && app.lang != null && String(app.lang).trim() !== "") {
+      return String(app.lang)
+        .trim()
+        .toLowerCase()
+        .split("-")[0];
+    }
+    try {
+      var hl = (document.documentElement.getAttribute("lang") || "")
+        .trim()
+        .toLowerCase();
+      if (hl) {
+        return hl.split("-")[0];
+      }
+    } catch (e2) {
+      /* ignore */
+    }
+    return "";
+  }
+
+  function prestigeIsStoreLangAr() {
+    return prestigeResolveStoreLang() === "ar";
+  }
+
+  /** `html.ps-app-lang-ar` + `body.ps-doc-rtl` — used by theme CSS for RTL / arrow mirrors. */
+  function prestigeSyncStoreLangOnHtml() {
+    var isAr = prestigeIsStoreLangAr();
+    var root = document.documentElement;
+    var body = document.body;
+    if (isAr) {
+      root.classList.add("ps-app-lang-ar");
+      if (body) {
+        body.classList.add("ps-doc-rtl");
+      }
+    } else {
+      root.classList.remove("ps-app-lang-ar");
+      if (body) {
+        body.classList.remove("ps-doc-rtl");
+      }
+    }
+  }
+
+  try {
+    prestigeSyncStoreLangOnHtml();
+  } catch (eLangEarly) {
+    prestigeThemeError("store-lang-early", eLangEarly);
+  }
+
+  /** `html`/`body` RTL breaks horizontal `scrollLeft` unless scrollports use LTR coordinates. */
+  function prestigeForceLtrScrollPort(el) {
+    if (!el || !el.style) {
+      return;
+    }
+    try {
+      el.style.setProperty("direction", "ltr", "important");
+      el.style.setProperty("unicode-bidi", "isolate", "important");
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function prestigeHScrollGet(el) {
+    if (!el) {
+      return 0;
+    }
+    var sl = el.scrollLeft;
+    var max = Math.max(0, el.scrollWidth - el.clientWidth);
+    if (max <= 0) {
+      return 0;
+    }
+    try {
+      var cs = window.getComputedStyle(el);
+      if ((cs.direction || "").toLowerCase() === "rtl") {
+        if (sl < 0) {
+          return Math.min(max, -sl);
+        }
+        return Math.max(0, Math.min(max, max - sl));
+      }
+    } catch (e2) {
+      /* ignore */
+    }
+    return sl;
+  }
+
+  function prestigeHScrollSet(el, leftPx, behavior) {
+    if (!el) {
+      return;
+    }
+    prestigeForceLtrScrollPort(el);
+    var max = Math.max(0, el.scrollWidth - el.clientWidth);
+    var x = Math.max(0, Math.min(max, leftPx));
+    var beh = behavior || "auto";
+    if (beh === "smooth") {
+      try {
+        el.scrollTo({ left: x, behavior: "smooth" });
+      } catch (e3) {
+        el.scrollLeft = x;
+      }
+    } else {
+      el.scrollLeft = x;
+    }
+  }
+
   function readPrestigeScrollY(scrollRoot) {
     if (!scrollRoot || scrollRoot === window) {
       return window.scrollY || document.documentElement.scrollTop || 0;
@@ -2243,6 +2366,25 @@
   }
 
   /** list-products split: same scroll contract as categories showcase (track + flex + snap; arrows all widths). */
+  function prestigeApplySleekSplitShowcaseRtl(root, track) {
+    if (!root || !track || !root.hasAttribute("data-ps-plist-split")) {
+      return;
+    }
+    /* Sleek theme only: the large split product card should start at the
+       right edge in Arabic while the rest of the product/card carousels keep
+       their existing LTR scroll contract. */
+    if (prestigeIsStoreLangAr()) {
+      root.setAttribute("data-ps-sleek-split-rtl", "1");
+      track.setAttribute("dir", "rtl");
+      window.requestAnimationFrame(function () {
+        track.scrollLeft = 0;
+      });
+    } else {
+      root.removeAttribute("data-ps-sleek-split-rtl");
+      track.setAttribute("dir", "ltr");
+    }
+  }
+
   function initPrestigeListProductsShowcaseCarousel() {
     initPrestigeSnapCarouselGroup({
       rootSelector: "[data-ps-plist-showcase]",
@@ -2257,11 +2399,13 @@
     });
 
     document.querySelectorAll("[data-ps-plist-showcase]").forEach(function (root) {
+      var track = root.querySelector("[data-ps-plist-carousel]");
+      prestigeApplySleekSplitShowcaseRtl(root, track);
+
       if (root.getAttribute("data-ps-plist-fraction-init")) {
         return;
       }
 
-      var track = root.querySelector("[data-ps-plist-carousel]");
       var fracCurrent = root.querySelector("[data-ps-plist-frac-current]");
       var fracTotal = root.querySelector("[data-ps-plist-frac-total]");
       if (!track) {
@@ -2296,7 +2440,23 @@
       function syncFractionFromScroll() {
         var step = cardStepForFraction();
         if (!step) return;
-        var idx = Math.round(track.scrollLeft / step);
+        var idx;
+        if (root.getAttribute("data-ps-sleek-split-rtl")) {
+          var trackRect = track.getBoundingClientRect();
+          var bestIdx = 0;
+          var bestDist = Infinity;
+          cards.forEach(function (card, i) {
+            var cardRect = card.getBoundingClientRect();
+            var dist = Math.abs(cardRect.right - trackRect.right);
+            if (dist < bestDist) {
+              bestDist = dist;
+              bestIdx = i;
+            }
+          });
+          idx = bestIdx;
+        } else {
+          idx = Math.round(track.scrollLeft / step);
+        }
         idx = Math.min(Math.max(idx, 0), cards.length - 1);
         fracCurrent.textContent = String(idx + 1);
       }
@@ -2566,6 +2726,19 @@
       });
   }
 
+  function pdpGallerySlideStep(slider, slides) {
+    if (!slides || !slides.length) {
+      return slider ? slider.clientWidth : 0;
+    }
+    if (slides.length < 2) {
+      return slides[0].offsetWidth || slider.clientWidth || 0;
+    }
+    var a = slides[0].getBoundingClientRect();
+    var b = slides[1].getBoundingClientRect();
+    var step = Math.abs(b.left - a.left);
+    return step || slides[0].offsetWidth || slider.clientWidth || 0;
+  }
+
   function initLegacyGallery() {
     document.querySelectorAll(".ab-gallery").forEach(function (gallery) {
       if (gallery.dataset.galleryInit) return;
@@ -2580,6 +2753,10 @@
       var galleryPrev = gallery.querySelector("[data-ab-gallery-prev]");
       var galleryNext = gallery.querySelector("[data-ab-gallery-next]");
       var images = [];
+
+      if (slider) {
+        prestigeForceLtrScrollPort(slider);
+      }
 
       function pdpGallerySliderViewportActive() {
         return (
@@ -2598,8 +2775,14 @@
       }
 
       function syncCounter(idx) {
-        if (!galleryCounter || !images.length) return;
-        galleryCounter.textContent = idx + 1 + " / " + images.length;
+        if (!galleryCounter || !images.length) {
+          return;
+        }
+        var current = idx + 1;
+        var total = images.length;
+        galleryCounter.setAttribute("dir", "ltr");
+        galleryCounter.textContent =
+          "\u2066" + current + " / " + total + "\u2069";
       }
 
       if (slides.length) {
@@ -2625,6 +2808,20 @@
       }
 
       function getActiveMediaIndex() {
+        if (
+          slider &&
+          slides.length &&
+          !isStackLayout() &&
+          pdpGallerySliderViewportActive()
+        ) {
+          var step = pdpGallerySlideStep(slider, slides);
+          if (step > 0) {
+            return Math.min(
+              slides.length - 1,
+              Math.max(0, Math.round(prestigeHScrollGet(slider) / step))
+            );
+          }
+        }
         var activeSlide = gallery.querySelector(".ab-gallery-slide.is-active");
         if (activeSlide && activeSlide.dataset.src) {
           var k = images.indexOf(activeSlide.dataset.src);
@@ -2674,12 +2871,9 @@
       function scrollSliderToIndex(idx, instant) {
         if (!slider || !slides.length) return;
         if (isStackLayout()) return;
-        var w = slider.clientWidth;
-        if (w <= 0) return;
-        slider.scrollTo({
-          left: idx * w,
-          behavior: instant ? "auto" : "smooth",
-        });
+        var step = pdpGallerySlideStep(slider, slides);
+        if (step <= 0) return;
+        prestigeHScrollSet(slider, idx * step, instant ? "auto" : "smooth");
       }
 
       function scrollStackToIndex(idx, instant) {
@@ -2779,9 +2973,9 @@
         if (scrollT) clearTimeout(scrollT);
         scrollT = setTimeout(function () {
           scrollT = null;
-          var w = slider.clientWidth;
-          if (w <= 0) return;
-          var idx = Math.round(slider.scrollLeft / w);
+          var step = pdpGallerySlideStep(slider, slides);
+          if (step <= 0) return;
+          var idx = Math.round(prestigeHScrollGet(slider) / step);
           if (idx < 0 || idx >= slides.length) return;
           syncSlideMedia(idx);
           thumbs.forEach(function (t) {
@@ -2859,7 +3053,11 @@
       function showLbImage(idx) {
         lbIndex = ((idx % images.length) + images.length) % images.length;
         if (lbImg) lbImg.src = images[lbIndex];
-        if (lbCounter) lbCounter.textContent = lbIndex + 1 + " / " + images.length;
+        if (lbCounter) {
+          lbCounter.setAttribute("dir", "ltr");
+          lbCounter.textContent =
+            "\u2066" + (lbIndex + 1) + " / " + images.length + "\u2069";
+        }
       }
 
       function openLightboxFromTrigger(trigger) {
@@ -4354,6 +4552,7 @@
 
   function init() {
     try {
+      prestigeSyncStoreLangOnHtml();
       prestigeInjectThemeFonts();
       syncPrestigeThemeStack();
       initPrestigeHeaderScroll();
@@ -4383,14 +4582,32 @@
   }
 
   document.addEventListener(MOUNT_EVENT, function () {
+    try {
+      prestigeSyncStoreLangOnHtml();
+    } catch (eLangMount) {
+      prestigeThemeError("store-lang-mount", eLangMount);
+    }
     scheduleDynamicInits();
   });
 
   window.addEventListener("popstate", function () {
     try {
+      prestigeSyncStoreLangOnHtml();
+    } catch (eLangPop) {
+      prestigeThemeError("store-lang-popstate", eLangPop);
+    }
+    try {
       initPrestigeThanksOrderFetch();
     } catch (e) {
       prestigeThemeError("thanks-order-fetch-popstate", e);
+    }
+  });
+
+  window.addEventListener("load", function () {
+    try {
+      prestigeSyncStoreLangOnHtml();
+    } catch (eLangLoad) {
+      prestigeThemeError("store-lang-load", eLangLoad);
     }
   });
 

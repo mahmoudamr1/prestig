@@ -17,17 +17,13 @@
           {% elsif r_stars > prev %}
             {% assign frac = r_stars | minus: prev %}
             <span class="ab-pd-star-slot ab-pd-star-slot--lg">
-              <img width="18" height="15" class="ab-pd-star-icon ab-pd-star-icon--off" aria-hidden="true" src="https://files.easy-orders.net/1779102257932429887sx021.svg" alt="" loading="lazy" decoding="async" />
-
-
+              <span class="ab-pd-star-icon ab-pd-star-icon--off" aria-hidden="true"></span>
               <span class="ab-pd-star-fill" style="width: calc(100% * {{ frac }});">
                 <span class="ab-pd-star-icon ab-pd-star-icon--on" aria-hidden="true"></span>
-
-
               </span>
             </span>
           {% else %}
-            <img width="18" height="15" class="ab-pd-star-icon ab-pd-star-icon--off" aria-hidden="true" src="https://files.easy-orders.net/1779102257932429887sx021.svg" alt="" loading="lazy" decoding="async" />
+            <span class="ab-pd-star-icon ab-pd-star-icon--off" aria-hidden="true"></span>
 
 
           {% endif %}

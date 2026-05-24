@@ -3213,6 +3213,8 @@ padding: 0;
   left: 16px;
 }
 
+html.ps-app-lang-ar .ab-categories-section .category-card__arrow-icon,
+body.ps-doc-rtl .ab-categories-section .category-card__arrow-icon,
 [dir="rtl"] .ab-categories-section .category-card__arrow-icon {
   transform: scaleX(-1);
 }
@@ -4240,10 +4242,6 @@ padding: 0;
     text-align: start;
   }
 
-  [dir="rtl"] .ps-plist--split-showcase .ps-plist-split__title-bar {
-    text-align: end;
-  }
-
   .ps-plist--split-showcase .ps-plist-split__fraction {
     display: none;
   }
@@ -4261,6 +4259,14 @@ padding: 0;
   box-sizing: border-box;
 }
 
+/* Sleek theme only: Arabic split product cards scroll/read from right to left. */
+html.ps-app-lang-ar .ps-plist--split-showcase .ps-plist-carousel-col,
+[dir="rtl"] .ps-plist--split-showcase .ps-plist-carousel-col {
+  margin-inline-start: calc(-1 * var(--ps-layout-gutter-x, 18px));
+  margin-inline-end: 0;
+  padding-inline-start: max(0px, env(safe-area-inset-left, 0px));
+  padding-inline-end: 0;
+}
 
 .ps-plist--split-showcase .ps-plist-carousel-track {
   display: flex;
@@ -4281,6 +4287,17 @@ padding: 0;
   overscroll-behavior-x: contain;
   touch-action: pan-x pan-y;
   background: transparent;
+}
+
+/* Sleek theme only: this showcase is the large split card; keep RTL scroll
+   behavior scoped here so product grids and other carousels keep their contract. */
+html.ps-app-lang-ar .ps-plist--split-showcase .ps-plist-carousel-track,
+[dir="rtl"] .ps-plist--split-showcase .ps-plist-carousel-track {
+  direction: rtl !important;
+  scroll-padding-inline-start: var(--ps-layout-gutter-x, 18px);
+  scroll-padding-inline-end: 0;
+  padding-inline-start: var(--ps-layout-gutter-x, 18px);
+  padding-inline-end: 0;
 }
 
 .ps-plist--split-showcase .ps-plist-carousel-track::-webkit-scrollbar {
@@ -4378,6 +4395,17 @@ padding: 0;
     justify-content: center;
     gap: 0.9375rem;
   }
+}
+
+/* Sleek theme only: Arabic split cards put media on the right and content on the left. */
+html.ps-app-lang-ar .ps-plist--split-showcase .ps-plist-split__card-link,
+[dir="rtl"] .ps-plist--split-showcase .ps-plist-split__card-link {
+  direction: rtl;
+}
+
+html.ps-app-lang-ar .ps-plist--split-showcase .ps-plist-split__body,
+[dir="rtl"] .ps-plist--split-showcase .ps-plist-split__body {
+  align-items: start;
 }
 
 @media (min-width: 1025px) {
@@ -4770,6 +4798,12 @@ padding: 0;
     font-size: 0.8125rem;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  html.ps-app-lang-ar .ps-plist--split-showcase .ps-plist-carousel-track,
+  [dir="rtl"] .ps-plist--split-showcase .ps-plist-carousel-track {
+    scroll-padding-inline-start: max(0px, calc((100% - 75vw) / 2));
+    scroll-padding-inline-end: var(--ps-layout-gutter-x, 18px);
   }
 
   .ps-plist--split-showcase .ps-plist-card--split {
@@ -5285,8 +5319,10 @@ div:has(> .ab-plist.ab-plist--related) {
   object-fit: contain;
 }
 
+html.ps-app-lang-ar .ps-viewall-arrow,
+body.ps-doc-rtl .ps-viewall-arrow,
 [dir="rtl"] .ps-viewall-arrow {
-  transform: rotate(180deg);
+  transform: scaleX(-1);
 }
 
 @media (max-width: 1199.98px) {
@@ -9027,7 +9063,7 @@ html:lang(it)
   width: 100%;
   border: 0;
   background: transparent;
-  text-align: left;
+  text-align: start;
   padding: 8px 10px;
   color: rgba(16, 16, 16, 0.8);
   font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
@@ -9802,6 +9838,8 @@ html:lang(it)
   color: inherit;
 }
 
+html.ps-app-lang-ar .ab-breadcrumbs-arrow,
+body.ps-doc-rtl .ab-breadcrumbs-arrow,
 [dir="rtl"] .ab-breadcrumbs-sep .ps-mobile-pages-arrow {
   transform: scaleX(-1);
 }
@@ -9979,6 +10017,9 @@ html:lang(it)
   display: inline-flex;
   align-items: center;
   gap: 2px;
+  /* Keep star order + partial fill clipping stable on RTL storefronts */
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .ab-pd-star-icon {
@@ -10004,28 +10045,41 @@ html:lang(it)
 }
 
 .ab-pd-star-icon--off {
-  color: var(--body-text, #101010);
+  box-sizing: border-box;
+  background-color: var(--body-text, #101010);
   opacity: 0.2;
+  -webkit-mask-image: url("https://files.easy-orders.net/1779102257963483924sx020.svg");
+  mask-image: url("https://files.easy-orders.net/1779102257963483924sx020.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
-/* Fractional star (e.g. 4.7): gray base + clipped dark overlay; width set inline from Liquid */
+/* Fractional star (e.g. 4.7): gray base + clipped gold overlay; width set inline from Liquid */
 .ab-pd-star-slot {
   position: relative;
   display: inline-block;
   width: 16px;
   height: 15px;
   flex-shrink: 0;
-  vertical-align: middle;
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .ab-pd-star-slot > .ab-pd-star-icon--off {
-  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .ab-pd-star-fill {
   position: absolute;
-  left: 0;
-  top: 0;
+  inset-block: 0;
+  inset-inline-start: 0;
   height: 100%;
   max-width: 100%;
   overflow: hidden;
@@ -16055,7 +16109,7 @@ div:has(> .ps-invoice) {
   font-size: 12px;
   font-weight: 500;
   color: var(--ps-ink-soft, #6b6b6b);
-  text-align: right;
+  text-align: end;
   max-width: 100%;
 }
 
@@ -16128,7 +16182,7 @@ div:has(> .ps-invoice) {
   white-space: nowrap;
   align-self: start;
   padding-top: 2px;
-  text-align: right;
+  text-align: end;
 }
 
 .ps-invoice-shipping {
@@ -16289,7 +16343,7 @@ div:has(> .ps-invoice) {
     grid-column: 2;
     grid-row: 2;
     justify-self: start;
-    text-align: left;
+    text-align: start;
     padding-top: 6px;
   }
 
@@ -16729,7 +16783,7 @@ body:has(.checkout_order_summary) .ps-footer {
 }
 
 .p_details_container .ab-pd-star-icon--off {
-  color: var(--body-text, #101010);
+  background-color: var(--body-text, #101010);
   opacity: 0.2;
 }
 
@@ -16999,6 +17053,8 @@ body:has(.checkout_order_summary) .ps-footer {
   opacity: 0.45;
 }
 
+html.ps-app-lang-ar .p_details_container .ab-pd-pairs-well-chevron svg,
+body.ps-doc-rtl .p_details_container .ab-pd-pairs-well-chevron svg,
 [dir="rtl"] .p_details_container .ab-pd-pairs-well-chevron svg {
   transform: scaleX(-1);
 }
@@ -17119,6 +17175,7 @@ body:has(.checkout_order_summary) .ps-footer {
   gap: 0;
   width: 100%;
   grid-template-columns: unset !important;
+  direction: ltr;
 }
 
 .ab-gallery--mix .ab-gallery-grid-mix {
@@ -17164,6 +17221,8 @@ body:has(.checkout_order_summary) .ps-footer {
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
   color: var(--ps-ink-secondary, #3a3a3a);
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .ab-gallery-pager__btn {
@@ -17524,4 +17583,123 @@ body:has(.checkout_order_summary) .ps-footer {
 
 .ab-plist.ab-plist--related .ps-pgrid-swatches {
   min-height: 13px;
+}
+
+/* ==========================================================================
+ * Arabic — `prestigeSyncStoreLangOnHtml()` → html.ps-app-lang-ar, body.ps-doc-rtl
+ * Carousels/pagers: LTR control strip (prev left / next right); mirror chevron img/svg inside only.
+ * Standalone horizontal arrows in RTL layout: scaleX(-1) on img/svg/mask icons only.
+ * ========================================================================== */
+
+html.ps-app-lang-ar .ab-gallery-slider,
+html.ps-app-lang-ar .ab-gallery-slides,
+html.ps-app-lang-ar .ab-gallery-pager,
+html.ps-app-lang-ar .ab-lightbox-toolbar,
+html.ps-app-lang-ar .ab-plist.ab-plist--related .ab-plist-arrows,
+html.ps-app-lang-ar .ps-plist-arrows,
+html.ps-app-lang-ar .ps-plist-split__slider-controls,
+html.ps-app-lang-ar .ab-categories-section .category-info-col__nav,
+body.ps-doc-rtl .ab-gallery-slider,
+body.ps-doc-rtl .ab-gallery-slides,
+body.ps-doc-rtl .ab-gallery-pager,
+body.ps-doc-rtl .ab-lightbox-toolbar,
+body.ps-doc-rtl .ab-plist.ab-plist--related .ab-plist-arrows,
+body.ps-doc-rtl .ps-plist-arrows,
+body.ps-doc-rtl .ps-plist-split__slider-controls,
+body.ps-doc-rtl .ab-categories-section .category-info-col__nav {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Prev/next chevrons inside LTR pager strips — mirror img/svg for Arabic reading direction */
+html.ps-app-lang-ar .ab-gallery-pager__btn img,
+html.ps-app-lang-ar .ab-lightbox-prev img,
+html.ps-app-lang-ar .ab-lightbox-next img,
+html.ps-app-lang-ar .ab-plist.ab-plist--related .ab-plist-arrow img,
+html.ps-app-lang-ar .ps-plist-arrows img,
+html.ps-app-lang-ar .ps-plist-arrows .ps-plist-arrow img,
+html.ps-app-lang-ar .ab-categories-section .category-carousel-btn img,
+html.ps-app-lang-ar .ab-categories-section .category-carousel-btn__icon,
+body.ps-doc-rtl .ab-gallery-pager__btn img,
+body.ps-doc-rtl .ab-lightbox-prev img,
+body.ps-doc-rtl .ab-lightbox-next img,
+body.ps-doc-rtl .ab-plist.ab-plist--related .ab-plist-arrow img,
+body.ps-doc-rtl .ps-plist-arrows img,
+body.ps-doc-rtl .ps-plist-arrows .ps-plist-arrow img,
+body.ps-doc-rtl .ab-categories-section .category-carousel-btn img,
+body.ps-doc-rtl .ab-categories-section .category-carousel-btn__icon {
+  transform: scaleX(-1);
+}
+
+/* Sleek only: these home arrows already have explicit prev/next artwork.
+   Keep the parent in Arabic flow and do not mirror the icon again. */
+html.ps-app-lang-ar .ps-hot-cards__head,
+body.ps-doc-rtl .ps-hot-cards__head {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+html.ps-app-lang-ar .ps-hot-cards__arrows,
+body.ps-doc-rtl .ps-hot-cards__arrows {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+html.ps-app-lang-ar .ps-hot-cards__arrows .ps-hot-cards__nav-btn svg,
+html.ps-app-lang-ar .ps-hot-cards__arrows .ps-hot-cards__nav-btn img,
+html.ps-app-lang-ar .ps-plist-split__slider-controls .ps-plist-arrow img,
+body.ps-doc-rtl .ps-hot-cards__arrows .ps-hot-cards__nav-btn svg,
+body.ps-doc-rtl .ps-hot-cards__arrows .ps-hot-cards__nav-btn img,
+body.ps-doc-rtl .ps-plist-split__slider-controls .ps-plist-arrow img {
+  transform: none !important;
+}
+
+html.ps-app-lang-ar .ps-viewall-arrow,
+html.ps-app-lang-ar .ps-featured-banner-cta-arrow,
+html.ps-app-lang-ar .ab-breadcrumbs-arrow,
+html.ps-app-lang-ar .ab-categories-section .category-card__arrow-icon,
+html.ps-app-lang-ar .ps-announce-mc-nav img,
+html.ps-app-lang-ar .ps-announce-mc-nav svg,
+html.ps-app-lang-ar .ps-footer--sleek .ps-footer-subscribe-btn--icon .ps-palette-icon,
+html.ps-app-lang-ar .ps-mobile-nav .ps-arrow-icon,
+html.ps-app-lang-ar .ps-mobile-accordion .ps-mobile-pages-arrow,
+body.ps-doc-rtl .ps-viewall-arrow,
+body.ps-doc-rtl .ps-featured-banner-cta-arrow,
+body.ps-doc-rtl .ab-breadcrumbs-arrow,
+body.ps-doc-rtl .ab-categories-section .category-card__arrow-icon,
+body.ps-doc-rtl .ps-announce-mc-nav img,
+body.ps-doc-rtl .ps-announce-mc-nav svg,
+body.ps-doc-rtl .ps-footer--sleek .ps-footer-subscribe-btn--icon .ps-palette-icon,
+body.ps-doc-rtl .ps-mobile-nav .ps-arrow-icon,
+body.ps-doc-rtl .ps-mobile-accordion .ps-mobile-pages-arrow {
+  transform: scaleX(-1);
+}
+
+/* Header / collection sort: vertical chevrons — never mirror horizontally */
+html.ps-app-lang-ar .ps-nav-chevron,
+html.ps-app-lang-ar .ps-nav-chevron--pages,
+html.ps-app-lang-ar .ps-cl-sort-arrow,
+html.ps-app-lang-ar .ps-rev-sort-arrow,
+html.ps-app-lang-ar .lq-desc-chevron,
+html.ps-app-lang-ar .ps-header .ps-nav-chevron,
+body.ps-doc-rtl .ps-nav-chevron,
+body.ps-doc-rtl .ps-nav-chevron--pages,
+body.ps-doc-rtl .ps-cl-sort-arrow,
+body.ps-doc-rtl .ps-rev-sort-arrow,
+body.ps-doc-rtl .lq-desc-chevron,
+body.ps-doc-rtl .ps-header .ps-nav-chevron {
+  transform: none !important;
+}
+
+html.ps-app-lang-ar .ps-rev-sort[open] .ps-rev-sort-arrow,
+html.ps-app-lang-ar .ps-cl-sort[open] .ps-cl-sort-arrow,
+body.ps-doc-rtl .ps-rev-sort[open] .ps-rev-sort-arrow,
+body.ps-doc-rtl .ps-cl-sort[open] .ps-cl-sort-arrow {
+  transform: rotate(180deg) !important;
+}
+
+/* Pairs-well row chevron (horizontal) */
+html.ps-app-lang-ar .p_details_container .ab-pd-pairs-well-chevron svg,
+body.ps-doc-rtl .p_details_container .ab-pd-pairs-well-chevron svg {
+  transform: scaleX(-1);
 }
