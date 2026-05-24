@@ -4151,11 +4151,88 @@
     });
   }
 
+  var PRESTIGE_PALETTE_ICON_SELECTOR =
+    ".ps-header img.ps-icon-image," +
+    ".ps-header img.ps-menu-icon," +
+    ".ps-header img.ps-nav-chevron," +
+    ".ps-mobile-menu img.ps-close-icon," +
+    ".ps-mobile-menu img.ps-arrow-icon," +
+    ".ps-mobile-menu img.ps-mobile-pages-arrow," +
+    ".ps-mobile-menu img.ps-mobile-row-icon," +
+    ".ps-footer--sleek img.ps-footer-social-img," +
+    ".ps-footer--sleek img.ps-footer-social-svg," +
+    ".ps-footer--sleek img.ps-footer-acc-svg," +
+    ".ps-footer--sleek .ps-footer-subscribe-btn--icon img";
+
+  function prestigeTintPaletteIcon(img) {
+    if (!img || img.nodeType !== 1 || img.tagName !== "IMG") {
+      return;
+    }
+    if (img.dataset.psPaletteTint === "1") {
+      return;
+    }
+    var src = (img.currentSrc || img.getAttribute("src") || img.src || "").trim();
+    if (!src) {
+      return;
+    }
+
+    var span = document.createElement("span");
+    span.className = (img.className ? img.className + " " : "") + "ps-palette-icon";
+    span.dataset.psPaletteTint = "1";
+
+    var ariaHidden = img.getAttribute("aria-hidden");
+    if (ariaHidden) {
+      span.setAttribute("aria-hidden", ariaHidden);
+    }
+    var ariaLabel = img.getAttribute("aria-label");
+    if (ariaLabel) {
+      span.setAttribute("aria-label", ariaLabel);
+    } else {
+      span.setAttribute("role", "presentation");
+    }
+
+    var w = img.getAttribute("width");
+    var h = img.getAttribute("height");
+    if (w) {
+      span.style.setProperty(
+        "--ps-palette-icon-w",
+        /^\d+$/.test(String(w)) ? w + "px" : w
+      );
+    }
+    if (h) {
+      span.style.setProperty(
+        "--ps-palette-icon-h",
+        /^\d+$/.test(String(h)) ? h + "px" : h
+      );
+    }
+
+    span.style.setProperty(
+      "--ps-palette-icon-url",
+      'url("' + src.replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '")'
+    );
+
+    img.dataset.psPaletteTint = "1";
+    img.replaceWith(span);
+  }
+
+  function initPrestigePaletteIcons(root) {
+    var scope = root && root.querySelectorAll ? root : document;
+    var nodes = scope.querySelectorAll(PRESTIGE_PALETTE_ICON_SELECTOR);
+    for (var i = 0; i < nodes.length; i++) {
+      prestigeTintPaletteIcon(nodes[i]);
+    }
+  }
+
   function runPrestigeDynamicInits() {
     try {
       prestigeInjectThemeFonts();
     } catch (eFonts) {
       prestigeThemeError("theme-fonts-inject-dynamic", eFonts);
+    }
+    try {
+      initPrestigePaletteIcons();
+    } catch (ePaletteIcons) {
+      prestigeThemeError("palette-icons", ePaletteIcons);
     }
     try {
       initEasyOrdersHsCtaLinks();
@@ -4299,6 +4376,7 @@
       initPrestigeSearchRedirect();
       syncPrestigeAnnounceBar();
       initPrestigeMobileMenu();
+      initPrestigePaletteIcons();
     } catch (e) {
       prestigeThemeError("header-menu-init", e);
     }
@@ -4387,6 +4465,7 @@
             el.matches("[data-ps-announce]") ||
             el.matches(".ps-theme") ||
             el.matches(".ps-header") ||
+            el.matches(".ps-footer--sleek") ||
             el.matches("#eo-header") ||
             el.matches("h2.variation_name") ||
             el.matches("[data-liquid-thanks]") ||
@@ -4423,6 +4502,7 @@
             el.querySelector("[data-ps-announce]") ||
             el.querySelector(".ps-theme") ||
             el.querySelector(".ps-header") ||
+            el.querySelector(".ps-footer--sleek") ||
             el.querySelector("#eo-header") ||
             el.querySelector("h2.variation_name") ||
             el.querySelector("[data-liquid-thanks]") ||

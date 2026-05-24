@@ -310,34 +310,10 @@
     "default": "Next categories"
   },
   {
-    "name": "list_products_header_subtitle",
-    "type": "string",
-    "description": "Product list carousel: eyebrow when shop_label is empty.",
-    "default": "Best seller product"
-  },
-  {
-    "name": "list_products_header_title",
-    "type": "string",
-    "description": "Product list carousel: heading when section_title is empty.",
-    "default": "New Arrivals"
-  },
-  {
     "name": "list_products_card_cta_label",
     "type": "string",
     "description": "Product list (split cards): pill text on each card. Replaces storefront “shop” / View All label for this section.",
     "default": "Shop this product"
-  },
-  {
-    "name": "grid_products_header_subtitle",
-    "type": "string",
-    "description": "Home grid (single category): eyebrow when shop_label is empty.",
-    "default": ""
-  },
-  {
-    "name": "grid_products_header_title",
-    "type": "string",
-    "description": "Home grid (single category): heading when section_title is empty.",
-    "default": ""
   },
   {
     "name": "grid_products_view_all_label",
@@ -386,18 +362,6 @@
     "type": "string",
     "description": "Sale badge: word before discount %. Empty uses platform default.",
     "default": "Save"
-  },
-  {
-    "name": "featured_products_header_subtitle",
-    "type": "string",
-    "description": "Featured section: eyebrow when shop_label is empty.",
-    "default": "Shop"
-  },
-  {
-    "name": "featured_products_banner_description",
-    "type": "string",
-    "description": "Featured section: banner paragraph on large screens.",
-    "default": "Discover our handpicked products designed for everyday style and comfort."
   },
   {
     "name": "thanks_title_fallback",
@@ -481,7 +445,7 @@
       {
         "name": "category",
         "type": "string",
-        "description": "Small eyebrow label (e.g. Lipstick)"
+        "description": "Category label on the card (e.g. Lipstick)"
       },
       {
         "name": "price",

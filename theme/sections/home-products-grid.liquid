@@ -8,9 +8,6 @@
     {% assign _pc_choose = theme_data.grid_products_choose_options_label | default: add | default: 'Choose options' | strip %}
   {% endif %}
   {% assign _hp_title = section_title | strip %}
-  {% if _hp_title == blank %}
-    {% assign _hp_title = theme_data.grid_products_header_title | strip %}
-  {% endif %}
   {% assign _hp_show_viewall = false %}
   {% if category and category.slug and hide_view_all != true %}
     {% assign _hp_show_viewall = true %}
