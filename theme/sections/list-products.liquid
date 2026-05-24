@@ -29,7 +29,7 @@
 
   <div class="ps-plist-carousel-col ps-plist-split__slider-col">
     <div class="ps-plist-carousel-track" data-ps-plist-carousel tabindex="0" dir="ltr">
-      {% for product in products limit: 10 %}
+      {% for product in products limit: 8 %}
         {% assign color_variation = product.variations | where: "type", "color" | first %}
         {% assign image_variation = product.variations | where: "type", "image" | first %}
         {% assign hover_image = "" %}
