@@ -61,7 +61,7 @@
 {% assign ps_footer_payment_img = theme_data.footer_payment_custom_image | default: payment_img | default: 'https://files.easy-orders.net/1776682997164347446.webp' %}
 
 <footer
-  class="ps-footer ps-footer--sleek"
+  class="ps-footer ps-footer--sleek ps-sr-scope"
   {% if palette %}
     {% assign pfb = palette.ft_bg %}
     {% assign pft = palette.ft_text %}
@@ -76,7 +76,7 @@
       style="--ps-footer-grid-cols: {{ ps_footer_col_total }}"
       data-footer-cols="{{ ps_footer_col_total }}"
     >
-      <div class="ps-footer-grid__cell ps-footer-grid__cell--newsletter ps-footer-subscribe-col">
+      <div class="ps-footer-grid__cell ps-footer-grid__cell--newsletter ps-footer-subscribe-col" data-anim="fadeInUp" data-seq="0">
         <h3 class="ps-footer-heading ps-footer-heading--lead">{{ ps_footer_title_newsletter }}</h3>
         <p class="ps-footer-newsletter-desc">Subscribe for store updates and discounts.</p>
         <form
@@ -110,7 +110,7 @@
       </div>
 
       {% if categories.size > 0 %}
-        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--quick">
+        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--quick" data-anim="fadeInLeft" data-seq="1">
           <h4 class="ps-footer-heading">{{ ps_footer_title_shop }}</h4>
           <ul class="ps-footer-links">
             {% for cat in categories %}
@@ -120,7 +120,7 @@
         </div>
       {% endif %}
       {% if pages.size > 0 %}
-        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--support">
+        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--support" data-anim="fadeInRight" data-seq="2">
           <h4 class="ps-footer-heading">{{ ps_footer_title_pages }}</h4>
           <ul class="ps-footer-links">
             {% for page in pages %}
@@ -130,7 +130,7 @@
         </div>
       {% endif %}
             {% if has_contact %}
-        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--contact">
+        <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-col ps-footer-col--contact" data-anim="slideInUp" data-seq="3">
           <h4 class="ps-footer-heading">{{ ps_footer_contact_heading }}</h4>
           <div class="ps-footer-contact ps-footer-contact--column">
             {% if phone != "" %}
@@ -154,7 +154,7 @@
           </div>
         </div>
       {% endif %}
-      <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-about-col">
+      <div class="ps-footer-grid__cell ps-footer-grid__cell--desktop ps-footer-about-col" data-anim="fadeInScale" data-seq="4">
         <h4 class="ps-footer-heading">{{ ps_footer_about_title }}</h4>
         <div class="ps-footer-about-body">
           {% if ps_footer_about_text != blank %}
@@ -280,7 +280,7 @@
     </div>
 
     {% assign si_known = "|facebook|instagram|x|linkedin|tiktok|youtube|pinterest|threads|snapchat|whatsapp|telegram|discord|reddit|github|google|vimeo|medium|dribbble|behance|mastodon|twitch|skype|slack|line|wechat|vk|rss|spotify|soundcloud|apple|etsy|shopify|" %}
-    <div class="ps-footer-sleek-bottom{% unless social and social.size > 0 %} ps-footer-sleek-bottom--no-social{% endunless %}">
+    <div class="ps-footer-sleek-bottom{% unless social and social.size > 0 %} ps-footer-sleek-bottom--no-social{% endunless %}" data-ps-no-reveal>
       <div class="ps-footer-pay-slot">
         <div class="ps-footer-payment-wrap" aria-label="Payment methods">
           <span class="ps-footer-payment-item ps-footer-payment-single">

@@ -16,11 +16,11 @@
   %}
 {% endif %}
 
-<section class="ps-related-products ab-plist ab-plist--related">
+<section class="ps-related-products ab-plist ab-plist--related ps-sr-scope">
   <div class="product_container">
     <div class="ab-plist-header">
       {% if section_title %}
-        <h2 class="ab-plist-title ab-reveal">{{ section_title }}</h2>
+        <h2 class="ab-plist-title" data-anim="fadeInDown" data-seq="0">{{ section_title }}</h2>
       {% endif %}
     </div>
 
@@ -84,8 +84,10 @@
 
           <a
             href="/products/{{ product.slug }}"
-            class="ab-plist-card ps-pgrid-card ab-reveal ps-store-card"
-            style="animation-delay: {{ forloop.index | times: 0.04 }}s"
+            class="ab-plist-card ps-pgrid-card ps-store-card"
+            data-anim="cycle"
+            data-cycle="{{ forloop.index0 }}"
+            data-seq="{{ forloop.index0 }}"
           >
             <div class="ps-pgrid-media">
               {% assign _card_custom_badge = product.product_theme_data.custom_badge_title | strip %}

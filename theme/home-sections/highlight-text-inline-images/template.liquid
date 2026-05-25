@@ -20,8 +20,10 @@
 {% assign w_d = section_data.image_width_desktop | default: 220 %}
 {% assign w_m = section_data.image_width_mobile | default: 110 %}
 <section
-  class="ps-hti ps-hti--align-{{ hti_align }}"
+  class="ps-hti ps-hti--align-{{ hti_align }} ps-sr-scope"
   data-ps-highlight-text-inline
+  data-anim="fadeInScale"
+  data-seq="0"
   style="
     --hti-pt: {{ hti_pt }}px;
     --hti-pb: {{ hti_pb }}px;
@@ -36,12 +38,14 @@
   <div class="ps-hti__inner">
     {% capture hti_headline_inner %}
       {% if hti_t1 != blank %}
-        <span class="ps-hti__segment ps-hti__segment--text">{{ section_data.text_1 }}</span>
+        <span class="ps-hti__segment ps-hti__segment--text" data-anim="fadeInUp" data-seq="1">{{ section_data.text_1 }}</span>
       {% endif %}
       {% if hti_i1 != blank %}
         {% if section_data.category_id_1 != blank %}
           <a
             class="ps-hti__pill ps-hti__pill--link"
+            data-anim="zoomIn"
+            data-seq="2"
             href="#"
             data-eo-hs-cta="1"
             data-eo-hs-cta-entity="categories"
@@ -61,12 +65,14 @@
         {% endif %}
       {% endif %}
       {% if hti_t2 != blank %}
-        <span class="ps-hti__segment ps-hti__segment--text">{{ section_data.text_2 }}</span>
+        <span class="ps-hti__segment ps-hti__segment--text" data-anim="fadeInLeft" data-seq="2">{{ section_data.text_2 }}</span>
       {% endif %}
       {% if hti_i2 != blank %}
         {% if section_data.category_id_2 != blank %}
           <a
             class="ps-hti__pill ps-hti__pill--link"
+            data-anim="rotateIn"
+            data-seq="3"
             href="#"
             data-eo-hs-cta="1"
             data-eo-hs-cta-entity="categories"
@@ -86,12 +92,14 @@
         {% endif %}
       {% endif %}
       {% if hti_t3 != blank %}
-        <span class="ps-hti__segment ps-hti__segment--text">{{ section_data.text_3 }}</span>
+        <span class="ps-hti__segment ps-hti__segment--text" data-anim="fadeInRight" data-seq="4">{{ section_data.text_3 }}</span>
       {% endif %}
       {% if hti_i3 != blank %}
         {% if section_data.category_id_3 != blank %}
           <a
             class="ps-hti__pill ps-hti__pill--link"
+            data-anim="bounceIn"
+            data-seq="5"
             href="#"
             data-eo-hs-cta="1"
             data-eo-hs-cta-entity="categories"

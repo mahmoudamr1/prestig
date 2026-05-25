@@ -1,5 +1,5 @@
 <section
-  class="ps-split-duo-hero"
+  class="ps-split-duo-hero ps-sr-scope"
   style="
     --ps-sdh-radius: {{ section_data.shell_radius | default: 28 }}px;
     --ps-sdh-left-bg: {{ section_data.left_bg | default: '#ebe4d8' }};
@@ -13,16 +13,16 @@
     <div class="ps-split-duo-hero__grid">
       <div class="ps-split-duo-hero__copy">
         {% if section_data.kicker != blank %}
-          <p class="ps-split-duo-hero__kicker">{{ section_data.kicker }}</p>
+          <p class="ps-split-duo-hero__kicker" data-anim="fadeInDown" data-seq="0">{{ section_data.kicker }}</p>
         {% endif %}
         {% if section_data.headline != blank %}
-          <h2 class="ps-split-duo-hero__title">{{ section_data.headline }}</h2>
+          <h2 class="ps-split-duo-hero__title" data-anim="fadeInUp" data-seq="1">{{ section_data.headline }}</h2>
         {% endif %}
         {% if section_data.body != blank %}
-          <p class="ps-split-duo-hero__body">{{ section_data.body }}</p>
+          <p class="ps-split-duo-hero__body" data-anim="fadeInLeft" data-seq="2">{{ section_data.body }}</p>
         {% endif %}
         {% if section_data.cta_label != blank %}
-          <a class="ps-split-duo-hero__cta" href="{{ section_data.cta_url | default: '/collections/all' }}">
+          <a class="ps-split-duo-hero__cta" href="{{ section_data.cta_url | default: '/collections/all' }}" data-anim="zoomIn" data-seq="3">
             {{ section_data.cta_label }}
           </a>
         {% endif %}
@@ -30,7 +30,7 @@
 
       <div class="ps-split-duo-hero__visual{% if section_data.show_slider_rail != false %} ps-split-duo-hero__visual--rail{% endif %}">
         {% if section_data.image != blank %}
-          <div class="ps-split-duo-hero__media">
+          <div class="ps-split-duo-hero__media" data-anim="fadeInRight" data-seq="4">
             <img
               class="ps-split-duo-hero__img"
               src="{{ section_data.image }}"

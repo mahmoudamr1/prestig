@@ -1,4 +1,4 @@
-<section class="ps-pgrid-section" data-ps-pgrid>
+<section class="ps-pgrid-section ps-sr-scope" data-ps-pgrid>
   {% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
   {% assign _pc_ch1 = theme_data.product_card_choose_label | default: '' | strip %}
   {% if _pc_ch1 != blank %}
@@ -34,7 +34,7 @@
             {% assign hover_image = product.images[0] %}
           {% endif %}
 
-          <a href="/products/{{ product.slug }}" class="ps-pgrid-card ps-store-card">
+          <a href="/products/{{ product.slug }}" class="ps-pgrid-card ps-store-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             <div class="ps-pgrid-media">
               {% assign _card_custom_badge = product.product_theme_data.custom_badge_title | strip %}
               {% assign _card_on_sale = false %}

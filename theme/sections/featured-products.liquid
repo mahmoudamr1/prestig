@@ -6,15 +6,17 @@
 {% else %}
   {% assign _pc_choose = theme_data.grid_products_choose_options_label | default: add | default: 'Choose options' | strip %}
 {% endif %}
-<section class="ps-featured">
+<section class="ps-featured ps-sr-scope">
   {% if section_title %}
-    <h2 class="ps-featured-section-heading">{{ section_title }}</h2>
+    <h2 class="ps-featured-section-heading" data-anim="fadeInDown" data-seq="0">{{ section_title }}</h2>
   {% endif %}
   <div class="ps-featured-desktop">
     <div class="ps-featured-grid">
       <a
         href="{% if category and category.slug %}/collections/{{ category.slug }}{% else %}#{% endif %}"
         class="ps-featured-banner ps-featured-banner--link ps-featured-hero"
+        data-anim="scaleIn"
+        data-seq="1"
       >
         <img
           class="ps-featured-banner-bg-img"
@@ -49,7 +51,7 @@
         {% elsif hover_image == "" and product.images and product.images.size > 0 and product.images[0] != product.thumb %}
           {% assign hover_image = product.images[0] %}
         {% endif %}
-        <a href="/products/{{ product.slug }}" class="ps-pgrid-card ps-store-card">
+        <a href="/products/{{ product.slug }}" class="ps-pgrid-card ps-store-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
           <div class="ps-pgrid-media">
             {% assign _card_custom_badge = product.product_theme_data.custom_badge_title | strip %}
             {% assign _card_on_sale = false %}

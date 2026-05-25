@@ -1,12 +1,12 @@
-<div class="ab-pd" data-ps-pdp-details>
-  <h1 class="ab-pd-name">{{ product_name }}</h1>
+<div class="ab-pd ps-sr-scope" data-ps-pdp-details>
+  <h1 class="ab-pd-name" data-anim="fadeInUp" data-seq="0">{{ product_name }}</h1>
 
   {% if rating > 0 %}
     {% assign r_stars = rating | plus: 0 %}
     {% if r_stars > 5 %}{% assign r_stars = 5 %}{% endif %}
     {% if r_stars < 0 %}{% assign r_stars = 0 %}{% endif %}
     {% assign rc = reviews_count | default: 0 | plus: 0 %}
-    <div class="ab-pd-rating-row" role="img" aria-label="Rating {{ rating | round: 1 }} out of 5">
+    <div class="ab-pd-rating-row" role="img" aria-label="Rating {{ rating | round: 1 }} out of 5" data-anim="fadeInDown" data-seq="1">
       <div class="ab-pd-stars" aria-hidden="true">
         {% for i in (1..5) %}
           {% assign prev = i | minus: 1 %}
@@ -37,7 +37,7 @@
     </div>
   {% endif %}
 
-  <div class="ab-pd-price-block">
+  <div class="ab-pd-price-block" data-anim="scaleIn" data-seq="2">
     <div class="ab-pd-price-group">
       {% if sale_price and price and sale_price < price %}
         <span class="ab-pd-price ab-pd-price-current">{{ sale_price }} {{ currency }}</span>
@@ -55,7 +55,7 @@
   </div>
 
   {% if description and description != "" %}
-    <p class="ab-pd-description">{{ description }}</p>
+    <p class="ab-pd-description" data-anim="fadeInLeft" data-seq="3">{{ description }}</p>
   {% endif %}
 
   {% assign stock_msg = theme_data.pdp_stock_message | strip %}
@@ -71,7 +71,7 @@
       {% for line in theme_data.pdp_trust_lines %}
         {% assign t = line.text | strip %}
         {% if t != blank %}
-          <li class="ab-pd-trust-item">
+          <li class="ab-pd-trust-item" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             {% if line.icon != blank %}
               <img class="ab-pd-trust-icon" src="{{ line.icon }}" alt="" width="20" height="20" loading="lazy" decoding="async" />
             {% endif %}
@@ -84,8 +84,8 @@
 
   {% if theme_data.pdp_pairs_well and theme_data.pdp_pairs_well.size > 0 %}
     {% assign pwh = theme_data.pdp_pairs_well_heading | strip | default: "Pairs well with" %}
-    <aside class="ab-pd-pairs-well" aria-label="{{ pwh }}">
-      <h2 class="ab-pd-pairs-well-heading">{{ pwh }}</h2>
+    <aside class="ab-pd-pairs-well" aria-label="{{ pwh }}" data-anim="fadeInRight" data-seq="4">
+      <h2 class="ab-pd-pairs-well-heading" data-anim="fadeInDown" data-seq="0">{{ pwh }}</h2>
       <div class="ab-pd-pairs-well-track">
         {% for pair in theme_data.pdp_pairs_well %}
           {% assign pt = pair.title | strip %}
@@ -97,7 +97,7 @@
             {% else %}
               {% assign phref = "/products/" | append: pu %}
             {% endif %}
-            <a href="{{ phref }}" class="ab-pd-pairs-well-card">
+            <a href="{{ phref }}" class="ab-pd-pairs-well-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
               <span class="ab-pd-pairs-well-media">
                 <img src="{{ pim }}" alt="{{ pt }}" loading="lazy" decoding="async" width="100" height="100" />
               </span>

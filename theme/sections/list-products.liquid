@@ -1,4 +1,4 @@
-<section class="ps-plist ps-plist--split-showcase{% if products and products.size > 1 %} ps-plist-split-showcase--nav{% endif %}" data-ps-plist data-ps-plist-split data-ps-plist-showcase>
+<section class="ps-plist ps-plist--split-showcase ps-sr-scope{% if products and products.size > 1 %} ps-plist-split-showcase--nav{% endif %}" data-ps-plist data-ps-plist-split data-ps-plist-showcase>
   {% assign _pc_search = theme_data.product_card_search_icon_url | strip | default: 'https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg' %}
   {% assign _pc_ch1 = theme_data.product_card_choose_label | default: '' | strip %}
   {% if _pc_ch1 != blank %}
@@ -21,7 +21,7 @@
 
   {% if section_title != blank %}
     <div class="ps-plist-split__title-bar">
-      <h2 class="ps-plist-title ps-plist-title--split">{{ section_title }}</h2>
+      <h2 class="ps-plist-title ps-plist-title--split" data-anim="fadeInDown" data-seq="0">{{ section_title }}</h2>
     </div>
   {% elsif products and products.size > 1 %}
     <div class="ps-plist-split__title-bar ps-plist-split__title-bar--empty" aria-hidden="true"></div>
@@ -53,7 +53,7 @@
           {% assign _plist_desc = _plist_desc | truncate: 200, '...' %}
         {% endif %}
 
-        <article class="ps-plist-carousel-slide ps-plist-card ps-plist-card--split ps-store-card" data-ps-plist-card>
+        <article class="ps-plist-carousel-slide ps-plist-card ps-plist-card--split ps-store-card" data-ps-plist-card data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
           <a href="/products/{{ product.slug }}" class="ps-plist-split__card-link" draggable="false">
           <div class="ps-plist-split__thumbnail">
             {% assign _card_custom_badge = product.product_theme_data.custom_badge_title | strip %}

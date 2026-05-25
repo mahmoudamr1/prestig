@@ -56,7 +56,7 @@
   );
   /* Horizontal page gutter — half of Bootstrap `--bs-gutter-x` (see `.content_container` / `.product_container`). */
   --ps-layout-gutter-x: calc(var(--bs-ref-gutter, 1.5rem) * 0.5);
-  /* Fixed header stack (updated by theme/script.js syncPrestigeThemeStack). */
+  /* Pinned header stack heights (theme/script.js syncPrestigeThemeStack, only while scrolled). */
   --ps-announce-h: 0px;
   --ps-header-h: 74px;
 }
@@ -429,14 +429,15 @@ html[lang="ar"] .ps-theme,
   font-family: var(--ps-ff-arabic), var(--ps-ff-primary), sans-serif;
 }
 
-/* In-flow placeholder: fixed announce + fixed header do not consume layout height. */
+/* Placeholder only while the header stack is pinned (scroll); zero at rest — no load shift. */
 .ps-theme-layout-spacer {
   width: 100%;
+  height: 0;
+  min-height: 0;
   flex-shrink: 0;
   pointer-events: none;
   box-sizing: border-box;
-  /* Fallback before JS measures real heights */
-  min-height: calc(var(--ps-announce-h, 0px) + var(--ps-header-h, 74px));
+  overflow: hidden;
 }
 .builder-section-reset .ps-theme-layout-spacer {
   display: none;
@@ -479,8 +480,8 @@ html[lang="ar"] .ps-announce,
   font-feature-settings: "kern" 1;
 }
 
-/* Black announcement strip: pinned to viewport top (whole .ps-theme is no longer fixed). */
-.ps-theme .ps-announce {
+/* Announce + header stay in normal document flow until scroll pins the stack. */
+.ps-theme.ps-header-stack-pinned .ps-announce {
   position: fixed;
   top: 0;
   left: 0;
@@ -524,7 +525,7 @@ html[lang="ar"] .ps-announce,
     letter-spacing: 0.12em;
   }
 
-  .ps-theme .ps-announce {
+  .ps-theme.ps-header-stack-pinned .ps-announce {
     padding-top: max(6px, env(safe-area-inset-top, 0px));
     padding-bottom: 6px;
     padding-left: 14px;
@@ -747,8 +748,8 @@ html[lang="ar"] .ps-announce,
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* .ps-theme .ps-announce already sets fixed positioning, z-index, and safe-area padding. */
-.ps-theme .ps-announce.ps-announce--fixed-shell {
+/* Min height when the announce bar is pinned (.ps-header-stack-pinned). */
+.ps-theme.ps-header-stack-pinned .ps-announce.ps-announce--fixed-shell {
   min-height: calc(40px + env(safe-area-inset-top, 0px));
 }
 
@@ -810,10 +811,10 @@ html[lang="ar"] .ps-announce,
  * ============================================================================ */
 
 .ps-header {
-  position: fixed;
-  top: var(--ps-announce-h, 0px);
-  left: 0;
-  right: 0;
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
   z-index: 42;
   box-sizing: border-box;
   background: transparent;
@@ -830,10 +831,17 @@ html[lang="ar"] .ps-announce,
     backdrop-filter 0.24s ease;
 }
 
+.ps-theme.ps-header-stack-pinned .ps-header {
+  position: fixed;
+  top: var(--ps-announce-h, 0px);
+  left: 0;
+  right: 0;
+}
+
 /*
  * Dawn-like header chrome (theme/theme.css ref: `.header--show-sperator-line` + scrolled shadow).
  * Default: hairline border at rest, no lift shadow. Scrolled: same border + soft shadow.
- * Hero under fixed header (`.ps-slider--under-nav`): flush until scroll — no border/shadow at top.
+ * Hero (`.ps-slider--under-nav`): header is in-flow until scroll; optional flush styles when not scrolled.
  */
 .ps-header:not(.ps-scrolled) {
   background: var(--hd-bg, #fff) !important;
@@ -14871,6 +14879,32 @@ textarea.global_textarea:focus {
   border-top: 1px solid var(--ps-border-e3, #e3e3e3);
   border-bottom: none;
   box-shadow: 0 -4px 24px rgba(16, 16, 16, 0.08);
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.ps-sticky-buy.will-animate,
+.ps-sticky-buy.animated,
+.ps-sticky-buy [class*="anim-"] {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.ps-footer-sleek-bottom,
+.ps-footer-sleek-bottom * {
+  animation: none !important;
+}
+
+.ps-footer-sleek-bottom.will-animate,
+.ps-footer-sleek-bottom.animated,
+.ps-footer-sleek-bottom .will-animate,
+.ps-footer-sleek-bottom .animated,
+.ps-footer-sleek-bottom [class*="anim-"] {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
 }
 
 .ps-sticky-buy .product_container.ps-sticky-buy__container {
@@ -16463,7 +16497,24 @@ body:has(.checkout_order_summary) .ps-footer {
 .ps-theme .ps-rev-carousel-shell,
 .ps-theme .ps-rev-carousel-slot,
 .ps-theme .ps-rev-carousel,
-.ps-theme .psc-compare {
+.ps-theme .psc-compare,
+.ps-theme .shop-the-look,
+.ps-theme .hot-card-carousel,
+.ps-theme .ps-hti-section,
+.ps-theme .editorial-trio,
+.ps-theme .editorial-feature,
+.ps-theme .ab-pd,
+.ps-theme .ab-gallery,
+.ps-theme .ab-plist,
+.ps-theme .ab-breadcrumbs,
+.ps-theme .ab-fake-stock,
+.ps-theme .ab-fake-visitor,
+.ps-theme .ab-fake-counter,
+.ps-theme .ab-pd-fixed-buy,
+.ps-theme .lq-desc-section,
+.ps-theme .ps-thanks-wrap,
+.ps-theme .ps-invoice,
+.ps-theme .category-section-wrapper {
   overflow-x: clip;
   overflow-y: clip;
 }
@@ -16747,6 +16798,35 @@ body:has(.checkout_order_summary) .ps-footer {
     transform: none !important;
     opacity: 1 !important;
   }
+}
+
+/* Merchant toggle: theme_data.enable_theme_animations → #prestige-theme-runtime-config animations */
+html.ps-theme-animations-off .will-animate,
+html.ps-theme-animations-off [data-anim].will-animate {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.ps-theme-animations-off [class*="anim-"],
+html.ps-theme-animations-off .animated[class*="anim-"] {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+html.ps-theme-animations-off .ps-announce-marquee-track {
+  animation: none !important;
+  transform: none !important;
+}
+
+html.ps-theme-animations-off .ps-slider-ind-progress {
+  transform: none !important;
+}
+
+html.ps-theme-animations-off .ps-featured-fadeIn,
+html.ps-theme-animations-off .ab-pd-stock-dot-pulse {
+  animation: none !important;
 }
 
 /* ========== PDP Sleek parity pack ========== */
@@ -17339,9 +17419,7 @@ body.ps-doc-rtl .p_details_container .ab-pd-pairs-well-chevron svg,
   background-image: none !important;
   background-color: var(--buy-btn-bg, var(--ps-ink, #101010)) !important;
   color: var(--buy-btn-text, #fff) !important;
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease !important;
+  transition: opacity 0.2s ease !important;
 }
 
 @media (hover: hover) {
@@ -17350,7 +17428,7 @@ body.ps-doc-rtl .p_details_container .ab-pd-pairs-well-chevron svg,
     opacity: 0.92;
     color: var(--buy-btn-text, #fff) !important;
     border: none !important;
-    transform: translateY(-1px);
+    transform: none;
   }
 }
 

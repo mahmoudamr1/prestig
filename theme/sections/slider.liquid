@@ -11,9 +11,11 @@
 
 {% if hero_slides != blank and hero_slides.size > 0 %}
 <section
-  class="ps-slider ps-slider--under-nav ps-u-w-100 ps-u-relative"
+  class="ps-slider ps-slider--under-nav ps-u-w-100 ps-u-relative ps-sr-scope"
   data-ps-peek-slider
   data-autoplay="3000"
+  data-anim="zoomIn"
+  data-seq="0"
 >
   <div class="ps-slider-viewport ps-u-relative ps-u-w-100 ps-u-overflow-hidden">
     <div class="ps-slider-track ps-u-flex-row">

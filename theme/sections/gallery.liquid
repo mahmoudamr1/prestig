@@ -1,4 +1,4 @@
-<div class="ab-gallery ab-gallery--mix" data-ps-pdp-gallery>
+<div class="ab-gallery ab-gallery--mix ps-sr-scope" data-ps-pdp-gallery>
   {% if images.size > 0 %}
     <div class="ab-gallery-grid-mix" role="list" aria-label="{{ product_name }} images">
       {% for image in images %}
@@ -8,6 +8,9 @@
           type="button"
           role="listitem"
           class="ab-gallery-cell{% if mod3 == 0 %} ab-gallery-cell--span{% endif %}"
+          data-anim="cycle"
+          data-cycle="{{ forloop.index0 }}"
+          data-seq="{{ forloop.index0 }}"
           data-src="{{ image }}"
           data-thumb-index="{{ i0 }}"
           data-gallery-open

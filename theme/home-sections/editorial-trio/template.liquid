@@ -1,17 +1,17 @@
 {% if section_data.cards and section_data.cards.size > 0 %}
-<section class="editorial-trio">
+<section class="editorial-trio ps-sr-scope">
   <div class="editorial-trio__inner">
     {% if section_data.headline != blank %}
-      <h2 class="editorial-trio__headline">{{ section_data.headline }}</h2>
+      <h2 class="editorial-trio__headline" data-anim="fadeInDown" data-seq="0">{{ section_data.headline }}</h2>
     {% endif %}
 
     {% if section_data.subtitle != blank %}
       {% if section_data.subtitle_url != blank %}
-        <a class="editorial-trio__subtitle editorial-trio__subtitle--link" href="{{ section_data.subtitle_url }}">
+        <a class="editorial-trio__subtitle editorial-trio__subtitle--link" href="{{ section_data.subtitle_url }}" data-anim="fadeInUp" data-seq="1">
           {{ section_data.subtitle }}
         </a>
       {% else %}
-        <p class="editorial-trio__subtitle">{{ section_data.subtitle }}</p>
+        <p class="editorial-trio__subtitle" data-anim="fadeInUp" data-seq="1">{{ section_data.subtitle }}</p>
       {% endif %}
     {% endif %}
 
@@ -29,9 +29,9 @@
       {% for card in section_data.cards %}
         {% assign et_label = card.title | default: card.button_label | default: 'Card' %}
         {% if card.button_url != blank %}
-          <a class="editorial-trio__card-link" href="{{ card.button_url }}" aria-label="{{ et_label | escape }}">
+          <a class="editorial-trio__card-link" href="{{ card.button_url }}" aria-label="{{ et_label | escape }}" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
         {% else %}
-          <div class="editorial-trio__card-link editorial-trio__card-link--static" role="group" aria-label="{{ et_label | escape }}">
+          <div class="editorial-trio__card-link editorial-trio__card-link--static" role="group" aria-label="{{ et_label | escape }}" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
         {% endif %}
           <div class="editorial-trio__card{% if card.image == blank %} editorial-trio__card--no-media{% endif %}">
             {% if card.image != blank %}

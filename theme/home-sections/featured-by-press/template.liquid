@@ -8,16 +8,16 @@
     --ps-fp-divider: {{ section_data.divider_color | default: '#e8e8e8' }};
   "
 >
-<section class="ps-featured-press">
+<section class="ps-featured-press ps-sr-scope">
   <div class="ps-featured-press__inner">
     {% if section_data.heading != blank %}
-      <h2 class="ps-featured-press__title">{{ section_data.heading }}</h2>
+      <h2 class="ps-featured-press__title" data-anim="fadeInDown" data-seq="0">{{ section_data.heading }}</h2>
     {% endif %}
 
     <div class="ps-featured-press__track">
       {% for item in section_data.items %}
         {% if item.logo_url != blank or item.quote != blank %}
-          <article class="ps-featured-press__cell">
+          <article class="ps-featured-press__cell" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             {% if item.logo_url != blank %}
               <div class="ps-featured-press__logo-wrap">
                 <img

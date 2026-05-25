@@ -10,7 +10,7 @@
   {% endif %}
   {% assign ct_speed = section_data.marquee_speed | default: 45 %}
 <section
-  class="collection-ticker{% if ct_marquee %} collection-ticker--marquee{% endif %}"
+  class="collection-ticker ps-sr-scope{% if ct_marquee %} collection-ticker--marquee{% endif %}"
   style="
     --ct-bg: {{ section_data.bg_color | default: '#ffffff' }};
     --ct-text: {{ section_data.text_color | default: '#141218' }};
@@ -31,6 +31,9 @@
               {% if item.category_id != blank %}
                 <a
                   class="collection-ticker__item"
+                  data-anim="cycle"
+                  data-cycle="{{ forloop.index0 }}"
+                  data-seq="{{ forloop.index0 }}"
                   href="#"
                   data-eo-hs-cta="1"
                   data-eo-hs-cta-entity="categories"
@@ -46,7 +49,7 @@
                   {% endif %}
                 </a>
               {% else %}
-                <div class="collection-ticker__item collection-ticker__item--static">
+                <div class="collection-ticker__item collection-ticker__item--static" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
                   {% if item.image != blank %}
                     <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
                       <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />
@@ -64,6 +67,9 @@
               {% if item.category_id != blank %}
                 <a
                   class="collection-ticker__item"
+                  data-anim="cycle"
+                  data-cycle="{{ forloop.index0 }}"
+                  data-seq="{{ forloop.index0 }}"
                   href="#"
                   data-eo-hs-cta="1"
                   data-eo-hs-cta-entity="categories"
@@ -79,7 +85,7 @@
                   {% endif %}
                 </a>
               {% else %}
-                <div class="collection-ticker__item collection-ticker__item--static">
+                <div class="collection-ticker__item collection-ticker__item--static" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
                   {% if item.image != blank %}
                     <span class="collection-ticker__thumb collection-ticker__thumb--{{ ct_shape }}">
                       <img src="{{ item.image }}" alt="{{ item.label | default: 'Collection' | escape }}" width="80" height="80" loading="lazy" decoding="async" />

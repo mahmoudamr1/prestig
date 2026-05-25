@@ -3,139 +3,169 @@
     "name": "font_google_families",
     "type": "string",
     "description": "خطوط جوجل للتحميل: أسماء متعددة مفصولة بفاصلة كما في موقع Google Fonts.",
-    "default": "DM Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display, Instrument Sans"
+    "default": "DM Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display, Instrument Sans",
+    "group": "Typography"
   },
   {
     "name": "font_google_weights",
     "type": "string",
     "description": "أوزان الخطوط (للكل): مثل 400;500;600;700",
-    "default": "400;500;600;700"
+    "default": "400;500;600;700",
+    "group": "Typography"
   },
   {
     "name": "font_family_primary",
     "type": "string",
     "description": "النص الأساسي — بدلاً من DM Sans.",
-    "default": "DM Sans"
+    "default": "DM Sans",
+    "group": "Typography"
   },
   {
     "name": "font_family_ui",
     "type": "string",
     "description": "إعلانات وواجهة ضيقة — بدلاً من Manrope.",
-    "default": "Manrope"
+    "default": "Manrope",
+    "group": "Typography"
   },
   {
     "name": "font_family_alt",
     "type": "string",
     "description": "نص ثانوي وتسميات — بدلاً من Nunito.",
-    "default": "Nunito"
+    "default": "Nunito",
+    "group": "Typography"
   },
   {
     "name": "font_family_display",
     "type": "string",
     "description": "عناوين عرض كبيرة — بدلاً من Playfair Display.",
-    "default": "Playfair Display"
+    "default": "Playfair Display",
+    "group": "Typography"
   },
   {
     "name": "font_family_arabic",
     "type": "string",
     "description": "العربية — بدلاً من Almarai. للخطّ الواحد للعربي والإنجليزي اكتب نفس اسم «النص الأساسي».",
-    "default": "Almarai"
+    "default": "Almarai",
+    "group": "Typography"
   },
   {
     "name": "font_family_announce",
     "type": "string",
     "description": "شريط الإعلان (Announcement) — افتراضي DM Sans.",
-    "default": "DM Sans"
+    "default": "DM Sans",
+    "group": "Typography"
+  },
+  {
+    "name": "enable_theme_animations",
+    "type": "boolean",
+    "group": "Theme",
+    "description": "تفعيل حركات وانتقالات الثيم (ظهور عند التمرير، سليدر تلقائي، ماركي الإعلان، إلخ). عطّله لإيقاف كل الأنيميشن دفعة واحدة.",
+    "default": true
   },
   {
     "name": "store_product_card_background",
     "type": "color",
     "description": "خلفية بطاقة المنتج (الشبكة، القائمة، الرئيسية، ذات الصلة) — Store product card background.",
-    "default": "#f7f7f7"
+    "default": "#f7f7f7",
+    "group": "Products"
   },
   {
     "name": "product_card_sale_badge_bg",
     "type": "color",
     "description": "كروت المنتجات: خلفية بادج التخفيض (مثل -20%).",
-    "default": "#e32c2b"
+    "default": "#e32c2b",
+    "group": "Products"
   },
   {
     "name": "product_card_sale_badge_text",
     "type": "color",
     "description": "كروت المنتجات: لون نص بادج التخفيض.",
-    "default": "#ffffff"
+    "default": "#ffffff",
+    "group": "Products"
   },
   {
     "name": "product_card_custom_badge_bg",
     "type": "color",
     "description": "كروت المنتجات: خلفية البادج المخصص (من إعدادات المنتج — مثل New).",
-    "default": "#4fa355"
+    "default": "#4fa355",
+    "group": "Products"
   },
   {
     "name": "product_card_custom_badge_text",
     "type": "color",
     "description": "كروت المنتجات: لون نص البادج المخصص.",
-    "default": "#ffffff"
+    "default": "#ffffff",
+    "group": "Products"
   },
   {
     "name": "header_hamburger_icon",
     "type": "image",
     "description": "Header: mobile menu (hamburger) image URL.",
-    "default": "https://files.easy-orders.net/1777884423237977559hamburger%20icon%20for%20phones%20header%20.svg"
+    "default": "https://files.easy-orders.net/1777884423237977559hamburger%20icon%20for%20phones%20header%20.svg",
+    "group": "Header"
   },
   {
     "name": "header_search_icon",
     "type": "image",
     "description": "Header: search button image URL (desktop + mobile search row).",
-    "default": "https://files.easy-orders.net/1777884423228231659search%20icon%20for%20prduct%20cards%20.svg"
+    "default": "https://files.easy-orders.net/1777884423228231659search%20icon%20for%20prduct%20cards%20.svg",
+    "group": "Header"
   },
   {
     "name": "header_cart_icon",
     "type": "image",
     "description": "Header: cart button image URL.",
-    "default": "https://files.easy-orders.net/1777884423251467919cart.svg"
+    "default": "https://files.easy-orders.net/1777884423251467919cart.svg",
+    "group": "Header"
   },
   {
     "name": "header_close_icon",
     "type": "image",
     "description": "Header: mobile drawer close button image URL.",
-    "default": "https://files.easy-orders.net/1777886670778456461close%20icon.svg"
+    "default": "https://files.easy-orders.net/1777886670778456461close%20icon.svg",
+    "group": "Header"
   },
   {
     "name": "header_nav_chevron_icon",
     "type": "image",
     "description": "Header: chevron image next to menu items that open a dropdown (desktop).",
-    "default": "https://files.easy-orders.net/1777884423218668962arrow%20for%20categories.svg"
+    "default": "https://files.easy-orders.net/1777884423218668962arrow%20for%20categories.svg",
+    "group": "Header"
   },
   {
     "name": "header_pages_menu_label",
     "type": "string",
     "description": "Header: label for the dropdown that lists store pages (editable by merchant).",
-    "default": "Pages"
+    "default": "Pages",
+    "group": "Header"
   },
   {
     "name": "header_pages_chevron_icon",
     "type": "image",
     "description": "Header: arrow next to the Pages label on desktop (hover dropdown).",
-    "default": "https://files.easy-orders.net/1777885936858131198arrow%20down%20.svg"
+    "default": "https://files.easy-orders.net/1777885936858131198arrow%20down%20.svg",
+    "group": "Header"
   },
   {
     "name": "header_pages_mobile_arrow_icon",
     "type": "image",
     "description": "Header: arrow on the Pages row in the mobile drawer (opens submenu on tap).",
-    "default": "https://files.easy-orders.net/1777886349676015118arrow%20right.svg"
+    "default": "https://files.easy-orders.net/1777886349676015118arrow%20right.svg",
+    "group": "Header"
   },
   {
     "name": "header_language_menu_label",
     "type": "string",
     "description": "Header (mobile drawer): عنوان قسم اللغة (مثل Pages).",
-    "default": "Language"
+    "default": "Language",
+    "group": "Header"
   },
   {
     "name": "header_language_fallback_label",
     "type": "string",
     "description": "إذا لم تُضف لغات يدوياً: نص السطر داخل القائمة الفرعية الذي يفتح واجهة اللغة في المنصة.",
-    "default": "Change language"
+    "default": "Change language",
+    "group": "Header"
   },
   {
     "name": "header_language_options",
@@ -152,276 +182,322 @@
         "type": "string",
         "description": "رابط التحويل (مسار كامل أو نسبي)"
       }
-    ]
+    ],
+    "group": "Header"
   },
   {
     "name": "footer_quick_links",
     "type": "string",
     "description": "Footer: column title above categories.",
-    "default": "Shop"
+    "default": "Shop",
+    "group": "Footer"
   },
   {
     "name": "footer_customer_support",
     "type": "string",
     "description": "Footer: column title above pages.",
-    "default": "Pages"
+    "default": "Pages",
+    "group": "Footer"
   },
   {
     "name": "footer_contact_us",
     "type": "string",
     "description": "Footer: column title above contact.",
-    "default": "Contact us"
+    "default": "Contact us",
+    "group": "Footer"
   },
   {
     "name": "footer_phone_label",
     "type": "string",
     "description": "Footer: label above phone.",
-    "default": "Phone"
+    "default": "Phone",
+    "group": "Footer"
   },
   {
     "name": "footer_email_label",
     "type": "string",
     "description": "Footer: label above email.",
-    "default": "Email"
+    "default": "Email",
+    "group": "Footer"
   },
   {
     "name": "footer_address_label",
     "type": "string",
     "description": "Footer: label above address.",
-    "default": "Address"
+    "default": "Address",
+    "group": "Footer"
   },
   {
     "name": "footer_subscribe_emails",
     "type": "string",
     "description": "Footer: newsletter heading.",
-    "default": "Subscribe to Our Newsletter"
+    "default": "Subscribe to Our Newsletter",
+    "group": "Footer"
   },
   {
     "name": "footer_email_placeholder",
     "type": "string",
     "description": "Footer: newsletter input placeholder.",
-    "default": "Enter your email address"
+    "default": "Enter your email address",
+    "group": "Footer"
   },
   {
     "name": "footer_subscribe_newsletter_btn",
     "type": "string",
     "description": "Footer: newsletter button.",
-    "default": "Subscribe to Newsletter"
+    "default": "Subscribe to Newsletter",
+    "group": "Footer"
   },
   {
     "name": "footer_powered_by",
     "type": "string",
     "description": "Footer: text before powered-by link.",
-    "default": "Powered By"
+    "default": "Powered By",
+    "group": "Footer"
   },
   {
     "name": "footer_payment_custom_image",
     "type": "image",
     "description": "Footer: optional payment strip image URL. Empty uses store payment image.",
-    "default": ""
+    "default": "",
+    "group": "Footer"
   },
   {
     "name": "footer_about_title",
     "type": "string",
     "description": "Footer (Sleek): About column heading.",
-    "default": "About"
+    "default": "About",
+    "group": "Footer"
   },
   {
     "name": "footer_about_text",
     "type": "string",
     "description": "Footer (Sleek): About column body copy.",
-    "default": "We only carry designs we believe in ethically and aesthetically – original, authentic pieces that are made to last."
+    "default": "We only carry designs we believe in ethically and aesthetically – original, authentic pieces that are made to last.",
+    "group": "Footer"
   },
   {
     "name": "footer_about_button",
     "type": "string",
     "description": "Footer (Sleek): About column CTA label (e.g. Learn more).",
-    "default": "Learn more"
+    "default": "Learn more",
+    "group": "Footer"
   },
   {
     "name": "footer_about_page_id",
     "type": "page_single_select",
-    "description": "Simple page the CTA opens (link URL is resolved on the storefront)"
+    "description": "Simple page the CTA opens (link URL is resolved on the storefront)",
+    "group": "Footer"
   },
   {
     "name": "reviews_heading_fallback",
     "type": "string",
     "description": "Reviews: section heading fallback.",
-    "default": "All Reviews"
+    "default": "All Reviews",
+    "group": "Reviews"
   },
   {
     "name": "reviews_share_cta_fallback",
     "type": "string",
     "description": "Reviews: write-review button fallback.",
-    "default": "Share your review"
+    "default": "Share your review",
+    "group": "Reviews"
   },
   {
     "name": "reviews_count_word",
     "type": "string",
     "description": "Reviews: word after the count.",
-    "default": "reviews"
+    "default": "reviews",
+    "group": "Reviews"
   },
   {
     "name": "reviews_load_more_label",
     "type": "string",
     "description": "Reviews: load-more button.",
-    "default": "Load more reviews"
+    "default": "Load more reviews",
+    "group": "Reviews"
   },
   {
     "name": "reviews_empty_message",
     "type": "string",
     "description": "Reviews: empty state.",
-    "default": "No reviews yet."
+    "default": "No reviews yet.",
+    "group": "Reviews"
   },
   {
     "name": "reviews_anonymous_name",
     "type": "string",
     "description": "Reviews: name when missing.",
-    "default": "Customer"
+    "default": "Customer",
+    "group": "Reviews"
   },
   {
     "name": "reviews_avatar_placeholder",
     "type": "string",
     "description": "Reviews: avatar letter fallback.",
-    "default": "?"
+    "default": "?",
+    "group": "Reviews"
   },
   {
     "name": "reviews_read_more_label",
     "type": "string",
     "description": "Reviews: expand long text.",
-    "default": "...Read more"
+    "default": "...Read more",
+    "group": "Reviews"
   },
   {
     "name": "reviews_show_less_label",
     "type": "string",
     "description": "Reviews: collapse expanded text.",
-    "default": "Show less"
+    "default": "Show less",
+    "group": "Reviews"
   },
   {
     "name": "categories_header_subtitle",
     "type": "string",
     "description": "Categories section: small eyebrow above the heading (left column). If unset or blank in saved theme data, the default below is shown in the storefront.",
-    "default": "Care For Your Skin"
+    "default": "Care For Your Skin",
+    "group": "Categories"
   },
   {
     "name": "categories_header_title",
     "type": "string",
     "description": "Categories section: main heading (left column). If unset or blank in saved theme data, the default below is shown in the storefront.",
-    "default": "Natural self care products"
+    "default": "Natural self care products",
+    "group": "Categories"
   },
   {
     "name": "categories_section_description",
     "type": "string",
     "description": "Categories showcase: paragraph under the heading (left column). If unset or blank in saved theme data, the default below is shown in the storefront.",
-    "default": "Thoughtfully chosen routines and essentials to care for your skin every day."
+    "default": "Thoughtfully chosen routines and essentials to care for your skin every day.",
+    "group": "Categories"
   },
   {
     "name": "categories_items_label",
     "type": "string",
     "description": "Categories cards: word after the product count (e.g. items / منتجات).",
-    "default": "items"
+    "default": "items",
+    "group": "Categories"
   },
   {
     "name": "categories_carousel_prev_label",
     "type": "string",
     "description": "Categories carousel: aria-label for the previous button (desktop).",
-    "default": "Previous categories"
+    "default": "Previous categories",
+    "group": "Categories"
   },
   {
     "name": "categories_carousel_next_label",
     "type": "string",
     "description": "Categories carousel: aria-label for the next button (desktop).",
-    "default": "Next categories"
+    "default": "Next categories",
+    "group": "Categories"
   },
   {
     "name": "list_products_card_cta_label",
     "type": "string",
     "description": "Product list (split cards): pill text on each card. Replaces storefront “shop” / View All label for this section.",
-    "default": "Shop this product"
+    "default": "Shop this product",
+    "group": "Product list"
   },
   {
     "name": "grid_products_view_all_label",
     "type": "string",
     "description": "شبكة أصناف الرئيسية: نص رابط «عرض الكل» بجانب العنوان. افتراضي: Shop All Products — يمكن تغييره.",
-    "default": "Shop All Products"
+    "default": "Shop All Products",
+    "group": "Home product grid"
   },
   {
     "name": "grid_products_view_all_arrow_url",
     "type": "image",
     "description": "Product grids (home + collection): “view all” / shop_now arrow image URL.",
-    "default": "https://files.easy-orders.net/1773832247629050805.webp"
+    "default": "https://files.easy-orders.net/1773832247629050805.webp",
+    "group": "Home product grid"
   },
   {
     "name": "grid_products_quick_add_icon_url",
     "type": "image",
     "description": "Home grid & filtered collection list: optional quick-add icon image URL. Empty uses built-in SVG plus.",
-    "default": ""
+    "default": "",
+    "group": "Home product grid"
   },
   {
     "name": "grid_products_choose_options_label",
     "type": "string",
     "description": "Product cards (grids, lists, related): quick-add pill label on desktop hover. If unset or blank in saved theme data, the theme falls back to the storefront quick-add string then «Choose options».",
-    "default": "Choose options"
+    "default": "Choose options",
+    "group": "Home product grid"
   },
   {
     "name": "product_card_search_icon_url",
     "type": "image",
     "description": "كروت المنتجات: أيقونة البحث/العرض السريع (شاشات كبيرة عند الهوفر فقط).",
-    "default": "https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg"
+    "default": "https://files.easy-orders.net/1777960580107194333search%20icon%20for%20prduct%20cards%20.svg",
+    "group": "Products"
   },
   {
     "name": "product_card_choose_label",
     "type": "string",
     "description": "كروت المنتجات: نص مخصص لزر التسمية على سطح المكتب (الهوفر) بدل النص الافتراضي. إذا كان فارغاً أو غير محفوظ: يُستخدم grid_products_choose_options_label ثم نص الإضافة السريعة من المنصة ثم «Choose options».",
-    "default": ""
+    "default": "",
+    "group": "Products"
   },
   {
     "name": "product_card_show_swatches",
     "type": "boolean",
     "description": "كروت المنتجات: إظهار دوائر ألوان/صور المتغيرات على الكارت. عطّله لإخفائها.",
-    "default": true
+    "default": true,
+    "group": "Products"
   },
   {
     "name": "sale_badge_label",
     "type": "string",
     "description": "Sale badge: word before discount %. Empty uses platform default.",
-    "default": "Save"
+    "default": "Save",
+    "group": "Products"
   },
   {
     "name": "thanks_title_fallback",
     "type": "string",
     "description": "Thank-you page: heading fallback.",
-    "default": "Thank you!"
+    "default": "Thank you!",
+    "group": "Thank you page"
   },
   {
     "name": "thanks_subtitle_fallback",
     "type": "string",
     "description": "Thank-you page: subtitle fallback.",
-    "default": "Your order has been received."
+    "default": "Your order has been received.",
+    "group": "Thank you page"
   },
   {
     "name": "thanks_confirmation_prefix",
     "type": "string",
     "description": "Thank-you page: text before customer email.",
-    "default": "The order confirmation has been sent to"
+    "default": "The order confirmation has been sent to",
+    "group": "Thank you page"
   },
   {
     "name": "pdp_shipping_note",
     "type": "string",
     "description": "PDP: optional line under price (e.g. Shipping calculated at checkout). Empty hides.",
-    "default": ""
+    "default": "",
+    "group": "Product page"
   },
   {
     "name": "pdp_stock_message",
     "type": "string",
     "description": "PDP: optional inventory line under short description (merchant-written). Empty hides.",
-    "default": ""
+    "default": "",
+    "group": "Product page"
   },
   {
     "name": "pdp_stock_pulse",
     "type": "boolean",
     "description": "PDP: show animated green dot before pdp_stock_message.",
-    "default": true
+    "default": true,
+    "group": "Product page"
   },
   {
     "name": "pdp_trust_lines",
@@ -438,13 +514,15 @@
         "type": "string",
         "description": "Line copy next to the icon."
       }
-    ]
+    ],
+    "group": "Product page"
   },
   {
     "name": "pdp_pairs_well_heading",
     "type": "string",
     "description": "PDP: heading above manual cross-sell cards.",
-    "default": "Pairs well with"
+    "default": "Pairs well with",
+    "group": "Product page"
   },
   {
     "name": "pdp_pairs_well",
@@ -476,6 +554,7 @@
         "type": "string",
         "description": "Display price text (e.g. $39.00)"
       }
-    ]
+    ],
+    "group": "Product page"
   }
 ]

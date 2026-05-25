@@ -1,6 +1,6 @@
 {% if section_data.reviews and section_data.reviews.size > 0 %}
 <div
-  class="ps-rev-carousel-shell"
+  class="ps-rev-carousel-shell ps-sr-scope"
   style="
     --ps-rc-heading: {{ section_data.heading_color | default: '#111111' }};
     --ps-rc-radius: {{ section_data.card_radius | default: 18 }}px;
@@ -13,11 +13,11 @@
   data-ps-rev-showcase
 >
   <div class="ps-rev-carousel__inner">
-    <div class="ps-rev-carousel__head">
+    <div class="ps-rev-carousel__head" data-anim="fadeInDown" data-seq="0">
       {% if section_data.heading != blank %}
-        <h2 class="ps-rev-carousel__title">{{ section_data.heading }}</h2>
+        <h2 class="ps-rev-carousel__title" data-anim="fadeInUp" data-seq="1">{{ section_data.heading }}</h2>
       {% endif %}
-      <div class="ps-rev-carousel__nav" aria-label="{{ section_data.heading | default: 'Reviews' }}">
+      <div class="ps-rev-carousel__nav" aria-label="{{ section_data.heading | default: 'Reviews' }}" data-anim="fadeInLeft" data-seq="2">
         <button
           type="button"
           class="ps-rev-carousel__btn ps-rev-carousel__btn--prev"
@@ -88,7 +88,7 @@
               {% assign rc_show_product = true %}
             {% endif %}
           {% endif %}
-          <article class="ps-rev-carousel__card">
+          <article class="ps-rev-carousel__card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             {% if rev.photo_url != blank %}
               <div class="ps-rev-carousel__media">
                 <img

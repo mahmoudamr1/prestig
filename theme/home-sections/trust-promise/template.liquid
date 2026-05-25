@@ -1,11 +1,11 @@
 <section
-  class="trust-promise trust-promise--{{ section_data.style | default: 'soft' }}"
+  class="trust-promise trust-promise--{{ section_data.style | default: 'soft' }} ps-sr-scope"
   style="--tp-accent: {{ section_data.accent_color | default: '#C9A962' }};"
 >
   {% if section_data.promises and section_data.promises.size > 0 %}
     <div class="trust-promise__row">
       {% for item in section_data.promises %}
-        <div class="trust-promise__item">
+        <div class="trust-promise__item" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
           <div class="trust-promise__icon-wrap" aria-hidden="true">
             {% if item.icon != blank %}
               <img class="trust-promise__icon" src="{{ item.icon }}" alt="" width="36" height="36" loading="lazy" />

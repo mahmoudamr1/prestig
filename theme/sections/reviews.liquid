@@ -1,17 +1,17 @@
 <section
-  class="ps-rev-section"
+  class="ps-rev-section ps-sr-scope"
   data-ps-reviews
   data-reviews-read-more="{{ theme_data.reviews_read_more_label | escape }}"
   data-reviews-show-less="{{ theme_data.reviews_show_less_label | escape }}"
 >
   <div class="ps-rev-inner product_container">
     {% if reviews and reviews.size > 0 %}
-      <div class="ps-rev-head">
+      <div class="ps-rev-head" data-anim="fadeInDown" data-seq="0">
         <h2 class="ps-rev-title">
           <span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span>
           <span class="ps-rev-title-count">({{ reviews_count_display | default: reviews_count | default: reviews.size }})</span>
         </h2>
-        <div class="ps-rev-head-actions">
+        <div class="ps-rev-head-actions" data-anim="fadeInLeft" data-seq="1">
           <button
             type="button"
             class="ps-rev-write-btn"
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div class="ps-rev-summary">
+      <div class="ps-rev-summary" data-anim="fadeInUp" data-seq="2">
         {% assign ps_rev_use_backend_rows = false %}
         {% if rating_rows and rating_rows.size > 0 %}
           {% assign ps_rev_use_backend_rows = true %}
@@ -146,7 +146,7 @@
 
       <div class="ps-rev-grid">
         {% for review in reviews %}
-          <article class="ps-rev-card">
+          <article class="ps-rev-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             <div class="ps-rev-card-head">
               <span class="ps-rev-avatar ps-rev-avatar-fallback" aria-hidden="true">
                 {{ review.avatar_initial | default: review.user_name | default: review.name | slice: 0, 1 | default: theme_data.reviews_avatar_placeholder }}
@@ -223,7 +223,7 @@
 
     {% else %}
 
-      <div class="ps-rev-empty-state">
+      <div class="ps-rev-empty-state" data-anim="fadeInScale" data-seq="0">
         <h2 class="ps-rev-title">
           <span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span>
         </h2>

@@ -1,6 +1,6 @@
 {% if section_data.badges and section_data.badges.size > 0 %}
 <section
-  class="ps-trust-pills"
+  class="ps-trust-pills ps-sr-scope"
   style="
     --ps-tp-bg: {{ section_data.bg_color | default: '#ffffff' }};
     --ps-tp-pill-bg: {{ section_data.pill_bg | default: '#ffffff' }};
@@ -14,7 +14,7 @@
     <div class="ps-trust-pills__row" role="list">
       {% for badge in section_data.badges %}
         {% if badge.label != blank %}
-          <div class="ps-trust-pills__cell" role="listitem">
+          <div class="ps-trust-pills__cell" role="listitem" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             {% if badge.link_url != blank %}
               <a class="ps-trust-pills__pill" href="{{ badge.link_url }}">
                 <span class="ps-trust-pills__check" aria-hidden="true">

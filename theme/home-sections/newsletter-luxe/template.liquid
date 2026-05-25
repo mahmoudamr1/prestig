@@ -1,5 +1,5 @@
 <section
-  class="newsletter-luxe"
+  class="newsletter-luxe ps-sr-scope"
   style="
     background: {{ section_data.bg_color | default: '#1A1814' }};
     color: {{ section_data.text_color | default: '#F4EEE6' }};
@@ -8,14 +8,16 @@
 >
   <div class="newsletter-luxe__inner">
     {% if section_data.headline != blank %}
-      <h2 class="newsletter-luxe__title">{{ section_data.headline }}</h2>
+      <h2 class="newsletter-luxe__title" data-anim="fadeInDown" data-seq="0">{{ section_data.headline }}</h2>
     {% endif %}
     {% if section_data.body != blank %}
-      <p class="newsletter-luxe__body">{{ section_data.body }}</p>
+      <p class="newsletter-luxe__body" data-anim="fadeInUp" data-seq="1">{{ section_data.body }}</p>
     {% endif %}
 
     <form
       class="newsletter-luxe__form"
+      data-anim="fadeInScale"
+      data-seq="2"
       novalidate
       onsubmit="
         event.preventDefault();

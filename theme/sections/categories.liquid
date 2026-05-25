@@ -11,15 +11,15 @@
   <div class="category-section-inner">
     <div class="category-info-col">
       {% if _cat_kicker != blank %}
-        <p class="category-info-col__kicker">{{ _cat_kicker }}</p>
+        <p class="category-info-col__kicker" data-anim="fadeInDown" data-seq="0">{{ _cat_kicker }}</p>
       {% endif %}
       {% if _cat_heading != blank %}
-        <h2 class="category-info-col__title">{{ _cat_heading }}</h2>
+        <h2 class="category-info-col__title" data-anim="fadeInUp" data-seq="1">{{ _cat_heading }}</h2>
       {% endif %}
       {% if _cat_desc != blank %}
-        <p class="category-info-col__desc">{{ _cat_desc }}</p>
+        <p class="category-info-col__desc" data-anim="fadeInLeft" data-seq="2">{{ _cat_desc }}</p>
       {% endif %}
-      <div class="category-info-col__nav">
+      <div class="category-info-col__nav" data-anim="fadeInRight" data-seq="3">
         <button
           type="button"
           class="category-carousel-btn category-carousel-btn--prev"
@@ -49,7 +49,7 @@
         tabindex="0"
       >
         {% for category in categories %}
-          <article class="category-card">
+          <article class="category-card" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 }}">
             <a class="category-card__link" href="/collections/{{ category.slug }}">
               <div class="category-card__media">
                 <img

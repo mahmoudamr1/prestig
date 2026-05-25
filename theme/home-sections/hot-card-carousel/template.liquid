@@ -18,7 +18,7 @@
 {% assign hcc_cta_bg = section_data.cta_bg | default: '#111111' %}
 {% assign hcc_cta_text = section_data.cta_text_color | default: '#ffffff' %}
 <section
-  class="ps-hot-cards ps-hot-cards--slider"
+  class="ps-hot-cards ps-hot-cards--slider ps-sr-scope"
   data-ps-hot-cards
   style="
     padding-top: {{ hcc_pt }}px;
@@ -39,7 +39,7 @@
   <div class="ps-hot-cards__shell">
     <header class="ps-hot-cards__head">
       {% if section_data.heading != blank %}
-        <h2 class="ps-hot-cards__section-title">{{ section_data.heading }}</h2>
+        <h2 class="ps-hot-cards__section-title" data-anim="fadeInDown" data-seq="0">{{ section_data.heading }}</h2>
       {% endif %}
       {% if hcc_visible_count > 1 %}
         <div class="ps-hot-cards__arrows" aria-hidden="false">
@@ -80,7 +80,7 @@
         {% for slide in hcc_slides %}
           {% if slide.image != blank %}
             {% assign hcc_href = slide.link_url | strip | default: '/collections/all' %}
-            <article class="ps-hot-cards__slide" data-ps-hot-cards-slide data-index="{{ hcc_si }}">
+            <article class="ps-hot-cards__slide" data-ps-hot-cards-slide data-index="{{ hcc_si }}" data-anim="cycle" data-cycle="{{ hcc_si }}" data-seq="{{ hcc_si }}">
               <a href="{{ hcc_href }}" class="ps-hot-cards__card-link" aria-label="{{ slide.title | default: slide.cta_label | default: 'Shop' | escape }}">
                 <div
                   class="ps-hot-cards__card"

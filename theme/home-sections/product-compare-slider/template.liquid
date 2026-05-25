@@ -1,5 +1,5 @@
 <section
-  class="psc-compare"
+  class="psc-compare ps-sr-scope"
   data-psc-split="{{ section_data.initial_split_percent | default: 50 }}"
   style="
     --psc-split: {{ section_data.initial_split_percent | default: 50 }};
@@ -10,17 +10,19 @@
 >
   {% assign _ar = section_data.aspect_ratio_desktop | default: 'cinematic' %}
   <div class="psc-compare__shell psc-compare__shell--aspect-{{ _ar }}">
-    <header class="psc-compare__header">
+    <header class="psc-compare__header" data-anim="fadeInDown" data-seq="0">
       {% if section_data.eyebrow != blank %}
-        <p class="psc-compare__eyebrow">{{ section_data.eyebrow }}</p>
+        <p class="psc-compare__eyebrow" data-anim="fadeInUp" data-seq="1">{{ section_data.eyebrow }}</p>
       {% endif %}
       {% if section_data.heading != blank %}
-        <h2 class="psc-compare__heading">{{ section_data.heading }}</h2>
+        <h2 class="psc-compare__heading" data-anim="fadeInLeft" data-seq="2">{{ section_data.heading }}</h2>
       {% endif %}
     </header>
 
     <div
       class="psc-compare__viewport"
+      data-anim="slideInUp"
+      data-seq="3"
       tabindex="0"
       role="group"
       aria-label="{{ section_data.heading | default: 'Product comparison' }}"

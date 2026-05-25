@@ -1,5 +1,5 @@
 <section
-  class="newsletter-immersive newsletter-immersive--h-{{ section_data.min_height | default: 'comfortable' }}"
+  class="newsletter-immersive newsletter-immersive--h-{{ section_data.min_height | default: 'comfortable' }} ps-sr-scope"
   style="
     --ni-text: {{ section_data.text_color | default: '#FFFFFF' }};
     --ni-btn-bg: {{ section_data.button_bg | default: '#FFFFFF' }};
@@ -15,13 +15,13 @@
 
   <div class="newsletter-immersive__inner">
     {% if section_data.kicker != blank %}
-      <p class="newsletter-immersive__kicker">{{ section_data.kicker }}</p>
+      <p class="newsletter-immersive__kicker" data-anim="fadeInDown" data-seq="0">{{ section_data.kicker }}</p>
     {% endif %}
     {% if section_data.headline != blank %}
-      <h2 class="newsletter-immersive__title">{{ section_data.headline }}</h2>
+      <h2 class="newsletter-immersive__title" data-anim="fadeInUp" data-seq="1">{{ section_data.headline }}</h2>
     {% endif %}
     {% if section_data.body != blank %}
-      <p class="newsletter-immersive__body">{{ section_data.body }}</p>
+      <p class="newsletter-immersive__body" data-anim="fadeInLeft" data-seq="2">{{ section_data.body }}</p>
     {% endif %}
 
     {%- comment -%}
@@ -29,6 +29,8 @@
     {%- endcomment -%}
     <form
       class="newsletter-immersive__form"
+      data-anim="zoomIn"
+      data-seq="3"
       action="{{ section_data.form_action | default: '/pages/contact' }}"
       method="get"
     >
