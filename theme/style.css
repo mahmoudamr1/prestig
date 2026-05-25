@@ -13145,11 +13145,12 @@ h2.variation_name .ps-variation-name-value {
   box-shadow: none !important;
 }
 
-/* PDP: image / thumbnail variant chips (e.g. Style) — Sleek-like rounded tile + ring when selected */
+/* PDP: image / thumbnail variant chips (e.g. Style) — fixed width, natural height */
 .p_details_container .button_variation:has(img) {
-  min-width: 3.25rem;
-  width: 3.25rem;
-  height: 3.25rem;
+  min-width: 5rem;
+  width: 5rem;
+  height: auto;
+  min-height: 0;
   padding: 0.2rem !important;
   border-radius: var(--medium-blocks-radius, 1rem) !important;
   overflow: hidden;
@@ -13158,9 +13159,29 @@ h2.variation_name .ps-variation-name-value {
 .p_details_container .button_variation:has(img) img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
   border-radius: var(--small-blocks-radius, 0.6rem);
+}
+
+/* PDP: platform image radiogroup (Headless UI) — same: fixed width, height auto */
+.p_details_container [id^="headlessui-radiogroup-option"] > div:has(img),
+.p_details_container [id^="headlessui-radiogroup-option"] div.relative.overflow-hidden {
+  width: 5rem !important;
+  height: auto !important;
+  min-height: 0;
+  max-height: none;
+}
+
+.p_details_container [id^="headlessui-radiogroup-option"] img {
+  display: block;
+  width: 5rem !important;
+  height: auto !important;
+  max-width: 100%;
+  object-fit: contain !important;
+  object-position: center;
 }
 
 .p_details_container .button_variation_checked:has(img),
@@ -15363,11 +15384,18 @@ textarea.global_textarea:focus {
   }
 
   .p_details_container .button_variation:has(img) {
-    width: 52px;
-    height: 52px;
-    min-width: 52px;
+    width: 5rem;
+    min-width: 5rem;
+    height: auto;
     padding: 3px !important;
     border-radius: 12px !important;
+  }
+
+  .p_details_container [id^="headlessui-radiogroup-option"] > div:has(img),
+  .p_details_container [id^="headlessui-radiogroup-option"] div.relative.overflow-hidden,
+  .p_details_container [id^="headlessui-radiogroup-option"] img {
+    width: 70px !important;
+    height: auto !important;
   }
 }
 
