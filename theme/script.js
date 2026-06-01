@@ -1704,7 +1704,7 @@
 
       var scrollT = null;
       function onSliderScroll() {
-        if (!slider || window.innerWidth > 768) return;
+        if (!slider || isStackLayout()) return;
         if (scrollT) clearTimeout(scrollT);
         scrollT = setTimeout(function () {
           scrollT = null;
@@ -1733,7 +1733,7 @@
 
       window.addEventListener("resize", function () {
         bindStackObserver();
-        if (slider && window.innerWidth <= 768) {
+        if (slider && !isStackLayout()) {
           var idx = getActiveMediaIndex();
           scrollSliderToIndex(idx, true);
         }
@@ -1825,7 +1825,7 @@
         requestAnimationFrame(function () {
           bindStackObserver();
           var ri = getActiveMediaIndex();
-          if (slider && window.innerWidth <= 768 && slides.length) {
+          if (slider && !isStackLayout() && slides.length) {
             scrollSliderToIndex(ri, true);
             syncDots(ri);
             syncSlideCounter(ri);

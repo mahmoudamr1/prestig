@@ -203,20 +203,6 @@
     "default": "Show less"
   },
   {
-    "name": "categories_header_subtitle",
-    "type": "string",
-    "group": "Categories",
-    "description": "Categories section: small uppercase eyebrow above the grid (Figma kicker). Leave empty to hide.",
-    "default": "best seller collections"
-  },
-  {
-    "name": "categories_header_title",
-    "type": "string",
-    "group": "Categories",
-    "description": "Categories section: main heading above the grid. Leave empty to hide.",
-    "default": "Shop by Category"
-  },
-  {
     "name": "list_products_header_subtitle",
     "type": "string",
     "group": "Product list",
