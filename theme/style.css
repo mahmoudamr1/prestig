@@ -668,16 +668,16 @@ html[lang="ar"] .ps-theme,
   box-sizing: border-box;
 }
 
-#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div,
-#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div[class*="mt-4"],
-#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div[class*="mt-6"],
-#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div[class*="md:mt-6"] {
+#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div:not(.bundles_item *),
+#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div[class*="mt-4"]:not(.bundles_item *),
+#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div[class*="mt-6"]:not(.bundles_item *),
+#product-id .p_details_container form:not(.product_form_checkout):not(.checkout_container) > div[class*="md:mt-6"]:not(.bundles_item *) {
   margin: 0 !important;
   padding: 0 !important;
 }
 
-#product-id .p_details_container div:has(.variation_name):has(:is(.color_variation, .button_variation, .image_variation)),
-#product-id .p_details_container form:not(.product_form_checkout) > div:has(:is(.color_variation, .button_variation)) {
+#product-id .p_details_container div:has(.variation_name):has(:is(.color_variation, .button_variation, .image_variation)):not(.bundles_item *),
+#product-id .p_details_container form:not(.product_form_checkout) > div:has(:is(.color_variation, .button_variation)):not(.bundles_item *) {
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -922,11 +922,12 @@ html[lang="ar"] .ps-theme,
   }
 }
 
-.p_details_container .bundles_container {
+.p_details_container .bundles_container,
+[data-product-preview="details"] .bundles_container {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -953,7 +954,9 @@ html[lang="ar"] .ps-theme,
   max-width: 100%;
 }
 
-.p_details_container .bundles_item {
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item,
+.p_details_container .bundles_item,
+[data-product-preview="details"] .bundles_item {
   position: relative;
   display: flex !important;
   flex-direction: column !important;
@@ -961,7 +964,12 @@ html[lang="ar"] .ps-theme,
   width: 100% !important;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 35px 12px 20px 12px !important;
+  padding-top: 16px !important;
+  padding-bottom: 20px !important;
+  padding-inline-start: 24px !important;
+  padding-inline-end: 24px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
   margin-bottom: 0 !important;
   background: var(--ps-surface, #fff) !important;
   border: 1px solid var(--ps-border-lavender, #e5e5ef) !important;
@@ -969,11 +977,25 @@ html[lang="ar"] .ps-theme,
   border-radius: 2px !important;
   box-shadow: none !important;
   cursor: pointer;
-  gap: 0;
+  gap: 0 !important;
+  overflow: hidden;
 }
 
-.p_details_container .bundles_item.mb-4 {
-  margin-bottom: 14px !important;
+/* Active / expanded bundle */
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item:has(> div:not(.absolute) > div.border-skin-primary),
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item:has(> div:not(.absolute) > div.border-skin-primary) {
+  padding-top: 18px !important;
+  padding-bottom: 28px !important;
+  padding-inline-start: 24px !important;
+  padding-inline-end: 24px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  gap: 0 !important;
+}
+
+.p_details_container .bundles_item.mb-4,
+[data-product-preview="details"] .bundles_item.mb-4 {
+  margin-bottom: 12px !important;
 }
 
 .p_details_container .bundles_item:last-of-type.mb-4,
@@ -981,69 +1003,79 @@ html[lang="ar"] .ps-theme,
   margin-bottom: 0 !important;
 }
 
-.p_details_container .bundles_item[class*="border-skin-primary"],
 .p_details_container .bundles_item.border-gray-400 {
   border-color: var(--ps-border-lavender, #e5e5ef) !important;
   border-width: 1px !important;
 }
 
-.p_details_container .bundles_item>div.absolute {
+.p_details_container .bundles_item>div.absolute,
+[data-product-preview="details"] .bundles_item>div.absolute {
   position: absolute !important;
-  top: -1px !important;
-  right: -1px !important;
-  left: auto !important;
+  top: 0 !important;
+  inset-inline-end: 0 !important;
+  inset-inline-start: auto !important;
   margin: 0 !important;
-  z-index: 3;
+  padding: 0 !important;
+  max-width: none;
+  width: auto;
+  z-index: 2;
   transform: none;
+  pointer-events: none;
 }
 
-[dir="rtl"] .p_details_container .bundles_item>div.absolute {
-  right: auto !important;
-  left: -1px !important;
+.p_details_container .bundles_item>div.absolute .bundles_label,
+[data-product-preview="details"] .bundles_item>div.absolute .bundles_label {
+  pointer-events: auto;
 }
 
-.p_details_container .bundles_label {
+.p_details_container .bundles_label,
+[data-product-preview="details"] .bundles_label {
   position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-height: 22px;
-  padding: 6px 12px !important;
-  background: #f33 !important;
+  min-height: 28px;
+  padding: 7px 14px !important;
+  background: #ff3333 !important;
   color: var(--ps-surface, #fff) !important;
-  font-family: "SF Mono", ui-monospace, monospace !important;
-  font-size: 13px !important;
+  font-family: var(--ps-ff-primary), sans-serif !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
-  line-height: 1.4 !important;
-  letter-spacing: 0.02em;
+  line-height: 1.35 !important;
+  letter-spacing: 0;
   border-radius: 0 !important;
   text-align: center;
+  white-space: nowrap;
 }
 
 .p_details_container .bundles_label>div.absolute {
   display: none !important;
 }
 
-.p_details_container .bundles_item .radio_container {
+.p_details_container .bundles_item .radio_container,
+[data-product-preview="details"] .bundles_item .radio_container {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 13px !important;
-  height: 13px !important;
-  min-width: 13px !important;
-  min-height: 13px !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  margin: 0 !important;
   padding: 0 !important;
   border: 1px solid var(--ps-border-lavender, #e5e5ef) !important;
   border-radius: 50% !important;
   background: var(--ps-surface, #fff) !important;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
-.p_details_container .bundles_item .radio_circle {
-  width: 7px !important;
-  height: 7px !important;
-  min-width: 7px !important;
-  min-height: 7px !important;
+.p_details_container .bundles_item .radio_circle,
+[data-product-preview="details"] .bundles_item .radio_circle {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
   border-radius: 50% !important;
   background: transparent !important;
   transition: background-color var(--animation-values-slow);
@@ -1054,12 +1086,13 @@ html[lang="ar"] .ps-theme,
   background: var(--ps-ink-secondary, #1c1c1c) !important;
 }
 
-.p_details_container .bundles_item p.text-xl {
+.p_details_container .bundles_item p.text-xl,
+[data-product-preview="details"] .bundles_item p.text-xl {
   font-family: var(--ps-ff-primary), sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  line-height: 1.5 !important;
-  color: var(--ps-ink-secondary, #1c1c1c) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: var(--ps-ink, #101010) !important;
   margin: 0 !important;
 }
 
@@ -1153,6 +1186,213 @@ h2.variation_name .ps-variation-name-value {
   line-height: 1.4 !important;
   margin-top: 0 !important;
   text-transform: none !important;
+}
+
+/* Bundles — header grid like reference (offer left, prices under red tab right) */
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "offer prices";
+  align-items: stretch !important;
+  column-gap: clamp(20px, 6vw, 56px) !important;
+  row-gap: 0 !important;
+  width: 100%;
+  min-height: 72px;
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-inline-end: 0 !important;
+  flex-wrap: nowrap !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-1 {
+  grid-area: offer;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-start !important;
+  align-content: flex-start !important;
+  align-self: center !important;
+  gap: 8px !important;
+  min-width: 0;
+  max-width: 100%;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-1 .relative.flex.items-center {
+  display: inline-flex !important;
+  flex: 0 1 auto;
+  gap: 12px !important;
+  align-items: center !important;
+  min-width: 0;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-1 p.text-xl.ms-4 {
+  margin-inline-start: 0 !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-1 > p.w-fit.text-xs {
+  flex: 0 0 auto;
+  margin: 0 !important;
+  margin-inline-start: 34px !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-col.items-center {
+  grid-area: prices;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-start !important;
+  align-self: stretch !important;
+  justify-content: flex-end !important;
+  gap: 18px 28px !important;
+  width: auto !important;
+  max-width: 100%;
+  margin: 0 !important;
+  padding: 30px 0 0 !important;
+  text-align: start;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-col.items-center > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-col.items-center > div > p:first-child {
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-col.items-center > div > p:last-child {
+  margin: 0 !important;
+}
+
+/* Expanded body — full width under header (active card) */
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div:not(.absolute):has(> div.border-skin-primary) {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  width: 100%;
+  margin: 20px 0 0 !important;
+  padding: 20px 0 8px !important;
+  border-top: 1px solid var(--ps-border-lavender, #e5e5ef);
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div:not(.absolute) > div.border-skin-primary {
+  margin: 0 !important;
+  padding: 8px 0 12px !important;
+  border-color: var(--ps-border-lavender, #e5e5ef) !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div:not(.absolute) > div.border-skin-primary.border-b {
+  padding-top: 4px !important;
+  padding-bottom: 22px !important;
+  margin-bottom: 22px !important;
+  border-bottom-width: 1px !important;
+  border-bottom-style: solid !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item > div:not(.absolute) > div.border-skin-primary:last-child {
+  padding-top: 4px !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 0 !important;
+  border-bottom: none !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item:has(> div:not(.absolute) > div.border-skin-primary) > div.flex.gap-2:first-of-type {
+  min-height: 84px;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item .border-skin-primary > p.font-bold.text-black,
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item .border-skin-primary > p.font-bold[class*="-mb-"] {
+  margin: 0 0 12px !important;
+  padding-top: 12px !important;
+  line-height: 1.4 !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item [class*="col-span-5"] {
+  margin: 0 !important;
+  padding: 4px 0 8px !important;
+}
+
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item form:not(.product_form_checkout) > div,
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item form:not(.product_form_checkout) > div[class*="mt-4"],
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item form:not(.product_form_checkout) > div[class*="mt-6"],
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item div:has(.variation_name):has(:is(.color_variation, .button_variation, .image_variation)) {
+  margin: 14px 0 0 !important;
+  padding: 0 0 4px !important;
+}
+
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item form:not(.product_form_checkout) > div:first-child,
+#product-id :is(.p_details_container, [data-product-preview="details"]) .bundles_item div:has(.variation_name):has(:is(.color_variation, .button_variation, .image_variation)):first-of-type {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item:has(> div:not(.absolute) > div.border-skin-primary) h2.variation_name.text-base {
+  margin: 0 0 6px !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item h2.variation_name + div[class*="mt-3"],
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item .flex.items-center.justify-between + div[class*="mt-2"] {
+  margin-top: 0 !important;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item .button_variations_container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  width: 100%;
+  max-width: 100%;
+}
+
+:is(.p_details_container, [data-product-preview="details"]) .bundles_item .flex.flex-wrap.items-center.gap-3 {
+  gap: 10px !important;
+}
+
+/* Beat platform Tailwind p-3 / !pt-7 on bundle cards */
+#product-id .p_details_container .bundles_container > .bundles_item.bundles_item,
+#product-id .p_details_container .bundles_item.bundles_item.mb-4 {
+  padding-inline-start: 24px !important;
+  padding-inline-end: 24px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+#product-id .p_details_container .bundles_container > .bundles_item.bundles_item > *:not(.absolute) {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 479px) {
+  #product-id .p_details_container .bundles_container > .bundles_item.bundles_item,
+  :is(.p_details_container, [data-product-preview="details"]) .bundles_item {
+    padding-top: 14px !important;
+    padding-bottom: 16px !important;
+    padding-inline-start: 18px !important;
+    padding-inline-end: 18px !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  :is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "offer"
+      "prices";
+    row-gap: 12px !important;
+    min-height: 0;
+  }
+
+  :is(.p_details_container, [data-product-preview="details"]) .bundles_item > div.flex.gap-2:first-of-type > .flex.flex-col.items-center {
+    justify-content: flex-start !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+  }
 }
 
 #product-id:not(:has([data-ps-pdp-gallery])) .p_details_container .color_variation {
