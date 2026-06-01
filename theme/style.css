@@ -12123,6 +12123,11 @@ div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
   color: var(--body-text, var(--ps-ink, #101010));
 }
 
+/* Product preview — parent must not clip sticky columns */
+div:has(> [data-product-preview="grid"]) {
+  overflow: visible !important;
+}
+
 /* Product preview grid (platform md:grid-cols-2): sticky gallery + details */
 @media (min-width: 768px) {
   [data-product-preview="grid"] {
