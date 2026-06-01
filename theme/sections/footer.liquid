@@ -1,3 +1,6 @@
+{% if payment_img == "https://www.diveriksperformance.com/wp-content/uploads/2023/05/payment-methods-epicerie-ludo.png" %}
+{% assign payment_img = "https://files.easy-orders.net/1779706615785801969.png" %}
+{% endif %}
 <footer class="ps-footer ps-sr-scope"{% if palette %}{% assign pfb = palette.ft_bg %}{% assign pft = palette.ft_text %}{% if pfb != blank or pft != blank %} style="{% if pfb != blank %}--ft-bg: {{ pfb }};{% endif %}{% if pft != blank %}--ft-text: {{ pft }};{% endif %}"{% endif %}{% endif %}><div class="content_container ps-footer-inner"><div class="ps-footer-main"><a href="/" class="ps-footer-logo ps-footer-main__brand" aria-label="{{ store_name }}" data-anim="fadeInScale" data-seq="0">{% if logo != "" %}<img src="{{ logo }}" alt="{{ store_name }}" />{% else %}<span class="ps-footer-logo-text">{{ store_name }}</span>{% endif %}</a>{% if categories.size > 0 %}{% liquid
   assign ps_footer_title_shop = theme_data.footer_quick_links | strip
   if ps_footer_title_shop == blank
