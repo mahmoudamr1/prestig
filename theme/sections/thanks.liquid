@@ -55,19 +55,19 @@
           </div>
         </div>
         {% if phone_message and phone_message != "" %}
-          <p class="ps-thanks-phone-msg" data-anim="fadeInLeft" data-seq="2">{{ phone_message }}</p>
+          <p class="ps-thanks-phone-msg" data-anim="fadeInUp" data-seq="2">{{ phone_message }}</p>
         {% endif %}
       </div>
     {% endif %}
 
-    <div class="ps-thanks-order-slot" data-thanks-order-slot aria-live="polite" data-anim="fadeInRight" data-seq="3"></div>
+    <div class="ps-thanks-order-slot" data-thanks-order-slot aria-live="polite" data-anim="fadeInUp" data-seq="3"></div>
 
     {% if show_home_button %}
       <button
         class="ps-thanks-home-btn"
         type="button"
         onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
-        data-anim="slideInUp"
+        data-anim="fadeInUp"
         data-seq="4"
       >
         {{ go_home_text | default: "Go home" }}
@@ -75,7 +75,7 @@
     {% endif %}
 
     {% if offers_text and offers_text != "" %}
-      <p class="ps-thanks-offers" data-anim="fadeInScale" data-seq="5">{{ offers_text }}</p>
+      <p class="ps-thanks-offers" data-anim="fadeInUp" data-seq="5">{{ offers_text }}</p>
     {% endif %}
   </div>
 </section>

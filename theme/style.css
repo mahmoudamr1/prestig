@@ -1,7 +1,7 @@
 ﻿/* =============================================================================
-   BAYNOIRE theme/style.css — scope index (search START: <id>)
+   BAYNOIRE theme/style.css � scope index (search START: <id>)
    =============================================================================
-   01-tokens          :root design tokens
+   01-tokens          :root design tokens + animation system
    02-base            html, body, RTL, .ps-theme
    03-layout          layout spacer, .content_container, .product_container
    04-announce        announcement bar
@@ -33,19 +33,19 @@
    ============================================================================= */
 
 /* =============================================================================
-   START: 00-file — File header
+   START: 00-file � File header
    ============================================================================= */
 
-/* Google Fonts: `theme/script.js` builds the css2 URL from `.ps-theme[data-ps-gf-families]` + weights (or legacy href), injects stylesheet, then sets `--ps-ff-*` on `<html style>` so merchant fonts override this file’s `:root` defaults after load order. */
+/* Google Fonts: `theme/script.js` builds the css2 URL from `.ps-theme[data-ps-gf-families]` + weights (or legacy href), injects stylesheet, then sets `--ps-ff-*` on `<html style>` so merchant fonts override this file�s `:root` defaults after load order. */
 
-/* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host — saves editing this + Liquid without extra tools. */
+/* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host � saves editing this + Liquid without extra tools. */
 
 
 /* =============================================================================
    END: 00-file
    ============================================================================= */
 /* =============================================================================
-   START: 01-tokens — Design tokens (:root)
+   START: 01-tokens � Design tokens (:root)
    ============================================================================= */
 
 :root {
@@ -62,7 +62,7 @@
   --ps-ink-muted: #303030;
   --ps-charcoal: #0d0d12;
   --ps-card-ink: #1d242d;
-  /* Figma 128:61 — product card copy */
+  /* Figma 128:61 � product card copy */
   --ps-card-price-muted: rgba(3, 3, 2, 0.76);
   --ps-card-price-strike: rgba(3, 3, 2, 0.5);
   --ps-nav-text: #212a2f;
@@ -102,23 +102,23 @@
   --ps-gray-600: #676665;
   --ps-sale: #f2627b;
   --ps-sale-strong: #e32c2b;
-  /* Strike / compare-at — palette price text; theme fallback = Figma rgba */
+  /* Strike / compare-at � palette price text; theme fallback = Figma rgba */
   --ps-price-strike: var(--product-price-text, rgba(3, 3, 2, 0.5));
   /* Full-bleed layout: no horizontal inset on .content_container / section shells. */
   --ps-layout-gutter-x: 0px;
-  /* Header only — not tied to page layout gutter. */
+  /* Header only � not tied to page layout gutter. */
   --ps-header-gutter-x: 40px;
   /* Fixed header stack (updated by theme/script.js syncPrestigeThemeStack). */
   --ps-announce-h: 0px;
-  --ps-header-h: 60px;
+  --ps-header-h: 58px;
   --ps-header-shadow: 0 4px 20px rgba(13, 13, 18, 0.08), 0 1px 2px rgba(13, 13, 18, 0.06);
-  /* PDP product form — Figma 10:2655 / 25:2402 add-to-cart icon */
+  /* PDP product form � Figma 10:2655 / 25:2402 add-to-cart icon */
   --ps-pdp-atc-icon: url("https://files.easy-orders.net/1779260760569197919add-to-card.svg");
-  /* PDP description accordion — Figma 10:2670 dividers */
+  /* PDP description accordion � Figma 10:2670 dividers */
   --ps-pdp-desc-divider: color-mix(in srgb,
       var(--body-text, var(--ps-black, #000)) 25%,
       transparent);
-  /* Thanks hero — Figma 17:1495 / 25:3973 */
+  /* Thanks hero � Figma 17:1495 / 25:3973 */
   --ps-thanks-hero-border: var(--ps-border-faint, #e8e8e1);
   --ps-thanks-hero-ink: var(--body-text, #111);
   --ps-thanks-hero-ink-muted: color-mix(in srgb,
@@ -127,11 +127,37 @@
   /* Footer palette fallbacks (overridden by storefront palette + footer inline --ft-*) */
   --ft-bg: #000000;
   --ft-text: #ffffff;
+  /* Unified animation system — snap/fade timing */
+  --animation-speed-fast: 0.0625s;
+  --animation-speed: 0.125s;
+  --animation-speed-slow: 0.2s;
+  --animation-speed-medium: 0.15s;
+  --animation-easing: ease-in-out;
+  --animation-slideshow-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --drawer-animation-speed: 0.2s;
+  --animation-values-slow: var(--animation-speed-slow) var(--animation-easing);
+  --animation-values: var(--animation-speed) var(--animation-easing);
+  --animation-values-fast: var(--animation-speed-fast) var(--animation-easing);
+  --animation-values-allow-discrete: var(--animation-speed) var(--animation-easing) allow-discrete;
+  --animation-timing-hover: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --animation-timing-active: cubic-bezier(0.5, 0, 0.75, 0);
+  --animation-timing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animation-timing-default: cubic-bezier(0, 0, 0.2, 1);
+  --animation-timing-fade-in: cubic-bezier(0.16, 1, 0.3, 1);
+  --animation-timing-fade-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-reveal-duration: 0.3s;
+  --animation-reveal-values: var(--animation-reveal-duration) var(--animation-timing-fade-in);
+  --blur-opacity: 0.75;
+  --animation-reveal-blur: 12px;
+  --animation-hover-values: var(--animation-speed-medium) var(--animation-timing-hover);
+  --animation-drawer-values: var(--drawer-animation-speed) var(--animation-timing-default);
+  --view-transition-old-main-content: var(--animation-speed) var(--animation-easing) both fadeOut;
+  --view-transition-new-main-content: var(--animation-speed) var(--animation-easing) both fadeIn, var(--animation-speed) var(--animation-easing) both slideInTopViewTransition;
 }
 
 /*
- * EasyOrders storefront palette (22 vars on :root) — use var(--name, #fallback) only.
- * Ref: .cursor/rules/easyorders-custom-themes.mdc §3
+ * EasyOrders storefront palette (22 vars on :root) � use var(--name, #fallback) only.
+ * Ref: .cursor/rules/easyorders-custom-themes.mdc �3
  *
  * Layout:     --hd-bg, --hd-text | --ann-bg, --ann-text | --ft-bg, --ft-text
  * Buttons:    --buy-btn-bg, --buy-btn-text, --buy-btn-border
@@ -141,7 +167,7 @@
  * Forms:      --input-border, --input-bg, --input-text
  * Checkout:   --checkout-form-bg, --checkout-heading-text
  *
- * Pattern: var(--palette-var, theme-fallback) — no color-mix for product copy.
+ * Pattern: var(--palette-var, theme-fallback) � no color-mix for product copy.
  * Example: color: var(--product-name-text, rgba(3, 3, 2, 0.76));
  *          color: var(--product-price-text, #030302);
  */
@@ -149,7 +175,7 @@
 @media (max-width: 1024px) {
   :root {
     --ps-header-gutter-x: 20px;
-    --ps-header-h: 76px;
+    --ps-header-h: 46px;
   }
 }
 
@@ -158,7 +184,7 @@
    END: 01-tokens
    ============================================================================= */
 /* =============================================================================
-   START: 02-base — Document base, RTL, .ps-theme
+   START: 02-base � Document base, RTL, .ps-theme
    ============================================================================= */
 
 
@@ -179,7 +205,7 @@ html:not(:has(#product-id)):not(:has([data-checkout-page-root])) body {
   background-color: #ffffff !important;
 }
 
-/* Arabic storefront: __NEXT_DATA__ `appSettings.lang` → `ps-app-lang-ar` on html (sync in script.js: prestigeSyncStoreLangOnHtml). */
+/* Arabic storefront: __NEXT_DATA__ `appSettings.lang` ? `ps-app-lang-ar` on html (sync in script.js: prestigeSyncStoreLangOnHtml). */
 html.ps-app-lang-ar,
 html.ps-app-lang-ar body {
   direction: rtl;
@@ -187,7 +213,7 @@ html.ps-app-lang-ar body {
   font-family: var(--ps-ff-primary), sans-serif;
 }
 
-/* Arabic: letter-spacing from Latin-oriented UI rules harms readability — neutralize on the whole document */
+/* Arabic: letter-spacing from Latin-oriented UI rules harms readability � neutralize on the whole document */
 html.ps-app-lang-ar,
 html.ps-app-lang-ar * {
   letter-spacing: normal !important;
@@ -230,7 +256,7 @@ html[lang="ar"] .ps-theme,
    END: 02-base
    ============================================================================= */
 /* =============================================================================
-   START: 03-layout — Layout spacer, content_container, product_container
+   START: 03-layout � Layout spacer, content_container, product_container
    ============================================================================= */
 
 /* Placeholder only while nav is pinned (scroll); at top of page announce + header stay in normal flow. */
@@ -245,7 +271,7 @@ html[lang="ar"] .ps-theme,
 }
 
 .ps-theme.ps-nav-pinned .ps-theme-layout-spacer {
-  min-height: calc(var(--ps-announce-h, 0px) + var(--ps-header-h, 74px));
+  min-height: calc(var(--ps-announce-h, 0px) + var(--ps-header-h, 58px));
 }
 
 .builder-section-reset .ps-theme-layout-spacer {
@@ -258,7 +284,7 @@ html[lang="ar"] .ps-theme,
   color: var(--body-text, var(--ps-ink, #101010));
 }
 
-/* PDP shell — Figma 10:2198 / 25:1948: gallery flush under header spacer (no platform py-* gap) */
+/* PDP shell � Figma 10:2198 / 25:1948: gallery flush under header spacer (no platform py-* gap) */
 #product-id {
   padding-top: 0 !important;
   margin-top: 0 !important;
@@ -283,7 +309,7 @@ html[lang="ar"] .ps-theme,
   box-sizing: border-box;
 }
 
-/* Breadcrumbs section sits in its own platform wrapper above gallery — hide duplicate shell gap */
+/* Breadcrumbs section sits in its own platform wrapper above gallery � hide duplicate shell gap */
 #product-id > div:has(> nav.ab-breadcrumbs--category-only):not(:has([data-ps-pdp-gallery])):not(:has(.p_content_container)),
 #product-id > div:has(> .ab-breadcrumbs--category-only):not(:has([data-ps-pdp-gallery])):not(:has(.p_content_container)) {
   display: none !important;
@@ -411,7 +437,7 @@ html[lang="ar"] .ps-theme,
 }
 
 @media (min-width: 1024px) {
-  /* PDP desktop — gallery from viewport left; details width matches header gutter (see .ps-header-inner) */
+  /* PDP desktop � gallery from viewport left; details width matches header gutter (see .ps-header-inner) */
   #product-id .product_container {
     width: 100% !important;
     max-width: none !important;
@@ -558,7 +584,7 @@ html[lang="ar"] .ps-theme,
   padding-top: 0 !important;
 }
 
-/* PDP — platform shell: flex stack + zero Tailwind mt-* inside details column */
+/* PDP � platform shell: flex stack + zero Tailwind mt-* inside details column */
 #product-id .p_details_container > div:has(.ab-pd),
 #product-id .p_details_container > div:has(form:not(.product_form_checkout):not(.checkout_container)),
 #product-id .p_details_container > div:has(.product_form_checkout),
@@ -639,7 +665,7 @@ html[lang="ar"] .ps-theme,
   width: 100%;
 }
 
-/* Color swatches row — must stay horizontal (do not match checkout gap-3) */
+/* Color swatches row � must stay horizontal (do not match checkout gap-3) */
 #product-id .p_details_container .flex.flex-wrap:has(.color_variation),
 #product-id .p_details_container [id^="headlessui-radiogroup"] .flex.flex-wrap,
 .p_content_container:has([data-ps-pdp-gallery]) .p_details_container .flex:has(.color_variation) {
@@ -994,7 +1020,7 @@ html[lang="ar"] .ps-theme,
   min-height: 7px !important;
   border-radius: 50% !important;
   background: transparent !important;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--animation-values-slow);
 }
 
 .p_details_container .bundles_item .radio_circle.bg-blue-500,
@@ -1117,7 +1143,7 @@ h2.variation_name .ps-variation-name-value {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.2s ease;
+  transition: border-color var(--animation-values-slow);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -1136,7 +1162,7 @@ h2.variation_name .ps-variation-name-value {
   box-shadow: none !important;
 }
 
-/* :hover Ø¨Ø¹Ø¯ Ø§Ù„Ù„Ù…Ø³ Ø¹Ù„Ù‰ Ø§Ù„Ù…ÙˆØ¨Ø§ÙŠÙ„ ÙŠØ¸Ù„ Ù†Ø´Ø·Ø§Ù‹ ÙˆÙƒØ§Ù† ÙŠØºÙ„Ø¨ border Ø§Ù„Ù…Ø­Ø¯Ø¯ (Ø®ØµÙˆØµÙŠØ© Ø£Ø¹Ù„Ù‰ Ù…Ù† .color_variation_checked) */
+/* :hover بعد اللمس على الموبايل يظل نشطاً وكان يغلب border المحدد (خصوصية أعلى من .color_variation_checked) */
 @media (hover: hover) {
   #product-id:not(:has([data-ps-pdp-gallery])) .p_details_container .color_variation:hover:not(.color_variation_checked) {
     border-color: var(--ps-border-hover, #d9d9d9) !important;
@@ -1165,9 +1191,9 @@ h2.variation_name .ps-variation-name-value {
   letter-spacing: 0;
   box-shadow: none !important;
   transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    color 0.2s ease;
+    border-color var(--animation-values-slow),
+    background-color var(--animation-values-slow),
+    color var(--animation-values-slow);
 }
 
 #product-id:not(:has([data-ps-pdp-gallery])) .p_details_container .button_variation:hover:not(.button_variation_checked) {
@@ -1217,14 +1243,14 @@ h2.variation_name .ps-variation-name-value {
   border-width: 1px;
   background-image: none !important;
   transition:
-    background-color 0.22s ease,
-    color 0.22s ease,
-    border-color 0.22s ease,
-    filter 0.2s ease,
-    opacity 0.2s ease;
+    background-color var(--animation-values-slow),
+    color var(--animation-values-slow),
+    border-color var(--animation-values-slow),
+    filter var(--animation-values-slow),
+    opacity var(--animation-values-slow);
 }
 
-/* ألوان لوحة المنصة: «إضافة للسلة» = إطار فاتح + تعبئة من --crt-* عند الهوفر — «اشتري الآن / إتمام» = زر الشراء Buy */
+/* ????? ???? ??????: �????? ?????� = ???? ???? + ????? ?? --crt-* ??? ?????? � �????? ???? / ?????� = ?? ?????? Buy */
 .add_to_cart_btn {
   background-color: transparent !important;
   color: var(--crt-btn-bg, var(--ps-ink-secondary, #1c1c1c)) !important;
@@ -1241,11 +1267,11 @@ h2.variation_name .ps-variation-name-value {
     left top,
     left top !important;
   transition:
-    background-size 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    border-color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    filter 0.2s ease,
-    opacity 0.2s ease !important;
+    background-size var(--animation-speed-slow) var(--animation-timing-default),
+    color var(--animation-speed-slow) var(--animation-timing-default),
+    border-color var(--animation-speed-slow) var(--animation-timing-default),
+    filter var(--animation-values-slow),
+    opacity var(--animation-values-slow) !important;
 }
 
 .checkout_btn {
@@ -1265,11 +1291,11 @@ h2.variation_name .ps-variation-name-value {
     left top,
     left top !important;
   transition:
-    background-size 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    border-color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    filter 0.2s ease,
-    opacity 0.2s ease !important;
+    background-size var(--animation-speed-slow) var(--animation-timing-default),
+    color var(--animation-speed-slow) var(--animation-timing-default),
+    border-color var(--animation-speed-slow) var(--animation-timing-default),
+    filter var(--animation-values-slow),
+    opacity var(--animation-values-slow) !important;
 }
 
 @media (hover: hover) {
@@ -1346,9 +1372,9 @@ h2.variation_name .ps-variation-name-value {
   background-color: transparent !important;
   background-repeat: no-repeat !important;
   transition:
-    background-size 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    border-color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86) !important;
+    background-size var(--animation-speed-slow) var(--animation-timing-default),
+    color var(--animation-speed-slow) var(--animation-timing-default),
+    border-color var(--animation-speed-slow) var(--animation-timing-default) !important;
 }
 
 .p_details_container .product_form_checkout button.button.button--outline {
@@ -1419,7 +1445,7 @@ h2.variation_name .ps-variation-name-value {
    END: 03-layout
    ============================================================================= */
 /* =============================================================================
-   START: 04-announce — sections/header.liquid — announcement
+   START: 04-announce � sections/header.liquid � announcement
    ============================================================================= */
 
 .ps-announce {
@@ -1705,7 +1731,7 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   color: inherit;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.2s ease;
+  transition: background var(--animation-values-slow);
 }
 
 .ps-announce-mc-nav svg,
@@ -1750,7 +1776,7 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
    END: 04-announce
    ============================================================================= */
 /* =============================================================================
-   START: 05-header — sections/header.liquid — header & nav
+   START: 05-header � sections/header.liquid � header & nav
    ============================================================================= */
 
 .ps-header {
@@ -1758,8 +1784,8 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   z-index: 42;
   box-sizing: border-box;
   width: 100%;
-  height: var(--ps-header-h, 60px);
-  min-height: var(--ps-header-h, 60px);
+  height: var(--ps-header-h, 58px);
+  min-height: var(--ps-header-h, 58px);
   display: flex;
   align-items: center;
   background: transparent;
@@ -1768,11 +1794,11 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   -webkit-backdrop-filter: none;
   transform: translateY(0);
   transition:
-    background-color 0.24s ease,
-    border-color 0.24s ease,
-    box-shadow 0.24s ease,
-    transform 0.24s ease,
-    backdrop-filter 0.24s ease;
+    background-color var(--animation-values-slow),
+    border-color var(--animation-values-slow),
+    box-shadow var(--animation-values-slow),
+    transform var(--animation-values-slow),
+    backdrop-filter var(--animation-values-slow);
 }
 
 .ps-theme.ps-nav-pinned .ps-header {
@@ -1780,10 +1806,10 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   top: var(--ps-announce-h, 0px);
   left: 0;
   right: 0;
-  height: var(--ps-header-h, 60px);
+  height: var(--ps-header-h, 58px);
 }
 
-/* #eo-header: top-of-page only — faint tint of palette header bg (~5%), not solid --hd-bg */
+/* #eo-header: top-of-page only � faint tint of palette header bg (~5%), not solid --hd-bg */
 .ps-header:not(.ps-scrolled) {
   background: rgba(255, 255, 255, 0.05) !important;
   background: color-mix(in srgb, var(--hd-bg, #ffffff) 5%, transparent) !important;
@@ -1875,8 +1901,9 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
 .ps-header-inner {
   width: 100%;
   max-width: none;
-  height: 100%;
-  min-height: inherit;
+  height: var(--ps-header-h, 58px);
+  min-height: var(--ps-header-h, 58px);
+  max-height: var(--ps-header-h, 58px);
   margin: 0 auto;
   padding: 0 var(--ps-header-gutter-x, 40px);
   box-sizing: border-box;
@@ -1891,8 +1918,9 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   justify-content: space-between;
   column-gap: 16px;
   width: 100%;
-  min-height: var(--ps-header-h, 60px);
-  height: 100%;
+  height: var(--ps-header-h, 58px);
+  min-height: var(--ps-header-h, 58px);
+  max-height: var(--ps-header-h, 58px);
 }
 
 .ps-left-group {
@@ -1918,7 +1946,7 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: filter 0.24s ease;
+  transition: filter var(--animation-values-slow);
 }
 
 .ps-menu-icon {
@@ -1952,7 +1980,7 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   align-items: center;
 }
 
-/* Invisible bridge — keeps :hover while moving from nav link into the panel (desktop) */
+/* Invisible bridge � keeps :hover while moving from nav link into the panel (desktop) */
 .ps-nav-dropdown::after {
   content: "";
   position: absolute;
@@ -1985,7 +2013,7 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   white-space: nowrap;
   padding: 0;
   box-sizing: border-box;
-  transition: color 0.24s ease;
+  transition: color var(--animation-values-slow);
 }
 
 .ps-desktop-nav-link::after {
@@ -1997,7 +2025,7 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   background: currentColor;
   transform: scaleX(0);
   transform-origin: inline-start;
-  transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: transform var(--animation-speed-medium) var(--animation-timing-default);
   pointer-events: none;
 }
 
@@ -2038,10 +2066,10 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   pointer-events: none;
   transform: translateX(-50%);
   transition:
-    opacity 0.15s ease,
-    visibility 0.15s ease,
-    transform 0.15s ease;
-  transition-delay: 0.12s, 0.12s, 0s;
+    opacity var(--animation-speed-medium) var(--animation-easing),
+    visibility var(--animation-speed-medium) var(--animation-easing),
+    transform var(--animation-speed-medium) var(--animation-easing);
+  transition-delay: var(--animation-speed-medium), var(--animation-speed-medium), 0s;
   z-index: 62;
 }
 
@@ -2059,7 +2087,7 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  transition: background 0.15s ease;
+  transition: background var(--animation-speed-medium) var(--animation-easing);
 }
 
 .ps-nav-dropdown-panel a:hover {
@@ -2172,8 +2200,8 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   justify-content: center;
   flex-shrink: 0;
   transition:
-    color 0.24s ease,
-    filter 0.24s ease;
+    color var(--animation-values-slow),
+    filter var(--animation-values-slow);
 }
 
 button.ps-icon-btn .ps-cart-icon {
@@ -2241,7 +2269,7 @@ button.ps-icon-btn .ps-lang-icon {
   background: rgba(0, 0, 0, 0.38);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.22s ease;
+  transition: opacity var(--animation-values-slow);
   z-index: 90;
 }
 
@@ -2253,14 +2281,14 @@ button.ps-icon-btn .ps-lang-icon {
   height: 100vh;
   background: var(--body-bg, var(--ps-page-bg, #ffffff));
   transform: translateX(-102%);
-  transition: transform 0.25s ease;
+  transition: transform var(--animation-drawer-values);
   z-index: 91;
   display: flex;
   flex-direction: column;
 }
 
 .ps-mobile-top {
-  height: 74px;
+  height: var(--ps-header-h, 46px);
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -2353,13 +2381,13 @@ button.ps-icon-btn .ps-lang-icon {
   display: block;
   flex-shrink: 0;
   color: inherit;
-  transition: transform 0.2s ease;
+  transition: transform var(--animation-values-slow);
 }
 
 .ps-accordion-panel {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.24s ease;
+  transition: max-height var(--animation-values-slow);
   padding-left: 10px;
 }
 
@@ -2384,11 +2412,16 @@ button.ps-icon-btn .ps-lang-icon {
 @media (max-width: 1024px) {
   .ps-header-inner {
     padding: 0 var(--ps-header-gutter-x, 20px);
+    height: var(--ps-header-h, 46px);
+    min-height: var(--ps-header-h, 46px);
+    max-height: var(--ps-header-h, 46px);
   }
 
   .ps-header-row {
     column-gap: 12px;
-    min-height: var(--ps-header-h, 76px);
+    height: var(--ps-header-h, 46px);
+    min-height: var(--ps-header-h, 46px);
+    max-height: var(--ps-header-h, 46px);
   }
 
   .ps-menu-btn {
@@ -2425,7 +2458,7 @@ button.ps-icon-btn .ps-lang-icon {
   transform: translateX(0);
 }
 
-/* Same breakpoint as .ps-menu-btn / .ps-desktop-nav (≤1024): drawer + overlay active; wider = hidden. */
+/* Same breakpoint as .ps-menu-btn / .ps-desktop-nav (=1024): drawer + overlay active; wider = hidden. */
 @media (min-width: 1025px) {
 
   .ps-mobile-menu,
@@ -2448,7 +2481,7 @@ main.container_class {
    END: 05-header
    ============================================================================= */
 /* =============================================================================
-   START: 06-slider — sections/slider.liquid
+   START: 06-slider � sections/slider.liquid
    ============================================================================= */
 
 .ps-slider {
@@ -2469,7 +2502,7 @@ main.container_class {
 /* Pull hero under the fixed header stack so transparent nav sits on imagery, not page bg. */
 .content_container .ps-slider.ps-slider--under-nav.ps-slider--under-nav-first,
 .content_container .hero-video.hero-video--under-nav.hero-video--under-nav-first {
-  margin-top: calc(-1 * (var(--ps-announce-h, 0px) + var(--ps-header-h, 74px)));
+  margin-top: calc(-1 * (var(--ps-announce-h, 0px) + var(--ps-header-h, 58px)));
 }
 
 .ps-slider-track {
@@ -2484,7 +2517,7 @@ main.container_class {
   inset: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1s ease;
+  transition: opacity var(--animation-speed-slow) var(--animation-slideshow-easing);
 }
 
 .ps-slider-slide.ps-active {
@@ -2600,7 +2633,7 @@ main.container_class {
   white-space: nowrap;
   border-radius: 0;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--animation-values-slow);
 }
 
 .ps-slider-cta:hover {
@@ -2679,7 +2712,7 @@ main.container_class {
   color: rgba(255, 255, 255, 0.35);
   line-height: 1;
   text-align: center;
-  transition: color 0.3s;
+  transition: color var(--animation-hover-values);
 }
 
 .ps-slider-indicator.ps-active .ps-slider-ind-num {
@@ -2857,9 +2890,9 @@ main.container_class {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
     align-self: stretch;
     transition:
-      background 0.3s ease,
-      box-shadow 0.3s ease,
-      width 0.3s ease;
+      background var(--animation-hover-values),
+      box-shadow var(--animation-hover-values),
+      width var(--animation-hover-values);
   }
 
   .ps-slider-ind-progress {
@@ -2885,10 +2918,10 @@ main.container_class {
    END: 06-slider
    ============================================================================= */
 /* =============================================================================
-   START: 07-categories — sections/categories.liquid
+   START: 07-categories � sections/categories.liquid
    ============================================================================= */
 
-/* Categories — Figma 19:2216 (section shell + 19:2218 header) + asymmetric grid 19:2222 (3n+1 tall left). Tile copy = category.name centered only. */
+/* Categories � Figma 19:2216 (section shell + 19:2218 header) + asymmetric grid 19:2222 (3n+1 tall left). Tile copy = category.name centered only. */
 .ab-categories-section {
   --ab-cat-gap: 20px;
   --ab-cat-section-gap: clamp(2.25rem, 6vw, 4rem);
@@ -2991,7 +3024,7 @@ main.container_class {
   object-fit: cover;
   object-position: center;
   transform: scale(1.02);
-  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform var(--animation-speed-slow) var(--animation-timing-hover);
 }
 
 .ab-cat-tile:hover .ab-cat-tile__img {
@@ -3053,14 +3086,14 @@ main.container_class {
   }
 }
 
-/* Full-bleed on page bg — no inner box, no white strip (Figma frame sits on white/grey page) */
+/* Full-bleed on page bg � no inner box, no white strip (Figma frame sits on white/grey page) */
 
 
 /* =============================================================================
    END: 07-categories
    ============================================================================= */
 /* =============================================================================
-   START: 09-list-products — sections/list-products.liquid
+   START: 09-list-products � sections/list-products.liquid
    ============================================================================= */
 
 .ps-plist {
@@ -3075,7 +3108,7 @@ main.container_class {
   background: var(--ps-surface, #fff);
 }
 
-/* Old themes may still wrap content in .ps-plist-inner — do not create a layout box */
+/* Old themes may still wrap content in .ps-plist-inner � do not create a layout box */
 .ps-plist-inner {
   display: contents;
 }
@@ -3137,7 +3170,7 @@ main.container_class {
   background: transparent;
 }
 
-/* Carousel scrollport — card borders paint on cells; clip-margin keeps edge lines visible */
+/* Carousel scrollport � card borders paint on cells; clip-margin keeps edge lines visible */
 .ps-plist-viewport {
   width: 100%;
   min-height: 0;
@@ -3164,7 +3197,7 @@ main.container_class {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Grid mesh: track = shell (top + left), card = cell (right + bottom) — same as .ps-pgrid-grid */
+/* Grid mesh: track = shell (top + left), card = cell (right + bottom) � same as .ps-pgrid-grid */
 .ps-plist-track:not(.ps-plist-track--grid) {
   box-sizing: border-box;
   border-top: var(--ps-product-grid-line);
@@ -3213,14 +3246,14 @@ main.container_class {
   }
 }
 
-/* grid_products home — hero tile + plist cards (legacy ab-pgrid-style). */
+/* grid_products home � hero tile + plist cards (legacy ab-pgrid-style). */
 
 
 /* =============================================================================
    END: 09-list-products
    ============================================================================= */
 /* =============================================================================
-   START: 12-home-grid — sections/home-products-grid.liquid
+   START: 12-home-grid � sections/home-products-grid.liquid
    ============================================================================= */
 
 .ps-hpgrid {
@@ -3355,10 +3388,10 @@ main.container_class {
    END: 12-home-grid
    ============================================================================= */
 /* =============================================================================
-   START: 08-product-card — Shared product card chrome
+   START: 08-product-card � Shared product card chrome
    ============================================================================= */
 
-/* Shared product-card tokens (all card types use circular swatches — see .ps-card-swatch* below) */
+/* Shared product-card tokens (all card types use circular swatches � see .ps-card-swatch* below) */
 .ps-plist-card,
 .ps-pgrid-card,
 .ps-featured-grid .ps-pgrid-card {
@@ -3407,8 +3440,8 @@ main.container_class {
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity 0.22s ease,
-    visibility 0.22s ease;
+    opacity var(--animation-values-slow),
+    visibility var(--animation-values-slow);
 }
 
 .ps-card-media__nav {
@@ -3464,7 +3497,7 @@ main.container_class {
   padding-right: 0 !important;
 }
 
-/* In-card media arrows — smaller on narrow screens (all plist / pgrid cards) */
+/* In-card media arrows � smaller on narrow screens (all plist / pgrid cards) */
 @media (max-width: 767.98px) {
   .ps-card-media__nav {
     padding: 0 4px;
@@ -3488,28 +3521,21 @@ main.container_class {
   }
 }
 
-.ps-card-media--carousel .ps-plist-img-hover,
-.ps-card-media--carousel .ps-pgrid-img-hover {
+.ps-plist-img-hover[hidden],
+.ps-pgrid-img-hover[hidden] {
   display: none !important;
+  opacity: 0 !important;
+  pointer-events: none;
 }
 
-@media (hover: hover) {
+.ps-plist-media:has(.ps-plist-img-hover),
+.ps-pgrid-media:has(.ps-pgrid-img-hover) {
+  isolation: isolate;
+}
 
-  .ps-card-media--carousel:hover .ps-plist-img-primary,
-  .ps-card-media--carousel:focus-within .ps-plist-img-primary,
-  .ps-card-media--carousel:hover .ps-pgrid-img-primary,
-  .ps-card-media--carousel:focus-within .ps-pgrid-img-primary {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .ps-card-media--carousel:hover .ps-plist-media::after,
-  .ps-card-media--carousel:focus-within .ps-plist-media::after,
-  .ps-card-media--carousel:hover .ps-pgrid-media::after,
-  .ps-card-media--carousel:focus-within .ps-pgrid-media::after {
-    opacity: 0 !important;
-    transform: translateX(-120%) rotate(10deg) !important;
-  }
+.ps-plist-img-hover,
+.ps-pgrid-img-hover {
+  z-index: 1;
 }
 
 /* Product card images: w-full h-auto (natural ratio); no aspect-ratio crop box */
@@ -3537,16 +3563,16 @@ main.container_class {
   transform: scale(1.08);
   filter: saturate(1.08) contrast(1.04);
   transition:
-    opacity 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.72s cubic-bezier(0.22, 0.61, 0.36, 1),
-    filter 0.52s ease;
+    opacity var(--animation-speed-slow) var(--animation-timing-default),
+    transform var(--animation-speed-slow) var(--animation-timing-default),
+    filter var(--animation-values-slow);
 }
 
 .ps-plist-img-primary,
 .ps-pgrid-img-primary {
   transition:
-    opacity 0.42s ease,
-    transform 0.6s ease;
+    opacity var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 .ps-plist-media::after,
@@ -3603,7 +3629,7 @@ main.container_class {
   background: var(--ps-sale-strong, #e32c2b);
 }
 
-/* theme_data label — top-end; same type treatment as sale, ink background */
+/* theme_data label � top-end; same type treatment as sale, ink background */
 .ps-product-custom-badge {
   background: var(--ps-ink-secondary, #1c1c1c);
   left: auto;
@@ -3739,14 +3765,14 @@ main.container_class {
   text-decoration-skip-ink: none;
 }
 
-/* Figma 19:2278 — home list + grid product row (shared card chrome) */
+/* Figma 19:2278 � home list + grid product row (shared card chrome) */
 .ps-plist .ps-plist-info,
 .ps-pgrid-section .ps-pgrid-info,
 .ps-featured-grid .ps-pgrid-info {
   padding: 0;
 }
 
-/* Color swatch dot — all product card types (list / grid / catalog / home / featured / related) */
+/* Color swatch dot � all product card types (list / grid / catalog / home / featured / related) */
 :is(
   .ps-plist-swatch:not(.ps-plist-swatch-image),
   .ps-pgrid-swatch:not(.ps-pgrid-swatch-image),
@@ -3770,8 +3796,8 @@ main.container_class {
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
   transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    box-shadow var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 :is(
@@ -3801,8 +3827,8 @@ main.container_class {
   box-shadow: 0 0 0 1.5px var(--ps-swatch-ring, #e8e8e1);
   -webkit-tap-highlight-color: transparent;
   transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    box-shadow var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 /* +N more swatches */
@@ -3826,8 +3852,8 @@ main.container_class {
   line-height: 1;
   color: #4a4a4a;
   transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    box-shadow var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 @media (hover: hover) {
@@ -3895,10 +3921,10 @@ main.container_class {
    END: 08-product-card
    ============================================================================= */
 /* =============================================================================
-   START: 10-products-grid — sections/products-grid.liquid
+   START: 10-products-grid � sections/products-grid.liquid
    ============================================================================= */
 
-/* Figma 19:2309 — home product grid; width follows parent .content_container (no extra inner cap) */
+/* Figma 19:2309 � home product grid; width follows parent .content_container (no extra inner cap) */
 .ps-pgrid-section:not(.ps-pgrid-section--home) {
   padding: clamp(40px, 8vw, 60px) 0;
   box-sizing: border-box;
@@ -3987,7 +4013,7 @@ main.container_class {
   overflow: hidden;
 }
 
-/* Catalog / collection grid — Figma 5:2403 (desktop) / 24:1488 (mobile); cards match featured */
+/* Catalog / collection grid � Figma 5:2403 (desktop) / 24:1488 (mobile); cards match featured */
 .ps-pgrid-section--catalog .ps-pgrid-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
@@ -4127,7 +4153,7 @@ main.container_class {
   object-fit: contain;
 }
 
-/* RTL chevrons: [dir] / :lang miss when only body,html { direction: rtl } — .ps-doc-rtl from appSettings.lang (ar) via script.js */
+/* RTL chevrons: [dir] / :lang miss when only body,html { direction: rtl } � .ps-doc-rtl from appSettings.lang (ar) via script.js */
 html:dir(rtl) .ps-viewall-arrow,
 body:dir(rtl) .ps-viewall-arrow,
 .ps-doc-rtl .ps-viewall-arrow,
@@ -4229,7 +4255,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   }
 }
 
-/* Home products grid — Figma 5:1852 (desktop) / 24:731 (mobile); cards match featured 20:128 */
+/* Home products grid � Figma 5:1852 (desktop) / 24:731 (mobile); cards match featured 20:128 */
 .ps-pgrid-section.ps-pgrid-section--home {
   background: var(--ps-surface, #fff);
 }
@@ -4475,10 +4501,10 @@ html.ps-app-lang-ar .ps-plist-arrow img,
    END: 10-products-grid
    ============================================================================= */
 /* =============================================================================
-   START: 11-featured — sections/featured-products.liquid
+   START: 11-featured � sections/featured-products.liquid
    ============================================================================= */
 
-/* Featured — same width as parent .content_container (no inner max-width cap) */
+/* Featured � same width as parent .content_container (no inner max-width cap) */
 .ps-featured {
   padding: 0;
   box-sizing: border-box;
@@ -4559,7 +4585,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   max-width: 100%;
 }
 
-/* Flat hero — same DOM order as reference (img → overlay → content → CTA) */
+/* Flat hero � same DOM order as reference (img ? overlay ? content ? CTA) */
 .ps-featured-banner.ps-featured-hero {
   position: relative;
   display: flex;
@@ -4722,8 +4748,8 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   text-decoration: none !important;
   box-sizing: border-box;
   transition:
-    background 0.2s ease,
-    color 0.2s ease;
+    background var(--animation-values-slow),
+    color var(--animation-values-slow);
 }
 
 .ps-featured-banner-cta:hover {
@@ -4771,7 +4797,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   }
 }
 
-/* Featured product card — Figma 20:128 */
+/* Featured product card � Figma 20:128 */
 .ps-featured-grid>.ps-pgrid-card,
 .ps-featured-grid>.ps-featured-banner.ps-featured-hero {
   border-right: var(--ps-product-grid-line);
@@ -5127,7 +5153,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
 
 .ps-featured-slide.ps-active {
   display: block;
-  animation: ps-featured-fadeIn 0.35s ease;
+  animation: ps-featured-fadeIn var(--animation-values-slow);
 }
 
 @keyframes ps-featured-fadeIn {
@@ -5140,7 +5166,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   }
 }
 
-/* Hero + card: one column mobile, equal halves (1fr 1fr) from md — no fixed px column widths */
+/* Hero + card: one column mobile, equal halves (1fr 1fr) from md � no fixed px column widths */
 .ps-featured-layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -5149,7 +5175,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   align-items: start;
 }
 
-/* Old mobile carousel only — do not target `.ps-featured-banner.ps-featured-hero` (category hero) */
+/* Old mobile carousel only � do not target `.ps-featured-banner.ps-featured-hero` (category hero) */
 .ps-featured-layout .ps-featured-hero {
   display: block;
   position: relative;
@@ -5217,15 +5243,15 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   transform: scale(1.08);
   filter: saturate(1.08) contrast(1.04);
   transition:
-    opacity 0.52s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.72s cubic-bezier(0.22, 0.61, 0.36, 1),
-    filter 0.52s ease;
+    opacity var(--animation-speed-slow) var(--animation-timing-default),
+    transform var(--animation-speed-slow) var(--animation-timing-default),
+    filter var(--animation-values-slow);
 }
 
 .ps-featured-img-primary {
   transition:
-    opacity 0.42s ease,
-    transform 0.6s ease;
+    opacity var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 .ps-featured-card-media::after {
@@ -5244,37 +5270,37 @@ html.ps-app-lang-ar .ps-plist-arrow img,
 
 @media (hover: hover) {
 
-  .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
-  .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-hover,
-  .ps-pgrid-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
-  .ps-pgrid-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-hover,
+  .ps-plist-card:hover .ps-plist-media[data-ps-card-has-hover] .ps-plist-img-hover,
+  .ps-plist-card:focus-within .ps-plist-media[data-ps-card-has-hover] .ps-plist-img-hover,
+  .ps-pgrid-card:hover .ps-pgrid-media[data-ps-card-has-hover] .ps-pgrid-img-hover,
+  .ps-pgrid-card:focus-within .ps-pgrid-media[data-ps-card-has-hover] .ps-pgrid-img-hover,
   .ps-featured-card:hover .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-hover,
   .ps-featured-card:focus-within .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-hover {
     opacity: 1;
     transform: scale(1);
   }
 
-  .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
-  .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover) .ps-plist-img-primary,
-  .ps-pgrid-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
-  .ps-pgrid-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover) .ps-pgrid-img-primary,
+  .ps-plist-card:hover .ps-plist-media[data-ps-card-has-hover] .ps-plist-img-primary,
+  .ps-plist-card:focus-within .ps-plist-media[data-ps-card-has-hover] .ps-plist-img-primary,
+  .ps-pgrid-card:hover .ps-pgrid-media[data-ps-card-has-hover] .ps-pgrid-img-primary,
+  .ps-pgrid-card:focus-within .ps-pgrid-media[data-ps-card-has-hover] .ps-pgrid-img-primary,
   .ps-featured-card:hover .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-primary,
   .ps-featured-card:focus-within .ps-featured-card-media:has(.ps-featured-img-hover) .ps-featured-img-primary {
     opacity: 0.02;
     transform: scale(1.01);
   }
 
-  .ps-plist-card:hover .ps-plist-media:has(.ps-plist-img-hover)::after,
-  .ps-plist-card:focus-within .ps-plist-media:has(.ps-plist-img-hover)::after,
-  .ps-pgrid-card:hover .ps-pgrid-media:has(.ps-pgrid-img-hover)::after,
-  .ps-pgrid-card:focus-within .ps-pgrid-media:has(.ps-pgrid-img-hover)::after,
+  .ps-plist-card:hover .ps-plist-media[data-ps-card-has-hover]::after,
+  .ps-plist-card:focus-within .ps-plist-media[data-ps-card-has-hover]::after,
+  .ps-pgrid-card:hover .ps-pgrid-media[data-ps-card-has-hover]::after,
+  .ps-pgrid-card:focus-within .ps-pgrid-media[data-ps-card-has-hover]::after,
   .ps-featured-card:hover .ps-featured-card-media:has(.ps-featured-img-hover)::after,
   .ps-featured-card:focus-within .ps-featured-card-media:has(.ps-featured-img-hover)::after {
     opacity: 1;
     transform: translateX(120%) rotate(10deg);
     transition:
-      transform 0.98s cubic-bezier(0.2, 0.65, 0.2, 1),
-      opacity 0.32s ease;
+      transform var(--animation-speed-slow) var(--animation-timing-fade-in),
+      opacity var(--animation-values-slow);
   }
 
   .ps-plist-card:hover .ps-card-media--carousel .ps-card-media__nav,
@@ -5399,8 +5425,8 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   background: var(--ps-gray-350, #c8c8c8);
   cursor: pointer;
   transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+    background var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 .ps-featured-dot.is-active {
@@ -5556,7 +5582,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
    END: 11-featured
    ============================================================================= */
 /* =============================================================================
-   START: 13-related — sections/related-products.liquid (ps-plist carousel = list-products)
+   START: 13-related � sections/related-products.liquid (ps-plist carousel = list-products)
    ============================================================================= */
 
 /* PDP similar: same carousel chrome + behavior as list-products (ps-plist) */
@@ -5602,7 +5628,7 @@ html.ps-app-lang-ar .ps-plist-arrow img,
     padding-inline: 12px !important;
   }
 
-  /* Mobile: CSS-only horizontal carousel — 75vw cards, snap mandatory start */
+  /* Mobile: CSS-only horizontal carousel � 75vw cards, snap mandatory start */
   .ps-related-products.ps-plist .ps-plist-viewport {
     overflow-x: auto !important;
     overflow-y: hidden !important;
@@ -5664,22 +5690,25 @@ html.ps-app-lang-ar .ps-plist-arrow img,
    END: 13-related
    ============================================================================= */
 
-/* Product card add CTA — Figma 24:571 idle circle → pill + label on hover */
+/* Product card add CTA � Figma 24:571 idle circle ? pill + label on hover */
 .ps-plist-add,
 .ps-pgrid-add,
 .ps-product-quick-add {
+  --ps-quick-add-core: 22px;
+  --ps-quick-add-ring: 7px;
+  --ps-quick-add-shadow-reach: 14px;
   position: absolute;
   z-index: 5;
   left: 50%;
   right: auto;
   bottom: 12px;
-  width: 40px;
-  height: 40px;
+  width: calc(var(--ps-quick-add-core) + (var(--ps-quick-add-ring) * 2));
+  height: calc(var(--ps-quick-add-core) + (var(--ps-quick-add-ring) * 2));
   margin: 0;
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: #fff;
+  background: transparent;
   color: var(--product-price-text, #030302);
   font-family: var(--ps-ff-primary), sans-serif;
   font-weight: 500;
@@ -5694,25 +5723,30 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   justify-content: center;
   gap: 0;
   flex-shrink: 0;
+  box-sizing: border-box;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  box-shadow:
-    0 0 0 7px rgba(165, 142, 115, 0.42),
-    0 4px 20px rgba(3, 3, 2, 0.08);
-  overflow: hidden;
+  box-shadow: none;
+  overflow: visible;
   transform: translateX(-50%);
   transition:
-    opacity 0.22s ease,
-    visibility 0.22s ease,
-    transform 0.22s ease,
-    width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-    height 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-    padding 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-    border-radius 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-    background 0.25s ease,
-    box-shadow 0.3s ease,
-    gap 0.3s ease;
+    opacity var(--animation-values-slow),
+    visibility var(--animation-values-slow),
+    transform var(--animation-values-slow),
+    background 0.22s ease,
+    border-radius 0.22s ease,
+    box-shadow 0.22s ease,
+    backdrop-filter 0.22s ease;
+}
+
+/* Invisible hit area — ring + drop shadow, without changing pill shape */
+.ps-product-quick-add::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--ps-quick-add-shadow-reach));
+  border-radius: inherit;
+  z-index: 0;
 }
 
 .ps-plist-add {
@@ -5721,94 +5755,48 @@ html.ps-app-lang-ar .ps-plist-arrow img,
 
 .ps-product-quick-add__icon {
   position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
+  width: var(--ps-quick-add-core);
+  height: var(--ps-quick-add-core);
   border-radius: 50%;
   background: #fff;
   flex-shrink: 0;
   line-height: 0;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 var(--ps-quick-add-ring) rgba(165, 142, 115, 0.42),
+    0 4px 20px rgba(3, 3, 2, 0.08);
   transition:
-    width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-    height 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-    min-width 0.3s ease,
-    min-height 0.3s ease;
+    box-shadow 0.22s ease;
 }
 
-/* Hide SVG asset — CSS plus stays optically centered in the circle */
 .ps-product-quick-add .ps-product-plus-icon {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.ps-product-quick-add__icon::before,
-.ps-product-quick-add__icon::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background: #030302;
-  border-radius: 1px;
-  transform: translate(-50%, -50%);
-}
-
-.ps-product-quick-add__icon::before {
+  display: block;
   width: 12px;
-  height: 2px;
-}
-
-.ps-product-quick-add__icon::after {
-  width: 2px;
   height: 12px;
-}
-
-.ps-product-quick-add:hover .ps-product-quick-add__icon,
-.ps-product-quick-add:focus-visible .ps-product-quick-add__icon {
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  min-height: 24px;
-}
-
-.ps-product-quick-add:hover .ps-product-quick-add__icon::before,
-.ps-product-quick-add:focus-visible .ps-product-quick-add__icon::before {
-  width: 11px;
-  height: 2px;
-}
-
-.ps-product-quick-add:hover .ps-product-quick-add__icon::after,
-.ps-product-quick-add:focus-visible .ps-product-quick-add__icon::after {
-  width: 2px;
-  height: 11px;
+  object-fit: contain;
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 .ps-product-quick-add__label {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   max-width: 0;
   opacity: 0;
   overflow: hidden;
   white-space: nowrap;
+  flex-shrink: 0;
   font: inherit;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: 0;
-  text-transform: none;
   color: #fff;
-  transition:
-    max-width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-    opacity 0.22s ease 0.05s;
+  pointer-events: none;
+  transition: opacity 0.18s ease 0.04s;
 }
 
 .ps-product-quick-add__text {
@@ -5816,35 +5804,44 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   font: inherit;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 .ps-product-quick-add__text--hover {
   display: none;
 }
 
-/* Expanded pill — semi-transparent taupe (matches Figma / reference) */
+/* Expanded pill — frosted glass */
 .ps-product-quick-add:hover,
 .ps-product-quick-add:focus-visible {
   width: max-content;
-  max-width: max-content;
-  min-width: 0;
-  height: 32px;
-  padding: 3px 12px 3px 3px;
+  height: auto;
+  padding-block: 6px;
+  padding-inline-start: 8px;
+  padding-inline-end: 18px;
   border-radius: 100px;
-  background: rgba(3, 3, 2, 0.58);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background: rgba(165, 142, 115, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 20px rgba(3, 3, 2, 0.15);
-  gap: 6px;
+  gap: 8px;
   justify-content: flex-start;
-  align-items: center;
+}
+
+.ps-product-quick-add:hover::before,
+.ps-product-quick-add:focus-visible::before {
+  border-radius: 100px;
+}
+
+.ps-product-quick-add:hover .ps-product-quick-add__icon,
+.ps-product-quick-add:focus-visible .ps-product-quick-add__icon {
+  width: 24px;
+  height: 24px;
+  box-shadow: none;
 }
 
 .ps-product-quick-add:hover .ps-product-quick-add__label,
 .ps-product-quick-add:focus-visible .ps-product-quick-add__label {
-  max-width: max-content;
+  max-width: 12em;
   opacity: 1;
 }
 
@@ -5853,9 +5850,11 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   display: inline;
 }
 
-/* Keyboard focus — solid pill + longer merchant label */
-.ps-product-quick-add:focus-visible {
+/* Keyboard focus — readable solid pill (hover stays frosted glass) */
+.ps-product-quick-add:focus-visible:not(:hover) {
   background: #030302;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .ps-product-quick-add:focus-visible .ps-product-quick-add__text--rest {
@@ -5956,6 +5955,21 @@ html.ps-app-lang-ar .ps-plist-arrow img,
     pointer-events: auto;
   }
 
+  .ps-plist-card:hover .ps-product-quick-add:hover,
+  .ps-plist-card:focus-within .ps-product-quick-add:hover,
+  .ps-plist-card:hover .ps-product-quick-add:focus-visible,
+  .ps-plist-card:focus-within .ps-product-quick-add:focus-visible,
+  .ps-rp-card:hover .ps-product-quick-add:hover,
+  .ps-rp-card:focus-within .ps-product-quick-add:hover,
+  .ps-rp-card:hover .ps-product-quick-add:focus-visible,
+  .ps-rp-card:focus-within .ps-product-quick-add:focus-visible,
+  .ps-pgrid-card:hover .ps-product-quick-add:hover,
+  .ps-pgrid-card:focus-within .ps-product-quick-add:hover,
+  .ps-pgrid-card:hover .ps-product-quick-add:focus-visible,
+  .ps-pgrid-card:focus-within .ps-product-quick-add:focus-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
   .ps-plist-card:hover .ps-product-stock-x,
   .ps-plist-card:focus-within .ps-product-stock-x,
   .ps-rp-card:hover .ps-product-stock-x,
@@ -5994,8 +6008,8 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   background: var(--ps-card-ink, #1d242d);
   width: 35%;
   transition:
-    left 0.25s ease,
-    width 0.25s ease;
+    left var(--animation-values-slow),
+    width var(--animation-values-slow);
 }
 
 .ps-plist-arrows {
@@ -6133,12 +6147,10 @@ html.ps-app-lang-ar .ps-plist-arrow img,
 
   .ps-plist .ps-plist-add,
   .ps-pgrid-add {
-    width: 24px;
-    height: 24px;
+    --ps-quick-add-core: 24px;
+    --ps-quick-add-ring: 5px;
+    --ps-quick-add-shadow-reach: 12px;
     bottom: 11px;
-    box-shadow:
-      0 0 0 5px rgba(165, 142, 115, 0.38),
-      0 4px 20px rgba(3, 3, 2, 0.12);
   }
 
   .ps-product-quick-add .ps-product-plus-icon {
@@ -6146,44 +6158,21 @@ html.ps-app-lang-ar .ps-plist-arrow img,
     height: 10px;
   }
 
-  .ps-product-quick-add__icon::before {
-    width: 10px;
-    height: 1.75px;
-  }
-
-  .ps-product-quick-add__icon::after {
-    width: 1.75px;
-    height: 10px;
-  }
-
   .ps-product-quick-add:hover .ps-product-quick-add__icon,
   .ps-product-quick-add:focus-visible .ps-product-quick-add__icon {
     width: 20px;
     height: 20px;
-    min-width: 20px;
-    min-height: 20px;
-  }
-
-  .ps-product-quick-add:hover .ps-product-quick-add__icon::before,
-  .ps-product-quick-add:focus-visible .ps-product-quick-add__icon::before {
-    width: 10px;
-    height: 1.75px;
-  }
-
-  .ps-product-quick-add:hover .ps-product-quick-add__icon::after,
-  .ps-product-quick-add:focus-visible .ps-product-quick-add__icon::after {
-    width: 1.75px;
-    height: 10px;
+    box-shadow: none;
   }
 
   .ps-product-quick-add:hover,
   .ps-product-quick-add:focus-visible {
     width: max-content;
-    max-width: max-content;
-    min-width: 0;
-    height: 28px;
-    padding: 2px 10px 2px 2px;
-    gap: 5px;
+    height: auto;
+    padding-block: 5px;
+    padding-inline-start: 6px;
+    padding-inline-end: 16px;
+    gap: 6px;
     font-size: 13px;
   }
 }
@@ -6344,14 +6333,14 @@ div:has(> .ps-related-products) {
   opacity: 0;
   transform: scale(1.05);
   transition:
-    opacity 0.36s ease,
-    transform 0.5s ease;
+    opacity var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 .ps-rp-img-primary {
   transition:
-    opacity 0.36s ease,
-    transform 0.5s ease;
+    opacity var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 .ps-rp-content {
@@ -6497,7 +6486,7 @@ div:has(> .ps-related-products) {
    END: 13-related
    ============================================================================= */
 /* =============================================================================
-   START: 14-collection — Collection / products listing page
+   START: 14-collection � Collection / products listing page
    ============================================================================= */
 
 .collection_container {
@@ -6517,7 +6506,7 @@ div:has(> .ps-related-products) {
   padding-top: 0;
 }
 
-/* Platform collection shell + prestige blocks (Figma 27:3041 — title row, tagline, sort) */
+/* Platform collection shell + prestige blocks (Figma 27:3041 � title row, tagline, sort) */
 .collection_container>div:first-child>p {
   margin: 0 0 clamp(16px, 3vw, 24px);
   max-width: 42rem;
@@ -6577,7 +6566,7 @@ div:has(> .ps-related-products) {
   border: 1px solid var(--ps-border-hover, #d9d9d9) !important;
   border-radius: 6px !important;
   box-shadow: none !important;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--animation-values-slow);
 }
 
 .collection_container .category_section_header button[type="button"]:hover {
@@ -6604,7 +6593,7 @@ div:has(> .ps-related-products) {
 .collection_container .ps-pgrid-section {
   margin-left: 0;
   margin-right: 0;
-  /* Collection shell already pads; drop duplicate top padding (was clamp(40px…) from .ps-pgrid-section). */
+  /* Collection shell already pads; drop duplicate top padding (was clamp(40px�) from .ps-pgrid-section). */
   padding-top: 0;
   padding-bottom: clamp(20px, 3vw, 44px);
 }
@@ -6938,7 +6927,7 @@ div:has(> .ps-related-products) {
   background-position: center;
   background-size: contain;
   opacity: 0.65;
-  transition: transform 0.2s ease;
+  transition: transform var(--animation-values-slow);
 }
 
 .ps-cl-sort[open] .ps-cl-sort-arrow {
@@ -6984,7 +6973,7 @@ div:has(> .ps-related-products) {
   display: grid;
   grid-template-columns: 276px minmax(0, 1fr);
   gap: 32px;
-  /* Was 60px — created a large dead zone under toolbar / hero. */
+  /* Was 60px � created a large dead zone under toolbar / hero. */
   padding: clamp(14px, 2.2vw, 28px) 0 0;
 }
 
@@ -7051,7 +7040,7 @@ div:has(> .ps-related-products) {
   background-size: contain;
   flex-shrink: 0;
   opacity: 0.65;
-  transition: transform 0.2s ease;
+  transition: transform var(--animation-values-slow);
 }
 
 .ps-cl-filters-shell[open]>.ps-cl-filters-shell-summary::after {
@@ -7162,7 +7151,7 @@ div:has(> .ps-related-products) {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  transition: transform 0.2s ease;
+  transition: transform var(--animation-values-slow);
   flex-shrink: 0;
 }
 
@@ -7334,7 +7323,7 @@ div:has(> .ps-related-products) {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity var(--animation-values-slow);
 }
 
 @media (hover: hover) {
@@ -7634,7 +7623,7 @@ div:has(> .ps-related-products) {
    END: 14-collection
    ============================================================================= */
 /* =============================================================================
-   START: 15-footer — sections/footer.liquid
+   START: 15-footer � sections/footer.liquid
    ============================================================================= */
 
 /* Footer: palette --ft-bg / --ft-text (Liquid sets them on <footer> when palette exists; else inherit from :root). CSS uses var(--ft-*, fallback) only. */
@@ -7676,7 +7665,7 @@ div:has(> .ps-related-products) {
 }
 
 .ps-footer-inner {
-  /* ÙŠØªØ¨Ø¹ Ù†ÙØ³ Ù‚ÙˆØ§Ø¹Ø¯ .content_container: Ø¹Ø±Ø¶ 100% Ø¨Ø¯ÙˆÙ† Ø³Ù‚Ù 1240px */
+  /* يتبع نفس قواعد .content_container: عرض 100% بدون سقف 1240px */
   width: 100%;
   max-width: none;
   margin: 0;
@@ -7690,7 +7679,7 @@ div:has(> .ps-related-products) {
 
 /*
  * Footer main: 12-col grid <1024 (tablet/mobile).
- * ≥1024: equal-width columns via grid-auto-flow — one `1fr` track per child (no flex).
+ * =1024: equal-width columns via grid-auto-flow � one `1fr` track per child (no flex).
  */
 .ps-footer-main {
   --ps-footer-main-gap: clamp(24px, 3.5vw, 40px);
@@ -7872,7 +7861,7 @@ div:has(> .ps-related-products) {
   line-height: 1.5;
   text-align: center;
   text-transform: none;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--animation-values-slow);
 }
 
 .ps-footer-subscribe-btn:hover {
@@ -7901,7 +7890,7 @@ div:has(> .ps-related-products) {
   color: inherit;
 }
 
-/* Column titles — palette Footer Text (--ft-text) */
+/* Column titles � palette Footer Text (--ft-text) */
 .ps-footer-heading {
   margin: 0 0 26px;
   font-family: var(--ps-ff-primary), sans-serif;
@@ -8043,7 +8032,7 @@ div:has(> .ps-related-products) {
   opacity: 0.95;
 }
 
-/* Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª Ù…Ù„ÙˆÙ†Ø© Ù…Ù† Ø§Ù„Ù…ØªØ¬Ø± — ØªØ­ÙˆÙŠÙ„Ù‡Ø§ Ù„Ø£Ø¨ÙŠØ¶ Ø¹Ù„Ù‰ Ø§Ù„Ø®Ù„ÙÙŠØ© Ø§Ù„Ø¯Ø§ÙƒÙ†Ø© */
+/* أيقونات ملونة من المتجر � تحويلها لأبيض على الخلفية الداكنة */
 .ps-footer-social-img--invert {
   filter: brightness(0) invert(1);
 }
@@ -8171,7 +8160,7 @@ div:has(> .ps-related-products) {
   }
 }
 
-/* Ù‡Ø§ØªÙ ÙÙ‚Ø·: ØªÙˆØ³ÙŠØ· ØµÙ Ø§Ù„Ø¯ÙØ¹ØŒ Ø§Ù„Ø³ÙˆØ´ÙŠØ§Ù„ØŒ Ø§Ù„ÙØ§ØµÙ„ØŒ ÙˆØ­Ù‚ÙˆÙ‚ / Powered by */
+/* هاتف فقط: توسيط صف الدفع، السوشيال، الفاصل، وحقوق / Powered by */
 @media (max-width: 767.98px) {
   .ps-footer-meta-row {
     justify-items: center;
@@ -8225,7 +8214,7 @@ div:has(> .ps-related-products) {
    END: 15-footer
    ============================================================================= */
 /* =============================================================================
-   START: 16-cart — Cart drawer (platform)
+   START: 16-cart � Cart drawer (platform)
    ============================================================================= */
 
 .ps-cart-drawer {
@@ -8793,7 +8782,7 @@ html.ps-app-lang-ar :is(.ps-cart-drawer-footer,
   section.checkout_order_summary) .checkout-coupon::before,
 html.ps-app-lang-ar :is(.product_form_checkout.checkout_container,
   form.checkout_form.checkout_container) .checkout-coupon::before {
-  content: "Ù‚Ø³ÙŠÙ…Ø© Ø§Ù„Ø®ØµÙ…";
+  content: "قسيمة الخصم";
 }
 
 html:lang(de) :is(.ps-cart-drawer-footer,
@@ -8809,7 +8798,7 @@ html:lang(es) :is(.ps-cart-drawer-footer,
   section.checkout_order_summary) .checkout-coupon::before,
 html:lang(es) :is(.product_form_checkout.checkout_container,
   form.checkout_form.checkout_container) .checkout-coupon::before {
-  content: "Cupón de descuento";
+  content: "Cup�n de descuento";
 }
 
 html:lang(fr) :is(.ps-cart-drawer-footer,
@@ -8817,7 +8806,7 @@ html:lang(fr) :is(.ps-cart-drawer-footer,
   section.checkout_order_summary) .checkout-coupon::before,
 html:lang(fr) :is(.product_form_checkout.checkout_container,
   form.checkout_form.checkout_container) .checkout-coupon::before {
-  content: "Bon de réduction";
+  content: "Bon de r�duction";
 }
 
 html:lang(it) :is(.ps-cart-drawer-footer,
@@ -8847,7 +8836,7 @@ html:lang(it) :is(.product_form_checkout.checkout_container,
   border-radius: 0;
   background: var(--ps-surface, #fff);
   box-sizing: border-box;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--animation-speed-medium) var(--animation-easing);
 }
 
 :is(.ps-cart-drawer-footer,
@@ -9291,7 +9280,7 @@ html:lang(it) :is(.product_form_checkout.checkout_container,
    END: 16-cart
    ============================================================================= */
 /* =============================================================================
-   START: 19-product-details — sections/product-details.liquid
+   START: 19-product-details � sections/product-details.liquid
    ============================================================================= */
 
 
@@ -9325,8 +9314,8 @@ html:lang(it) :is(.product_form_checkout.checkout_container,
 .ab-breadcrumbs-cat-link {
   color: inherit;
   transition:
-    color 0.15s ease,
-    text-decoration-color 0.15s ease;
+    color var(--animation-speed-medium) var(--animation-easing),
+    text-decoration-color var(--animation-speed-medium) var(--animation-easing);
 }
 
 .ab-breadcrumbs-cat-link:hover {
@@ -9517,7 +9506,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
 }
 
 
-/* PDP — Figma 10:2198 / 10:2556 (variations desktop) / 25:1955 / 25:3607 (variations mobile) / 25:1948 (gallery counter) */
+/* PDP � Figma 10:2198 / 10:2556 (variations desktop) / 25:1955 / 25:3607 (variations mobile) / 25:1948 (gallery counter) */
 .p_content_container:has([data-ps-pdp-gallery]) .ab-pd {
   gap: 12px;
   margin: 0;
@@ -9590,7 +9579,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   gap: 14px !important;
 }
 
-/* PDP color swatches — Figma 16:1114 (row) / 16:1119 (swatch) */
+/* PDP color swatches � Figma 16:1114 (row) / 16:1119 (swatch) */
 :is(#product-id:has([data-ps-pdp-gallery]), #product-id:has([data-ps-pdp-details])) .p_details_container .color_variation,
 #product-id .p_details_container:has([data-ps-pdp-details]) .color_variation,
 #product-id .p_details_container:has(.ab-pd[data-ps-pdp-details]) .color_variation {
@@ -9652,7 +9641,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   gap: 14px !important;
 }
 
-/* PDP size buttons — Figma 10:2594: unselected 11% border / selected solid ink border */
+/* PDP size buttons � Figma 10:2594: unselected 11% border / selected solid ink border */
 :is(#product-id:has([data-ps-pdp-gallery]), #product-id:has([data-ps-pdp-details])) .p_details_container .button_variation,
 #product-id .p_details_container:has([data-ps-pdp-details]) .button_variation {
   position: relative;
@@ -9715,7 +9704,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   gap: 11px !important;
 }
 
-/* Image variation thumbnails — Figma 10:2556 (15:38 Color Pick) */
+/* Image variation thumbnails � Figma 10:2556 (15:38 Color Pick) */
 .p_content_container:has([data-ps-pdp-gallery]) .p_details_container .image_variation {
   flex: 0 0 auto;
   width: 67px !important;
@@ -9796,7 +9785,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   gap: 11px !important;
 }
 
-/* PDP product form — Figma 10:2655 / 25:2402 (row: qty + ATC; full-width buy now below) */
+/* PDP product form � Figma 10:2655 / 25:2402 (row: qty + ATC; full-width buy now below) */
 .p_content_container:has([data-ps-pdp-gallery]) .product_form_checkout {
   width: 100%;
   max-width: 100%;
@@ -9813,7 +9802,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   min-width: 0 !important;
 }
 
-/* PDP qty row — 126×51 box, ± icons readable, no overflow */
+/* PDP qty row � 126�51 box, � icons readable, no overflow */
 .p_content_container:has([data-ps-pdp-gallery]) .flex:has(.quantity_btn_container),
 .p_content_container:has([data-ps-pdp-gallery]) .product_form_checkout .flex:has(.quantity_btn_container) {
   display: flex !important;
@@ -9978,7 +9967,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   padding: 0 !important;
 }
 
-/* Product form — Figma 10:2655 (desktop) / 25:2402 (mobile) */
+/* Product form � Figma 10:2655 (desktop) / 25:2402 (mobile) */
 .p_content_container:has([data-ps-pdp-gallery]) .add_to_cart_btn,
 .p_content_container:has([data-ps-pdp-gallery]) .p_details_container .product_form_checkout button.button.button--outline {
   flex: 1 1 auto !important;
@@ -10013,10 +10002,10 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    filter 0.2s ease,
-    opacity 0.2s ease !important;
+    background-color var(--animation-values-slow),
+    color var(--animation-values-slow),
+    filter var(--animation-values-slow),
+    opacity var(--animation-values-slow) !important;
 }
 
 .p_content_container:has([data-ps-pdp-gallery]) .add_to_cart_btn::before,
@@ -10096,7 +10085,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   }
 }
 
-/* PDP description accordion — Figma 10:2670 (Details / policies rows) */
+/* PDP description accordion � Figma 10:2670 (Details / policies rows) */
 .p_content_container:has([data-ps-pdp-gallery]) .lq-desc-accordion {
   margin-top: 0;
   width: 100%;
@@ -10344,7 +10333,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
    END: 19-product-details
    ============================================================================= */
 /* =============================================================================
-   START: 18-gallery — sections/gallery.liquid
+   START: 18-gallery � sections/gallery.liquid
    ============================================================================= */
 
 .ab-gallery {
@@ -10430,9 +10419,9 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   visibility: visible;
   transform: scale(1);
   transition:
-    opacity 0.25s ease,
-    transform 0.25s ease,
-    background 0.2s ease;
+    opacity var(--animation-values-slow),
+    transform var(--animation-values-slow),
+    background var(--animation-values-slow);
 }
 
 .ab-gallery-slide:hover .ab-gallery-zoom,
@@ -10476,8 +10465,8 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   max-width: 100%;
   display: block;
   transition:
-    border-color 0.25s ease,
-    transform 0.25s ease;
+    border-color var(--animation-values-slow),
+    transform var(--animation-values-slow);
 }
 
 .ab-gallery-thumb.ab-active {
@@ -10634,7 +10623,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
    END: 18-gallery
    ============================================================================= */
 /* =============================================================================
-   START: 21-reviews — sections/reviews.liquid
+   START: 21-reviews � sections/reviews.liquid
    ============================================================================= */
 
 .ps-rev-section .ps-rev-summary,
@@ -10778,8 +10767,8 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   list-style: none;
   transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
+    border-color var(--animation-values-slow),
+    background var(--animation-values-slow);
   -webkit-appearance: none;
   appearance: none;
   -webkit-tap-highlight-color: transparent;
@@ -10817,7 +10806,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   height: 8px;
   background: url("https://files.easy-orders.net/1778659559800239805prestig-form-select-chevron-down.svg") no-repeat center;
   opacity: 0.85;
-  transition: transform 0.2s ease;
+  transition: transform var(--animation-values-slow);
   pointer-events: none;
 }
 
@@ -10859,9 +10848,9 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   cursor: pointer;
   border-radius: 2px;
   transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    box-shadow 0.15s ease;
+    background var(--animation-speed-medium) var(--animation-easing),
+    color var(--animation-speed-medium) var(--animation-easing),
+    box-shadow var(--animation-speed-medium) var(--animation-easing);
   -webkit-appearance: none;
   appearance: none;
   -webkit-tap-highlight-color: transparent;
@@ -10907,8 +10896,8 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   -webkit-appearance: none;
   -moz-appearance: none;
   transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease;
+    border-color var(--animation-values-slow),
+    background-color var(--animation-values-slow);
   font-family: "SF Mono", var(--ps-ff-ui), sans-serif;
   color-scheme: light;
 }
@@ -11163,7 +11152,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   background: var(--ps-rev-star-fill, var(--ps-ink-secondary, #1c1c1c));
   border-radius: inherit;
   min-width: 0;
-  transition: width 0.35s ease;
+  transition: width var(--animation-values-slow);
 }
 
 .ps-rev-bar-pct {
@@ -11174,7 +11163,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   text-align: end;
 }
 
-/* Review cards — same bordered grid system as product cards (§08 / catalog pgrid) */
+/* Review cards � same bordered grid system as product cards (�08 / catalog pgrid) */
 .ps-rev-grid.ps-rev-grid--cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -11315,7 +11304,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   overflow: hidden;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--animation-values-slow);
 }
 
 .ps-rev-photo-btn:hover {
@@ -11407,7 +11396,7 @@ img.ab-pd-star-icon.ab-pd-star-icon--off {
   border-radius: 0;
   cursor: pointer;
   box-sizing: border-box;
-  transition: background 0.2s ease;
+  transition: background var(--animation-values-slow);
 }
 
 .ps-rev-load-more:hover {
@@ -11507,8 +11496,8 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) button.text-gray
   cursor: pointer;
   color: #6b7280;
   transition:
-    color 0.2s ease,
-    background 0.2s ease;
+    color var(--animation-values-slow),
+    background var(--animation-values-slow);
 }
 
 div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) button.text-gray-500:hover {
@@ -11554,9 +11543,9 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) textarea.global_
   color: var(--input-text, var(--ps-ink, #101010));
   background: var(--input-bg, var(--ps-surface-hover, #fafafa));
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    border-color var(--animation-values-slow),
+    box-shadow var(--animation-values-slow),
+    background var(--animation-values-slow);
 }
 
 div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) textarea.global_textarea {
@@ -11680,7 +11669,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) button.bg-skin-p
    END: 21-reviews
    ============================================================================= */
 /* =============================================================================
-   START: 20-description — sections/product-description.liquid
+   START: 20-description � sections/product-description.liquid
    ============================================================================= */
 
 .lq-desc-accordion {
@@ -11748,7 +11737,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) button.bg-skin-p
   content: "";
   position: absolute;
   background: currentColor;
-  transition: transform 0.25s ease;
+  transition: transform var(--animation-values-slow);
 }
 
 .lq-desc-chevron::before {
@@ -11845,7 +11834,7 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) button.bg-skin-p
    END: 20-description
    ============================================================================= */
 /* =============================================================================
-   START: 23-fake-utility — fake-visitor / stock / counter
+   START: 23-fake-utility � fake-visitor / stock / counter
    ============================================================================= */
 
 .ab-fake-counter {
@@ -11960,10 +11949,10 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) button.bg-skin-p
    END: 23-fake-utility
    ============================================================================= */
 /* =============================================================================
-   START: 24-quick-view — Quick view dialog
+   START: 24-quick-view � Quick view dialog
    ============================================================================= */
 
-/* Quick view: Headless UI dialog panel (id headlessui-dialog-panel-…); classes from initPrestigeQuickViewScope */
+/* Quick view: Headless UI dialog panel (id headlessui-dialog-panel-�); classes from initPrestigeQuickViewScope */
 div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
   background-color: var(--body-bg, var(--ps-page-bg, #ffffff));
   color: var(--body-text, var(--ps-ink, #101010));
@@ -12076,8 +12065,8 @@ div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
   line-height: 0 !important;
   letter-spacing: 0 !important;
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+    background-color var(--animation-values-slow),
+    color var(--animation-values-slow);
 }
 
 .quantity_btn_container button>* {
@@ -12304,8 +12293,8 @@ div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
     flex-shrink: 0;
     -webkit-tap-highlight-color: transparent;
     transition:
-      background 0.2s ease,
-      transform 0.2s ease;
+      background var(--animation-values-slow),
+      transform var(--animation-values-slow);
   }
 
   .ab-gallery-dot.is-active {
@@ -12335,7 +12324,7 @@ div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
   }
 }
 
-/* Phones / narrow: no hover — keep zoom visible on the active slide only */
+/* Phones / narrow: no hover � keep zoom visible on the active slide only */
 @media (max-width: 767.98px) {
   .ab-gallery-slide.is-active .ab-gallery-zoom {
     opacity: 1 !important;
@@ -12356,10 +12345,10 @@ div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
    END: 24-quick-view
    ============================================================================= */
 /* =============================================================================
-   START: 25-checkout — /checkout page
+   START: 25-checkout � /checkout page
    ============================================================================= */
 
-/* Platform /checkout (React + Tailwind): Ø®Ù„ÙÙŠØ© Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ù…ÙˆØ­Ù‘Ø¯Ø© (Ø±Ù…Ø§Ø¯ÙŠ ÙØ§ØªØ­ Ø«ÙŠÙ…) */
+/* Platform /checkout (React + Tailwind): خلفية الصفحة الموحّدة (رمادي فاتح ثيم) */
 div.bg-white:has(> .checkout_container) {
   background: var(--ps-surface-checkout, #f4f4f5) !important;
   min-height: 100vh;
@@ -12434,7 +12423,7 @@ section.checkout_order_summary>.mx-auto {
   }
 }
 
-/* Ø¹Ù†Ø§ÙˆÙŠÙ† Ø¨Ù†ÙØ³ Ø£Ø³Ù„ÙˆØ¨ ÙÙˆØ±Ù… Ø§Ù„Ù…Ù†ØªØ¬ (SF Mono + ÙˆØ²Ù† Ù‡Ø§Ø¯Ø¦) */
+/* عناوين بنفس أسلوب فورم المنتج (SF Mono + وزن هادئ) */
 section.checkout_order_summary h2#summary-heading {
   font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
   font-size: 18px !important;
@@ -12456,7 +12445,7 @@ form.checkout_form.checkout_container .contact-info-heading {
   padding-top: 0.25rem;
 }
 
-/* Field labels: legacy PDP shell only — /checkout + Figma form use §26 Figma block below */
+/* Field labels: legacy PDP shell only � /checkout + Figma form use �26 Figma block below */
 :is(.product_form_checkout.checkout_container,
   form.product_form_checkout.checkout_container) label.block {
   font-family: "SF Mono", var(--ps-ff-ui), sans-serif !important;
@@ -12484,8 +12473,8 @@ button.checkout_buy_now,
   text-transform: uppercase !important;
   min-height: 48px !important;
   transition:
-    background 0.2s ease,
-    opacity 0.2s ease !important;
+    background var(--animation-values-slow),
+    opacity var(--animation-values-slow) !important;
 }
 
 @media (hover: hover) {
@@ -12494,7 +12483,7 @@ button.checkout_buy_now,
   }
 }
 
-/* Ø´Ø±ÙŠØ· Ø§Ù„Ø²Ø± Ø§Ù„Ø«Ø§Ø¨Øª: Ù…ÙˆØ¨Ø§ÙŠÙ„ — Ø¹Ø±Ø¶ ÙƒØ§Ù…Ù„ Ø¨Ø¯ÙˆÙ† Ø¨Ø§Ø¯ÙŠÙ†Ø¬ Ø¬Ø§Ù†Ø¨ÙŠØŒ Ø®Ù„ÙÙŠØ© Ù†ÙØ³ Ù„ÙˆÙ† Ø§Ù„Ù€ checkout */
+/* شريط الزر الثابت: موبايل � عرض كامل بدون بادينج جانبي، خلفية نفس لون الـ checkout */
 form.checkout_form.checkout_container .fixed.bottom-0 {
   border-color: var(--ps-zinc-200-border, #e4e4e7) !important;
   background: var(--ps-surface-checkout, #f4f4f5) !important;
@@ -12842,10 +12831,10 @@ ul.checkout_cart_items_container.divide-y>li,
    END: 25-checkout
    ============================================================================= */
 /* =============================================================================
-   START: 26-forms — Shared PDP + checkout form fields
+   START: 26-forms � Shared PDP + checkout form fields
    ============================================================================= */
 
-/* Checkout form: PDP + /checkout — tokens + Shopify-like fields (single source) */
+/* Checkout form: PDP + /checkout � tokens + Shopify-like fields (single source) */
 :is(.product_form_checkout.checkout_container,
   form.product_form_checkout.checkout_container,
   form.checkout_form.checkout_container) {
@@ -13024,7 +13013,7 @@ textarea.global_textarea:focus {
   outline: none !important;
 }
 
-/* Coupon composite strip: inner field is borderless; wrapper uses :focus-within — drop global focus ring */
+/* Coupon composite strip: inner field is borderless; wrapper uses :focus-within � drop global focus ring */
 :is(.ps-cart-drawer-footer,
   .ps-checkout-page__summary-body,
   section.checkout_order_summary) .checkout-coupon .global_input:focus,
@@ -13308,7 +13297,7 @@ textarea.global_textarea:focus {
   color: rgba(16, 16, 16, 0.7) !important;
 }
 
-/* Payment methods — always stacked vertically (never side-by-side) */
+/* Payment methods � always stacked vertically (never side-by-side) */
 :is(.product_form_checkout.checkout_container,
   form.checkout_form.checkout_container) div:has(> .payment_card),
 :is(.product_form_checkout.checkout_container,
@@ -13453,8 +13442,8 @@ textarea.global_textarea:focus {
       var(--ps-ink-secondary, #1c1c1c)) !important;
   background-image: none !important;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease !important;
+    background-color var(--animation-values-slow),
+    border-color var(--animation-values-slow) !important;
 }
 
 :is(.product_form_checkout.checkout_container,
@@ -13530,7 +13519,7 @@ textarea.global_textarea:focus {
 }
 
 
-/* Checkout form — Figma 15:267 + PDP 10:2882 (Personal Information / Delivery / Payment) */
+/* Checkout form � Figma 15:267 + PDP 10:2882 (Personal Information / Delivery / Payment) */
 :is(
   .p_content_container:has([data-ps-pdp-gallery]) .p_details_container .product_form_checkout.checkout_container,
   .p_content_container:has([data-ps-pdp-gallery]) .p_details_container form.product_form_checkout.checkout_container,
@@ -13644,7 +13633,7 @@ div.checkout_container form.checkout_form.checkout_container {
   text-transform: none;
 }
 
-/* Checkout intro — not a beige section bar (Figma 15:267) */
+/* Checkout intro � not a beige section bar (Figma 15:267) */
 :is(
   .p_content_container:has([data-ps-pdp-gallery]) .p_details_container .product_form_checkout.checkout_container,
   .p_content_container:has([data-ps-pdp-gallery]) .p_details_container form.product_form_checkout.checkout_container,
@@ -14135,7 +14124,7 @@ div.checkout_container form.checkout_form.checkout_container {
   }
 }
 
-/* /checkout page — intro + section spacing (Figma 15:267) */
+/* /checkout page � intro + section spacing (Figma 15:267) */
 form.checkout_form.checkout_container > section[aria-labelledby="contact-info-heading"],
 form.checkout_form.checkout_container > .contact-info-heading {
   display: flex;
@@ -14167,7 +14156,7 @@ form.checkout_form.checkout_container .payment_card_description {
   color: color-mix(in srgb, var(--body-text, #0f0f0f) 70%, transparent) !important;
 }
 
-/* /checkout — final overrides (legacy §26 + global .global_input) */
+/* /checkout � final overrides (legacy �26 + global .global_input) */
 form.checkout_form.checkout_container form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
 form.checkout_form.checkout_container form textarea,
 form.checkout_form.checkout_container form select,
@@ -14311,7 +14300,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
    END: 26-forms
    ============================================================================= */
 /* =============================================================================
-   START: 22-fixed-buy — sections/fixed-buy-button.liquid
+   START: 22-fixed-buy � sections/fixed-buy-button.liquid
    Figma 16:1426 (desktop) / 25:3920 (mobile)
    ============================================================================= */
 
@@ -14495,7 +14484,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
   color: var(--buy-btn-text, #fff) !important;
   background: var(--buy-btn-bg, #000) !important;
   background-image: none !important;
-  transition: filter 0.2s ease, opacity 0.2s ease !important;
+  transition: filter var(--animation-values-slow), opacity var(--animation-values-slow) !important;
 }
 
 @media (hover: hover) {
@@ -14518,13 +14507,13 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
   cursor: not-allowed;
 }
 
-/* Sticky qty chrome = PDP .quantity_btn_container (shared rules above + §20 PDP form) */
+/* Sticky qty chrome = PDP .quantity_btn_container (shared rules above + �20 PDP form) */
 .ps-sticky-buy__qty {
   flex: 0 0 auto;
   align-self: stretch;
 }
 
-/* Desktop — Figma 16:1426: full width, px 100 / py 30, space-between (not centered band) */
+/* Desktop � Figma 16:1426: full width, px 100 / py 30, space-between (not centered band) */
 @media (min-width: 1024px) {
   .ps-sticky-buy .product_container.ps-sticky-buy__container {
     max-width: none;
@@ -14578,7 +14567,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
   }
 }
 
-/* Mobile / tablet — Figma 25:3920: column stack, thumb hidden, py adjusted for no-image row */
+/* Mobile / tablet � Figma 25:3920: column stack, thumb hidden, py adjusted for no-image row */
 @media (max-width: 1023.98px) {
   .ps-sticky-buy {
     border-radius: 0;
@@ -14855,7 +14844,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
   background: var(--ps-surface, #fff);
   cursor: pointer;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--animation-speed-medium) var(--animation-easing);
 }
 
 .ps-upsell__card:focus-visible {
@@ -15334,7 +15323,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
    END: 22-fixed-buy
    ============================================================================= */
 /* =============================================================================
-   START: 27-thanks-invoice — thanks + order-invoice
+   START: 27-thanks-invoice � thanks + order-invoice
    Figma 17:1495 (desktop) / 25:3973 (mobile)
    ============================================================================= */
 
@@ -15448,7 +15437,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
   gap: 24px;
 }
 
-/* Legacy platform HTML block — hidden; Figma hero uses thanks_title / thanks_message vars */
+/* Legacy platform HTML block � hidden; Figma hero uses thanks_title / thanks_message vars */
 .ps-thanks-custom-content,
 [data-liquid-thanks] .ps-thanks-platform-content {
   display: none !important;
@@ -15489,7 +15478,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
   color: var(--body-text, var(--ps-ink, #101010));
   cursor: pointer;
   margin-top: 0;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color var(--animation-values-slow), color var(--animation-values-slow);
 }
 
 @media (hover: hover) {
@@ -15537,7 +15526,7 @@ form.checkout_form.checkout_container div:has(> button:has(.radio_container)) {
   }
 }
 
-/* --- Order invoice (order-invoice.liquid) — compact card, bounded width --- */
+/* --- Order invoice (order-invoice.liquid) � compact card, bounded width --- */
 div:has(> .ps-invoice) {
   padding: 0 clamp(20px, 4vw, 40px);
 }
@@ -15592,8 +15581,8 @@ div:has(> .ps-invoice) {
   border-radius: 10px;
   cursor: pointer;
   transition:
-    background 0.15s ease,
-    transform 0.1s ease;
+    background var(--animation-speed-medium) var(--animation-easing),
+    transform var(--animation-values-fast);
 }
 
 .ps-invoice-track-btn:hover {
@@ -15914,7 +15903,7 @@ div:has(> .ps-invoice) {
    END: 27-thanks-invoice
    ============================================================================= */
 /* =============================================================================
-   START: 28-compare — Product compare UI
+   START: 28-compare � Product compare UI
    ============================================================================= */
 
 /* Product compare: captions inside each layer (clip with split); bottom corners */
@@ -15984,11 +15973,12 @@ body:has(.checkout_order_summary) .ps-footer {
 /* --- Prestige scroll-reveal animation system (`data-anim`, `data-seq`, `data-anim="cycle"` + `data-cycle`) --- */
 
 /* Sticky buy + footer bottom strip: never hide or animate (PDP bar + copyright row). */
-.ps-sticky-buy :is(.will-animate, .animated, [class*="anim-"]),
-.ps-footer-sleek-bottom :is(.will-animate, .animated, [class*="anim-"]),
-[data-ps-no-anim] :is(.will-animate, .animated, [class*="anim-"]) {
+.ps-sticky-buy :is(.will-animate, .animated, .animate-blur, [class*="anim-"]),
+.ps-footer-sleek-bottom :is(.will-animate, .animated, .animate-blur, [class*="anim-"]),
+[data-ps-no-anim] :is(.will-animate, .animated, .animate-blur, [class*="anim-"]) {
   opacity: 1 !important;
   transform: none !important;
+  filter: none !important;
   animation: none !important;
   transition: none !important;
 }
@@ -16046,16 +16036,34 @@ body:has(.checkout_order_summary) .ps-footer {
    ============================================================================= */
 
 /* Hide pending elements — !important beats host/Tailwind utilities (e.g. opacity-100). */
-.will-animate {
-  opacity: 0 !important;
-  transform: translateY(20px) !important;
+/* Shopify Horizon-style `animate-blur`: blur + fade, no slide — matches section-wrapper.animate-blur */
+[data-anim],
+.animate-blur {
+  transition:
+    opacity var(--animation-reveal-values),
+    filter var(--animation-reveal-values),
+    transform var(--animation-reveal-values);
 }
 
-/* Transition-only reveal (no `anim-*` keyframe class). */
+[data-anim].will-animate,
+.animate-blur:not(.animated) {
+  opacity: 0 !important;
+  filter: blur(var(--animation-reveal-blur)) !important;
+  transform: none !important;
+}
+
+[data-anim].animated,
+.animate-blur.animated {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* Legacy keyframe path — kept for `anim-*` hooks; scroll reveal uses transition-only `.animated`. */
 .animated:not([class*="anim-"]) {
   opacity: 1 !important;
-  transform: translateY(0) !important;
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: none !important;
+  transform: none !important;
 }
 
 /* Keyframe-driven reveals: avoid transition fighting `animation`. */
@@ -16067,246 +16075,282 @@ body:has(.checkout_order_summary) .ps-footer {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(40px);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-40px);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    transform: translateX(-50px);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes fadeInRight {
   from {
     opacity: 0;
-    transform: translateX(50px);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.8);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: scale(1);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes rotateIn {
   from {
     opacity: 0;
-    transform: rotate(-10deg) scale(0.9);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: rotate(0deg) scale(1);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes slideInUp {
   from {
     opacity: 0;
-    transform: translateY(60px) scale(0.95);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes bounceIn {
-  0% {
+  from {
     opacity: 0;
-    transform: scale(0.3);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
-  50% {
+  to {
     opacity: 1;
-    transform: scale(1.05);
-  }
-
-  70% {
-    transform: scale(0.98);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes flipIn {
   from {
     opacity: 0;
-    transform: perspective(400px) rotateY(-90deg);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: perspective(400px) rotateY(0deg);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes zoomIn {
   from {
     opacity: 0;
-    transform: scale(0.5);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: scale(1);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-100px) rotate(-5deg);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: translateX(0) rotate(0deg);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(100px) rotate(5deg);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: translateX(0) rotate(0deg);
+    filter: none;
+    transform: none;
   }
 }
 
 @keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: scale(0.7) translateY(20px);
+    filter: blur(var(--animation-reveal-blur));
+    transform: none;
   }
 
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    filter: none;
+    transform: none;
   }
 }
 
+.anim-fadeInUp,
+.anim-fadeInDown,
+.anim-fadeInLeft,
+.anim-fadeInRight,
+.anim-rotateIn,
+.anim-slideInUp,
+.anim-flipIn,
+.anim-slideInLeft,
+.anim-slideInRight,
+.anim-fadeInScale,
+.anim-scaleIn,
+.anim-zoomIn,
+.anim-bounceIn {
+  animation-duration: var(--animation-reveal-duration);
+  animation-timing-function: var(--animation-timing-fade-in);
+  animation-fill-mode: both;
+  animation-direction: normal;
+}
+
 .anim-fadeInUp {
-  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: fadeInUp;
 }
 
 .anim-fadeInDown {
-  animation: fadeInDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: fadeInDown;
 }
 
 .anim-fadeInLeft {
-  animation: fadeInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: fadeInLeft;
 }
 
 .anim-fadeInRight {
-  animation: fadeInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: fadeInRight;
 }
 
 .anim-scaleIn {
-  animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-name: scaleIn;
 }
 
 .anim-rotateIn {
-  animation: rotateIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: rotateIn;
 }
 
 .anim-slideInUp {
-  animation: slideInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: slideInUp;
 }
 
 .anim-bounceIn {
-  animation: bounceIn 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation-name: bounceIn;
 }
 
 .anim-flipIn {
-  animation: flipIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: flipIn;
 }
 
 .anim-zoomIn {
-  animation: zoomIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: zoomIn;
 }
 
 .anim-slideInLeft {
-  animation: slideInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: slideInLeft;
 }
 
 .anim-slideInRight {
-  animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: slideInRight;
 }
 
 .anim-fadeInScale {
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-name: fadeInScale;
 }
 
 .hover-lift,
 .ps-hover-lift {
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform var(--animation-hover-values),
+    box-shadow var(--animation-hover-values);
 }
 
 .hover-lift:hover,
 .ps-hover-lift:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .hover-scale,
 .ps-hover-scale {
-  transition: transform 0.3s ease;
+  transition: transform var(--animation-hover-values);
 }
 
 .hover-scale:hover,
 .ps-hover-scale:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .hover-glow,
 .ps-hover-glow {
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow var(--animation-hover-values);
 }
 
 .hover-glow:hover,
@@ -16322,31 +16366,41 @@ body:has(.checkout_order_summary) .ps-footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .will-animate {
+  [data-anim].will-animate,
+  .animate-blur:not(.animated) {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
   }
 
+  [data-anim].animated,
+  .animate-blur.animated,
   .animated,
   .animated[class*="anim-"] {
     animation: none !important;
     transition: none !important;
     transform: none !important;
+    filter: none !important;
     opacity: 1 !important;
   }
 }
 
 /* Merchant: `enable_theme_animations` off — mirrored to `html[data-ps-animations="0"]` by script.js. */
-html[data-ps-animations="0"] .will-animate {
+html[data-ps-animations="0"] [data-anim].will-animate,
+html[data-ps-animations="0"] .animate-blur:not(.animated) {
   opacity: 1 !important;
   transform: none !important;
+  filter: none !important;
 }
 
+html[data-ps-animations="0"] [data-anim].animated,
+html[data-ps-animations="0"] .animate-blur.animated,
 html[data-ps-animations="0"] .animated,
 html[data-ps-animations="0"] .animated[class*="anim-"] {
   animation: none !important;
   transition: none !important;
   transform: none !important;
+  filter: none !important;
   opacity: 1 !important;
 }
 

@@ -100,7 +100,7 @@
     border-radius: 6px;
     overflow: hidden;
     background: #ece8e1;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform var(--animation-values-slow), box-shadow var(--animation-values-slow);
   }
   .category-mosaic .eo-hs-card--category:hover {
     transform: translateY(-4px);
@@ -120,7 +120,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.45s ease;
+    transition: transform var(--animation-values-slow);
   }
   .category-mosaic .eo-hs-card--category:hover .eo-hs-card__media img {
     transform: scale(1.04);

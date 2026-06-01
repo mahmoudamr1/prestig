@@ -48,7 +48,7 @@
       {% endfor %}
 
       <div class="ps-rev-head">
-        <h2 class="ps-rev-title" data-anim="fadeInDown" data-seq="0">
+        <h2 class="ps-rev-title" data-anim="fadeInUp" data-seq="0">
           <span class="ps-rev-title-text">{{ t_all_reviews | default: t_users_reviews | default: theme_data.reviews_heading_fallback }}</span>
           <span class="ps-rev-title-count">({{ reviews_count_display | default: reviews_count | default: reviews.size }})</span>
         </h2>
@@ -58,7 +58,7 @@
             class="ps-rev-write-btn"
             data-review-open
             onclick="this.dispatchEvent(new CustomEvent('review-open',{bubbles:true}));"
-            data-anim="fadeInRight"
+            data-anim="fadeInUp"
             data-seq="1"
           >
             {{ t_share_your_review | default: theme_data.reviews_share_cta_fallback }}
@@ -67,7 +67,7 @@
       </div>
 
       <div class="ps-rev-summary">
-        <div class="ps-rev-summary-left" data-anim="fadeInLeft" data-seq="2">
+        <div class="ps-rev-summary-left" data-anim="fadeInUp" data-seq="2">
           <div class="ps-rev-score-ring" aria-hidden="true">
             <span class="ps-rev-score-ring-value">{{ average_rating_display | default: average_rating | default: '—' }}</span>
           </div>
@@ -89,7 +89,7 @@
           </div>
         </div>
 
-        <div class="ps-rev-bars" role="list" data-ps-rev-bars data-ps-rev-bars-sync data-anim="fadeInRight" data-seq="3">
+        <div class="ps-rev-bars" role="list" data-ps-rev-bars data-ps-rev-bars-sync data-anim="fadeInUp" data-seq="3">
           {% for i in (1..5) %}
             {% assign stars = 6 | minus: i %}
             {% if stars == 5 %}
@@ -154,8 +154,7 @@
           <article
             class="ps-rev-card"
             data-review-rating="{{ r_val }}"
-            data-anim="cycle"
-            data-cycle="{{ forloop.index0 }}"
+            data-anim="fadeInUp"
             data-seq="{{ forloop.index0 | plus: 4 }}"
           >
             <div class="ps-rev-card-top">

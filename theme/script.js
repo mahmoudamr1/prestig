@@ -241,16 +241,8 @@
           if (prestigeScrollRevealIsExcluded(el)) {
             return;
           }
-          el.classList.remove("will-animate");
-          el.classList.add("animated");
-          var cn = el.className;
-          if (typeof cn === "string" && cn.indexOf("anim-") !== -1) {
-            cn.split(/\s+/).forEach(function (t) {
-              if (t.indexOf("anim-") === 0) {
-                el.classList.remove(t);
-              }
-            });
-          }
+          el.classList.remove("will-animate", "animate-blur");
+          el.classList.add("animated", "animate-blur");
         });
       });
     });
@@ -355,7 +347,8 @@
             var rect = ann.getBoundingClientRect();
             ah = Math.round(rect.height) || ann.offsetHeight || 0;
           }
-          var hh = header ? Math.round(header.offsetHeight) || 74 : 74;
+          var headerFallback = window.innerWidth <= 1024 ? 46 : 58;
+          var hh = headerFallback;
           document.documentElement.style.setProperty("--ps-announce-h", ah + "px");
           document.documentElement.style.setProperty("--ps-header-h", hh + "px");
           if (spacer) {
@@ -2950,9 +2943,7 @@
               html +=
                 '<a class="eo-hs-card--category" href="' +
                 href +
-                '" data-anim="cycle" data-cycle="' +
-                cardIdx +
-                '" data-seq="' +
+                '" data-anim="fadeInUp" data-seq="' +
                 (cardIdx + 2) +
                 '">' +
                 media +
@@ -2997,9 +2988,7 @@
               html +=
                 '<a class="eo-hs-card--product" href="/products/' +
                 encodeURIComponent(slug) +
-                '" data-anim="cycle" data-cycle="' +
-                cardIdx +
-                '" data-seq="' +
+                '" data-anim="fadeInUp" data-seq="' +
                 (cardIdx + 7) +
                 '">' +
                 media +
@@ -3284,21 +3273,7 @@
    * optional `data-seq` delay, and `data-anim="cycle"` with `data-cycle`.
    * Prestige extras: `prestigeThemeAnimationsEnabled`, `prefers-reduced-motion`, and `ps-sr-*` class → attr wiring.
    */
-  var PS_SR_CYCLE = [
-    "fadeInUp",
-    "fadeInDown",
-    "fadeInLeft",
-    "fadeInRight",
-    "scaleIn",
-    "rotateIn",
-    "slideInUp",
-    "bounceIn",
-    "flipIn",
-    "zoomIn",
-    "slideInLeft",
-    "slideInRight",
-    "fadeInScale",
-  ];
+  var PS_SR_CYCLE = ["fadeInUp"];
 
   var prestigeScrollRevealDone =
     typeof Set !== "undefined"
@@ -3345,13 +3320,13 @@
     return !!el.closest("[data-ps-no-anim], .ps-sticky-buy, .ps-footer-sleek-bottom");
   }
 
-  function prestigeScrollRevealRun(el, animType) {
+  function prestigeScrollRevealRun(el) {
     prestigeSafeRun("scrollReveal.run", function () {
       if (!el.isConnected || el.classList.contains("animated")) {
         return;
       }
       el.classList.remove("will-animate");
-      el.classList.add("animated", "anim-" + animType);
+      el.classList.add("animated", "animate-blur");
     });
   }
 
@@ -3383,18 +3358,18 @@
       prestigeScrollRevealMarkDone(el);
 
       if (instant) {
-        prestigeScrollRevealRun(el, animType);
+        prestigeScrollRevealRun(el);
         return;
       }
 
       var seq = el.getAttribute("data-seq");
-      var delay = seq ? parseInt(seq, 10) * 0.1 : 0;
+      var delay = seq ? parseInt(seq, 10) * 0.04 : 0;
       if (isNaN(delay)) {
         delay = 0;
       }
       window.setTimeout(
         prestigeGuardFn("scrollReveal.delayed", function () {
-          prestigeScrollRevealRun(el, animType);
+          prestigeScrollRevealRun(el);
         }),
         delay * 1000
       );
@@ -3540,7 +3515,7 @@
         !el.classList.contains("will-animate") &&
         !el.classList.contains("animated")
       ) {
-        el.classList.add("will-animate");
+        el.classList.add("will-animate", "animate-blur");
       }
 
       if (el.classList.contains("animated")) {
