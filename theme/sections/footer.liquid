@@ -54,6 +54,9 @@
 {% if ps_footer_sub_btn == blank %}
   {% assign ps_footer_sub_btn = "Subscribe" %}
 {% endif %}
+{% if payment_img == "https://www.diveriksperformance.com/wp-content/uploads/2023/05/payment-methods-epicerie-ludo.png" %}
+  {% assign payment_img = "https://files.easy-orders.net/1779706615785801969.png" %}
+{% endif %}
 {% assign ps_footer_contact_heading = theme_data.footer_contact_us | strip %}
 {% if ps_footer_contact_heading == blank %}
   {% assign ps_footer_contact_heading = "Contact us" %}
