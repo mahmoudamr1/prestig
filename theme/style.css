@@ -12117,14 +12117,23 @@ div.fixed[class*="backdrop-blur"]:has(textarea.global_textarea) button.bg-skin-p
    START: 24-quick-view � Quick view dialog
    ============================================================================= */
 
-/* Quick view: Headless UI dialog panel (id headlessui-dialog-panel-�); classes from initPrestigeQuickViewScope */
-div[id^="headlessui-dialog-panel"]:has(> .max-h-\[85vh\].overflow-y-auto) {
+/* Quick view / product preview — platform shell (data-product-preview=*); fallback div[id^=headlessui-dialog-panel] */
+[data-product-preview="panel"],
+div[id^="headlessui-dialog-panel"]:has([data-product-preview="panel-inner"]) {
   background-color: var(--body-bg, var(--ps-page-bg, #ffffff));
   color: var(--body-text, var(--ps-ink, #101010));
 }
 
-/* Product preview — parent must not clip sticky columns */
-div:has(> [data-product-preview="grid"]) {
+[data-product-preview="panel-inner"] {
+  max-height: 85vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Direct parent of grid (p-5 md:p-8) — must not clip sticky columns */
+[data-product-preview="liquid-content"] {
   overflow: visible !important;
 }
 
@@ -12153,8 +12162,8 @@ div:has(> [data-product-preview="grid"]) {
     overflow: visible;
   }
 
-  div[id^="headlessui-dialog-panel"] [data-product-preview="grid"] > div:has([data-ps-pdp-gallery]),
-  div[id^="headlessui-dialog-panel"] [data-product-preview="details"] {
+  [data-product-preview="panel"] [data-product-preview="grid"] > div:has([data-ps-pdp-gallery]),
+  [data-product-preview="panel"] [data-product-preview="details"] {
     top: 12px;
   }
 }
@@ -12165,8 +12174,8 @@ div:has(> [data-product-preview="grid"]) {
     top: calc(var(--ps-announce-h, 0px) + var(--ps-header-h, 58px) + 8px);
   }
 
-  div[id^="headlessui-dialog-panel"] [data-product-preview="grid"] > div:has([data-ps-pdp-gallery]),
-  div[id^="headlessui-dialog-panel"] [data-product-preview="details"] {
+  [data-product-preview="panel"] [data-product-preview="grid"] > div:has([data-ps-pdp-gallery]),
+  [data-product-preview="panel"] [data-product-preview="details"] {
     top: 16px;
   }
 }
