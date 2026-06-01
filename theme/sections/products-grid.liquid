@@ -9,7 +9,7 @@
   <div class="ps-pgrid-inner">
     <div class="ps-pgrid-main">
       <div class="ps-pgrid-grid">
-        {% for product in products limit: 8 %}
+        {% for product in products %}
           {% assign color_variation = product.variations | where: "type", "color" | first %}
           {% assign image_variation = product.variations | where: "type", "image" | first %}
           {% assign swatch_total = 0 %}
