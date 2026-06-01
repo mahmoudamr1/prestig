@@ -47,18 +47,20 @@
     <div class="bottom-banner__inner">
       <div class="bottom-banner__copy">
         {% if bb_kicker != '' %}
-          <p class="bottom-banner__kicker">{{ bb_kicker }}</p>
+          <p class="bottom-banner__kicker" data-anim="fadeInDown" data-seq="0">{{ bb_kicker }}</p>
         {% endif %}
         {% if bb_body != '' %}
-          <p class="bottom-banner__body">{{ bb_body }}</p>
+          <p class="bottom-banner__body" data-anim="fadeInUp" data-seq="1">{{ bb_body }}</p>
         {% endif %}
       </div>
 
       {% if bb_cta != '' and bb_url != '' %}
         <a
-          class="bottom-banner__cta"
+          class="bottom-banner__cta ps-hover-lift"
           href="{{ bb_url }}"
           data-eo-hs-cta
+          data-anim="slideInRight"
+          data-seq="2"
         >{{ bb_cta }}</a>
       {% endif %}
     </div>
@@ -72,6 +74,7 @@
     width: 100%;
     background: var(--body-bg, #fff);
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .bottom-banner *,

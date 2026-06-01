@@ -1,15 +1,15 @@
 <section
-  class="category-mosaic eo-hs{% if section_data.gap_tight %} category-mosaic--tight{% endif %}{% if section_data.mosaic_category_ids == blank or section_data.mosaic_category_ids.size == 0 %} eo-hs--empty{% endif %}"
+  class="category-mosaic eo-hs ps-sr-scope{% if section_data.gap_tight %} category-mosaic--tight{% endif %}{% if section_data.mosaic_category_ids == blank or section_data.mosaic_category_ids.size == 0 %} eo-hs--empty{% endif %}"
   style="--mosaic-cols: {{ section_data.columns | default: '3' }};"
   data-eo-hs-entity="categories"
   data-eo-hs-ids="{{ section_data.mosaic_category_ids | join: ',' | strip }}"
 >
   <div class="category-mosaic__head">
     {% if section_data.title != blank %}
-      <h2 class="category-mosaic__title">{{ section_data.title }}</h2>
+      <h2 class="category-mosaic__title" data-anim="fadeInUp" data-seq="0">{{ section_data.title }}</h2>
     {% endif %}
     {% if section_data.subtitle != blank %}
-      <p class="category-mosaic__subtitle">{{ section_data.subtitle }}</p>
+      <p class="category-mosaic__subtitle" data-anim="fadeInDown" data-seq="1">{{ section_data.subtitle }}</p>
     {% endif %}
   </div>
 
@@ -19,7 +19,7 @@
         <div class="eo-hs-skeleton eo-hs-skeleton--category" aria-hidden="true"></div>
       {% endfor %}
     {% else %}
-      <p class="category-mosaic__placeholder">Choose categories in the section settings to build this mosaic.</p>
+      <p class="category-mosaic__placeholder" data-anim="fadeInUp" data-seq="2">Choose categories in the section settings to build this mosaic.</p>
     {% endif %}
   </div>
 </section>
@@ -29,6 +29,7 @@
     padding: clamp(2.5rem, 5vw, 4rem) 0 3rem;
     background: #fff;
     color: #141218;
+    overflow: hidden;
   }
   .category-mosaic--tight .category-mosaic__grid {
     gap: 0.75rem;

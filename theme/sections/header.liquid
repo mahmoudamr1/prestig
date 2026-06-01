@@ -1,4 +1,4 @@
-{% comment %}Contract: .ps-theme(data-ps-*); .ps-announce[data-ps-announce]; #eo-header.ps-header; .ps-theme-layout-spacer; aside#eo-mobile-menu; #eo-menu-btn,#header-cart-count,#header-lang-btn,#header-lang-mobile,#header-register,#header-register-mobile; is_register_active gates register UI; lang buttons hidden until platform shows; cart-count hidden when 0. Google Fonts from data-ps-gf-*.{% endcomment %}
+{% comment %}Contract: .ps-theme(data-ps-animations from theme_data.enable_theme_animations); .ps-announce[data-ps-announce]; #eo-header.ps-header; .ps-theme-layout-spacer (active only with .ps-nav-pinned after scroll); aside#eo-mobile-menu; #eo-menu-btn,#header-cart-count,#header-lang-btn,#header-lang-mobile,#header-register,#header-register-mobile; is_register_active gates register UI; lang buttons hidden until platform shows; cart-count hidden when 0. Google Fonts from data-ps-gf-*.{% endcomment %}
 {% liquid
   assign _ps_anim_on = true
   if theme_data.enable_theme_animations == false

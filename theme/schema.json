@@ -4,7 +4,7 @@
     "type": "string",
     "group": "Typography",
     "description": "خطوط جوجل للتحميل: أسماء متعددة مفصولة بفاصلة كما في موقع Google Fonts.",
-    "default": "Hauora, Almarai"
+    "default": "Instrument Sans, Almarai, Manrope, Montserrat, Nunito, Playfair Display"
   },
   {
     "name": "font_google_weights",
@@ -17,29 +17,29 @@
     "name": "font_family_primary",
     "type": "string",
     "group": "Typography",
-    "description": "النص الأساسي — بدلاً من Hauora.",
-    "default": "Hauora"
+    "description": "النص الأساسي — بدلاً من Instrument Sans.",
+    "default": "Instrument Sans"
   },
   {
     "name": "font_family_ui",
     "type": "string",
     "group": "Typography",
     "description": "إعلانات وواجهة ضيقة — بدلاً من Manrope.",
-    "default": "Hauora"
+    "default": "Manrope"
   },
   {
     "name": "font_family_alt",
     "type": "string",
     "group": "Typography",
     "description": "نص ثانوي وتسميات — بدلاً من Nunito.",
-    "default": "Hauora"
+    "default": "Nunito"
   },
   {
     "name": "font_family_display",
     "type": "string",
     "group": "Typography",
     "description": "عناوين عرض كبيرة — بدلاً من Playfair Display.",
-    "default": "Hauora"
+    "default": "Playfair Display"
   },
   {
     "name": "font_family_arabic",
@@ -51,8 +51,8 @@
   {
     "name": "enable_theme_animations",
     "type": "boolean",
-    "group": "Theme",
-    "description": "تفعيل حركات وانتقالات الثيم (ظهور عند التمرير، سليدر تلقائي، ماركي، إلخ). عطّله لإيقاف كل الأنيميشن دفعة واحدة.",
+    "group": "Animations",
+    "description": "تشغيل أنيميشن الثيم: ظهور العناصر عند التمرير (scroll reveal)، سليدر تلقائي، شريط الإعلان (marquee)، وانتقالات البطاقات. أوقفه (Off) لإخفاء كل الحركات دفعة واحدة — مناسب لمن يفضّل أداء أسرع أو تقليل الحركة.",
     "default": true
   },
   {
@@ -60,7 +60,7 @@
     "type": "number",
     "group": "Header",
     "description": "ارتفاع صورة الشعار في شريط التنقل (بكسل).",
-    "default": 40
+    "default": 46
   },
   {
     "name": "footer_quick_links",
@@ -285,6 +285,13 @@
     "group": "Featured products",
     "description": "Featured section: banner paragraph on large screens.",
     "default": "Discover our handpicked products designed for everyday style and comfort."
+  },
+  {
+    "name": "brand_name",
+    "type": "string",
+    "group": "Product page",
+    "description": "Product page: optional brand label above the product title. Leave empty to hide.",
+    "default": ""
   },
   {
     "name": "thanks_title_fallback",

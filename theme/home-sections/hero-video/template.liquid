@@ -44,13 +44,15 @@
   assign _poster = section_data.poster_image | strip
 %}
 <section
-  class="hero-video{% if _pull_under %} hero-video--under-nav{% endif %} hero-video--focal-{{ section_data.focal_point | default: 'center' }}"
+  class="hero-video{% if _pull_under %} hero-video--under-nav{% endif %} hero-video--focal-{{ section_data.focal_point | default: 'center' }} ps-sr-scope"
   style="--hv-h-desktop: {{ _h_d }}vh; --hv-h-mobile: {{ _h_m }}vh; --hv-focal: {{ _focal }};"
   aria-label="Hero video"
 >
   {% if _has_video %}
     <div
       class="hero-video__frame"
+      data-anim="fadeInScale"
+      data-seq="0"
       {% if _poster != blank %}
         style="background-image: url('{{ _poster }}');"
       {% endif %}
@@ -114,7 +116,7 @@
       {% endif %}
     </div>
   {% else %}
-    <div class="hero-video__empty" role="status">
+    <div class="hero-video__empty" role="status" data-anim="fadeInUp" data-seq="0">
       <span class="hero-video__empty-icon" aria-hidden="true">
         <img src="https://api.iconify.design/lucide/video-off.svg?width=32&height=32&color=%23888" alt="" width="32" height="32" />
       </span>
@@ -130,6 +132,7 @@
     max-width: none;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     font-family: var(--ps-ff-ui, "Manrope"), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }

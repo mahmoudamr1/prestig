@@ -1,5 +1,5 @@
 <section
-  class="psc-compare"
+  class="psc-compare ps-sr-scope"
   data-psc-split="{{ section_data.initial_split_percent | default: 50 }}"
   style="
     --psc-split: {{ section_data.initial_split_percent | default: 50 }};
@@ -41,7 +41,7 @@
                 height="675"
               />
               <div class="psc-compare__caption-slot psc-compare__caption-slot--under-right">
-                <div class="psc-compare__caption-block psc-compare__caption-block--right">
+                <div class="psc-compare__caption-block psc-compare__caption-block--right" data-anim="fadeInRight" data-seq="4">
                   {% if section_data.caption_right_title != blank %}
                     <p class="psc-compare__caption-title">{{ section_data.caption_right_title }}</p>
                   {% endif %}
@@ -62,7 +62,7 @@
                 width="1200"
                 height="675"
               />
-              <div class="psc-compare__caption-block psc-compare__caption-block--left">
+              <div class="psc-compare__caption-block psc-compare__caption-block--left" data-anim="fadeInLeft" data-seq="3">
                 {% if section_data.caption_left_title != blank %}
                   <p class="psc-compare__caption-title">{{ section_data.caption_left_title }}</p>
                 {% endif %}
@@ -77,6 +77,8 @@
             <button
               type="button"
               class="psc-compare__handle"
+              data-anim="bounceIn"
+              data-seq="5"
               aria-valuemin="0"
               aria-valuemax="100"
               aria-valuenow="{{ section_data.initial_split_percent | default: 50 }}"
@@ -96,7 +98,7 @@
           </div>
         </div>
       {% else %}
-        <div class="psc-compare__empty">Add left and right image URLs in section settings.</div>
+        <div class="psc-compare__empty" data-anim="fadeInUp" data-seq="3">Add left and right image URLs in section settings.</div>
       {% endif %}
     </div>
   </div>
@@ -109,6 +111,7 @@
       width: 100%;
       max-width: none;
       color: #1c1a17;
+      overflow: hidden;
     }
     .psc-compare__shell {
       width: 100%;

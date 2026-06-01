@@ -20,7 +20,7 @@
       <p class="lifestyle-editorial-hero__body" data-anim="fadeInLeft" data-seq="2">{{ section_data.body }}</p>
     {% endif %}
     {% if section_data.cta_label != blank %}
-      <a class="lifestyle-editorial-hero__cta" href="{{ section_data.cta_url | default: '#' }}" data-anim="zoomIn" data-seq="3">
+      <a class="lifestyle-editorial-hero__cta ps-hover-lift" href="{{ section_data.cta_url | default: '#' }}" data-anim="zoomIn" data-seq="3">
         {{ section_data.cta_label }}
       </a>
     {% endif %}

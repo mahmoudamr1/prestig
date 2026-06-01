@@ -26,7 +26,7 @@
       {% endif %}
       {% if section_data.cta_label != blank %}
         <a
-          class="promo-countdown-hero__btn"
+          class="promo-countdown-hero__btn ps-hover-lift"
           href="{{ section_data.cta_url | default: '/products' }}"
           data-anim="scaleIn"
           data-seq="3"
@@ -58,8 +58,6 @@
           role="timer"
           aria-live="polite"
           aria-atomic="true"
-          data-anim="slideInRight"
-          data-seq="4"
         >
       {% else %}
         <div
@@ -70,26 +68,24 @@
           role="timer"
           aria-live="polite"
           aria-atomic="true"
-          data-anim="slideInRight"
-          data-seq="4"
         >
       {% endif %}
-      <div class="promo-countdown-hero__unit">
+      <div class="promo-countdown-hero__unit" data-anim="cycle" data-cycle="0" data-seq="4">
         <span class="promo-countdown-hero__num" data-unit="days">00</span>
         <span class="promo-countdown-hero__unit-label">{{ section_data.label_days | default: 'DAY' }}</span>
       </div>
       <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
-      <div class="promo-countdown-hero__unit">
+      <div class="promo-countdown-hero__unit" data-anim="cycle" data-cycle="1" data-seq="5">
         <span class="promo-countdown-hero__num" data-unit="hours">00</span>
         <span class="promo-countdown-hero__unit-label">{{ section_data.label_hours | default: 'HOURS' }}</span>
       </div>
       <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
-      <div class="promo-countdown-hero__unit">
+      <div class="promo-countdown-hero__unit" data-anim="cycle" data-cycle="2" data-seq="6">
         <span class="promo-countdown-hero__num" data-unit="minutes">00</span>
         <span class="promo-countdown-hero__unit-label">{{ section_data.label_minutes | default: 'MIN' }}</span>
       </div>
       <span class="promo-countdown-hero__sep" aria-hidden="true">:</span>
-      <div class="promo-countdown-hero__unit">
+      <div class="promo-countdown-hero__unit" data-anim="cycle" data-cycle="3" data-seq="7">
         <span class="promo-countdown-hero__num" data-unit="seconds">00</span>
         <span class="promo-countdown-hero__unit-label">{{ section_data.label_seconds | default: 'SEC' }}</span>
       </div>
@@ -102,6 +98,7 @@
   .promo-countdown-hero {
     position: relative;
     isolation: isolate;
+    overflow: hidden;
     min-height: var(--pch-min-h, 72vh);
     display: flex;
     align-items: stretch;

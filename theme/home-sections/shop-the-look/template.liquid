@@ -1,22 +1,22 @@
 <section
-  class="shop-the-look shop-the-look--{{ section_data.surface | default: 'cream' }}"
+  class="shop-the-look shop-the-look--{{ section_data.surface | default: 'cream' }} ps-sr-scope"
   style="--stl-accent: {{ section_data.accent_color | default: '#C9A962' }};"
 >
   <header class="shop-the-look__head">
     {% if section_data.eyebrow != blank %}
-      <p class="shop-the-look__eyebrow">{{ section_data.eyebrow }}</p>
+      <p class="shop-the-look__eyebrow" data-anim="fadeInDown" data-seq="0">{{ section_data.eyebrow }}</p>
     {% endif %}
     {% if section_data.title != blank %}
-      <h2 class="shop-the-look__title">{{ section_data.title }}</h2>
+      <h2 class="shop-the-look__title" data-anim="fadeInUp" data-seq="1">{{ section_data.title }}</h2>
     {% endif %}
     {% if section_data.subtitle != blank %}
-      <p class="shop-the-look__subtitle">{{ section_data.subtitle }}</p>
+      <p class="shop-the-look__subtitle" data-anim="fadeInRight" data-seq="2">{{ section_data.subtitle }}</p>
     {% endif %}
   </header>
 
   <div class="shop-the-look__layout">
     <a class="shop-the-look__hero" href="{{ section_data.look_url | default: '/products' }}">
-      <div class="shop-the-look__hero-visual">
+      <div class="shop-the-look__hero-visual" data-anim="fadeInLeft" data-seq="3">
         {% if section_data.look_image != blank %}
           <img
             class="shop-the-look__hero-img"
@@ -33,13 +33,13 @@
       </div>
       <div class="shop-the-look__hero-copy">
         {% if section_data.look_title != blank %}
-          <span class="shop-the-look__hero-title">{{ section_data.look_title }}</span>
+          <span class="shop-the-look__hero-title" data-anim="fadeInUp" data-seq="4">{{ section_data.look_title }}</span>
         {% endif %}
         {% if section_data.look_caption != blank %}
-          <span class="shop-the-look__hero-caption">{{ section_data.look_caption }}</span>
+          <span class="shop-the-look__hero-caption" data-anim="fadeInRight" data-seq="5">{{ section_data.look_caption }}</span>
         {% endif %}
         {% if section_data.look_cta_label != blank %}
-          <span class="shop-the-look__hero-cta">{{ section_data.look_cta_label }}</span>
+          <span class="shop-the-look__hero-cta ps-hover-lift" data-anim="zoomIn" data-seq="6">{{ section_data.look_cta_label }}</span>
         {% endif %}
       </div>
     </a>
@@ -55,7 +55,7 @@
             <div class="eo-hs-skeleton eo-hs-skeleton--product" aria-hidden="true"></div>
           {% endfor %}
         {% else %}
-          <p class="shop-the-look__picks-empty">Add products in the section settings to list pieces from this look.</p>
+          <p class="shop-the-look__picks-empty" data-anim="slideInUp" data-seq="7">Add products in the section settings to list pieces from this look.</p>
         {% endif %}
       </div>
     </div>
@@ -65,6 +65,7 @@
 <style>
   .shop-the-look {
     padding: clamp(2.5rem, 5vw, 4rem) 0;
+    overflow: hidden;
   }
   .shop-the-look--cream {
     background: #f3efe8;

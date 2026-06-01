@@ -60,13 +60,13 @@
         aria-label="{{ section_data.placeholder | default: 'Email address' }}"
         placeholder="{{ section_data.placeholder | default: 'E-mail' }}"
       />
-      <button class="newsletter-immersive__submit" type="submit">
+      <button class="newsletter-immersive__submit ps-hover-lift" type="submit">
         {{ section_data.button_label | default: 'SUBSCRIBE' }}
       </button>
     </form>
 
     {% if section_data.show_footnote and section_data.footnote != blank %}
-      <p class="newsletter-immersive__fine">{{ section_data.footnote }}</p>
+      <p class="newsletter-immersive__fine" data-anim="fadeInScale" data-seq="4">{{ section_data.footnote }}</p>
     {% endif %}
   </div>
 </section>

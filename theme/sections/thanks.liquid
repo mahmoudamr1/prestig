@@ -1,74 +1,74 @@
-{% comment %}Thanks — Figma 17:1495 (desktop) / 25:3973 (mobile){% endcomment %}
-{% liquid
-  assign _hero_img = theme_data.thanks_illustration_url | strip
-  if _hero_img == blank
-    assign _hero_img = "https://files.easy-orders.net/1779262852038166754.webp"
-  endif
-
-  assign _customer = customer_name | default: buyer_name | default: full_name | default: ""
-  assign _confirm_ref = order_short_id | default: order_reference | default: order_number | default: order_id | default: ""
-  assign _confirm_label = theme_data.thanks_confirmation_label | default: "Confirmation" | strip
-
-  if _customer != blank
-    assign _line1 = "Thank you, " | append: _customer | append: "!"
-  else
-    assign _line1 = theme_data.thanks_title_fallback | default: "Thank you!"
-  endif
-
-  assign _line2 = theme_data.thanks_subtitle_fallback | default: "Your order is confirmed"
-%}
-<section
-  class="ps-thanks ps-sr-scope"
-  data-liquid-thanks
-  data-ps-thanks
-  data-thanks-client-fetch="0"
-  data-thanks-confirm-label="{{ _confirm_label | escape }}"
->
-  <div class="ps-thanks-hero" data-anim="fadeInUp" data-seq="0">
-    <div class="ps-thanks-hero__inner">
-      <figure class="ps-thanks-hero__media" aria-hidden="true">
-        <img
-          class="ps-thanks-hero__img"
-          src="{{ _hero_img }}"
-          alt=""
-          width="455"
-          height="421"
-          loading="eager"
-          decoding="async"
-        />
-      </figure>
-      <div class="ps-thanks-hero__copy">
-        <h1 class="ps-thanks-hero__title">
-          <span class="ps-thanks-hero__line ps-thanks-hero__line--primary" data-thanks-hero-name>{{ _line1 }}</span>
-          <span class="ps-thanks-hero__line ps-thanks-hero__line--secondary">{{ _line2 }}</span>
-        </h1>
-        {% if _confirm_ref != blank %}
-          <p class="ps-thanks-hero__confirm" data-thanks-confirm-ref>{{ _confirm_label }} #{{ _confirm_ref }}</p>
-        {% else %}
-          <p class="ps-thanks-hero__confirm" data-thanks-confirm-ref hidden></p>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-
-  <div class="ps-thanks-content">
-    {% if phone_message and phone_message != "" %}
-      <p class="ps-thanks-phone-msg" data-anim="fadeInLeft" data-seq="2">{{ phone_message }}</p>
-    {% endif %}
-    <div class="ps-thanks-order-slot" data-thanks-order-slot aria-live="polite"></div>
-    {% if show_home_button %}
-      <button
-        class="ps-thanks-home-btn"
-        type="button"
-        onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
-        data-anim="slideInUp"
-        data-seq="4"
-      >
-        {{ go_home_text | default: "Go home" }}
-      </button>
-    {% endif %}
-    {% if offers_text and offers_text != "" %}
-      <p class="ps-thanks-offers" data-anim="fadeInScale" data-seq="5">{{ offers_text }}</p>
-    {% endif %}
-  </div>
-</section>
+{% comment %}Thanks — Figma 17:1495 (desktop) / 25:3973 (mobile){% endcomment %}
+{% liquid
+  assign _hero_img = theme_data.thanks_illustration_url | strip
+  if _hero_img == blank
+    assign _hero_img = "https://files.easy-orders.net/1779262852038166754.webp"
+  endif
+
+  assign _customer = customer_name | default: buyer_name | default: full_name | default: ""
+  assign _confirm_ref = order_short_id | default: order_reference | default: order_number | default: order_id | default: ""
+  assign _confirm_label = theme_data.thanks_confirmation_label | default: "Confirmation" | strip
+
+  if _customer != blank
+    assign _line1 = "Thank you, " | append: _customer | append: "!"
+  else
+    assign _line1 = theme_data.thanks_title_fallback | default: "Thank you!"
+  endif
+
+  assign _line2 = theme_data.thanks_subtitle_fallback | default: "Your order is confirmed"
+%}
+<section
+  class="ps-thanks ps-sr-scope"
+  data-liquid-thanks
+  data-ps-thanks
+  data-thanks-client-fetch="0"
+  data-thanks-confirm-label="{{ _confirm_label | escape }}"
+>
+  <div class="ps-thanks-hero" data-anim="fadeInUp" data-seq="0">
+    <div class="ps-thanks-hero__inner">
+      <figure class="ps-thanks-hero__media" aria-hidden="true">
+        <img
+          class="ps-thanks-hero__img"
+          src="{{ _hero_img }}"
+          alt=""
+          width="455"
+          height="421"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+      <div class="ps-thanks-hero__copy">
+        <h1 class="ps-thanks-hero__title">
+          <span class="ps-thanks-hero__line ps-thanks-hero__line--primary" data-thanks-hero-name>{{ _line1 }}</span>
+          <span class="ps-thanks-hero__line ps-thanks-hero__line--secondary">{{ _line2 }}</span>
+        </h1>
+        {% if _confirm_ref != blank %}
+          <p class="ps-thanks-hero__confirm" data-thanks-confirm-ref>{{ _confirm_label }} #{{ _confirm_ref }}</p>
+        {% else %}
+          <p class="ps-thanks-hero__confirm" data-thanks-confirm-ref hidden></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="ps-thanks-content">
+    {% if phone_message and phone_message != "" %}
+      <p class="ps-thanks-phone-msg" data-anim="fadeInLeft" data-seq="2">{{ phone_message }}</p>
+    {% endif %}
+    <div class="ps-thanks-order-slot" data-thanks-order-slot aria-live="polite" data-anim="fadeInRight" data-seq="3"></div>
+    {% if show_home_button %}
+      <button
+        class="ps-thanks-home-btn"
+        type="button"
+        onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
+        data-anim="slideInUp"
+        data-seq="4"
+      >
+        {{ go_home_text | default: "Go home" }}
+      </button>
+    {% endif %}
+    {% if offers_text and offers_text != "" %}
+      <p class="ps-thanks-offers" data-anim="fadeInScale" data-seq="5">{{ offers_text }}</p>
+    {% endif %}
+  </div>
+</section>

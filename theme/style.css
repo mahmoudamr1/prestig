@@ -208,13 +208,18 @@ html[lang="ar"] .ps-theme,
    START: 03-layout — Layout spacer, content_container, product_container
    ============================================================================= */
 
-/* In-flow placeholder: fixed announce + fixed header do not consume layout height. */
+/* Placeholder only while nav is pinned (scroll); at top of page announce + header stay in normal flow. */
 .ps-theme-layout-spacer {
   width: 100%;
   flex-shrink: 0;
   pointer-events: none;
   box-sizing: border-box;
-  /* Fallback before JS measures real heights */
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ps-theme.ps-nav-pinned .ps-theme-layout-spacer {
   min-height: calc(var(--ps-announce-h, 0px) + var(--ps-header-h, 74px));
 }
 
@@ -1414,17 +1419,20 @@ html.ps-app-lang-ar .ps-announce {
   font-feature-settings: "kern" 1;
 }
 
-/* Black announcement strip: pinned to viewport top (whole .ps-theme is no longer fixed). */
+/* Announcement: in document flow at load; fixed to viewport top only after scroll (see .ps-nav-pinned). */
 .ps-theme .ps-announce {
+  padding-top: max(8px, env(safe-area-inset-top, 0px));
+  padding-bottom: 8px;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.ps-theme.ps-nav-pinned .ps-announce {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 44;
-  padding-top: max(8px, env(safe-area-inset-top, 0px));
-  padding-bottom: 8px;
-  padding-left: 18px;
-  padding-right: 18px;
 }
 
 .ps-announce-inner {
@@ -1717,18 +1725,18 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
    ============================================================================= */
 
 .ps-header {
-  position: fixed;
-  top: var(--ps-announce-h, 0px);
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 42;
   box-sizing: border-box;
+  width: 100%;
   height: var(--ps-header-h, 60px);
+  min-height: var(--ps-header-h, 60px);
+  display: flex;
+  align-items: center;
   background: transparent;
   border-bottom: 1px solid transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  width: 100%;
   transform: translateY(0);
   transition:
     background-color 0.24s ease,
@@ -1736,6 +1744,14 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
     box-shadow 0.24s ease,
     transform 0.24s ease,
     backdrop-filter 0.24s ease;
+}
+
+.ps-theme.ps-nav-pinned .ps-header {
+  position: fixed;
+  top: var(--ps-announce-h, 0px);
+  left: 0;
+  right: 0;
+  height: var(--ps-header-h, 60px);
 }
 
 /* #eo-header: top-of-page only — faint tint of palette header bg (~5%), not solid --hd-bg */
@@ -1831,28 +1847,34 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   width: 100%;
   max-width: none;
   height: 100%;
+  min-height: inherit;
   margin: 0 auto;
   padding: 0 var(--ps-header-gutter-x, 40px);
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
 .ps-header-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: stretch;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   column-gap: 16px;
   width: 100%;
+  min-height: var(--ps-header-h, 60px);
   height: 100%;
 }
 
 .ps-left-group {
-  grid-column: 1;
-  justify-self: start;
+  flex: 1 1 0;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 22px;
   min-width: 0;
-  height: 100%;
+  height: auto;
+  z-index: 3;
 }
 
 .ps-menu-btn {
@@ -1887,18 +1909,18 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
 
 .ps-desktop-nav {
   display: flex;
-  align-items: stretch;
-  align-self: stretch;
+  align-items: center;
+  align-self: center;
   gap: 20px;
-  height: 100%;
+  height: auto;
   font-family: var(--ps-ff-primary), sans-serif;
 }
 
 .ps-nav-dropdown {
   position: relative;
-  height: 100%;
+  height: auto;
   display: inline-flex;
-  align-items: stretch;
+  align-items: center;
 }
 
 /* Invisible bridge — keeps :hover while moving from nav link into the panel (desktop) */
@@ -1919,7 +1941,8 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
 
 .ps-desktop-nav-link {
   position: relative;
-  height: 100%;
+  height: auto;
+  min-height: 22px;
   text-decoration: none;
   color: var(--hd-text, #0f0f0f);
   filter: none;
@@ -2036,12 +2059,11 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
 }
 
 .ps-logo {
-  grid-column: 2;
-  justify-self: center;
-  align-self: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   height: auto;
-  position: relative;
-  transform: none;
   text-decoration: none;
   color: var(--hd-text, #1a1a1a);
   filter: none;
@@ -2050,6 +2072,7 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   justify-content: center;
   z-index: 2;
   max-width: min(52vw, 220px);
+  pointer-events: auto;
 }
 
 .ps-logo img {
@@ -2070,22 +2093,29 @@ body:has(:is(.ps-slider.ps-slider--under-nav-first, .hero-video.hero-video--unde
   white-space: nowrap;
 }
 
-.ps-header-row :is(.ps-logo, .ps-left-group, .ps-right-group).will-animate,
-.ps-header-row :is(.ps-logo, .ps-left-group, .ps-right-group).animated,
-.ps-header-row :is(.ps-logo, .ps-left-group, .ps-right-group)[class*="anim-"] {
+.ps-header-row :is(.ps-left-group, .ps-right-group).will-animate,
+.ps-header-row :is(.ps-left-group, .ps-right-group).animated,
+.ps-header-row :is(.ps-left-group, .ps-right-group)[class*="anim-"] {
   opacity: 1 !important;
   transform: none !important;
 }
 
+.ps-header-row .ps-logo.will-animate,
+.ps-header-row .ps-logo.animated,
+.ps-header-row .ps-logo[class*="anim-"] {
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) !important;
+}
+
 .ps-right-group {
-  grid-column: 3;
-  justify-self: end;
+  flex: 1 1 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 15px;
   min-width: 0;
-  height: 100%;
+  height: auto;
+  z-index: 3;
 }
 
 .ps-left-group>.ps-icon-btn,
@@ -2329,6 +2359,7 @@ button.ps-icon-btn .ps-lang-icon {
 
   .ps-header-row {
     column-gap: 12px;
+    min-height: var(--ps-header-h, 76px);
   }
 
   .ps-menu-btn {
@@ -16179,9 +16210,19 @@ body:has(.checkout_order_summary) .ps-footer {
 }
 
 /* --- Prestige scroll-reveal animation system (`data-anim`, `data-seq`, `data-anim="cycle"` + `data-cycle`) --- */
+
+/* Sticky buy + footer bottom strip: never hide or animate (PDP bar + copyright row). */
+.ps-sticky-buy :is(.will-animate, .animated, [class*="anim-"]),
+.ps-footer-sleek-bottom :is(.will-animate, .animated, [class*="anim-"]),
+[data-ps-no-anim] :is(.will-animate, .animated, [class*="anim-"]) {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
 .ps-sr-scope {
-  overflow-x: clip;
-  overflow-y: clip;
+  overflow: hidden;
 }
 
 .ps-theme .ps-header,
@@ -16197,9 +16238,17 @@ body:has(.checkout_order_summary) .ps-footer {
 .ps-theme .ps-rev-section,
 .ps-theme .ps-thanks,
 .ps-theme .ab-categories-section,
+.ps-theme .ab-gallery,
+.ps-theme .ab-pd,
+.ps-theme .lq-desc-accordion,
+.ps-theme .ab-fake-visitor,
+.ps-theme .ab-fake-stock,
+.ps-theme .ab-fake-counter,
+.ps-theme .ps-invoice,
 .ps-theme .promo-countdown-hero,
 .ps-theme .runway-hero,
 .ps-theme .lifestyle-editorial-hero,
+.ps-theme .hero-video,
 .ps-theme .newsletter-immersive,
 .ps-theme .newsletter-luxe,
 .ps-theme .service-highlights,
@@ -16209,8 +16258,7 @@ body:has(.checkout_order_summary) .ps-footer {
 .ps-theme .shop-the-look,
 .ps-theme .bottom-banner,
 .ps-theme .psc-compare {
-  overflow-x: clip;
-  overflow-y: clip;
+  overflow: hidden;
 }
 
 .ps-theme .ps-header {
