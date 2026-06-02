@@ -4411,6 +4411,25 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   transform: rotate(180deg);
 }
 
+/* Arabic: in-card carousel arrows (featured / home-grid / products-grid) - img only */
+html.ps-app-lang-ar .ps-featured-grid .ps-card-media__arrow--prev img,
+html.ps-app-lang-ar .ps-pgrid-section--home .ps-card-media__arrow--prev img,
+html.ps-app-lang-ar .ps-pgrid-section--catalog .ps-card-media__arrow--prev img,
+.ps-doc-rtl .ps-featured-grid .ps-card-media__arrow--prev img,
+.ps-doc-rtl .ps-pgrid-section--home .ps-card-media__arrow--prev img,
+.ps-doc-rtl .ps-pgrid-section--catalog .ps-card-media__arrow--prev img {
+  transform: rotate(0deg) !important;
+}
+
+html.ps-app-lang-ar .ps-featured-grid .ps-card-media__arrow--next img,
+html.ps-app-lang-ar .ps-pgrid-section--home .ps-card-media__arrow--next img,
+html.ps-app-lang-ar .ps-pgrid-section--catalog .ps-card-media__arrow--next img,
+.ps-doc-rtl .ps-featured-grid .ps-card-media__arrow--next img,
+.ps-doc-rtl .ps-pgrid-section--catalog .ps-card-media__arrow--next img,
+.ps-doc-rtl .ps-pgrid-section--home .ps-card-media__arrow--next img {
+  transform: rotate(180deg) !important;
+}
+
 @media (max-width: 1199.98px) {
   .ps-pgrid-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -6233,7 +6252,6 @@ html.ps-app-lang-ar .ps-plist-arrow img,
   display: flex;
   align-items: center;
   gap: 7px;
-  direction: ltr;
 }
 
 .ps-plist-arrow {
