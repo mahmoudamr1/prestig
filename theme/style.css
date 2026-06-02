@@ -3210,17 +3210,41 @@ main.container_class {
   box-sizing: border-box;
 }
 
+/* <1024: horizontal swipe carousel; >=1024: asymmetric grid (below) */
 .ab-categories-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
+  display: flex;
+  flex-wrap: nowrap;
   align-items: stretch;
+  gap: 12px;
   width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 16px;
+  padding-inline: 16px;
+  margin-inline: -16px;
+  width: calc(100% + 32px);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  overscroll-behavior-x: contain;
+  box-sizing: border-box;
+}
+
+.ab-categories-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .ab-cat-tile {
   position: relative;
   display: block;
+  flex: 0 0 min(82vw, 360px);
+  width: min(82vw, 360px);
+  max-width: min(82vw, 360px);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   overflow: hidden;
   min-height: min(72vw, 400px);
   text-decoration: none;
@@ -3287,14 +3311,27 @@ main.container_class {
   text-wrap: balance;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .ab-categories-grid {
+    display: grid;
     grid-template-columns: minmax(0, 1.195fr) minmax(0, 1fr);
     gap: var(--ab-cat-gap);
     grid-auto-rows: minmax(min(280px, 22vw), auto);
+    overflow: visible;
+    flex-wrap: unset;
+    scroll-snap-type: none;
+    scroll-padding-inline: 0;
+    padding-inline: 0;
+    margin-inline: 0;
+    width: 100%;
   }
 
   .ab-cat-tile {
+    flex: unset;
+    width: auto;
+    max-width: none;
+    scroll-snap-align: unset;
+    scroll-snap-stop: unset;
     min-height: 0;
   }
 
