@@ -2907,7 +2907,7 @@
         }
         var mainEl = gallery.querySelector("#gallery-main-image");
         if (mainEl && mainEl.src) {
-          var i = images.indexOf(mainEl.src);
+          var i = resolveMainImageIndex(mainEl.src);
           if (i !== -1) return i;
         }
         for (var j = 0; j < slides.length; j++) {
@@ -2930,6 +2930,9 @@
         slides.forEach(function (slide, i) {
           slide.classList.toggle("is-active", i === idx);
         });
+        if (gallery.querySelector(".ab-gallery-grid-mix #gallery-main-image")) {
+          return;
+        }
         var slide = slides[idx];
         if (!slide) return;
         var media = slide.querySelector(".ab-gallery-main-media");
@@ -2940,6 +2943,63 @@
           }
           media.id = "gallery-main-image";
         }
+      }
+
+      function resolveMainImageIndex(src) {
+        if (!src) return -1;
+        var idx = images.indexOf(src);
+        if (idx !== -1) return idx;
+        var clean = String(src).split("?")[0];
+        for (var ri = 0; ri < images.length; ri++) {
+          if (String(images[ri]).split("?")[0] === clean) return ri;
+        }
+        return -1;
+      }
+
+      function syncMobileSliderFromMainImage() {
+        if (!slides.length) return;
+        var mainEl = gallery.querySelector("#gallery-main-image");
+        if (!mainEl) return;
+        var src = mainEl.currentSrc || mainEl.src || mainEl.getAttribute("src");
+        if (!src) return;
+        var idx = resolveMainImageIndex(src);
+        if (idx !== -1) {
+          slides.forEach(function (slide, i) {
+            slide.classList.toggle("is-active", i === idx);
+          });
+          syncDots(idx);
+          syncCounter(idx);
+          if (pdpGallerySliderViewportActive()) {
+            scrollSliderToIndex(idx, true);
+          }
+          return;
+        }
+        if (!pdpGallerySliderViewportActive()) return;
+        var activeSlide = gallery.querySelector(".ab-gallery-slide.is-active") || slides[0];
+        if (!activeSlide) return;
+        var media = activeSlide.querySelector(".ab-gallery-main-media");
+        if (media && media !== mainEl && (media.tagName === "IMG" || media.tagName === "VIDEO")) {
+          media.src = src;
+        }
+      }
+
+      function syncMainImageFromSliderIndex(idx) {
+        if (!gallery.classList.contains("ab-gallery--mix")) return;
+        var src = images[idx];
+        if (!src) return;
+        var mainEl = gallery.querySelector("#gallery-main-image");
+        if (mainEl && (mainEl.tagName === "IMG" || mainEl.tagName === "VIDEO")) {
+          mainEl.src = src;
+        }
+      }
+
+      function bindMainImageSrcObserver() {
+        var mainEl = gallery.querySelector("#gallery-main-image");
+        if (!mainEl || mainEl.__psMainSrcObs) return;
+        mainEl.__psMainSrcObs = true;
+        new MutationObserver(function () {
+          syncMobileSliderFromMainImage();
+        }).observe(mainEl, { attributes: true, attributeFilter: ["src"] });
       }
 
       function isStackLayout() {
@@ -3026,6 +3086,7 @@
         syncCounter(idx);
         syncSlideMedia(idx);
         syncMainMobileFromIndex(idx);
+        syncMainImageFromSliderIndex(idx);
         if (isStackLayout()) {
           scrollStackToIndex(idx, false);
         } else {
@@ -3062,6 +3123,7 @@
           syncDots(idx);
           syncCounter(idx);
           syncMainMobileFromIndex(idx);
+          syncMainImageFromSliderIndex(idx);
           var src = images[idx];
           if (src) {
             gallery.dispatchEvent(
@@ -3077,6 +3139,7 @@
 
       window.addEventListener("resize", function () {
         bindStackObserver();
+        syncMobileSliderFromMainImage();
         if (slider && pdpGallerySliderViewportActive()) {
           var idx = getActiveMediaIndex();
           scrollSliderToIndex(idx, true);
@@ -3194,9 +3257,13 @@
         });
       }
 
+      bindMainImageSrcObserver();
+      syncMobileSliderFromMainImage();
+
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
           bindStackObserver();
+          syncMobileSliderFromMainImage();
           if (slider && pdpGallerySliderViewportActive() && slides.length) {
             var ri = getActiveMediaIndex();
             scrollSliderToIndex(ri, true);

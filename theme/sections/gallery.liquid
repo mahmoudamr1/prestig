@@ -18,7 +18,8 @@
         >
           {% if image contains '.mp4' %}
             <video
-              src="{{ image }}"
+              {% if forloop.first %}id="gallery-main-image" {% endif %}
+              src="{% if forloop.first %}{{ mainImage }}{% else %}{{ image }}{% endif %}"
               class="ab-gallery-cell-media"
               muted
               playsinline
@@ -26,7 +27,8 @@
             ></video>
           {% else %}
             <img
-              src="{{ image }}"
+              {% if forloop.first %}id="gallery-main-image" {% endif %}
+              src="{% if forloop.first %}{{ mainImage }}{% else %}{{ image }}{% endif %}"
               alt="{{ product_name }}"
               class="ab-gallery-cell-media"
               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
@@ -70,7 +72,6 @@
                   ></video>
                 {% else %}
                   <img
-                    {% if image == mainImage %}id="gallery-main-image" {% endif %}
                     src="{{ image }}"
                     alt="{{ product_name }}"
                     class="ab-gallery-main-media"
