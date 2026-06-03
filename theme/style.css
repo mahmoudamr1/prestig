@@ -3758,26 +3758,65 @@ main.container_class {
 }
 
 /* In-card media arrows � smaller on narrow screens (all plist / pgrid cards) */
+/* Mobile only: hide in-card arrows; horizontal snap scroll (.ps-card-media__scroll) */
 @media (max-width: 767.98px) {
   .ps-card-media__nav {
-    padding: 0 4px;
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 
-  .ps-related-products .ps-card-media__nav {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+  .ps-card-media--scroll .ps-plist-img-primary,
+  .ps-card-media--scroll .ps-pgrid-img-primary,
+  .ps-card-media--scroll .ps-plist-img-hover,
+  .ps-card-media--scroll .ps-pgrid-img-hover {
+    display: none !important;
   }
 
-  .ps-card-media__arrow {
-    width: 36px;
-    height: 36px;
+  .ps-card-media__scroll {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  .ps-card-media__arrow img {
-    width: 40px;
-    height: 16px;
-    max-width: 40px;
-    max-height: 16px;
+  .ps-card-media__scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ps-card-media__scroll-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .ps-card-media__scroll-slide img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: unset;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .ps-card-media--scroll.ps-plist-media::after,
+  .ps-card-media--scroll.ps-pgrid-media::after {
+    display: none;
   }
 }
 

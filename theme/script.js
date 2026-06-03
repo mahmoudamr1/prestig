@@ -1437,87 +1437,190 @@
 
   var PS_CARD_MEDIA_ARROW_SVG =
     "https://files.easy-orders.net/1779188833025272262www.svg";
+  var PS_CARD_MEDIA_MOBILE_MQ = "(max-width: 767.98px)";
+
+  function prestigeParseCardImages(media) {
+    var raw = media.getAttribute("data-ps-card-images") || "";
+    var images = raw
+      .split("|")
+      .map(function (s) {
+        return s.trim();
+      })
+      .filter(Boolean);
+    return images.filter(function (url, i) {
+      return images.indexOf(url) === i;
+    });
+  }
 
   function initPrestigeProductCardMedia() {
+    var mqMobile =
+      typeof window.matchMedia === "function"
+        ? window.matchMedia(PS_CARD_MEDIA_MOBILE_MQ)
+        : null;
+
+    function isMobileCardMedia() {
+      return mqMobile ? mqMobile.matches : false;
+    }
+
     document
-      .querySelectorAll("[data-ps-card-media][data-ps-card-images]")
+      .querySelectorAll(
+        ".ps-plist-media[data-ps-card-images], .ps-pgrid-media[data-ps-card-images]"
+      )
       .forEach(function (media) {
         if (media.getAttribute("data-ps-card-media-init")) {
           return;
         }
         media.setAttribute("data-ps-card-media-init", "1");
 
-        var raw = media.getAttribute("data-ps-card-images") || "";
-        var images = raw
-          .split("|")
-          .map(function (s) {
-            return s.trim();
-          })
-          .filter(Boolean);
-        images = images.filter(function (url, i) {
-          return images.indexOf(url) === i;
-        });
+        var images = prestigeParseCardImages(media);
         if (images.length < 2) {
           return;
         }
 
-        var imgEl = media.querySelector(
-          ".ps-card-media__img, .ps-plist-img-primary, .ps-pgrid-img-primary"
-        );
-        if (!imgEl) {
-          return;
-        }
-
-        var hoverImg = media.querySelector(
-          ".ps-plist-img-hover, .ps-pgrid-img-hover"
-        );
-        if (hoverImg) {
-          hoverImg.style.display = "none";
-        }
         media.classList.add("ps-card-media--carousel");
 
-        var index = 0;
-        for (var i = 0; i < images.length; i++) {
-          if (images[i] === imgEl.getAttribute("src")) {
-            index = i;
-            break;
+        var scrollEl = null;
+        var scrollCleanup = [];
+
+        function clearScrollCleanup() {
+          scrollCleanup.forEach(function (fn) {
+            try {
+              fn();
+            } catch (eSc) {
+              /* ignore */
+            }
+          });
+          scrollCleanup = [];
+        }
+
+        function destroyMobileScroll() {
+          clearScrollCleanup();
+          if (scrollEl && scrollEl.parentNode === media) {
+            media.removeChild(scrollEl);
+          }
+          scrollEl = null;
+          media.classList.remove("ps-card-media--scroll");
+        }
+
+        function buildMobileScroll() {
+          if (scrollEl) {
+            return;
+          }
+
+          var primary = media.querySelector(
+            ".ps-plist-img-primary, .ps-pgrid-img-primary"
+          );
+          var alt = (primary && primary.getAttribute("alt")) || "";
+
+          scrollEl = document.createElement("div");
+          scrollEl.className = "ps-card-media__scroll";
+          scrollEl.setAttribute("role", "group");
+          scrollEl.setAttribute("aria-label", "Product images");
+
+          prestigeForceLtrScrollPort(scrollEl);
+
+          images.forEach(function (src, idx) {
+            var slide = document.createElement("div");
+            slide.className = "ps-card-media__scroll-slide";
+
+            var img = document.createElement("img");
+            img.src = src;
+            img.setAttribute("src", src);
+            img.alt = idx === 0 ? alt : "";
+            img.loading = "lazy";
+            img.decoding = "async";
+            if (idx > 0) {
+              img.setAttribute("aria-hidden", "true");
+            }
+            img.draggable = false;
+
+            slide.appendChild(img);
+            scrollEl.appendChild(slide);
+          });
+
+          media.appendChild(scrollEl);
+          media.classList.add("ps-card-media--scroll");
+
+          var cardLink = media.closest("a.ps-plist-card, a.ps-pgrid-card");
+          var touchStartX = 0;
+          var touchStartY = 0;
+          var didSwipe = false;
+
+          function onTouchStart(e) {
+            if (!e.touches || !e.touches[0]) {
+              return;
+            }
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            didSwipe = false;
+          }
+
+          function onTouchMove(e) {
+            if (!e.touches || !e.touches[0]) {
+              return;
+            }
+            var dx = Math.abs(e.touches[0].clientX - touchStartX);
+            var dy = Math.abs(e.touches[0].clientY - touchStartY);
+            if (dx > 10 && dx > dy * 1.2) {
+              didSwipe = true;
+            }
+          }
+
+          function onClickCapture(evt) {
+            if (!didSwipe || !cardLink) {
+              return;
+            }
+            if (cardLink.contains(evt.target)) {
+              evt.preventDefault();
+              evt.stopPropagation();
+            }
+            didSwipe = false;
+          }
+
+          scrollEl.addEventListener("touchstart", onTouchStart, { passive: true });
+          scrollEl.addEventListener("touchmove", onTouchMove, { passive: true });
+
+          scrollCleanup.push(function () {
+            scrollEl.removeEventListener("touchstart", onTouchStart);
+            scrollEl.removeEventListener("touchmove", onTouchMove);
+          });
+
+          if (cardLink) {
+            cardLink.addEventListener("click", onClickCapture, true);
+            scrollCleanup.push(function () {
+              cardLink.removeEventListener("click", onClickCapture, true);
+            });
           }
         }
 
-        function show(ix) {
-          index = ((ix % images.length) + images.length) % images.length;
-          var src = images[index];
-          if (!src) return;
-          imgEl.src = src;
-          imgEl.setAttribute("src", src);
-        }
-
-        function stopNav(evt) {
-          evt.preventDefault();
-          evt.stopPropagation();
-        }
-
-        var prev = media.querySelector("[data-ps-card-prev]");
-        var next = media.querySelector("[data-ps-card-next]");
-
-        if (prev) {
-          prev.addEventListener("click", function (e) {
-            stopNav(e);
-            show(index - 1);
-          });
-        }
-        if (next) {
-          next.addEventListener("click", function (e) {
-            stopNav(e);
-            show(index + 1);
-          });
-        }
-
-        media.querySelectorAll(".ps-card-media__arrow img").forEach(function (icon) {
-          if (!icon.getAttribute("src")) {
-            icon.setAttribute("src", PS_CARD_MEDIA_ARROW_SVG);
+        function applyCardMediaMode() {
+          if (isMobileCardMedia()) {
+            buildMobileScroll();
+          } else {
+            destroyMobileScroll();
+            media.querySelectorAll(".ps-card-media__arrow img").forEach(function (icon) {
+              if (!icon.getAttribute("src")) {
+                icon.setAttribute("src", PS_CARD_MEDIA_ARROW_SVG);
+              }
+            });
           }
-        });
+        }
+
+        applyCardMediaMode();
+
+        if (mqMobile) {
+          var onMq = function () {
+            if (isMobileCardMedia()) {
+              destroyMobileScroll();
+            }
+            applyCardMediaMode();
+          };
+          if (typeof mqMobile.addEventListener === "function") {
+            mqMobile.addEventListener("change", onMq);
+          } else if (typeof mqMobile.addListener === "function") {
+            mqMobile.addListener(onMq);
+          }
+        }
       });
   }
 
@@ -3835,6 +3938,8 @@
               el.matches("[data-ps-featured-carousel]") ||
               el.matches("[data-ps-plist]") ||
               el.matches("[data-ps-card-media]") ||
+              el.matches(".ps-plist-media[data-ps-card-images]") ||
+              el.matches(".ps-pgrid-media[data-ps-card-images]") ||
               el.matches(".ab-gallery") ||
               el.matches(".ab-reviews") ||
               el.matches(".ps-rev-section") ||
@@ -3867,6 +3972,8 @@
               el.querySelector("[data-ps-featured-carousel]") ||
               el.querySelector("[data-ps-plist]") ||
               el.querySelector("[data-ps-card-media]") ||
+              el.querySelector(".ps-plist-media[data-ps-card-images]") ||
+              el.querySelector(".ps-pgrid-media[data-ps-card-images]") ||
               el.querySelector(".ab-gallery") ||
               el.querySelector(".ab-reviews") ||
               el.querySelector(".ps-rev-section") ||
