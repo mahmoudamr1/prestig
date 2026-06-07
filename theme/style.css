@@ -2,12 +2,30 @@
 
 /* Dev: script.js polls this file when ps_theme_watch=1 or tunnel/localhost script host â€” saves editing this + Liquid without extra tools. */
 
+/* Figma children-theme tokens — MCP 19:720, 19:722, 19:723, 19:727, 19:728 */
 :root {
-  --ps-ff-primary: "Instrument Sans";
-  --ps-ff-ui: "Manrope";
-  --ps-ff-alt: "Nunito";
-  --ps-ff-display: "Playfair Display";
+  --ps-ff-primary: "Asap";
+  --ps-ff-ui: "Asap";
+  --ps-ff-alt: "Asap";
+  --ps-ff-display: "Asap";
   --ps-ff-arabic: "Almarai";
+  --ps-brand-red: #da3c24;
+  --ps-header-shell-bg: #da3c24;
+  --ps-header-pill-radius: 63px;
+  --ps-header-shell-pad-y: 28px;
+  --ps-header-shell-pad-x: 46px;
+  --ps-header-pill-pad-y: 18px;
+  --ps-header-pill-pad-x: 54px;
+  --ps-header-icon-img-filter: brightness(0) saturate(100%) invert(33%) sepia(79%) saturate(4732%)
+    hue-rotate(347deg) brightness(95%) contrast(89%);
+  --ps-header-icon-shadow-hover: drop-shadow(1px 2px 0 rgba(13, 13, 18, 0.5));
+  --ps-header-icon-img-filter-hover: var(--ps-header-icon-img-filter)
+    var(--ps-header-icon-shadow-hover);
+  --ps-fs-nav: 16px;
+  --ps-lh-nav: 20.8px;
+  --ps-fs-announce: 14px;
+  --ps-lh-announce: 19.6px;
+  --ps-announce-bar-min-h: 42px;
   --ps-page-bg: #efefef;
   --ps-ink: #101010;
   --ps-ink-secondary: #1c1c1c;
@@ -52,13 +70,13 @@
   --ps-layout-gutter-x: 32px;
   /* Fixed header stack (updated by theme/script.js syncPrestigeThemeStack). */
   --ps-announce-h: 0px;
-  --ps-header-h: 74px;
+  --ps-header-h: 135px;
 }
 
 @media (max-width: 1024px) {
   :root {
     --ps-layout-gutter-x: 18px;
-    --ps-header-h: 66px;
+    --ps-header-h: 135px;
   }
 }
 
@@ -126,19 +144,20 @@ html[lang="ar"] .ps-theme,
 .builder-section-reset .ps-theme-layout-spacer {
   display: none;
 }
+/* Figma 19:720 — Promo Bar */
 .ps-announce {
   width: 100%;
   box-sizing: border-box;
-  /* Palette: --ann-bg / --ann-text from storefront :root (EasyOrders palette); optional --ab-ann-* fallbacks */
-  background: var(--ann-bg, var(--ab-ann-bg, var(--ps-ink, #101010)));
-  color: var(--ann-text, var(--ab-ann-text, var(--ps-surface, #ffffff)));
-  padding: 8px 18px;
+  background: var(--ann-bg, var(--ps-brand-red, #da3c24));
+  color: var(--ann-text, var(--ps-surface, #ffffff));
+  padding: 3px 18px;
+  min-height: var(--ps-announce-bar-min-h, 42px);
   font-family: var(--ps-ff-primary), var(--ps-ff-ui), sans-serif;
-  font-size: clamp(10px, 2.6vw, 12px);
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: var(--ps-fs-announce, 14px);
+  font-weight: 400;
+  line-height: var(--ps-lh-announce, 19.6px);
+  letter-spacing: normal;
+  text-transform: none;
   position: relative;
   z-index: 3;
   text-align: center;
@@ -148,21 +167,23 @@ html[lang="ar"] .ps-theme,
 
 html.ps-app-lang-ar .ps-announce {
   font-family: var(--ps-ff-arabic), var(--ps-ff-primary), sans-serif;
-  letter-spacing: 0.06em;
+  letter-spacing: normal;
   font-feature-settings: "kern" 1;
 }
 
-/* Black announcement strip: pinned to viewport top (whole .ps-theme is no longer fixed). */
 .ps-theme .ps-announce {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 44;
-  padding-top: max(8px, env(safe-area-inset-top, 0px));
-  padding-bottom: 8px;
+  z-index: 50;
+  padding-top: max(3px, env(safe-area-inset-top, 0px));
+  padding-bottom: 3px;
   padding-left: 18px;
   padding-right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ps-announce-inner {
@@ -193,13 +214,13 @@ html.ps-app-lang-ar .ps-announce {
 
 @media (max-width: 767.98px) {
   .ps-announce {
-    padding: 6px 14px;
-    letter-spacing: 0.12em;
+    padding: 3px 14px;
+    letter-spacing: normal;
   }
 
   .ps-theme .ps-announce {
-    padding-top: max(6px, env(safe-area-inset-top, 0px));
-    padding-bottom: 6px;
+    padding-top: max(3px, env(safe-area-inset-top, 0px));
+    padding-bottom: 3px;
     padding-left: 14px;
     padding-right: 14px;
   }
@@ -444,6 +465,12 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   }
 }
 
+/* Figma 19:722 — Header shell (unified on all pages); 19:723 — pill .ps-header-inner */
+.ps-theme:has(.ps-announce) .ps-header {
+  /* Until JS sets --ps-announce-h, keep pill below the promo bar */
+  top: max(var(--ps-announce-h, 0px), var(--ps-announce-bar-min-h, 42px));
+}
+
 .ps-header {
   position: fixed;
   top: var(--ps-announce-h, 0px);
@@ -451,56 +478,28 @@ html.ps-app-lang-ar .ps-announce-marquee-track,
   right: 0;
   z-index: 42;
   box-sizing: border-box;
+  width: 100%;
+  transform: translateY(0);
+  /* Figma 19:722 shell inset — transparent top shows banner behind, not a solid fill */
+  padding: max(var(--ps-header-shell-pad-y), env(safe-area-inset-top, 0px))
+    var(--ps-header-shell-pad-x) var(--ps-header-shell-pad-y);
   background: transparent;
   border-bottom: 1px solid transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  width: 100%;
-  transform: translateY(0);
+  box-shadow: none;
   transition:
-    background-color 0.24s ease,
-    border-color 0.24s ease,
     transform 0.24s ease,
-    backdrop-filter 0.24s ease;
+    box-shadow 0.24s ease;
 }
 
-/* #eo-header: top-of-page only — faint tint of palette header bg (~5%), not solid --hd-bg */
-.ps-header:not(.ps-scrolled) {
-  background: rgba(255, 255, 255, 0.05) !important;
-  background: color-mix(in srgb, var(--hd-bg, #ffffff) 5%, transparent) !important;
-  border-bottom-color: transparent !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-/*
- * قبل التمرير: أبيض فوق الهيرو فقط — أول سلايدر أو hero-video تحت الهيدر (.ps-under-nav-first من syncPrestigeUnderNavFirst).
- */
-body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-under-nav-first)
-  #eo-header:not(.ps-scrolled)
-  :is(.ps-desktop-nav-link, .ps-logo, .ps-icon-btn) {
-  color: #fff !important;
-}
-
-body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-under-nav-first)
-  #eo-header:not(.ps-scrolled)
-  :is(.ps-icon-btn img.ps-icon-image, .ps-menu-btn .ps-menu-icon) {
-  filter: brightness(0) invert(1) !important;
-}
-
-body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-under-nav-first)
-  #eo-header:not(.ps-scrolled)
-  :is(.ps-cart-count, .ps-icon-btn #header-cart-count) {
-  background: #fff !important;
-  border-color: rgba(15, 15, 15, 0.28) !important;
-}
-
+.ps-header:not(.ps-scrolled),
 .ps-header.ps-scrolled {
-  background: var(--hd-bg, rgba(255, 255, 255, 0.96));
-  border-bottom-color: var(--ps-border-e3, #e3e3e3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
 .ps-header.ps-hidden {
@@ -510,9 +509,11 @@ body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-und
 .ps-header-inner {
   width: 100%;
   margin: 0 auto;
-  min-height: 74px;
-  height: 74px;
-  padding: 0 var(--ps-layout-gutter-x);
+  min-height: 79px;
+  height: auto;
+  padding: var(--ps-header-pill-pad-y) var(--ps-header-pill-pad-x);
+  background: var(--hd-bg, #ffffff);
+  border-radius: var(--ps-header-pill-radius, 63px);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -540,17 +541,22 @@ body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-und
   gap: 4px;
 }
 
+.ps-menu-btn {
+  color: var(--ps-brand-red, #da3c24);
+}
+
 .ps-menu-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: block;
   object-fit: contain;
+  filter: var(--ps-header-icon-img-filter);
 }
 
 .ps-desktop-nav {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 20px;
   height: 100%;
 }
 
@@ -574,37 +580,50 @@ body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-und
 
 .ps-desktop-nav-link {
   text-decoration: none;
-  color: var(--hd-text, #0f0f0f);
-  text-transform: uppercase;
-  font-size: 13px;
-  letter-spacing: 0.18em;
+  color: var(--hd-text, #101010);
+  font-family: var(--ps-ff-ui), var(--ps-ff-primary), sans-serif;
+  font-size: var(--ps-fs-nav, 16px);
+  font-weight: 400;
+  line-height: var(--ps-lh-nav, 20.8px);
+  letter-spacing: normal;
+  text-transform: none;
   height: 100%;
   display: inline-flex;
   align-items: center;
   position: relative;
-  transition: color 0.3s ease;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
+}
+
+button.ps-desktop-nav-link {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
 }
 
 .ps-desktop-nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+  display: none;
 }
 
 .ps-desktop-nav-link:hover {
-  opacity: 1;
+  opacity: 0.82;
 }
 
-.ps-desktop-nav-link:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
+.ps-nav-dropdown-trigger::after {
+  content: "";
+  display: inline-block;
+  position: static;
+  width: 12px;
+  height: 7px;
+  margin-inline-start: 6px;
+  background: url("https://files.easy-orders.net/1780846554662145883toyo-u-demo.svg") no-repeat center / contain;
+  clip-path: none;
+  transform: none;
+  transition: transform 0.2s ease;
 }
 
 .ps-nav-dropdown-panel {
@@ -633,15 +652,51 @@ body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-und
   display: block;
   padding: 10px 16px;
   text-decoration: none;
-  color: #1a1a1a;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  color: var(--hd-text, #101010);
+  font-family: var(--ps-ff-ui), var(--ps-ff-primary), sans-serif;
+  font-size: var(--ps-fs-nav, 16px);
+  font-weight: 400;
+  line-height: var(--ps-lh-nav, 20.8px);
+  letter-spacing: normal;
+  text-transform: none;
   transition: background 0.15s ease;
 }
 
 .ps-nav-dropdown-panel a:hover {
   background: var(--ps-surface-subtle, #f5f5f5);
+}
+
+/* Pages mega-tab — Figma children-theme dropdown list */
+.ps-nav-dropdown-panel--pages {
+  min-width: min(320px, 92vw);
+  padding: 18px 22px;
+  border: 1px solid var(--hd-text, #101010);
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(16, 16, 16, 0.12);
+}
+
+.ps-nav-dropdown-panel--pages a {
+  padding: 11px 0;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.ps-nav-dropdown-panel--pages a:hover {
+  background: transparent;
+  color: var(--ps-brand-red, #da3c24);
+}
+
+.ps-nav-dropdown--pages:hover .ps-nav-pages-trigger,
+.ps-nav-dropdown--pages:focus-within .ps-nav-pages-trigger {
+  color: var(--ps-brand-red, #da3c24);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  opacity: 1;
+}
+
+.ps-nav-dropdown--pages:hover .ps-nav-pages-trigger::after,
+.ps-nav-dropdown--pages:focus-within .ps-nav-pages-trigger::after {
+  filter: var(--ps-header-icon-img-filter);
 }
 
 .ps-nav-dropdown:hover .ps-nav-dropdown-panel,
@@ -662,37 +717,39 @@ body:not(:has(.builder-section-reset #eo-header)):has(.content_container .ps-und
 .ps-logo {
   justify-self: center;
   text-decoration: none;
-  color: var(--hd-text, #1a1a1a);
+  color: var(--hd-text, #101010);
   display: inline-flex;
   align-items: center;
 }
 
 .ps-logo img {
-  height: var(--ps-logo-img-h, 46px);
+  height: min(var(--ps-logo-img-h, 43px), 43px);
   width: auto;
   object-fit: contain;
-  max-height: 100%;
+  max-height: 43px;
 }
 
 .ps-logo span {
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: clamp(26px, 2.3vw, 42px);
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: clamp(28px, 2.3vw, 43px);
+  font-weight: 700;
   line-height: 1;
+  color: var(--ps-brand-red, #da3c24);
 }
 
 .ps-right-group {
   justify-self: end;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .ps-icon-btn {
   position: relative;
   border: 0;
   background: transparent;
-  color: var(--hd-text, #121212);
+  color: var(--ps-brand-red, #da3c24);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -711,16 +768,58 @@ a.ps-icon-btn {
 }
 
 .ps-icon-image {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: block;
   object-fit: contain;
+  transition: filter 0.18s ease;
+}
+
+.ps-icon-btn.cart-btn .ps-icon-image {
+  width: 22px;
+  height: 20px;
+}
+
+.ps-icon-btn.search-btn .ps-icon-image {
+  width: 20px;
+  height: 19px;
 }
 
 button.ps-icon-btn .ps-lang-icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
+  stroke: currentColor;
+  transition: filter 0.18s ease;
+}
+
+/* Figma children — pill icons: #da3c24 default; hover = depth shadow (ref. search icon) */
+.ps-right-group .search-btn .ps-icon-image,
+.ps-right-group .cart-btn .ps-icon-image {
+  filter: none;
+}
+
+.ps-right-group .register-btn .ps-icon-image,
+.ps-right-group .lang-btn .ps-lang-icon {
+  filter: var(--ps-header-icon-img-filter);
+}
+
+.ps-right-group .lang-btn {
+  color: var(--ps-brand-red, #da3c24);
+}
+
+.ps-right-group .search-btn:hover .ps-icon-image,
+.ps-right-group .search-btn:focus-visible .ps-icon-image,
+.ps-right-group .cart-btn:hover .ps-icon-image,
+.ps-right-group .cart-btn:focus-visible .ps-icon-image {
+  filter: var(--ps-header-icon-shadow-hover);
+}
+
+.ps-right-group .register-btn:hover .ps-icon-image,
+.ps-right-group .register-btn:focus-visible .ps-icon-image,
+.ps-right-group .lang-btn:hover .ps-lang-icon,
+.ps-right-group .lang-btn:focus-visible .ps-lang-icon {
+  filter: var(--ps-header-icon-img-filter-hover);
 }
 
 .ps-cart-count,
@@ -732,8 +831,8 @@ button.ps-icon-btn .ps-lang-icon {
   min-width: 9px;
   height: 9px;
   border-radius: 999px;
-  background: var(--hd-text, #121212);
-  border: 1.5px solid var(--ps-surface-subtle, #f5f5f5);
+  background: var(--ps-brand-red, #da3c24);
+  border: 1.5px solid var(--hd-bg, #ffffff);
   color: transparent;
   font-size: 0;
   line-height: 0;
@@ -753,13 +852,17 @@ button.ps-icon-btn .ps-lang-icon {
   z-index: 90;
 }
 
+/* Figma 19:727/728 — mobile drawer nav */
 .ps-mobile-menu {
   position: fixed;
   top: 0;
   left: 0;
   width: min(360px, 84vw);
   height: 100vh;
-  background: var(--body-bg, var(--ps-page-bg, #efefef));
+  background: var(--hd-bg, #ffffff);
+  border-top-right-radius: var(--ps-header-pill-radius, 63px);
+  border-bottom-right-radius: var(--ps-header-pill-radius, 63px);
+  box-shadow: -8px 0 24px color-mix(in srgb, var(--ps-ink, #101010) 12%, transparent);
   transform: translateX(-102%);
   transition: transform 0.25s ease;
   z-index: 91;
@@ -768,11 +871,14 @@ button.ps-icon-btn .ps-lang-icon {
 }
 
 .ps-mobile-top {
-  height: 74px;
-  padding: 0 20px;
+  min-height: 79px;
+  height: auto;
+  padding: 0 var(--ps-header-shell-pad-x);
   display: flex;
   align-items: center;
   position: relative;
+  border-bottom: 1px solid color-mix(in srgb, var(--ps-ink, #101010) 12%, transparent);
+  background: var(--hd-bg, #ffffff);
 }
 
 .ps-mobile-close {
@@ -780,7 +886,7 @@ button.ps-icon-btn .ps-lang-icon {
   height: 34px;
   border: 0;
   background: transparent;
-  color: #121212;
+  color: var(--hd-text, #101010);
   padding: 0;
   cursor: pointer;
   display: inline-flex;
@@ -791,47 +897,56 @@ button.ps-icon-btn .ps-lang-icon {
 }
 
 .ps-close-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: block;
   object-fit: contain;
+  filter: var(--ps-header-icon-img-filter);
 }
 
 .ps-mobile-logo {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: #111;
+  color: var(--ps-brand-red, #da3c24);
 }
 
 .ps-mobile-logo img {
-  height: 32px;
+  height: min(var(--ps-logo-img-h, 43px), 43px);
+  max-height: 43px;
   width: auto;
   display: block;
   object-fit: contain;
 }
 
 .ps-mobile-logo span {
-  font-size: 24px;
-  letter-spacing: 0.04em;
+  font-size: clamp(24px, 7vw, 43px);
+  letter-spacing: normal;
   line-height: 1;
-  text-transform: uppercase;
+  text-transform: none;
+  font-weight: 700;
+  color: var(--ps-brand-red, #da3c24);
 }
 
 .ps-mobile-nav {
-  padding: 6px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px var(--ps-header-shell-pad-x) var(--ps-header-shell-pad-x);
   overflow-y: auto;
 }
 
 .ps-mobile-link {
   width: 100%;
   text-decoration: none;
-  color: #111;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 14px;
-  line-height: 1;
-  min-height: 40px;
+  color: var(--hd-text, #101010);
+  font-family: var(--ps-ff-ui), var(--ps-ff-primary), sans-serif;
+  font-size: var(--ps-fs-nav, 16px);
+  font-weight: 400;
+  line-height: var(--ps-lh-nav, 20.8px);
+  letter-spacing: normal;
+  text-transform: none;
+  min-height: 20.8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -850,7 +965,7 @@ button.ps-icon-btn .ps-lang-icon {
 
 .ps-arrow-icon {
   width: 12px;
-  height: 12px;
+  height: 7px;
   display: block;
   flex-shrink: 0;
   color: inherit;
@@ -861,16 +976,19 @@ button.ps-icon-btn .ps-lang-icon {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.24s ease;
-  padding-left: 10px;
+  padding-left: 20px;
 }
 
 .ps-mobile-sublink {
   display: block;
   text-decoration: none;
-  color: #2a2a2a;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  color: var(--hd-text, #101010);
+  font-family: var(--ps-ff-ui), var(--ps-ff-primary), sans-serif;
+  font-size: var(--ps-fs-nav, 16px);
+  font-weight: 400;
+  line-height: var(--ps-lh-nav, 20.8px);
+  letter-spacing: normal;
+  text-transform: none;
   padding: 10px 0;
 }
 
@@ -883,11 +1001,6 @@ button.ps-icon-btn .ps-lang-icon {
 }
 
 @media (max-width: 1024px) {
-  .ps-header-inner {
-    min-height: 66px;
-    height: 66px;
-  }
-
   .ps-menu-btn {
     display: inline-flex;
   }
@@ -897,7 +1010,7 @@ button.ps-icon-btn .ps-lang-icon {
   }
 
   .ps-logo span {
-    font-size: clamp(20px, 7vw, 30px);
+    font-size: clamp(24px, 7vw, 43px);
   }
 }
 
@@ -934,7 +1047,7 @@ main.container_class {
   margin: clamp(20px, 3vw, 40px) 0;
 }
 
-/* Under-nav blocks: normal spacing unless they are the first hero under the header. */
+/* Under-nav blocks: banner pulls under fixed announce + header stack */
 .content_container .ps-slider.ps-slider--under-nav,
 .content_container .hero-video.hero-video--under-nav {
   z-index: 0;
@@ -946,9 +1059,8 @@ main.container_class {
   margin-bottom: clamp(20px, 3vw, 40px);
 }
 
-/* Pull only the first under-nav hero (slider or video) under the fixed header stack. */
 .content_container .ps-under-nav-first {
-  margin-top: calc(-1 * (var(--ps-announce-h, 0px) + var(--ps-header-h, 74px)));
+  margin-top: calc(-1 * (var(--ps-announce-h, 0px) + var(--ps-header-h, 135px)));
 }
 
 .content_container .ps-slider.ps-slider--under-nav.ps-under-nav-first {

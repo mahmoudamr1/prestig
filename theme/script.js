@@ -642,6 +642,104 @@
   }
 
   /**
+   * Header Pages tab: when SSR has no `pages` in header context, mirror footer page links
+   * after the footer section hydrates (client-side).
+   */
+  function initPrestigeHeaderPagesNav() {
+    var desktopNav = document.querySelector(".ps-desktop-nav");
+    if (!desktopNav || desktopNav.querySelector(".ps-nav-dropdown--pages")) {
+      return;
+    }
+
+    var themeRoot = desktopNav.closest(".ps-theme");
+    var label = (themeRoot && themeRoot.getAttribute("data-ps-pages-label")) || "Pages";
+    var chevronSrc =
+      "https://files.easy-orders.net/1780846554662145883toyo-u-demo.svg";
+    var links = [];
+
+    document
+      .querySelectorAll(
+        ".ps-footer-col--support .ps-footer-links a[href*='/pages/'], .ps-footer-main__support .ps-footer-links a[href*='/pages/']"
+      )
+      .forEach(function (anchor) {
+        var href = anchor.getAttribute("href");
+        var text = (anchor.textContent || "").trim();
+        if (!href || !text) {
+          return;
+        }
+        if (links.some(function (entry) { return entry.href === href; })) {
+          return;
+        }
+        links.push({ href: href, text: text });
+      });
+
+    if (!links.length) {
+      return;
+    }
+
+    var panelHtml = links
+      .map(function (entry) {
+        return (
+          '<a href="' +
+          escapeHtml(entry.href) +
+          '" role="menuitem">' +
+          escapeHtml(entry.text) +
+          "</a>"
+        );
+      })
+      .join("");
+
+    var dropdown = document.createElement("div");
+    dropdown.className = "ps-nav-dropdown ps-nav-dropdown--pages";
+    dropdown.setAttribute("data-ps-pages-synced", "1");
+    dropdown.innerHTML =
+      '<button type="button" class="ps-desktop-nav-link ps-nav-dropdown-trigger ps-nav-pages-trigger" aria-haspopup="true" aria-expanded="false">' +
+      escapeHtml(label) +
+      '</button><div class="ps-nav-dropdown-panel ps-nav-dropdown-panel--pages" role="menu">' +
+      panelHtml +
+      "</div>";
+    desktopNav.appendChild(dropdown);
+
+    var mobileNav = document.querySelector(".ps-mobile-nav");
+    if (!mobileNav || mobileNav.querySelector(".ps-mobile-accordion--pages")) {
+      return;
+    }
+
+    var subHtml = links
+      .map(function (entry) {
+        return (
+          '<a href="' +
+          escapeHtml(entry.href) +
+          '" class="ps-mobile-sublink">' +
+          escapeHtml(entry.text) +
+          "</a>"
+        );
+      })
+      .join("");
+
+    var accordion = document.createElement("div");
+    accordion.className = "ps-mobile-accordion ps-mobile-accordion--pages";
+    accordion.setAttribute("data-ps-pages-synced", "1");
+    accordion.innerHTML =
+      '<button class="ps-mobile-link ps-accordion-trigger" type="button"><span>' +
+      escapeHtml(label) +
+      '</span><img src="' +
+      chevronSrc +
+      '" alt="" width="12" height="7" class="ps-arrow-icon" aria-hidden="true" /></button><div class="ps-accordion-panel">' +
+      subHtml +
+      "</div>";
+
+    var insertBefore = mobileNav.querySelector(
+      ".register-btn, [data-eo='search-btn'], .ps-mobile-link--iconrow"
+    );
+    if (insertBefore) {
+      mobileNav.insertBefore(accordion, insertBefore);
+    } else {
+      mobileNav.appendChild(accordion);
+    }
+  }
+
+  /**
    * One under-nav hero per page: first slider OR hero-video in .content_container (document order).
    * Negative margin + transparent-header styling apply only via .ps-under-nav-first.
    */
@@ -3097,6 +3195,11 @@
       initPrestigeHeroVideo();
     } catch (eHv) {
       console.warn("[Prestige] Hero video init error:", eHv);
+    }
+    try {
+      initPrestigeHeaderPagesNav();
+    } catch (ePagesNav) {
+      console.warn("[Prestige] Header pages nav sync error:", ePagesNav);
     }
     try {
       syncPrestigeUnderNavFirst();
