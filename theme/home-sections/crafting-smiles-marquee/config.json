@@ -1,0 +1,66 @@
+{
+  "icon": "https://api.iconify.design/lucide:whole-word.svg",
+  "label": "Crafting smiles marquee",
+  "section_schema": [
+    {
+      "name": "text",
+      "type": "string",
+      "default": "CRAFTING SMILES, ONE TOY AT A TIME",
+      "description": "Scrolling phrase (split into hoverable words)"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#DA3C24",
+      "description": "Outline and hover fill color"
+    },
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "",
+      "description": "Optional section background (leave empty = transparent, uses site cream canvas)"
+    },
+    {
+      "name": "font_size",
+      "type": "number",
+      "default": 128,
+      "description": "Max headline size on desktop (px)"
+    },
+    {
+      "name": "stroke_width",
+      "type": "number",
+      "default": 2,
+      "description": "Outline stroke width (px)"
+    },
+    {
+      "name": "scroll_duration",
+      "type": "number",
+      "default": 35,
+      "description": "Seconds for one full scroll loop"
+    },
+    {
+      "name": "scroll_duration_hover",
+      "type": "number",
+      "default": 70,
+      "description": "Loop duration while hovering the strip (slower = higher number)"
+    },
+    {
+      "name": "repeat_segments",
+      "type": "number",
+      "default": 6,
+      "description": "How many phrase copies in the tape (seamless loop)"
+    },
+    {
+      "name": "word_gap",
+      "type": "number",
+      "default": 28,
+      "description": "Space between words (px)"
+    },
+    {
+      "name": "phrase_gap",
+      "type": "number",
+      "default": 72,
+      "description": "Space between repeated phrases (px)"
+    }
+  ]
+}

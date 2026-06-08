@@ -1,0 +1,174 @@
+{% liquid
+  assign csm_text = section_data.text | default: 'CRAFTING SMILES, ONE TOY AT A TIME' | strip
+  assign csm_words = csm_text | split: ' '
+  assign csm_segments = section_data.repeat_segments | default: 6 | plus: 0
+  if csm_segments < 2
+    assign csm_segments = 2
+  endif
+  assign csm_font = section_data.font_size | default: 128 | plus: 0
+  if csm_font < 32
+    assign csm_font = 32
+  endif
+  assign csm_stroke = section_data.stroke_width | default: 2 | plus: 0
+  if csm_stroke < 1
+    assign csm_stroke = 1
+  endif
+  assign csm_duration = section_data.scroll_duration | default: 35 | plus: 0
+  if csm_duration < 8
+    assign csm_duration = 8
+  endif
+  assign csm_duration_hover = section_data.scroll_duration_hover | default: 70 | plus: 0
+  if csm_duration_hover < csm_duration
+    assign csm_duration_hover = csm_duration | times: 2
+  endif
+  assign csm_word_gap = section_data.word_gap | default: 28 | plus: 0
+  assign csm_phrase_gap = section_data.phrase_gap | default: 72 | plus: 0
+%}
+{% if csm_text != blank and csm_words.size > 0 %}
+<section
+  class="csm-marquee ps-sr-scope"
+  aria-label="{{ csm_text | escape }}"
+  style="
+    --csm-color: {{ section_data.text_color | default: '#DA3C24' }};
+    {% if section_data.bg_color != blank %}--csm-bg: {{ section_data.bg_color }};{% endif %}
+    --csm-font-max: {{ csm_font }}px;
+    --csm-stroke: {{ csm_stroke }}px;
+    --csm-duration: {{ csm_duration }}s;
+    --csm-duration-hover: {{ csm_duration_hover }}s;
+    --csm-segments: {{ csm_segments }};
+    --csm-word-gap: {{ csm_word_gap }}px;
+    --csm-phrase-gap: {{ csm_phrase_gap }}px;
+  "
+>
+  <div class="csm-marquee__viewport">
+    <div class="csm-marquee__track">
+      {% for seg in (1..csm_segments) %}
+        <div class="csm-marquee__phrase"{% if seg > 1 %} aria-hidden="true"{% endif %}>
+          {% for word in csm_words %}
+            {% if word != blank %}
+              <span class="csm-marquee__word" tabindex="0">{{ word }}</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .csm-marquee {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    background: var(--csm-bg, transparent);
+    color: var(--csm-color, #da3c24);
+    padding: clamp(1.25rem, 3.5vw, 2.25rem) 0;
+    font-family: var(--ps-ff-ui, var(--ps-ff-primary, "Asap")), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+
+  .csm-marquee__viewport {
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    cursor: default;
+  }
+
+  .csm-marquee__track {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: max-content;
+    animation: csm-marquee-scroll var(--csm-duration, 35s) linear infinite;
+    will-change: transform;
+  }
+
+  .csm-marquee:hover .csm-marquee__track,
+  .csm-marquee:focus-within .csm-marquee__track {
+    animation-duration: var(--csm-duration-hover, 70s);
+  }
+
+  .csm-marquee__phrase {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--csm-word-gap, 28px);
+    margin-inline-end: var(--csm-phrase-gap, 72px);
+    font-size: clamp(2.5rem, 9.5vw, var(--csm-font-max, 128px));
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .csm-marquee__word {
+    display: inline-block;
+    flex-shrink: 0;
+    color: var(--csm-color, #da3c24);
+    -webkit-text-stroke: 0 transparent;
+    paint-order: stroke fill;
+    transition:
+      color 0.22s ease,
+      -webkit-text-stroke-width 0.22s ease,
+      -webkit-text-stroke-color 0.22s ease;
+    cursor: pointer;
+  }
+
+  .csm-marquee__word:hover,
+  .csm-marquee__word:focus-visible {
+    color: transparent;
+    -webkit-text-stroke-width: var(--csm-stroke, 2px);
+    -webkit-text-stroke-color: var(--csm-color, #da3c24);
+    outline: none;
+  }
+
+  @keyframes csm-marquee-scroll {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(calc(-100% / var(--csm-segments, 6)), 0, 0);
+    }
+  }
+
+  html.ps-app-lang-ar .csm-marquee__track,
+  [dir="rtl"] .csm-marquee__track {
+    animation-name: csm-marquee-scroll-rtl;
+  }
+
+  @keyframes csm-marquee-scroll-rtl {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(calc(100% / var(--csm-segments, 6)), 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .csm-marquee__track {
+      animation: none !important;
+      transform: none !important;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      gap: var(--csm-word-gap, 28px);
+    }
+
+    .csm-marquee__phrase {
+      margin-inline-end: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      white-space: normal;
+    }
+
+    .csm-marquee__phrase[aria-hidden="true"] {
+      display: none;
+    }
+  }
+</style>
+{% endif %}

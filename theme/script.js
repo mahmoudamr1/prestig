@@ -654,7 +654,7 @@
     var themeRoot = desktopNav.closest(".ps-theme");
     var label = (themeRoot && themeRoot.getAttribute("data-ps-pages-label")) || "Pages";
     var chevronSrc =
-      "https://files.easy-orders.net/1780846554662145883toyo-u-demo.svg";
+      "https://files.easy-orders.net/1780902583529910062.webp";
     var links = [];
 
     document
@@ -725,7 +725,7 @@
       escapeHtml(label) +
       '</span><img src="' +
       chevronSrc +
-      '" alt="" width="12" height="7" class="ps-arrow-icon" aria-hidden="true" /></button><div class="ps-accordion-panel">' +
+      '" alt="" width="10" height="6" class="ps-arrow-icon" aria-hidden="true" /></button><div class="ps-accordion-panel">' +
       subHtml +
       "</div>";
 
