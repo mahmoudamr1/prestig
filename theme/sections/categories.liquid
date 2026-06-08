@@ -1,1 +1,54 @@
-{% if categories and categories.size > 0 %}<div class="ab-categories-section ps-sr-scope"><header class="ab-categories-header"><p class="ab-categories-kicker" data-anim="fadeInDown" data-seq="0">{{ theme_data.categories_header_subtitle | default: 'best seller collections' }}</p><h2 class="ab-categories-title" data-anim="fadeInUp" data-seq="1">{{ theme_data.categories_header_title | default: 'Shop by Category' }}</h2></header><div class="ab-categories"><div class="ab-categories-grid">{% for category in categories %}<a class="ab-cat-tile" href="/collections/{{ category.slug }}" data-anim="cycle" data-cycle="{{ forloop.index0 }}" data-seq="{{ forloop.index0 | plus: 2 }}"><span class="ab-cat-tile__media"><img class="ab-cat-tile__img" src="{{ category.thumb }}" alt="" loading="lazy" /><span class="ab-cat-tile__dim"></span></span><span class="ab-cat-tile__content"><span class="ab-cat-tile__title">{{ category.name }}</span></span></a>{% endfor %}</div></div></div>{% endif %}
+{% if categories and categories.size > 0 %}
+<div class="ab-categories-section ps-sr-scope">
+  <header class="ab-categories-header">
+    <p class="ab-categories-kicker" data-anim="fadeInDown" data-seq="0">{{ theme_data.categories_header_subtitle | default: 'best seller collections' }}</p>
+    <h2 class="ab-categories-title" data-anim="fadeInUp" data-seq="1">{{ theme_data.categories_header_title | default: 'Shop by Category' }}</h2>
+  </header>
+  <div class="ab-categories">
+    <div class="ab-categories-decor-layer" aria-hidden="true">
+      <img
+        class="ab-categories-decor ab-categories-decor--tr"
+        src="https://files.easy-orders.net/1780924644491443673.webp"
+        alt=""
+        width="105"
+        height="89"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        class="ab-categories-decor ab-categories-decor--bl"
+        src="https://files.easy-orders.net/1780924644809535516.webp"
+        alt=""
+        width="112"
+        height="97"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div class="ab-categories-bands">
+      {% for category in categories %}
+        {% assign cat_slot = forloop.index0 | modulo: 9 | plus: 1 %}
+        {% if cat_slot == 1 %}
+          <div class="ab-categories-band">
+            <div class="ab-categories-grid">
+        {% endif %}
+              <a
+                class="ab-cat-tile ab-cat-tile--slot-{{ cat_slot }}"
+                href="/collections/{{ category.slug }}"
+                data-anim="cycle"
+                data-cycle="{{ forloop.index0 }}"
+                data-seq="{{ forloop.index0 | plus: 2 }}"
+              >
+                <span class="ab-cat-tile__media">
+                  <img class="ab-cat-tile__img" src="{{ category.thumb }}" alt="{{ category.name }}" loading="lazy" />
+                </span>
+              </a>
+        {% if cat_slot == 9 or forloop.last %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}

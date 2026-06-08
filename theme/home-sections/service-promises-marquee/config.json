@@ -1,0 +1,105 @@
+{
+  "icon": "https://api.iconify.design/lucide:truck.svg",
+  "label": "Service promises marquee",
+  "section_schema": [
+    {
+      "name": "aria_label",
+      "type": "string",
+      "default": "Service promises",
+      "description": "Accessible section label"
+    },
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#DA3C24",
+      "description": "Strip background (Figma 19:1361)"
+    },
+    {
+      "name": "title_color",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Title and hover outline color"
+    },
+    {
+      "name": "stroke_width",
+      "type": "number",
+      "default": 2,
+      "description": "Outline stroke on title hover (px)"
+    },
+    {
+      "name": "title_size",
+      "type": "number",
+      "default": 48,
+      "description": "Max title size on desktop (px)"
+    },
+    {
+      "name": "icon_max_width",
+      "type": "number",
+      "default": 52,
+      "description": "Icon max width (px)"
+    },
+    {
+      "name": "item_gap",
+      "type": "number",
+      "default": 60,
+      "description": "Space between highlight blocks (px)"
+    },
+    {
+      "name": "inner_gap",
+      "type": "number",
+      "default": 60,
+      "description": "Space between icon and title (px)"
+    },
+    {
+      "name": "scroll_duration",
+      "type": "number",
+      "default": 32,
+      "description": "Seconds for one full scroll loop"
+    },
+    {
+      "name": "scroll_duration_hover",
+      "type": "number",
+      "default": 64,
+      "description": "Loop duration while hovering the strip (slower = higher)"
+    },
+    {
+      "name": "repeat_segments",
+      "type": "number",
+      "default": 4,
+      "description": "How many phrase copies in the tape (seamless loop)"
+    },
+    {
+      "name": "items",
+      "type": "object_array",
+      "description": "Scrolling blocks: icon + headline (Figma 19:1361)",
+      "default": [
+        {
+          "icon": "https://files.easy-orders.net/1777459486246957885svgexport-22.svg",
+          "title": "Free Shipping on All Orders above $50!"
+        },
+        {
+          "icon": "https://files.easy-orders.net/1777459486225747568svgexport-24.svg",
+          "title": "Free returns for 30 days"
+        },
+        {
+          "icon": "https://files.easy-orders.net/1777459486258835733svgexport-26.svg",
+          "title": "Customer service on WhatsApp"
+        }
+      ],
+      "fields": [
+        {
+          "name": "icon",
+          "type": "image",
+          "default": "https://files.easy-orders.net/1777459486246957885svgexport-22.svg",
+          "description": "Icon image (PNG/SVG)"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "Free Shipping on All Orders above $50!",
+          "description": "Scrolling headline"
+        }
+      ]
+    }
+  ]
+}

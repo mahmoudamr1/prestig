@@ -1,0 +1,505 @@
+{% liquid
+  assign fsg_show_promo = section_data.show_promo
+  assign fsg_show_timer = false
+  if fsg_show_promo and section_data.show_countdown
+    assign fsg_mode = section_data.countdown_mode | default: 'calendar_day'
+    assign fsg_roll_hours = section_data.rolling_duration_hours | default: 48
+    assign fsg_countdown_date = section_data.countdown_end_date
+    if fsg_mode == 'rolling_hours' and fsg_roll_hours > 0
+      assign fsg_show_timer = true
+    elsif fsg_mode != 'rolling_hours' and fsg_countdown_date != blank
+      assign fsg_show_timer = true
+    endif
+  endif
+  assign fsg_roll_key = section_data.rolling_storage_key | default: 'favorites-season' | strip
+%}
+<section
+  class="favorites-season ps-sr-scope"
+  style="
+    --fsg-title: {{ section_data.title_color | default: '#2D3679' }};
+    --fsg-desc: {{ section_data.description_color | default: '#101010' }};
+    --fsg-promo-overlay: {{ section_data.promo_overlay | default: 35 | divided_by: 100.0 }};
+    {% if section_data.promo_image != blank %}--fsg-promo-bg: url('{{ section_data.promo_image }}');{% endif %}
+  "
+>
+  {% if section_data.show_decor %}
+    <div class="favorites-season__decor-layer" aria-hidden="true">
+      <img
+        class="favorites-season__decor favorites-season__decor--left"
+        src="{{ section_data.decor_left | default: 'https://files.easy-orders.net/1780941922461508805.webp' }}"
+        alt=""
+        width="153"
+        height="131"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        class="favorites-season__decor favorites-season__decor--right"
+        src="{{ section_data.decor_right | default: 'https://files.easy-orders.net/1780941922570558348.webp' }}"
+        alt=""
+        width="576"
+        height="511"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  {% endif %}
+
+  <div class="favorites-season__inner">
+    {% if section_data.headline != blank or section_data.description != blank %}
+      <header class="favorites-season__head">
+        {% if section_data.headline != blank %}
+          <h2 class="favorites-season__title" data-anim="fadeInUp" data-seq="0">{{ section_data.headline }}</h2>
+        {% endif %}
+        {% if section_data.description != blank %}
+          <p class="favorites-season__desc" data-anim="fadeInUp" data-seq="1">{{ section_data.description }}</p>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    {% if fsg_show_promo %}
+      {% if section_data.promo_url != blank %}
+        <a class="favorites-season__promo" href="{{ section_data.promo_url }}" data-anim="scaleIn" data-seq="2">
+      {% else %}
+        <div class="favorites-season__promo" data-anim="scaleIn" data-seq="2">
+      {% endif %}
+        <div class="favorites-season__promo-media" aria-hidden="true">
+          <div class="favorites-season__promo-overlay"></div>
+        </div>
+        <div class="favorites-season__promo-content">
+          {% if section_data.promo_headline != blank %}
+            <h3 class="favorites-season__promo-title">{{ section_data.promo_headline }}</h3>
+          {% endif %}
+          {% if fsg_show_timer %}
+            {% if fsg_mode == 'rolling_hours' %}
+              <div
+                class="favorites-season__timer promo-countdown-hero__timer"
+                dir="ltr"
+                data-pch-mode="rolling"
+                data-hours="{{ fsg_roll_hours }}"
+                data-storage-key="{{ fsg_roll_key }}"
+                role="timer"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+            {% else %}
+              <div
+                class="favorites-season__timer promo-countdown-hero__timer"
+                dir="ltr"
+                data-pch-mode="calendar"
+                data-end="{{ fsg_countdown_date | strip }}"
+                role="timer"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+            {% endif %}
+              <div class="favorites-season__unit">
+                <span class="favorites-season__num" data-unit="days">00</span>
+                <span class="favorites-season__unit-label">{{ section_data.label_days | default: 'Days' }}</span>
+              </div>
+              <div class="favorites-season__unit">
+                <span class="favorites-season__num" data-unit="hours">00</span>
+                <span class="favorites-season__unit-label">{{ section_data.label_hours | default: 'Hours' }}</span>
+              </div>
+              <div class="favorites-season__unit">
+                <span class="favorites-season__num" data-unit="minutes">00</span>
+                <span class="favorites-season__unit-label">{{ section_data.label_minutes | default: 'Minutes' }}</span>
+              </div>
+              <div class="favorites-season__unit">
+                <span class="favorites-season__num" data-unit="seconds">00</span>
+                <span class="favorites-season__unit-label">{{ section_data.label_seconds | default: 'Seconds' }}</span>
+              </div>
+              </div>
+          {% endif %}
+        </div>
+      {% if section_data.promo_url != blank %}
+        </a>
+      {% else %}
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <div
+      class="favorites-season__products eo-hs{% if section_data.pick_product_ids == blank or section_data.pick_product_ids.size == 0 %} eo-hs--empty{% endif %}"
+      data-eo-hs-entity="products"
+      data-eo-hs-ids="{{ section_data.pick_product_ids | join: ',' | strip }}"
+    >
+      <div class="favorites-season__track" data-eo-hs-mount data-anim="fadeInUp" data-seq="3">
+        {% if section_data.pick_product_ids and section_data.pick_product_ids.size > 0 %}
+          {% for id in section_data.pick_product_ids %}
+            <div class="favorites-season__skeleton eo-hs-skeleton eo-hs-skeleton--product" aria-hidden="true"></div>
+          {% endfor %}
+        {% else %}
+          <p class="favorites-season__empty">Choose products in the section settings to fill the carousel.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Figma 19:1223 — favorites season grid (children-theme) */
+  .content_container:has(.favorites-season),
+  .product_container:has(.favorites-season) {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow: hidden;
+  }
+
+  .favorites-season {
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    width: 100%;
+    padding: clamp(40px, 6vw, 60px) 0;
+    overflow: hidden;
+    font-family: var(--ps-ff-ui), var(--ps-ff-primary), sans-serif;
+    color: var(--fsg-desc, #101010);
+    background: var(--body-bg, var(--ps-cream, #fef7e6));
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Side vectors — full viewport width, clipped inside section (never over section above) */
+  .favorites-season__decor-layer {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    width: 100vw;
+    max-width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  .favorites-season__decor {
+    position: absolute;
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: none;
+  }
+
+  .favorites-season__decor--left {
+    left: 0;
+    top: clamp(108px, 14.5vw, 155px);
+    width: clamp(96px, 10.6vw, 153px);
+  }
+
+  .favorites-season__decor--right {
+    right: 0;
+    top: 0;
+    width: clamp(220px, 40vw, 576px);
+  }
+
+  .favorites-season__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-inline: clamp(20px, 4vw, 50px);
+    box-sizing: border-box;
+  }
+
+  .favorites-season__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    max-width: 488px;
+    text-align: center;
+  }
+
+  .favorites-season__title {
+    margin: 0;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--fsg-title, #2d3679);
+  }
+
+  .favorites-season__desc {
+    margin: 0;
+    font-size: clamp(16px, 2.2vw, 20px);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--fsg-desc, #101010);
+  }
+
+  .favorites-season__promo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 981px;
+    min-height: clamp(240px, 42vw, 407px);
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #101010;
+    box-sizing: border-box;
+  }
+
+  .favorites-season__promo-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: #1a1a1a;
+    background-image: var(--fsg-promo-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .favorites-season__promo-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 16, 16, var(--fsg-promo-overlay, 0.35));
+  }
+
+  .favorites-season__promo-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(20px, 4vw, 32px);
+    padding: clamp(24px, 5vw, 40px);
+    text-align: center;
+  }
+
+  .favorites-season__promo-title {
+    margin: 0;
+    max-width: 28rem;
+    font-size: clamp(28px, 4.5vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+  }
+
+  .favorites-season__timer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 13px;
+  }
+
+  .favorites-season__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 4.5rem;
+    padding: 20px;
+    border-radius: 5px;
+    background: var(--ps-cream, #fef7e6);
+    box-sizing: border-box;
+  }
+
+  .favorites-season__num {
+    font-size: clamp(28px, 4vw, 36px);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    color: var(--ps-brand-red, #da3c24);
+  }
+
+  .favorites-season__unit-label {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    text-transform: capitalize;
+    color: var(--ps-ink, #101010);
+  }
+
+  .favorites-season__products {
+    position: relative;
+    z-index: 2;
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .favorites-season__track {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 32px;
+    width: 100%;
+    margin: 0;
+    padding: 4px clamp(20px, 4vw, 50px) 8px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: clamp(20px, 4vw, 50px);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .favorites-season__track.eo-hs-loading {
+    opacity: 0.88;
+  }
+
+  .favorites-season__empty {
+    margin: 0;
+    padding: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    opacity: 0.72;
+    text-align: center;
+    width: 100%;
+  }
+
+  .favorites-season__skeleton {
+    flex: 0 0 280.5px;
+    width: 280.5px;
+    min-height: 415px;
+    border-radius: 10px;
+    border: 1px solid #101010;
+    background: linear-gradient(110deg, #f5ecd8 8%, #fef7e6 18%, #f5ecd8 33%);
+    background-size: 200% 100%;
+    animation: favorites-season-shimmer 1.2s ease-in-out infinite;
+  }
+
+  @keyframes favorites-season-shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  .favorites-season__track .eo-hs-card--product {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 280.5px;
+    width: 280.5px;
+    min-width: 280.5px;
+    min-height: 415px;
+    padding: 15px;
+    box-sizing: border-box;
+    border: 1px solid #101010;
+    border-radius: 10px;
+    background: #fef7e6;
+    text-decoration: none;
+    color: #101010;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .favorites-season__track .eo-hs-card--product:hover,
+    .favorites-season__track .eo-hs-card--product:focus-visible {
+      background: #fff;
+      box-shadow: -8px 8px 0 #101010;
+      z-index: 2;
+    }
+  }
+
+  .favorites-season__track .eo-hs-card__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin: 0 0 12px;
+    border-radius: calc(10px - 2px);
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .favorites-season__track .eo-hs-card__media--empty {
+    background: linear-gradient(145deg, #f0e6d2, #e8dcc8);
+  }
+
+  .favorites-season__track .eo-hs-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .favorites-season__track .eo-hs-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 176px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .favorites-season__track .eo-hs-card__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #101010;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .favorites-season__track .eo-hs-card__meta {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #101010;
+  }
+
+  .favorites-season__track .eo-hs-card__meta del {
+    font-size: 0.85em;
+    opacity: 0.55;
+    margin-inline-end: 4px;
+  }
+
+  .favorites-season__track .eo-hs-error {
+    margin: 0;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #101010;
+  }
+
+  @media (max-width: 767.98px) {
+    .favorites-season__decor--left {
+      left: 0;
+      top: clamp(84px, 20vw, 128px);
+      width: clamp(72px, 18vw, 110px);
+    }
+
+    .favorites-season__decor--right {
+      right: 0;
+      top: 0;
+      width: clamp(150px, 46vw, 260px);
+    }
+
+    .favorites-season__track .eo-hs-card--product,
+    .favorites-season__skeleton {
+      flex: 0 0 min(280.5px, 78vw);
+      width: min(280.5px, 78vw);
+      min-width: min(280.5px, 78vw);
+    }
+  }
+</style>

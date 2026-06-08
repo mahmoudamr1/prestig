@@ -1,0 +1,72 @@
+{
+  "project": "children-theme",
+  "fileKey": "WGeAAOVafIP2zGjwQcOLQP",
+  "currentRequest": "unified-product-card-19-1001",
+  "sessions": [
+    {
+      "requestId": "unified-product-card-19-1001",
+      "status": "completed",
+      "calls": [
+        {
+          "id": "MCP-UC.1",
+          "tool": "get_design_context",
+          "args": { "nodeId": "19:1001" },
+          "status": "derived_from_prior_session",
+          "resultSummary": "Item shell 280.5×415; padding ~15px; radius 10px; cream #fef7e6; border #101010; hover white shadow -8px 8px #101010"
+        },
+        {
+          "id": "MCP-UC.2",
+          "tool": "get_design_context",
+          "args": { "nodeId": "19:1002" },
+          "status": "derived_from_prior_session",
+          "resultSummary": "Inner card 250.5×385.5; cream bg; border #101010"
+        },
+        {
+          "id": "MCP-UC.3",
+          "tool": "get_design_context",
+          "args": { "nodeId": "19:1033" },
+          "status": "derived_from_prior_session",
+          "resultSummary": "Choose Options 250×53; pill radius 63px; shadow -5px 6px #101010 solid; white bold 18px on red"
+        },
+        {
+          "id": "MCP-UC.4",
+          "tool": "get_design_context",
+          "args": { "nodeId": "19:1035" },
+          "status": "derived_from_prior_session",
+          "resultSummary": "Sale badge #4a3ed9 pill; 14px; padding ~7×17"
+        }
+      ]
+    },
+    {
+      "requestId": "list-products-19-874",
+      "status": "completed",
+      "calls": [
+        {
+          "id": "MCP-LP.1",
+          "tool": "get_design_context",
+          "args": { "nodeId": "19:874" },
+          "status": "derived_from_prior_session",
+          "resultSummary": "padding 60px 50px gap 32; title 19:876 Asap Bold 48px/57.6px #da3c24 left; arrows 19:877 50px gap 15 radius 32; grid 19:888 gap 32; item 252.5×415 cream #fef7e6 border #101010 radius 10; hover 19:905 280.5px white shadow -8px 8px #101010"
+        },
+        {
+          "id": "MCP-LP.2",
+          "tool": "get_design_context",
+          "args": { "nodeId": "19:890" },
+          "status": "derived_from_prior_session",
+          "resultSummary": "image 250.5×250.5; name 18px/21.6px medium #101010; swatches 16×16 gap 9 radius 8; price 20px/28px; info max-width 176px gap 16px"
+        },
+        {
+          "id": "MCP-LP.3",
+          "tool": "get_design_context",
+          "args": { "nodeId": "19:923" },
+          "status": "derived_from_prior_session",
+          "resultSummary": "sale badge #4a3ed9 pill 40px 14px"
+        }
+      ],
+      "arrowAssets": {
+        "prev": "https://files.easy-orders.net/1780926387572779709.webp",
+        "next": "https://files.easy-orders.net/1780926387581621030.webp"
+      }
+    }
+  ]
+}

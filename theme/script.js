@@ -292,40 +292,54 @@
     var lastY = readPrestigeScrollY(scrollRoot);
     var delta = 2;
 
-    function setScrolledState(y) {
-      if (y > 6) {
-        header.classList.add("ps-scrolled");
-      } else {
-        header.classList.remove("ps-scrolled");
+    function syncHeaderStackSoon() {
+      requestAnimationFrame(function () {
+        try {
+          syncPrestigeThemeStack();
+        } catch (eStack) {
+          /* ignore */
+        }
+      });
+    }
+
+    function setFullHeader() {
+      var changed =
+        header.classList.contains("ps-hidden") ||
+        header.classList.contains("ps-header--logo-only");
+      header.classList.remove("ps-hidden");
+      header.classList.remove("ps-header--logo-only");
+      if (changed) {
+        syncHeaderStackSoon();
       }
     }
 
-    function setVisible() {
+    function setLogoOnlyHeader() {
+      if (readPrestigeScrollY(scrollRoot) <= 6) {
+        return;
+      }
+      var changed =
+        !header.classList.contains("ps-header--logo-only") ||
+        header.classList.contains("ps-hidden");
       header.classList.remove("ps-hidden");
-    }
-
-    function setHidden() {
-      if (readPrestigeScrollY(scrollRoot) > 6) {
-        header.classList.add("ps-hidden");
+      header.classList.add("ps-header--logo-only");
+      if (changed) {
+        syncHeaderStackSoon();
       }
     }
 
     function onScroll() {
       var y = readPrestigeScrollY(scrollRoot);
-      setScrolledState(y);
 
       if (y <= 6) {
-        setVisible();
+        setFullHeader();
       } else if (y < lastY - delta) {
-        setVisible();
+        setFullHeader();
       } else if (y > lastY + delta) {
-        setHidden();
+        setLogoOnlyHeader();
       }
 
       lastY = y;
     }
-
-    setScrolledState(lastY);
 
     if (scrollRoot === window) {
       window.addEventListener("scroll", onScroll, { passive: true });
@@ -741,7 +755,7 @@
 
   /**
    * One under-nav hero per page: first slider OR hero-video in .content_container (document order).
-   * Negative margin + transparent-header styling apply only via .ps-under-nav-first.
+   * Negative margin for the first under-nav hero only via .ps-under-nav-first.
    */
   function syncPrestigeUnderNavFirst() {
     var underNavSel =
@@ -1266,7 +1280,7 @@
         return typeof window !== "undefined" && window.innerWidth <= 767;
       };
       var getScrollEl = function () {
-        return isMobile() && viewport ? viewport : track;
+        return viewport || track;
       };
 
       function visibleCount() {
@@ -1382,9 +1396,10 @@
           document.removeEventListener("mouseup", onTrackMouseUp, true);
           syncFromScroll();
         }
-        track.addEventListener("mousedown", onTrackMouseDown, true);
+        var dragPort = viewport || track;
+        dragPort.addEventListener("mousedown", onTrackMouseDown, true);
 
-        track.addEventListener(
+        dragPort.addEventListener(
           "wheel",
           function (evt) {
             if (Math.abs(evt.deltaX) > 4 || Math.abs(evt.deltaY) > 4) {
@@ -1414,6 +1429,72 @@
       });
 
       updateProgress();
+    });
+  }
+
+  /**
+   * Composer marquees (.csm-marquee, .spm-marquee): slow on hover via Web Animations
+   * playbackRate — avoids the jump/backward glitch from changing animation-duration mid-run.
+   */
+  function initPrestigeComposerMarquees() {
+    document.querySelectorAll(".csm-marquee, .spm-marquee").forEach(function (section) {
+      if (section.dataset.psMarqueeHoverInit === "1") {
+        return;
+      }
+      section.dataset.psMarqueeHoverInit = "1";
+
+      var track = section.querySelector(".csm-marquee__track, .spm-marquee__track");
+      if (!track) {
+        return;
+      }
+
+      var isCsm = section.classList.contains("csm-marquee");
+      var durProp = isCsm ? "--csm-duration" : "--spm-duration";
+      var hoverProp = isCsm ? "--csm-duration-hover" : "--spm-duration-hover";
+
+      function readCssSeconds(prop, fallback) {
+        var raw = getComputedStyle(section).getPropertyValue(prop).trim();
+        if (!raw) {
+          return fallback;
+        }
+        if (raw.indexOf("ms") !== -1) {
+          return parseFloat(raw) / 1000 || fallback;
+        }
+        return parseFloat(raw) || fallback;
+      }
+
+      function setHoverSlow(active) {
+        var anims = track.getAnimations();
+        if (!anims.length) {
+          return;
+        }
+        var anim = anims[0];
+        if (active) {
+          var normal = readCssSeconds(durProp, 35);
+          var hover = readCssSeconds(hoverProp, normal * 2);
+          if (hover <= 0) {
+            hover = normal * 2;
+          }
+          anim.playbackRate = normal / hover;
+        } else {
+          anim.playbackRate = 1;
+        }
+      }
+
+      section.addEventListener("mouseenter", function () {
+        setHoverSlow(true);
+      });
+      section.addEventListener("mouseleave", function () {
+        setHoverSlow(false);
+      });
+      section.addEventListener("focusin", function () {
+        setHoverSlow(true);
+      });
+      section.addEventListener("focusout", function (evt) {
+        if (!section.contains(evt.relatedTarget)) {
+          setHoverSlow(false);
+        }
+      });
     });
   }
 
@@ -3215,6 +3296,11 @@
       initPrestigeListProducts();
     } catch (e) {
       console.warn("[Prestige] List products init error:", e);
+    }
+    try {
+      initPrestigeComposerMarquees();
+    } catch (eMarquee) {
+      console.warn("[Prestige] Composer marquee hover init error:", eMarquee);
     }
     try {
       initPrestigeThanksOrderFetch();

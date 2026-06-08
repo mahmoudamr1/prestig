@@ -1,0 +1,111 @@
+{
+  "icon": "https://api.iconify.design/lucide:message-circle-heart.svg",
+  "label": "What they say for us",
+  "section_schema": [
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "What They Say for Us",
+      "description": "Section title (Figma 19:1506)"
+    },
+    {
+      "name": "title_color",
+      "type": "color",
+      "default": "#2D3679",
+      "description": "Headline color"
+    },
+    {
+      "name": "feature_image",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1777458784428286068.webp",
+      "description": "Left lifestyle image (Figma 19:1509)"
+    },
+    {
+      "name": "bg_shape_main",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1780942856596138947.webp",
+      "description": "Red wavy line top-left (backgroundshape 1.webp — Figma 19:1505)"
+    },
+    {
+      "name": "bg_shape_top",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1780942854170313214.webp",
+      "description": "Yellow/cream background fill (backgroundshape.webp — Figma 19:1504)"
+    },
+    {
+      "name": "show_background_shapes",
+      "type": "boolean",
+      "default": true,
+      "description": "Show decorative background shapes behind content"
+    },
+    {
+      "name": "card_bg",
+      "type": "color",
+      "default": "#FFD265",
+      "description": "Review card background (Figma 19:1521 — brand yellow)"
+    },
+    {
+      "name": "star_color",
+      "type": "color",
+      "default": "#DA3C24",
+      "description": "Star rating color"
+    },
+    {
+      "name": "quote_mark_color",
+      "type": "color",
+      "default": "#DFBA62",
+      "description": "Decorative quote icon on card (tan/gold on yellow)"
+    },
+    {
+      "name": "reviews",
+      "type": "object_array",
+      "description": "Customer testimonials (Figma 19:1511–19:1531)",
+      "default": [
+        {
+          "avatar": "",
+          "title": "Amazing Quality!",
+          "quote": "I absolutely love the baby clothes I purchased from Toyo! The organic fabrics are so soft and gentle on my little one's skin, and the designs are adorable. Plus, knowing they are eco-friendly makes me feel great about my purchase!",
+          "author": "Becky - Leeds"
+        },
+        {
+          "avatar": "",
+          "title": "Love the Shoes!",
+          "quote": "Toyo's footwear collection is a game-changer! Not only are the shoes stylish, but they also provide excellent support for my baby's developing feet. It's evident that safety and comfort are top priorities for this brand.",
+          "author": "Sarah - London"
+        },
+        {
+          "avatar": "",
+          "title": "Best Stuffed Toys ever!",
+          "quote": "Toyo's stuffed toys are a hit in our household! They are not only cuddly and adorable but also made from sustainable materials. My kids have fallen in love with their new companions, and I'm happy knowing I've made an eco-conscious choice.",
+          "author": "Robert - Manchester"
+        }
+      ],
+      "fields": [
+        {
+          "name": "avatar",
+          "type": "image",
+          "default": "",
+          "description": "Customer photo (100×100 circle)"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "Amazing Quality!",
+          "description": "Review headline beside stars"
+        },
+        {
+          "name": "quote",
+          "type": "string",
+          "default": "",
+          "description": "Review body text"
+        },
+        {
+          "name": "author",
+          "type": "string",
+          "default": "Becky - Leeds",
+          "description": "Customer name and location"
+        }
+      ]
+    }
+  ]
+}

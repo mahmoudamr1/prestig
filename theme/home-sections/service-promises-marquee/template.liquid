@@ -1,0 +1,260 @@
+{% liquid
+  assign spm_segments = section_data.repeat_segments | default: 4 | plus: 0
+  if spm_segments < 2
+    assign spm_segments = 2
+  endif
+  assign spm_duration = section_data.scroll_duration | default: 32 | plus: 0
+  if spm_duration < 8
+    assign spm_duration = 8
+  endif
+  assign spm_duration_hover = section_data.scroll_duration_hover | default: 64 | plus: 0
+  if spm_duration_hover < spm_duration
+    assign spm_duration_hover = spm_duration | times: 2
+  endif
+  assign spm_item_gap = section_data.item_gap | default: 60 | plus: 0
+  assign spm_inner_gap = section_data.inner_gap | default: 60 | plus: 0
+  assign spm_icon_max = section_data.icon_max_width | default: 52 | plus: 0
+  if spm_icon_max < 24
+    assign spm_icon_max = 24
+  endif
+  assign spm_title_size = section_data.title_size | default: 48 | plus: 0
+  if spm_title_size < 20
+    assign spm_title_size = 20
+  endif
+%}
+{% if section_data.items and section_data.items.size > 0 %}
+<section
+  class="spm-marquee ps-sr-scope"
+  aria-label="{{ section_data.aria_label | default: 'Service promises' | escape }}"
+  style="
+    --spm-color: {{ section_data.title_color | default: '#FFFFFF' }};
+    {% if section_data.bg_color != blank %}--spm-bg: {{ section_data.bg_color }};{% endif %}
+    --spm-stroke: {{ section_data.stroke_width | default: 2 }}px;
+    --spm-duration: {{ spm_duration }}s;
+    --spm-duration-hover: {{ spm_duration_hover }}s;
+    --spm-segments: {{ spm_segments }};
+    --spm-item-gap: {{ spm_item_gap }}px;
+    --spm-inner-gap: {{ spm_inner_gap }}px;
+    --spm-icon-max: {{ spm_icon_max }}px;
+    --spm-title-size: {{ spm_title_size }}px;
+  "
+>
+  <div class="spm-marquee__viewport">
+    <div class="spm-marquee__track">
+      {% for seg in (1..spm_segments) %}
+        <div class="spm-marquee__phrase"{% if seg > 1 %} aria-hidden="true"{% endif %}>
+          {% for item in section_data.items %}
+            {% if item.title != blank or item.icon != blank %}
+              <div class="spm-marquee__item">
+                {% if item.icon != blank %}
+                  <span class="spm-marquee__icon-wrap" aria-hidden="true">
+                    <img
+                      class="spm-marquee__icon"
+                      src="{{ item.icon }}"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      width="52"
+                      height="48"
+                    />
+                  </span>
+                {% endif %}
+                {% if item.title != blank %}
+                  <span class="spm-marquee__word" tabindex="0">{{ item.title }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Figma 19:1361 — red service promises marquee (animation/hover like .csm-marquee) */
+  .spm-marquee {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    background: var(--spm-bg, #da3c24);
+    color: var(--spm-color, #fff);
+    padding: 8px 0;
+    font-family: var(--ps-ff-ui, var(--ps-ff-primary, "Asap")), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  .spm-marquee__viewport {
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    cursor: default;
+  }
+
+  .spm-marquee__track {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: max-content;
+    animation: spm-marquee-scroll var(--spm-duration, 32s) linear infinite;
+    will-change: transform;
+  }
+
+  .spm-marquee__phrase {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--spm-item-gap, 60px);
+    margin-inline-end: var(--spm-item-gap, 60px);
+    padding-inline: 8px;
+    box-sizing: border-box;
+  }
+
+  .spm-marquee__item {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--spm-inner-gap, 60px);
+    min-width: 0;
+  }
+
+  .spm-marquee__icon-wrap {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    min-width: var(--spm-icon-max, 52px);
+    line-height: 0;
+  }
+
+  .spm-marquee__icon {
+    display: block;
+    width: auto;
+    max-width: var(--spm-icon-max, 52px);
+    max-height: 48px;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .spm-marquee__word {
+    display: inline-block;
+    flex-shrink: 0;
+    font-size: clamp(1.25rem, 4.5vw, var(--spm-title-size, 48px));
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--spm-color, #fff);
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-text-stroke: 0 transparent;
+    paint-order: stroke fill;
+    transition:
+      color 0.22s ease,
+      -webkit-text-stroke-width 0.22s ease,
+      -webkit-text-stroke-color 0.22s ease;
+  }
+
+  .spm-marquee__word:hover,
+  .spm-marquee__word:focus-visible {
+    color: transparent;
+    -webkit-text-stroke-width: var(--spm-stroke, 2px);
+    -webkit-text-stroke-color: var(--spm-color, #fff);
+    outline: none;
+  }
+
+  @keyframes spm-marquee-scroll {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(calc(-100% / var(--spm-segments, 4)), 0, 0);
+    }
+  }
+
+  html.ps-app-lang-ar .spm-marquee__track,
+  [dir="rtl"] .spm-marquee__track {
+    animation-name: spm-marquee-scroll-rtl;
+  }
+
+  @keyframes spm-marquee-scroll-rtl {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(calc(100% / var(--spm-segments, 4)), 0, 0);
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .spm-marquee__track {
+      animation: none !important;
+      transform: none !important;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      gap: 16px;
+      padding-inline: 12px;
+      box-sizing: border-box;
+    }
+
+    .spm-marquee__phrase {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+      margin-inline-end: 0;
+      padding-inline: 0;
+      width: 100%;
+    }
+
+    .spm-marquee__phrase[aria-hidden="true"] {
+      display: none;
+    }
+
+    .spm-marquee__item {
+      justify-content: flex-start;
+      gap: 16px;
+    }
+
+    .spm-marquee__word {
+      white-space: normal;
+      text-wrap: balance;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spm-marquee__track {
+      animation: none !important;
+      transform: none !important;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      gap: var(--spm-item-gap, 60px);
+      padding-inline: 12px;
+      box-sizing: border-box;
+    }
+
+    .spm-marquee__phrase {
+      margin-inline-end: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .spm-marquee__phrase[aria-hidden="true"] {
+      display: none;
+    }
+
+    .spm-marquee__word {
+      white-space: normal;
+      text-wrap: balance;
+    }
+  }
+</style>
+{% endif %}

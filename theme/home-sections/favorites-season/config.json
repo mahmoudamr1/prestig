@@ -1,0 +1,141 @@
+{
+  "icon": "https://api.iconify.design/lucide:heart.svg",
+  "label": "Favorites of the season",
+  "section_schema": [
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "Favorites of the Season",
+      "description": "Section title (Figma 19:1227)"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": "Explore our most beloved products now.",
+      "description": "Subtitle under the title (Figma 19:1228)"
+    },
+    {
+      "name": "title_color",
+      "type": "color",
+      "default": "#2D3679",
+      "description": "Headline color"
+    },
+    {
+      "name": "description_color",
+      "type": "color",
+      "default": "#101010",
+      "description": "Subtitle color"
+    },
+    {
+      "name": "show_promo",
+      "type": "boolean",
+      "default": true,
+      "description": "Show the promo banner with countdown (Figma 19:1229)"
+    },
+    {
+      "name": "promo_image",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1777458784428286068.webp",
+      "description": "Promo banner background image"
+    },
+    {
+      "name": "promo_headline",
+      "type": "string",
+      "default": "Don't Miss the Final Sale!",
+      "description": "Text on the promo banner"
+    },
+    {
+      "name": "promo_url",
+      "type": "string",
+      "default": "/products",
+      "description": "Optional link when clicking the promo banner"
+    },
+    {
+      "name": "promo_overlay",
+      "type": "number",
+      "default": 35,
+      "description": "Dark overlay on promo image (0–100)"
+    },
+    {
+      "name": "show_countdown",
+      "type": "boolean",
+      "default": true,
+      "description": "Show countdown on the promo banner"
+    },
+    {
+      "name": "countdown_mode",
+      "type": "select",
+      "default": "calendar_day",
+      "description": "Countdown timer mode",
+      "options": [
+        { "label": "Calendar — fixed end date", "value": "calendar_day" },
+        { "label": "Rolling hours — per visitor", "value": "rolling_hours" }
+      ]
+    },
+    {
+      "name": "countdown_end_date",
+      "type": "string",
+      "default": "1-12-2026",
+      "description": "End date day-month-year when mode = calendar"
+    },
+    {
+      "name": "rolling_duration_hours",
+      "type": "number",
+      "default": 48,
+      "description": "Rolling countdown length in hours"
+    },
+    {
+      "name": "rolling_storage_key",
+      "type": "string",
+      "default": "favorites-season",
+      "description": "Unique localStorage key for rolling countdown"
+    },
+    {
+      "name": "label_days",
+      "type": "string",
+      "default": "Days",
+      "description": "Countdown label — days"
+    },
+    {
+      "name": "label_hours",
+      "type": "string",
+      "default": "Hours",
+      "description": "Countdown label — hours"
+    },
+    {
+      "name": "label_minutes",
+      "type": "string",
+      "default": "Minutes",
+      "description": "Countdown label — minutes"
+    },
+    {
+      "name": "label_seconds",
+      "type": "string",
+      "default": "Seconds",
+      "description": "Countdown label — seconds"
+    },
+    {
+      "name": "pick_product_ids",
+      "type": "product_multi_select",
+      "description": "Products in the horizontal carousel (Figma 19:1249)"
+    },
+    {
+      "name": "show_decor",
+      "type": "boolean",
+      "default": true,
+      "description": "Show side vector decorations behind content (Figma 19:1224 / 19:1225)"
+    },
+    {
+      "name": "decor_left",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1780941922461508805.webp",
+      "description": "Left blue arc (vector 7)"
+    },
+    {
+      "name": "decor_right",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1780941922570558348.webp",
+      "description": "Right pink wave (vector 6)"
+    }
+  ]
+}

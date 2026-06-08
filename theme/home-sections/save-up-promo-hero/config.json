@@ -1,0 +1,94 @@
+{
+  "icon": "https://api.iconify.design/lucide:image.svg",
+  "label": "Save up promo hero",
+  "section_schema": [
+    {
+      "name": "image",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1777438251081865442.webp",
+      "description": "Full-width background image (Figma 19:1416)"
+    },
+    {
+      "name": "mobile_image",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1777451536861940548.webp",
+      "description": "Optional crop for mobile (uses main image if empty)"
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "Save Up to 50%",
+      "description": "Main headline (Figma 19:1420)"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": "Our curated collections are meant to inspire your creative side and provide you.",
+      "description": "Supporting paragraph (Figma 19:1421)"
+    },
+    {
+      "name": "cta_label",
+      "type": "string",
+      "default": "Shop Now",
+      "description": "Primary button label (Figma 19:1424)"
+    },
+    {
+      "name": "cta_url",
+      "type": "string",
+      "default": "/products",
+      "description": "Primary button URL"
+    },
+    {
+      "name": "overlay_strength",
+      "type": "number",
+      "default": 30,
+      "description": "Dark overlay strength 0–100 (Figma 19:1417 — 30%)"
+    },
+    {
+      "name": "bg_position",
+      "type": "select",
+      "default": "center",
+      "description": "Background focal point",
+      "options": [
+        { "label": "Center", "value": "center" },
+        { "label": "End", "value": "center right" },
+        { "label": "Start", "value": "center left" }
+      ]
+    },
+    {
+      "name": "curve_color",
+      "type": "color",
+      "default": "#FEF7E6",
+      "description": "Bottom wave fill — matches the section below (Figma 19:1411)"
+    },
+    {
+      "name": "text_color",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "Headline and body text"
+    },
+    {
+      "name": "button_bg",
+      "type": "color",
+      "default": "#DA3C24",
+      "description": "CTA button background (Figma 19:1422)"
+    },
+    {
+      "name": "button_text",
+      "type": "color",
+      "default": "#FFFFFF",
+      "description": "CTA button label color"
+    },
+    {
+      "name": "min_height",
+      "type": "select",
+      "default": "tall",
+      "description": "Minimum section height",
+      "options": [
+        { "label": "Compact", "value": "compact" },
+        { "label": "Tall (560px — Figma)", "value": "tall" },
+        { "label": "Near full screen", "value": "screen" }
+      ]
+    }
+  ]
+}

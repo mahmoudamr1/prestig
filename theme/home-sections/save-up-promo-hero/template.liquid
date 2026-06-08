@@ -1,0 +1,191 @@
+<section
+  class="save-up-promo-hero ps-sr-scope"
+  style="
+    --suph-text: {{ section_data.text_color | default: '#FFFFFF' }};
+    --suph-btn-bg: {{ section_data.button_bg | default: '#DA3C24' }};
+    --suph-btn-text: {{ section_data.button_text | default: '#FFFFFF' }};
+    --suph-overlay: {{ section_data.overlay_strength | default: 30 | divided_by: 100.0 }};
+    --suph-min-h: {% if section_data.min_height == 'compact' %}clamp(360px, 68vw, 480px){% elsif section_data.min_height == 'screen' %}min(92vh, 640px){% else %}560px{% endif %};
+    {% if section_data.image != blank %}--suph-bg: url('{{ section_data.image }}');{% endif %}
+    {% if section_data.mobile_image != blank %}--suph-bg-mobile: url('{{ section_data.mobile_image }}');{% endif %}
+    --suph-bg-pos: {{ section_data.bg_position | default: 'center' }};
+    {% if section_data.curve_color != blank %}--suph-curve: {{ section_data.curve_color }};{% endif %}
+  "
+>
+  <div class="save-up-promo-hero__media" aria-hidden="true">
+    <div class="save-up-promo-hero__overlay"></div>
+  </div>
+  <div class="save-up-promo-hero__inner">
+    <div class="save-up-promo-hero__copy">
+      {% if section_data.headline != blank %}
+        <h2 class="save-up-promo-hero__title" data-anim="fadeInUp" data-seq="0">{{ section_data.headline }}</h2>
+      {% endif %}
+      {% if section_data.description != blank %}
+        <p class="save-up-promo-hero__desc" data-anim="fadeInLeft" data-seq="1">{{ section_data.description }}</p>
+      {% endif %}
+      {% if section_data.cta_label != blank %}
+        <a
+          class="save-up-promo-hero__btn"
+          href="{{ section_data.cta_url | default: '/products' }}"
+          data-anim="scaleIn"
+          data-seq="2"
+        >
+          {{- section_data.cta_label -}}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="save-up-promo-hero__curve" aria-hidden="true">
+    <svg
+      class="save-up-promo-hero__wave"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1440 133"
+      preserveAspectRatio="none"
+      focusable="false"
+    >
+      <path fill="currentColor" d="M0 4C320.5 129 1119.5 129 1440 4V133H0Z" />
+    </svg>
+  </div>
+</section>
+
+<style>
+  /* Figma 19:1409 — centered promo hero (children-theme); all styles live in this block */
+  .content_container:has(.save-up-promo-hero) {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .save-up-promo-hero {
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: var(--suph-min-h, 560px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:
+      clamp(48px, 12vw, 158px)
+      clamp(20px, 4vw, 50px)
+      calc(clamp(56px, 9.25vw, 133px) + clamp(24px, 5vw, 48px));
+    margin: 0;
+    overflow: hidden;
+    font-family: var(--ps-ff-ui), var(--ps-ff-primary), sans-serif;
+    color: var(--suph-text, #fff);
+    background-color: var(--body-bg, var(--ps-cream, #fef7e6));
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .save-up-promo-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--ps-cream, #fef7e6);
+    background-image: var(--suph-bg-mobile, var(--suph-bg));
+    background-size: cover;
+    background-position: var(--suph-bg-pos, center);
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+
+  @media (min-width: 768px) {
+    .save-up-promo-hero__media {
+      background-image: var(--suph-bg);
+    }
+  }
+
+  .save-up-promo-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 16, 16, var(--suph-overlay, 0.3));
+  }
+
+  .save-up-promo-hero__curve {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    z-index: 2;
+    pointer-events: none;
+    line-height: 0;
+    color: var(--suph-curve, var(--body-bg, var(--ps-cream, #fef7e6)));
+  }
+
+  .save-up-promo-hero__wave {
+    display: block;
+    width: 100%;
+    height: clamp(56px, 9.25vw, 133px);
+  }
+
+  .save-up-promo-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .save-up-promo-hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 33px;
+    width: 100%;
+    max-width: 431px;
+    text-align: center;
+  }
+
+  .save-up-promo-hero__title {
+    margin: 0;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--suph-text, #fff);
+  }
+
+  .save-up-promo-hero__desc {
+    margin: 0;
+    font-size: clamp(16px, 2.2vw, 20px);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--suph-text, #fff);
+  }
+
+  .save-up-promo-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 24px;
+    border: 1px solid var(--suph-btn-bg, #da3c24);
+    border-radius: 32px;
+    background: var(--suph-btn-bg, #da3c24);
+    color: var(--suph-btn-text, #fff);
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: capitalize;
+    text-decoration: none;
+    box-shadow: none;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .save-up-promo-hero__btn:hover,
+    .save-up-promo-hero__btn:focus-visible {
+      box-shadow: var(--ps-product-card-cta-shadow, -5px 6px 0 #101010);
+    }
+  }
+</style>
