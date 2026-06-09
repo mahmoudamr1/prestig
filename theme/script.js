@@ -2401,6 +2401,34 @@
     }
   }
 
+  /** Move platform `.category_section_header` after collection hero (DOM order is header-first). */
+  function initCollectionPageLayout() {
+    var section = document.querySelector(
+      "[data-ps-pgrid].ps-pgrid-section--collection"
+    );
+    if (!section) return;
+
+    var hero = section.querySelector(".ps-cl-hero");
+    if (!hero) return;
+
+    var container = section.closest(".collection_container");
+    if (!container) return;
+
+    var header = container.querySelector(".category_section_header");
+    if (!header) return;
+
+    if (
+      header.getAttribute("data-ps-cl-placed") === "1" &&
+      hero.nextElementSibling === header
+    ) {
+      return;
+    }
+
+    hero.insertAdjacentElement("afterend", header);
+    header.setAttribute("data-ps-cl-placed", "1");
+    header.classList.add("ps-cl-filters");
+  }
+
   /**
    * Home-section API hydration — same behaviour as hosted `...script.js` (`E` + `A` + MutationObserver),
    * plus: categories render as collection cards, mount on self, `data-eo-hs-ids` attribute retries, Prestige price probes.
@@ -3259,6 +3287,7 @@
     try {
       initCollectionFiltersShell();
       initCollectionFilterGroupsAccordion();
+      initCollectionPageLayout();
     } catch (e) {
       console.warn("[Prestige] Collection filters init error:", e);
     }
@@ -3491,6 +3520,7 @@
               el.matches(".lq-desc-accordion") ||
               el.matches(".lq-desc-tabs") ||
               el.matches(".ps-cl-section") ||
+              el.matches(".ps-pgrid-section--collection") ||
               el.matches(".ps-announce-slider") ||
               el.matches("[data-ps-announce]") ||
               el.matches(".ps-theme") ||
@@ -3523,6 +3553,7 @@
               el.querySelector(".lq-desc-accordion") ||
               el.querySelector(".lq-desc-tabs") ||
               el.querySelector(".ps-cl-section") ||
+              el.querySelector(".ps-pgrid-section--collection") ||
               el.querySelector(".ps-announce-slider") ||
               el.querySelector("[data-ps-announce]") ||
               el.querySelector(".ps-theme") ||

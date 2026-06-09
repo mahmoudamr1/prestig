@@ -259,6 +259,27 @@
     "default": "Out of stock"
   },
   {
+    "name": "collection_items_label",
+    "type": "string",
+    "group": "Collections",
+    "description": "Collection page: suffix after product count (e.g. \"8 items\").",
+    "default": "items"
+  },
+  {
+    "name": "collection_hero_decor_left",
+    "type": "string",
+    "group": "Collections",
+    "description": "Collection hero: left squiggle decoration image URL.",
+    "default": "https://files.easy-orders.net/1781013162249775272.webp"
+  },
+  {
+    "name": "collection_hero_decor_right",
+    "type": "string",
+    "group": "Collections",
+    "description": "Collection hero: right squiggle decoration image URL.",
+    "default": "https://files.easy-orders.net/1781013162597986859.webp"
+  },
+  {
     "name": "featured_products_header_subtitle",
     "type": "string",
     "group": "Featured products",
