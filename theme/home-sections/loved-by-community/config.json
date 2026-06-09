@@ -1,0 +1,154 @@
+{
+  "icon": "https://api.iconify.design/lucide:heart-handshake.svg",
+  "label": "Loved by our community",
+  "section_schema": [
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "Loved by Our Community",
+      "description": "Section title (Figma 19:1544)"
+    },
+    {
+      "name": "headline_color",
+      "type": "color",
+      "default": "#DA3C24",
+      "description": "Headline color"
+    },
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#F6ECD3",
+      "description": "Section background (Figma 19:1541)"
+    },
+    {
+      "name": "show_decor",
+      "type": "boolean",
+      "default": true,
+      "description": "Show yellow hand-drawn vector decorations"
+    },
+    {
+      "name": "decor_top_right",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1781003908486732797.webp",
+      "description": "Top-right yellow loop (vector 1.webp — Figma 19:1542)"
+    },
+    {
+      "name": "decor_bottom_left",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1781003908428758287.webp",
+      "description": "Bottom-left yellow wave (vector.webp — Figma 19:1543)"
+    },
+    {
+      "name": "follow_label",
+      "type": "string",
+      "default": "Follow Us",
+      "description": "Social row label (Figma 19:1550)"
+    },
+    {
+      "name": "gallery_items",
+      "type": "object_array",
+      "description": "Community photo grid — three images (Figma 19:1546–19:1548)",
+      "default": [
+        {
+          "image": "https://files.easy-orders.net/1781003907578865005.webp",
+          "alt": "Handmade crochet tiger toy",
+          "url": ""
+        },
+        {
+          "image": "https://files.easy-orders.net/1781003908384493422.webp",
+          "alt": "Purple crochet bear with floral dress",
+          "url": ""
+        },
+        {
+          "image": "https://files.easy-orders.net/1781003908200913121.webp",
+          "alt": "Child hugging a teddy bear",
+          "url": ""
+        }
+      ],
+      "fields": [
+        {
+          "name": "image",
+          "type": "image",
+          "default": "",
+          "description": "Photo (347×410 in Figma)"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "",
+          "description": "Image alt text"
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "default": "",
+          "description": "Optional link when clicking the photo"
+        }
+      ]
+    },
+    {
+      "name": "social_links",
+      "type": "object_array",
+      "description": "Social icons row (Figma 19:1551–19:1558)",
+      "default": [
+        {
+          "type": "linkedin",
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/"
+        },
+        {
+          "type": "facebook",
+          "label": "Facebook",
+          "url": "https://www.facebook.com/"
+        },
+        {
+          "type": "x",
+          "label": "X",
+          "url": "https://x.com/"
+        },
+        {
+          "type": "instagram",
+          "label": "Instagram",
+          "url": "https://www.instagram.com/"
+        }
+      ],
+      "fields": [
+        {
+          "name": "type",
+          "type": "select",
+          "default": "instagram",
+          "description": "Network icon",
+          "options": [
+            { "label": "LinkedIn", "value": "linkedin" },
+            { "label": "Facebook", "value": "facebook" },
+            { "label": "X (Twitter)", "value": "x" },
+            { "label": "Instagram", "value": "instagram" },
+            { "label": "TikTok", "value": "tiktok" },
+            { "label": "YouTube", "value": "youtube" },
+            { "label": "Pinterest", "value": "pinterest" },
+            { "label": "WhatsApp", "value": "whatsapp" },
+            { "label": "Custom link", "value": "link" }
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "Social",
+          "description": "Accessible label"
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "default": "",
+          "description": "Profile URL"
+        },
+        {
+          "name": "icon",
+          "type": "image",
+          "default": "",
+          "description": "Optional custom icon (18×18); leave empty for built-in icon"
+        }
+      ]
+    }
+  ]
+}

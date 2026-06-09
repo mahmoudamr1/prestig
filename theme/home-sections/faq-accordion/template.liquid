@@ -1,0 +1,399 @@
+{% liquid
+  assign hs_faq_headline = section_data.headline | default: 'FAQs' | strip
+  assign hs_faq_items = section_data.faq_items
+  assign hs_faq_show_decor = section_data.show_decor
+  if hs_faq_show_decor == nil
+    assign hs_faq_show_decor = true
+  endif
+  assign hs_faq_decor_top = section_data.decor_top | default: 'https://files.easy-orders.net/1781004555518956073.webp'
+  assign hs_faq_decor_left = section_data.decor_left | default: 'https://files.easy-orders.net/1781004555468796347.webp'
+%}
+{% if hs_faq_items and hs_faq_items.size > 0 %}
+<section
+  class="hs-faq ps-sr-scope"
+  aria-labelledby="hs-faq-heading-{{ section.id }}"
+  style="
+    --hs-faq-bg: {{ section_data.bg_color | default: '#fef7e6' }};
+    --hs-faq-title: {{ section_data.headline_color | default: '#DA3C24' }};
+    --hs-faq-card: {{ section_data.card_bg | default: '#F6ECD3' }};
+    --hs-faq-q-open: {{ section_data.open_question_color | default: '#2D3679' }};
+    --hs-faq-q: {{ section_data.question_color | default: '#101010' }};
+    --hs-faq-a: {{ section_data.answer_color | default: '#101010' }};
+    --hs-faq-toggle: {{ section_data.toggle_bg | default: '#DA3C24' }};
+    --hs-faq-shadow: {{ section_data.card_shadow | default: '#101010' }};
+  "
+>
+  {% if hs_faq_show_decor %}
+    <div class="hs-faq__decor" aria-hidden="true">
+      {% if hs_faq_decor_top != blank %}
+        <img
+          class="hs-faq__decor-shape hs-faq__decor-shape--top"
+          src="{{ hs_faq_decor_top }}"
+          alt=""
+          width="223"
+          height="209"
+          loading="lazy"
+          decoding="async"
+        >
+      {% endif %}
+      {% if hs_faq_decor_left != blank %}
+        <img
+          class="hs-faq__decor-shape hs-faq__decor-shape--left"
+          src="{{ hs_faq_decor_left }}"
+          alt=""
+          width="37"
+          height="84"
+          loading="lazy"
+          decoding="async"
+        >
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="hs-faq__inner">
+    {% if hs_faq_headline != blank %}
+      <h2 id="hs-faq-heading-{{ section.id }}" class="hs-faq__title" data-anim="fadeInDown" data-seq="0">{{ hs_faq_headline }}</h2>
+    {% endif %}
+
+    <div class="hs-faq__list">
+      {% for item in hs_faq_items %}
+        {% if item.question != blank %}
+          <details
+            class="hs-faq__item"
+            data-hs-faq-item
+            {% if item.open_by_default %}open{% endif %}
+            data-anim="fadeInUp"
+            data-seq="{{ forloop.index0 | plus: 1 }}"
+          >
+            <summary class="hs-faq__summary">
+              <span class="hs-faq__question">{{ item.question }}</span>
+              <span class="hs-faq__toggle" aria-hidden="true">
+                <span class="hs-faq__toggle-icon"></span>
+              </span>
+            </summary>
+            {% if item.answer != blank %}
+              <div class="hs-faq__panel">
+                <p class="hs-faq__answer">{{ item.answer }}</p>
+              </div>
+            {% endif %}
+          </details>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .content_container:has(.hs-faq),
+  .product_container:has(.hs-faq) {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow: hidden;
+  }
+
+  /* Figma 19:1561 — same shell pattern as loved-by-community */
+  .hs-faq {
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+    padding: clamp(48px, 6vw, 60px) clamp(20px, 4vw, 50px);
+    background: var(--hs-faq-bg, #fef7e6);
+    color: var(--hs-faq-a, #101010);
+    font-family: var(--ps-ff-ui, var(--ps-ff-primary, "Asap")), sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hs-faq__decor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  .hs-faq__decor-shape {
+    position: absolute;
+    display: block;
+    max-width: none;
+    height: auto;
+  }
+
+  /* Figma 19:1562 — top-right squiggle (% tracks section height/width) */
+  .hs-faq__decor-shape--top {
+    top: 4%;
+    right: -1.5%;
+    width: clamp(100px, 17%, 223px);
+  }
+
+  /* Figma 19:1563 — left curve (% from bottom so short/tall sections both show it) */
+  .hs-faq__decor-shape--left {
+    left: 6%;
+    bottom: 10%;
+    top: auto;
+    width: clamp(24px, 3%, 37px);
+  }
+
+  .hs-faq__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(24px, 4vw, 32px);
+    max-width: 816px;
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hs-faq__title {
+    margin: 0;
+    text-align: center;
+    font-family: var(--ps-ff-ui, var(--ps-ff-primary, "Asap")), sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--hs-faq-title, #da3c24);
+  }
+
+  /* Room for open-card hard shadow inside overflow:hidden */
+  .hs-faq__list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    width: 100%;
+    padding: 0 0 8px 8px;
+    box-sizing: border-box;
+  }
+
+  .hs-faq__item {
+    position: relative;
+    margin: 0;
+    border: none;
+    border-radius: 24px;
+    background: var(--hs-faq-card, #F6ECD3);
+    overflow: visible;
+    box-shadow: none;
+  }
+
+  .hs-faq__item[open] {
+    box-shadow: -8px 8px 0 0 var(--hs-faq-shadow, #101010);
+    z-index: 1;
+  }
+
+  .hs-faq__summary {
+    position: relative;
+    display: block;
+    list-style: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 19px 112px 19px 50px;
+    box-sizing: border-box;
+  }
+
+  .hs-faq__item[open] .hs-faq__summary {
+    padding-bottom: 0;
+  }
+
+  .hs-faq__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .hs-faq__summary::marker {
+    content: "";
+  }
+
+  .hs-faq__question {
+    display: block;
+    margin: 0;
+    font-size: clamp(17px, 2.2vw, 20px);
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: var(--hs-faq-q, #101010);
+    text-align: start;
+  }
+
+  .hs-faq__item[open] .hs-faq__question {
+    color: var(--hs-faq-q-open, #2d3679);
+  }
+
+  /* Inside summary so + stays visible when details is closed */
+  .hs-faq__toggle {
+    position: absolute;
+    top: 3px;
+    right: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background: var(--hs-faq-toggle, #da3c24);
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  html.ps-app-lang-ar .hs-faq__toggle,
+  [dir="rtl"] .hs-faq__toggle {
+    right: auto;
+    left: 6px;
+  }
+
+  html.ps-app-lang-ar .hs-faq__summary,
+  [dir="rtl"] .hs-faq__summary {
+    padding: 19px 50px 19px 112px;
+  }
+
+  html.ps-app-lang-ar .hs-faq__item[open] .hs-faq__summary,
+  [dir="rtl"] .hs-faq__item[open] .hs-faq__summary {
+    padding-bottom: 0;
+  }
+
+  .hs-faq__toggle-icon {
+    position: relative;
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+
+  .hs-faq__toggle-icon::before,
+  .hs-faq__toggle-icon::after {
+    content: "";
+    position: absolute;
+    background: #ffffff;
+    border-radius: 1px;
+  }
+
+  .hs-faq__toggle-icon::before {
+    top: 5px;
+    left: 0;
+    width: 12px;
+    height: 2px;
+  }
+
+  .hs-faq__toggle-icon::after {
+    top: 0;
+    left: 5px;
+    width: 2px;
+    height: 12px;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .hs-faq__item[open] .hs-faq__toggle-icon::after {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+
+  .hs-faq__panel {
+    padding: 22px 112px 19px 50px;
+    box-sizing: border-box;
+  }
+
+  .hs-faq__answer {
+    margin: 0;
+    max-width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22.4px;
+    letter-spacing: 0;
+    color: var(--hs-faq-a, #101010);
+    text-align: start;
+  }
+
+  .hs-faq__summary:focus-visible {
+    outline: 2px solid var(--hs-faq-shadow, #101010);
+    outline-offset: 3px;
+    border-radius: 24px;
+  }
+
+  @media (max-width: 767px) {
+    .hs-faq__decor-shape--top {
+      top: 5%;
+      right: -4%;
+      width: clamp(100px, 22%, 160px);
+    }
+
+    .hs-faq__decor-shape--left {
+      left: 2%;
+      bottom: 8%;
+      width: clamp(20px, 6%, 24px);
+    }
+
+    .hs-faq__list {
+      padding: 0 0 6px 6px;
+    }
+
+    .hs-faq__summary {
+      padding: 19px 88px 19px 20px;
+    }
+
+    .hs-faq__panel {
+      padding: 22px 88px 19px 20px;
+    }
+
+    html.ps-app-lang-ar .hs-faq__summary,
+    [dir="rtl"] .hs-faq__summary {
+      padding: 19px 20px 19px 88px;
+    }
+
+    html.ps-app-lang-ar .hs-faq__panel,
+    [dir="rtl"] .hs-faq__panel {
+      padding: 22px 20px 19px 88px;
+    }
+
+    .hs-faq__toggle {
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      top: 6px;
+      right: 8px;
+    }
+
+    html.ps-app-lang-ar .hs-faq__toggle,
+    [dir="rtl"] .hs-faq__toggle {
+      left: 8px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function initHsFaqAccordions() {
+      document.querySelectorAll(".hs-faq").forEach(function (root) {
+        if (root.getAttribute("data-hs-faq-bound") === "1") {
+          return;
+        }
+        root.setAttribute("data-hs-faq-bound", "1");
+        root.querySelectorAll("[data-hs-faq-item]").forEach(function (item) {
+          item.addEventListener("toggle", function () {
+            if (!item.open) {
+              return;
+            }
+            root.querySelectorAll("[data-hs-faq-item]").forEach(function (other) {
+              if (other !== item) {
+                other.open = false;
+              }
+            });
+          });
+        });
+      });
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initHsFaqAccordions);
+    } else {
+      initHsFaqAccordions();
+    }
+    document.addEventListener("shop:section:load", initHsFaqAccordions);
+  })();
+</script>
+{% endif %}

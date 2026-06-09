@@ -1,0 +1,130 @@
+{
+  "icon": "https://api.iconify.design/lucide:circle-help.svg",
+  "label": "FAQ accordion",
+  "section_schema": [
+    {
+      "name": "headline",
+      "type": "string",
+      "default": "FAQs",
+      "description": "Section title (Figma 19:1564)"
+    },
+    {
+      "name": "headline_color",
+      "type": "color",
+      "default": "#DA3C24",
+      "description": "Headline color (Figma 19:1564)"
+    },
+    {
+      "name": "bg_color",
+      "type": "color",
+      "default": "#fef7e6",
+      "description": "Section background (cream canvas — Figma 19:1561)"
+    },
+    {
+      "name": "card_bg",
+      "type": "color",
+      "default": "#F6ECD3",
+      "description": "Accordion card background (Figma 19:1566)"
+    },
+    {
+      "name": "open_question_color",
+      "type": "color",
+      "default": "#2D3679",
+      "description": "Question text when item is open (Figma 19:1568)"
+    },
+    {
+      "name": "question_color",
+      "type": "color",
+      "default": "#101010",
+      "description": "Question text when collapsed (Figma 19:1573)"
+    },
+    {
+      "name": "answer_color",
+      "type": "color",
+      "default": "#101010",
+      "description": "Answer body text (Figma 19:1569)"
+    },
+    {
+      "name": "toggle_bg",
+      "type": "color",
+      "default": "#DA3C24",
+      "description": "Plus/minus circle button (Figma 19:1570)"
+    },
+    {
+      "name": "card_shadow",
+      "type": "color",
+      "default": "#101010",
+      "description": "Hard shadow on open card only (Figma 19:1566: -8px 8px)"
+    },
+    {
+      "name": "show_decor",
+      "type": "boolean",
+      "default": true,
+      "description": "Show decorative vectors (top → bottom)"
+    },
+    {
+      "name": "decor_top",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1781004555518956073.webp",
+      "description": "Top-right yellow squiggle (vector 3.webp — Figma 19:1562)"
+    },
+    {
+      "name": "decor_left",
+      "type": "image",
+      "default": "https://files.easy-orders.net/1781004555468796347.webp",
+      "description": "Left pink curve (vector 2.webp — Figma 19:1563)"
+    },
+    {
+      "name": "faq_items",
+      "type": "object_array",
+      "description": "FAQ rows stacked top to bottom (Figma 19:1565–19:1590)",
+      "default": [
+        {
+          "question": "When Will My Order Ship?",
+          "answer": "Our team needs 1-2 business days to pack and ship your full order. For larger items, we ask that you allow 3-4 business days. Orders placed after 1:00 pm EST on Friday — or over the weekend — will ship on the next business day.",
+          "open_by_default": true
+        },
+        {
+          "question": "Where Do You Ship To?",
+          "answer": "We ship nationwide and to select international destinations. Shipping options and rates are shown at checkout based on your delivery address.",
+          "open_by_default": false
+        },
+        {
+          "question": "I Have a Question about My Order, Who Can I Talk To?",
+          "answer": "Reach our support team via the contact page, email, or phone listed in the footer. Include your order number so we can help you faster.",
+          "open_by_default": false
+        },
+        {
+          "question": "What Is Your Return Policy?",
+          "answer": "Unused items in original packaging may be returned within 14 days of delivery. See our returns page for full terms and how to start a return.",
+          "open_by_default": false
+        },
+        {
+          "question": "Do You Offer Cash on Delivery?",
+          "answer": "Cash on delivery is available in eligible regions. Choose COD at checkout if it appears for your address.",
+          "open_by_default": false
+        }
+      ],
+      "fields": [
+        {
+          "name": "question",
+          "type": "string",
+          "default": "",
+          "description": "Question headline (20px in Figma)"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "default": "",
+          "description": "Answer body (shown when expanded)"
+        },
+        {
+          "name": "open_by_default",
+          "type": "boolean",
+          "default": false,
+          "description": "Start expanded (only one should be true)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,22 +1,7 @@
 {% if payment_img == "https://www.diveriksperformance.com/wp-content/uploads/2023/05/payment-methods-epicerie-ludo.png" %}
 {% assign payment_img = "https://files.easy-orders.net/1779706615785801969.png" %}
 {% endif %}
-<footer class="ps-footer ps-sr-scope"{% if palette %}{% assign pfb = palette.ft_bg %}{% assign pft = palette.ft_text %}{% if pfb != blank or pft != blank %} style="{% if pfb != blank %}--ft-bg: {{ pfb }};{% endif %}{% if pft != blank %}--ft-text: {{ pft }};{% endif %}"{% endif %}{% endif %}><div class="content_container ps-footer-inner"><div class="ps-footer-main"><a href="/" class="ps-footer-logo ps-footer-main__brand" aria-label="{{ store_name }}" data-anim="fadeInScale" data-seq="0">{% if logo != "" %}<img src="{{ logo }}" alt="{{ store_name }}" />{% else %}<span class="ps-footer-logo-text">{{ store_name }}</span>{% endif %}</a>{% if categories.size > 0 %}{% liquid
-  assign ps_footer_title_shop = theme_data.footer_quick_links | strip
-  if ps_footer_title_shop == blank
-    assign ps_footer_title_shop = "Shop"
-  endif
-%}<div class="ps-footer-col ps-footer-col--quick ps-footer-main__quick" data-anim="fadeInLeft" data-seq="1"><h4 class="ps-footer-heading">{{ ps_footer_title_shop }}</h4><ul class="ps-footer-links">{% for cat in categories %}<li><a href="/collections/{{ cat.slug }}">{{ cat.name }}</a></li>{% endfor %}</ul></div>{% endif %}{% if pages.size > 0 %}{% liquid
-  assign ps_footer_title_pages = theme_data.footer_customer_support | strip
-  if ps_footer_title_pages == blank
-    assign ps_footer_title_pages = "Pages"
-  endif
-%}<div class="ps-footer-col ps-footer-col--support ps-footer-main__support" data-anim="fadeInRight" data-seq="2"><h4 class="ps-footer-heading">{{ ps_footer_title_pages }}</h4><ul class="ps-footer-links">{% for page in pages %}<li><a href="/pages/{{ page.slug }}">{{ page.title }}</a></li>{% endfor %}</ul></div>{% endif %}{% if has_contact %}{% liquid
-  assign ps_footer_contact_heading = theme_data.footer_contact_us | strip
-  if ps_footer_contact_heading == blank
-    assign ps_footer_contact_heading = "Contact us"
-  endif
-%}<div class="ps-footer-contact-col ps-footer-main__contact" data-anim="slideInUp" data-seq="3"><h4 class="ps-footer-heading">{{ ps_footer_contact_heading }}</h4><div class="ps-footer-contact">{% if phone != "" %}<div class="ps-footer-contact-block"><span class="ps-footer-contact-k">{{ theme_data.footer_phone_label | default: "Phone" }}</span><a href="tel:{{ phone }}" dir="ltr">{{ phone }}</a></div>{% endif %}{% if email != "" %}<div class="ps-footer-contact-block"><span class="ps-footer-contact-k">{{ theme_data.footer_email_label | default: "Email" }}</span><a href="mailto:{{ email }}">{{ email }}</a></div>{% endif %}{% if address != "" %}<div class="ps-footer-contact-block"><span class="ps-footer-contact-k">{{ theme_data.footer_address_label | default: "Address" }}</span><span>{{ address }}</span></div>{% endif %}</div></div>{% endif %}{% liquid
+{% liquid
   assign ps_footer_title_newsletter = theme_data.footer_subscribe_emails | strip
   if ps_footer_title_newsletter == blank
     assign ps_footer_title_newsletter = "Subscribe to Our Newsletter"
@@ -29,4 +14,184 @@
   if ps_footer_sub_btn == blank
     assign ps_footer_sub_btn = "Subscribe to Newsletter"
   endif
-%}<div class="ps-footer-subscribe-col ps-footer-main__subscribe" data-anim="zoomIn" data-seq="4"><h4 class="ps-footer-heading">{{ ps_footer_title_newsletter }}</h4><form class="footer-subscribe-form ps-footer-subscribe-form" novalidate onsubmit="event.preventDefault();if(!this.checkValidity()){this.reportValidity();return;}var input=this.elements.email;var email=input&&input.value?String(input.value).trim():'';this.dispatchEvent(new CustomEvent('footer-subscribe',{bubbles:true,detail:{email:email}}));this.reset();"><div class="ps-footer-subscribe-field"><span class="ps-footer-subscribe-icon" aria-hidden="true"><img src="https://files.easy-orders.net/1778659559764892507prestig-footer-icon-newsletter-envelope.svg" alt="" width="24" height="24" /></span><input type="email" name="email" class="ps-footer-subscribe-input" placeholder="{{ ps_footer_email_ph }}" autocomplete="email" inputmode="email" maxlength="254" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="{{ ps_footer_email_ph }}" required aria-required="true" /></div><button type="submit" class="ps-footer-subscribe-btn">{{ ps_footer_sub_btn }}</button></form></div></div><div class="ps-footer-meta-row" data-anim="fadeInDown" data-seq="5">{% if payment_img != "" and theme_data.show_payment_icons != false %}<div class="ps-footer-brand-payments ps-footer-payments--desktop-only" aria-label="Payment methods"><span class="ps-footer-payment-item ps-footer-payment-single"><img src="{{ payment_img }}" alt="Accepted payment methods" loading="lazy" /></span></div>{% endif %}{% if social and social.size > 0 %}{% assign si_known = "|facebook|instagram|x|linkedin|tiktok|youtube|pinterest|threads|snapchat|whatsapp|telegram|discord|reddit|github|google|vimeo|medium|dribbble|behance|mastodon|twitch|skype|slack|line|wechat|vk|rss|spotify|soundcloud|apple|etsy|shopify|" %}<div class="ps-footer-socials" aria-label="{% if follow_label != blank %}{{ follow_label }}{% else %}Social{% endif %}">{% for item in social %}{% assign s_url = item.url | strip %}{% if s_url == blank %}{% assign s_url = "#" %}{% endif %}{% assign s_label = item.label | default: item.type | default: "Social" | strip %}{% assign s_icon = item.icon | strip %}{% assign slug = item.type | default: "link" | strip | downcase %}{% if slug == "twitter" %}{% assign slug = "x" %}{% elsif slug == "fb" %}{% assign slug = "facebook" %}{% elsif slug == "ig" %}{% assign slug = "instagram" %}{% elsif slug == "yt" %}{% assign slug = "youtube" %}{% elsif slug == "in" or slug == "linkedin" %}{% assign slug = "linkedin" %}{% endif %}{% assign needle = "|" | append: slug | append: "|" %}<a href="{{ s_url }}" target="_blank" rel="noreferrer" aria-label="{{ s_label }}">{% if s_icon != "" %}<img class="ps-footer-social-img ps-footer-social-img--invert" src="{{ s_icon }}" alt="" width="20" height="20" loading="lazy" />{% elsif si_known contains needle %}<img class="ps-footer-social-img" src="https://cdn.simpleicons.org/{{ slug }}/ffffff" alt="" width="20" height="20" loading="lazy" />{% else %}<img class="ps-footer-social-svg ps-footer-social-img--invert" src="https://files.easy-orders.net/1778659559794034419prestig-footer-icon-social-fallback-external.svg" alt="" width="20" height="20" loading="lazy" aria-hidden="true" />{% endif %}</a>{% endfor %}</div>{% endif %}</div><div class="ps-footer-divider"></div><div class="ps-footer-bottom"><p class="ps-footer-copy">&copy; {{ year }} {{ store_name }}. {{ rights_label }}</p>{% if show_powered %}<p class="ps-footer-powered">{{ theme_data.footer_powered_by | default: "Powered by" }} <a href="https://www.easy-orders.net" target="_blank" rel="noreferrer">Easy Orders</a></p>{% endif %}</div>{% if payment_img != "" and theme_data.show_payment_icons != false %}<div class="ps-footer-brand-payments ps-footer-payments--mobile-only" aria-label="Payment methods"><span class="ps-footer-payment-item ps-footer-payment-single"><img src="{{ payment_img }}" alt="Accepted payment methods" loading="lazy" /></span></div>{% endif %}</div></footer>
+%}
+<footer class="ps-footer ps-footer--children ps-sr-scope"{% if palette %}{% assign pfb = palette.ft_bg %}{% assign pft = palette.ft_text %}{% if pfb != blank or pft != blank %} style="{% if pfb != blank %}--ft-bg: {{ pfb }};{% endif %}{% if pft != blank %}--ft-text: {{ pft }};{% endif %}"{% endif %}{% endif %}>
+  <div class="ps-footer__wave-wrap" aria-hidden="true">
+    <svg class="ps-footer__wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 35" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="currentColor" d="M0 22C240 8 480 32 720 18C960 4 1200 28 1440 18V35H0V22Z"/>
+    </svg>
+  </div>
+  <div class="ps-footer__decor" aria-hidden="true">
+    <img
+      class="ps-footer__decor-shape ps-footer__decor-shape--left-top"
+      src="https://files.easy-orders.net/1781008176931420931.webp"
+      alt=""
+      width="160"
+      height="78"
+      loading="lazy"
+      decoding="async"
+    >
+    <img
+      class="ps-footer__decor-shape ps-footer__decor-shape--left-bottom"
+      src="https://files.easy-orders.net/1781008176906760423.webp"
+      alt=""
+      width="216"
+      height="182"
+      loading="lazy"
+      decoding="async"
+    >
+    <img
+      class="ps-footer__decor-shape ps-footer__decor-shape--right"
+      src="https://files.easy-orders.net/1781008176991133300.webp"
+      alt=""
+      width="148"
+      height="255"
+      loading="lazy"
+      decoding="async"
+    >
+  </div>
+  <div class="ps-footer-hero" data-anim="zoomIn" data-seq="0">
+    <div class="ps-footer-hero__inner">
+      <h2 class="ps-footer-hero__heading">{{ ps_footer_title_newsletter }}</h2>
+      <form class="footer-subscribe-form ps-footer-subscribe-form" novalidate onsubmit="event.preventDefault();if(!this.checkValidity()){this.reportValidity();return;}var input=this.elements.email;var email=input&&input.value?String(input.value).trim():'';this.dispatchEvent(new CustomEvent('footer-subscribe',{bubbles:true,detail:{email:email}}));this.reset();">
+        <div class="ps-footer-subscribe-field">
+          <input type="email" name="email" class="ps-footer-subscribe-input" placeholder="{{ ps_footer_email_ph }}" autocomplete="email" inputmode="email" maxlength="254" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="{{ ps_footer_email_ph }}" required aria-required="true" />
+          <button type="submit" class="ps-footer-subscribe-btn">{{ ps_footer_sub_btn }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="content_container ps-footer-inner">
+    <div class="ps-footer-main">
+      <div class="ps-footer-col ps-footer-col--brand ps-footer-main__brand-col" data-anim="fadeInScale" data-seq="1">
+        <a href="/" class="ps-footer-logo ps-footer-main__brand" aria-label="{{ store_name }}">
+          {% if logo != "" %}
+            <img src="{{ logo }}" alt="{{ store_name }}" />
+          {% else %}
+            <span class="ps-footer-logo-text">{{ store_name }}</span>
+          {% endif %}
+        </a>
+      </div>
+      {% if categories.size > 0 %}
+        {% liquid
+          assign ps_footer_title_shop = theme_data.footer_quick_links | strip
+          if ps_footer_title_shop == blank
+            assign ps_footer_title_shop = "Shop"
+          endif
+        %}
+        <div class="ps-footer-col ps-footer-col--quick ps-footer-main__quick" data-anim="fadeInLeft" data-seq="2">
+          <h4 class="ps-footer-heading">{{ ps_footer_title_shop }}</h4>
+          <ul class="ps-footer-links">
+            {% for cat in categories %}
+              <li><a href="/collections/{{ cat.slug }}">{{ cat.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% if pages.size > 0 %}
+        {% liquid
+          assign ps_footer_title_pages = theme_data.footer_customer_support | strip
+          if ps_footer_title_pages == blank
+            assign ps_footer_title_pages = "Pages"
+          endif
+        %}
+        <div class="ps-footer-col ps-footer-col--support ps-footer-main__support" data-anim="fadeInRight" data-seq="3">
+          <h4 class="ps-footer-heading">{{ ps_footer_title_pages }}</h4>
+          <ul class="ps-footer-links">
+            {% for page in pages %}
+              <li><a href="/pages/{{ page.slug }}">{{ page.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% if has_contact %}
+        {% liquid
+          assign ps_footer_contact_heading = theme_data.footer_contact_us | strip
+          if ps_footer_contact_heading == blank
+            assign ps_footer_contact_heading = "Contact us"
+          endif
+        %}
+        <div class="ps-footer-contact-col ps-footer-main__contact" data-anim="slideInUp" data-seq="4">
+          <h4 class="ps-footer-heading">{{ ps_footer_contact_heading }}</h4>
+          <div class="ps-footer-contact">
+            {% if phone != "" %}
+              <div class="ps-footer-contact-block">
+                <span class="ps-footer-contact-k">{{ theme_data.footer_phone_label | default: "Phone" }}</span>
+                <a href="tel:{{ phone }}" dir="ltr">{{ phone }}</a>
+              </div>
+            {% endif %}
+            {% if email != "" %}
+              <div class="ps-footer-contact-block">
+                <span class="ps-footer-contact-k">{{ theme_data.footer_email_label | default: "Email" }}</span>
+                <a href="mailto:{{ email }}">{{ email }}</a>
+              </div>
+            {% endif %}
+            {% if address != "" %}
+              <div class="ps-footer-contact-block">
+                <span class="ps-footer-contact-k">{{ theme_data.footer_address_label | default: "Address" }}</span>
+                <span>{{ address }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="ps-footer-meta-row" data-anim="fadeInDown" data-seq="5">
+      {% if social and social.size > 0 %}
+        {% assign si_known = "|facebook|instagram|x|linkedin|tiktok|youtube|pinterest|threads|snapchat|whatsapp|telegram|discord|reddit|github|google|vimeo|medium|dribbble|behance|mastodon|twitch|skype|slack|line|wechat|vk|rss|spotify|soundcloud|apple|etsy|shopify|" %}
+        <div class="ps-footer-socials" aria-label="{% if follow_label != blank %}{{ follow_label }}{% else %}Social{% endif %}">
+          {% for item in social %}
+            {% assign s_url = item.url | strip %}
+            {% if s_url == blank %}
+              {% assign s_url = "#" %}
+            {% endif %}
+            {% assign s_label = item.label | default: item.type | default: "Social" | strip %}
+            {% assign s_icon = item.icon | strip %}
+            {% assign slug = item.type | default: "link" | strip | downcase %}
+            {% if slug == "twitter" %}
+              {% assign slug = "x" %}
+            {% elsif slug == "fb" %}
+              {% assign slug = "facebook" %}
+            {% elsif slug == "ig" %}
+              {% assign slug = "instagram" %}
+            {% elsif slug == "yt" %}
+              {% assign slug = "youtube" %}
+            {% elsif slug == "in" or slug == "linkedin" %}
+              {% assign slug = "linkedin" %}
+            {% endif %}
+            {% assign needle = "|" | append: slug | append: "|" %}
+            <a href="{{ s_url }}" target="_blank" rel="noreferrer" aria-label="{{ s_label }}">
+              {% if s_icon != "" %}
+                <img class="ps-footer-social-img" src="{{ s_icon }}" alt="" width="18" height="18" loading="lazy" />
+              {% elsif si_known contains needle %}
+                <img class="ps-footer-social-img" src="https://cdn.simpleicons.org/{{ slug }}/101010" alt="" width="18" height="18" loading="lazy" />
+              {% else %}
+                <img class="ps-footer-social-svg" src="https://files.easy-orders.net/1778659559794034419prestig-footer-icon-social-fallback-external.svg" alt="" width="18" height="18" loading="lazy" aria-hidden="true" />
+              {% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if payment_img != "" and theme_data.show_payment_icons != false %}
+        <div class="ps-footer-brand-payments ps-footer-payments--desktop-only" aria-label="Payment methods">
+          <span class="ps-footer-payment-item ps-footer-payment-single">
+            <img src="{{ payment_img }}" alt="Accepted payment methods" loading="lazy" />
+          </span>
+        </div>
+      {% endif %}
+    </div>
+    {% if payment_img != "" and theme_data.show_payment_icons != false %}
+      <div class="ps-footer-brand-payments ps-footer-payments--mobile-only" aria-label="Payment methods">
+        <span class="ps-footer-payment-item ps-footer-payment-single">
+          <img src="{{ payment_img }}" alt="Accepted payment methods" loading="lazy" />
+        </span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="ps-footer-bar">
+    <p class="ps-footer-copy">&copy; {{ year }} {{ store_name }}. {{ rights_label }}</p>
+    {% if show_powered %}
+      <p class="ps-footer-powered">{{ theme_data.footer_powered_by | default: "Powered by" }} <a href="https://www.easy-orders.net" target="_blank" rel="noreferrer">Easy Orders</a></p>
+    {% endif %}
+  </div>
+</footer>

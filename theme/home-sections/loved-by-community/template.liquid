@@ -1,0 +1,380 @@
+{% liquid
+  assign lbcm_headline = section_data.headline | default: 'Loved by Our Community' | strip
+  assign lbcm_follow = section_data.follow_label | default: 'Follow Us' | strip
+  assign lbcm_gallery = section_data.gallery_items
+  assign lbcm_social = section_data.social_links
+  assign lbcm_show_decor = section_data.show_decor
+  if lbcm_show_decor == nil
+    assign lbcm_show_decor = true
+  endif
+  assign lbcm_decor_tr = section_data.decor_top_right | default: 'https://files.easy-orders.net/1781003908486732797.webp'
+  assign lbcm_decor_bl = section_data.decor_bottom_left | default: 'https://files.easy-orders.net/1781003908428758287.webp'
+%}
+<section
+  class="lbcm ps-sr-scope"
+  aria-labelledby="lbcm-heading-{{ section.id }}"
+  style="
+    --lbcm-bg: {{ section_data.bg_color | default: '#F6ECD3' }};
+    --lbcm-title: {{ section_data.headline_color | default: '#DA3C24' }};
+  "
+>
+  {% if lbcm_show_decor %}
+    <div class="lbcm__decor" aria-hidden="true">
+      {% if lbcm_decor_tr != blank %}
+        <img
+          class="lbcm__decor-shape lbcm__decor-shape--tr"
+          src="{{ lbcm_decor_tr }}"
+          alt=""
+          width="182"
+          height="281"
+          loading="lazy"
+          decoding="async"
+        >
+      {% endif %}
+      {% if lbcm_decor_bl != blank %}
+        <img
+          class="lbcm__decor-shape lbcm__decor-shape--bl"
+          src="{{ lbcm_decor_bl }}"
+          alt=""
+          width="210"
+          height="80"
+          loading="lazy"
+          decoding="async"
+        >
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="lbcm__inner">
+    {% if lbcm_headline != blank %}
+      <h2 id="lbcm-heading-{{ section.id }}" class="lbcm__title" data-anim="fadeInDown" data-seq="0">{{ lbcm_headline }}</h2>
+    {% endif %}
+
+    {% if lbcm_gallery and lbcm_gallery.size > 0 %}
+      <div class="lbcm__gallery" role="list">
+        {% for item in lbcm_gallery %}
+          {% if item.image != blank %}
+            {% assign lbcm_item_url = item.url | strip %}
+            {% if lbcm_item_url != blank %}
+              <a
+                href="{{ lbcm_item_url }}"
+                class="lbcm__photo lbcm__photo--link"
+                role="listitem"
+                data-anim="scaleIn"
+                data-seq="{{ forloop.index0 | plus: 1 }}"
+              >
+            {% else %}
+              <figure
+                class="lbcm__photo"
+                role="listitem"
+                data-anim="scaleIn"
+                data-seq="{{ forloop.index0 | plus: 1 }}"
+              >
+            {% endif %}
+              <img
+                class="lbcm__photo-img"
+                src="{{ item.image }}"
+                alt="{{ item.alt | default: lbcm_headline | escape }}"
+                width="347"
+                height="410"
+                loading="lazy"
+                decoding="async"
+              >
+            {% if lbcm_item_url != blank %}
+              </a>
+            {% else %}
+              </figure>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if lbcm_follow != blank or lbcm_social and lbcm_social.size > 0 %}
+      <div class="lbcm__social" data-anim="fadeInUp" data-seq="5">
+        {% if lbcm_follow != blank %}
+          <p class="lbcm__social-label">{{ lbcm_follow }}</p>
+        {% endif %}
+        {% if lbcm_social and lbcm_social.size > 0 %}
+          <ul class="lbcm__social-list">
+            {% for link in lbcm_social %}
+              {% assign lbcm_url = link.url | strip %}
+              {% if lbcm_url == blank %}
+                {% assign lbcm_url = '#' %}
+              {% endif %}
+              {% assign lbcm_label = link.label | default: link.type | default: 'Social' | strip %}
+              {% assign lbcm_icon = link.icon | strip %}
+              {% assign lbcm_type = link.type | default: 'link' | strip | downcase %}
+              {% if lbcm_type == 'twitter' %}
+                {% assign lbcm_type = 'x' %}
+              {% endif %}
+              <li>
+                <a
+                  class="lbcm__social-link"
+                  href="{{ lbcm_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="{{ lbcm_label | escape }}"
+                >
+                  {% if lbcm_icon != blank %}
+                    <img
+                      class="lbcm__social-icon"
+                      src="{{ lbcm_icon }}"
+                      alt=""
+                      width="18"
+                      height="18"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                  {% elsif lbcm_type != 'link' %}
+                    <img
+                      class="lbcm__social-icon"
+                      src="https://cdn.simpleicons.org/{{ lbcm_type }}/101010"
+                      alt=""
+                      width="18"
+                      height="18"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                  {% else %}
+                    <span class="lbcm__social-fallback" aria-hidden="true"></span>
+                  {% endif %}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .content_container:has(.lbcm),
+  .product_container:has(.lbcm) {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow: hidden;
+  }
+
+  /* Figma 19:1541 — Product Categories / Loved by Our Community */
+  .lbcm {
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+    padding: clamp(48px, 6vw, 60px) clamp(20px, 4vw, 50px);
+    background: var(--lbcm-bg, #f6ecd3);
+    color: var(--ps-ink, #101010);
+    font-family: var(--ps-ff-ui, var(--ps-ff-primary, "Asap")), sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .lbcm__decor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  .lbcm__decor-shape {
+    position: absolute;
+    display: block;
+    max-width: none;
+    height: auto;
+  }
+
+  /* Figma 19:1542 — top-right loop */
+  .lbcm__decor-shape--tr {
+    top: clamp(24px, 4vw, 39px);
+    right: clamp(-40px, -2vw, -23px);
+    width: clamp(120px, 14vw, 182px);
+  }
+
+  /* Figma 19:1543 — bottom-left wave */
+  .lbcm__decor-shape--bl {
+    left: clamp(-40px, -2vw, -26px);
+    bottom: clamp(48px, 8vw, 80px);
+    width: clamp(140px, 18vw, 210px);
+  }
+
+  .lbcm__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(24px, 4vw, 32px);
+    max-width: 1140px;
+    margin-inline: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Figma 19:1544 — 48px bold, #DA3C24, centered */
+  .lbcm__title {
+    margin: 0;
+    max-width: 34rem;
+    text-align: center;
+    font-family: var(--ps-ff-ui, var(--ps-ff-primary, "Asap")), sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--lbcm-title, #da3c24);
+  }
+
+  /* Figma 19:1545 — three photos, gap 29px */
+  .lbcm__gallery {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: clamp(16px, 2.5vw, 29px);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lbcm__photo,
+  .lbcm__photo--link {
+    flex: 1 1 min(100%, 280px);
+    max-width: 347px;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    overflow: hidden;
+    aspect-ratio: 347 / 410;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .lbcm__photo--link {
+    display: block;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  @media (hover: hover) {
+    .lbcm__photo--link:hover,
+    .lbcm__photo--link:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(16, 16, 16, 0.12);
+      outline: none;
+    }
+  }
+
+  .lbcm__photo-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Figma 19:1549 — Follow Us + icons */
+  .lbcm__social {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 3vw, 33px);
+    width: 100%;
+  }
+
+  /* Figma 19:1550 — 24px medium */
+  .lbcm__social-label {
+    margin: 0;
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--ps-ink, #101010);
+    text-align: center;
+  }
+
+  .lbcm__social-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 2.5vw, 26px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lbcm__social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    color: var(--ps-ink, #101010);
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .lbcm__social-link:hover,
+    .lbcm__social-link:focus-visible {
+      opacity: 0.72;
+      transform: translateY(-1px);
+      outline: none;
+    }
+  }
+
+  .lbcm__social-icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+
+  .lbcm__social-fallback {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  @media (min-width: 900px) {
+    .lbcm__gallery {
+      flex-wrap: nowrap;
+    }
+
+    .lbcm__photo,
+    .lbcm__photo--link {
+      flex: 0 1 347px;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .lbcm__decor-shape--tr {
+      top: 12px;
+      right: -32px;
+      width: 100px;
+      opacity: 0.85;
+    }
+
+    .lbcm__decor-shape--bl {
+      left: -32px;
+      bottom: 24px;
+      width: 120px;
+      opacity: 0.85;
+    }
+
+    .lbcm__social {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+</style>
