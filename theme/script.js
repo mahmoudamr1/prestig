@@ -2463,13 +2463,17 @@
     if (!section) return;
 
     var hero = section.querySelector(".ps-cl-hero");
-    if (!hero) return;
-
     var container = section.closest(".collection_container");
     if (!container) return;
 
     var header = container.querySelector(".category_section_header");
     if (!header) return;
+
+    if (!hero) {
+      header.setAttribute("data-ps-cl-placed", "1");
+      header.classList.add("ps-cl-filters");
+      return;
+    }
 
     if (
       header.getAttribute("data-ps-cl-placed") === "1" &&
