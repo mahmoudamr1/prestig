@@ -1,4 +1,4 @@
-{% comment %}PDP related: ps-rev-inner product_container; cards ps-pgrid-*.{% endcomment %}{% liquid
+{% comment %}PDP related: ps-related-products__shell; cards ps-pgrid-*.{% endcomment %}{% liquid
   if similar_products and similar_products.size > 0
     assign _rp_products = similar_products
   elsif related_products and related_products.size > 0
@@ -7,7 +7,7 @@
     assign _rp_products = products
   endif
 %}
-{% if _rp_products and _rp_products.size > 0 %}<section class="ps-related-products ps-sr-scope" data-ps-related-products><div class="ps-rev-inner product_container"><div class="ps-pgrid-inner">{% if section_title != blank %}<header class="ps-pgrid-header"><h2 class="ps-pgrid-title" data-anim="fadeInUp" data-seq="0">{{ section_title }}</h2></header>{% endif %}<div class="ps-pgrid-main"><div class="ps-pgrid-grid">{% for product in _rp_products %}{% liquid
+{% if _rp_products and _rp_products.size > 0 %}<section class="ps-related-products ps-sr-scope" data-ps-related-products><div class="ps-related-products__shell"><div class="ps-pgrid-inner">{% if section_title != blank %}<header class="ps-pgrid-header"><h2 class="ps-pgrid-title" data-anim="fadeInUp" data-seq="0">{{ section_title }}</h2></header>{% endif %}<div class="ps-pgrid-main"><div class="ps-pgrid-grid">{% for product in _rp_products %}{% liquid
   assign color_variation = product.variations | where: "type", "color" | first
   assign image_variation = product.variations | where: "type", "image" | first
   assign swatch_total = 0

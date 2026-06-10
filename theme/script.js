@@ -1498,6 +1498,53 @@
     });
   }
 
+  function syncPdpGalleryThumbRail(gallery) {
+    if (!gallery || !gallery.matches("[data-ps-pdp-gallery]")) return;
+    var thumbs = gallery.querySelector(".ab-gallery-thumbs");
+    var main = gallery.querySelector(".ab-gallery-main");
+    if (!thumbs || !main) return;
+
+    if (typeof window.matchMedia !== "function" || !window.matchMedia("(min-width: 1024px)").matches) {
+      thumbs.style.removeProperty("max-height");
+      return;
+    }
+
+    var mainHeight = main.offsetHeight;
+    if (mainHeight > 0) {
+      thumbs.style.maxHeight = mainHeight + "px";
+    }
+  }
+
+  function bindPdpGalleryThumbRail(gallery) {
+    if (!gallery || gallery.dataset.psThumbRailBound) return;
+    if (!gallery.matches("[data-ps-pdp-gallery]")) return;
+    gallery.dataset.psThumbRailBound = "1";
+
+    var main = gallery.querySelector(".ab-gallery-main");
+    if (!main) return;
+
+    function sync() {
+      syncPdpGalleryThumbRail(gallery);
+    }
+
+    sync();
+    window.addEventListener("resize", sync);
+
+    main.querySelectorAll(".ab-gallery-main-media").forEach(function (media) {
+      if (media.tagName === "IMG") {
+        if (media.complete) sync();
+        else media.addEventListener("load", sync);
+      } else if (media.tagName === "VIDEO") {
+        media.addEventListener("loadedmetadata", sync);
+      }
+    });
+
+    if (typeof ResizeObserver === "function") {
+      var ro = new ResizeObserver(sync);
+      ro.observe(main);
+    }
+  }
+
   function initLegacyGallery() {
     document.querySelectorAll(".ab-gallery").forEach(function (gallery) {
       if (gallery.dataset.galleryInit) return;
@@ -1623,6 +1670,7 @@
               });
               syncDots(ix);
               syncSlideMedia(ix);
+              syncPdpGalleryThumbRail(gallery);
               var src = images[ix];
               if (src) {
                 gallery.dispatchEvent(
@@ -1658,6 +1706,9 @@
         gallery.dispatchEvent(
           new CustomEvent("gallery-change", { bubbles: true, detail: { src: src } })
         );
+        requestAnimationFrame(function () {
+          syncPdpGalleryThumbRail(gallery);
+        });
       }
 
       function thumbIndex(thumb) {
@@ -1787,9 +1838,12 @@
         });
       }
 
+      bindPdpGalleryThumbRail(gallery);
+
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
           bindStackObserver();
+          syncPdpGalleryThumbRail(gallery);
           if (slider && window.innerWidth <= 768 && slides.length) {
             var ri = getActiveMediaIndex();
             scrollSliderToIndex(ri, true);
