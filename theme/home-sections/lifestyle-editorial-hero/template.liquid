@@ -31,7 +31,8 @@
   .lifestyle-editorial-hero {
     position: relative;
     isolation: isolate;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: clip;
     --leh-min-h: min(74vh, 720px);
     min-height: var(--leh-min-h);
     display: flex;

@@ -1,202 +1,202 @@
-{% liquid
-  assign _panda = theme_data.thanks_panda_image_url | default: "https://files.easy-orders.net/1781174635785341599.webp"
-  assign _hero_title = thanks_title | default: theme_data.thanks_title_fallback | default: t_thank_you | default: "Thank you!"
-  assign _confirmed = theme_data.thanks_confirmed_heading | default: "Your order is confirmed"
-  assign _products_heading = theme_data.thanks_products_heading | default: "Products in your order"
-  assign _details_heading = theme_data.thanks_details_heading | default: "Order details"
-  assign _confirm_prefix = theme_data.thanks_confirmation_number_prefix | default: "Confirmation #"
-  assign _l_contact = theme_data.thanks_label_contact | default: "Contact information"
-  assign _l_payment = theme_data.thanks_label_payment | default: "Payment Method"
-  assign _l_shipping = theme_data.thanks_label_shipping_address | default: "Shipping address"
-  assign _l_billing = theme_data.thanks_label_billing_address | default: "Billing address"
-  assign _l_shipping_method = theme_data.thanks_label_shipping_method | default: "Shipping method"
-  assign _l_shipping_value = theme_data.thanks_label_shipping_value | default: "Shipping"
-  assign _cur = currency | default: "EGP"
-  assign _has_order_ssr = false
-  if order and order.cart_items and order.cart_items.size > 0
-    assign _has_order_ssr = true
-  endif
-  assign _confirm_id = ""
-  if order
-    assign _confirm_id = order.id | default: order.order_id | default: order.uuid | default: ""
-  endif
-  assign _payment = ""
-  if order
-    assign _payment = order.payment_method | default: order.payment_type | default: order.gateway | default: ""
-  endif
-  assign _grand_total = ""
-  if order
-    assign _grand_total = order.total_cost | default: order.total | default: ""
-  endif
-%}
-<section
-  class="ps-thanks ps-thanks--children ps-sr-scope"
-  data-liquid-thanks
-  data-ps-thanks
-  data-ps-thanks--figma
-  {% if _has_order_ssr %}data-thanks-order-ssr="1"{% endif %}
-  data-thanks-currency="{{ _cur }}"
-  data-thanks-confirm-prefix="{{ _confirm_prefix }}"
-  data-thanks-label-products="{{ _products_heading }}"
-  data-thanks-label-order-details="{{ _details_heading }}"
-  data-thanks-label-contact="{{ _l_contact }}"
-  data-thanks-label-payment="{{ _l_payment }}"
-  data-thanks-label-shipping="{{ _l_shipping }}"
-  data-thanks-label-billing="{{ _l_billing }}"
-  data-thanks-label-shipping-method="{{ _l_shipping_method }}"
-  data-thanks-label-shipping-value="{{ _l_shipping_value }}"
->
-  <div class="ps-thanks__hero" aria-hidden="false">
-    <div class="ps-thanks__hero-band" aria-hidden="true">
-      <div class="ps-thanks__decor-layer" aria-hidden="true">
-        <img
-          class="ps-thanks__decor ps-thanks__decor--left"
-          src="https://files.easy-orders.net/1781013162249775272.webp"
-          alt=""
-          width="140"
-          height="120"
-          loading="eager"
-          decoding="async"
-        />
-        <img
-          class="ps-thanks__decor ps-thanks__decor--right"
-          src="https://files.easy-orders.net/1781013162597986859.webp"
-          alt=""
-          width="140"
-          height="120"
-          loading="eager"
-          decoding="async"
-        />
-      </div>
-    </div>
-    <h1 class="ps-thanks__hero-title" data-anim="fadeInUp" data-seq="0">{{ _hero_title }}</h1>
-    <img
-      class="ps-thanks__panda"
-      src="{{ _panda }}"
-      alt=""
-      width="502"
-      height="491"
-      loading="eager"
-      decoding="async"
-      data-anim="zoomIn"
-      data-seq="1"
-    />
-    <div class="ps-thanks__curve" aria-hidden="true"></div>
-  </div>
-
-  <div class="ps-thanks__body">
-    {% if content and content != "" %}
-      <div class="ps-thanks-custom-content ql-editor leading-10" data-anim="fadeInScale" data-seq="0">{{ content }}</div>
-    {% else %}
-      <header class="ps-thanks__head" data-anim="fadeInUp" data-seq="2">
-        <h2 class="ps-thanks__confirmed">{{ _confirmed }}</h2>
-        {% if _confirm_id != blank %}
-          <p class="ps-thanks__confirm-id" data-thanks-confirm-slot>{{ _confirm_prefix }}{{ _confirm_id }}</p>
-        {% else %}
-          <p class="ps-thanks__confirm-id" data-thanks-confirm-slot hidden></p>
-        {% endif %}
-        {% if thanks_message and thanks_message != "" %}
-          <p class="ps-thanks-message">{{ thanks_message | default: t_order_received }}</p>
-        {% endif %}
-        {% if phone_message and phone_message != "" %}
-          <p class="ps-thanks-phone-msg">{{ phone_message }}</p>
-        {% endif %}
-      </header>
-
-      <div class="ps-thanks__grid" data-anim="fadeInUp" data-seq="3">
-        <div class="ps-thanks__col ps-thanks__col--products">
-          <div class="ps-thanks__card" data-thanks-order-products-slot>
-            {% if _has_order_ssr %}
-              <h3 class="ps-thanks-order-title">{{ _products_heading }}</h3>
-              <ul class="ps-thanks-order-list" role="list">
-                {% for item in order.cart_items %}
-                  {% assign _thumb = item.thumb | default: item.product_thumb | default: item.image %}
-                  {% assign _vars = item.variants | default: item.variant_string | default: "" | strip %}
-                  {% assign _line_price = item.total | default: item.price %}
-                  <li class="ps-thanks-order-item">
-                    {% if _thumb and _thumb != "" %}
-                      <div class="ps-thanks-order-item-image">
-                        <img class="ps-thanks-order-item-img" src="{{ _thumb }}" alt="{{ item.name }}" loading="lazy" decoding="async" />
-                      </div>
-                    {% endif %}
-                    <div class="ps-thanks-order-item-content">
-                      <p class="ps-thanks-order-item-name">{{ item.name }}</p>
-                      {% if _vars != blank %}
-                        <p class="ps-thanks-order-item-variant">{{ _vars }}</p>
-                      {% endif %}
-                      {% if _line_price != blank %}
-                        <p class="ps-thanks-order-item-price">{{ _line_price }} {{ _cur }}</p>
-                      {% endif %}
-                    </div>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </div>
-        </div>
-        <div class="ps-thanks__col ps-thanks__col--details">
-          <div class="ps-thanks__card ps-thanks__card--details" data-thanks-order-details-slot>
-            {% if order %}
-              <h3 class="ps-thanks-order-title">{{ _details_heading }}</h3>
-              <div class="ps-thanks-details-grid">
-                <div class="ps-thanks-detail-block">
-                  <h4 class="ps-thanks-detail-label">{{ _l_contact }}</h4>
-                  {% if order.email and order.email != "" %}
-                    <p class="ps-thanks-detail-value">{{ order.email }}</p>
-                  {% endif %}
-                </div>
-                <div class="ps-thanks-detail-block">
-                  <h4 class="ps-thanks-detail-label">{{ _l_payment }}</h4>
-                  {% if _payment != blank %}
-                    <p class="ps-thanks-detail-value">{{ _payment }}</p>
-                  {% endif %}
-                  {% if _grand_total != blank %}
-                    <p class="ps-thanks-detail-value ps-thanks-detail-value--total">{{ _grand_total }} {{ _cur }}</p>
-                  {% endif %}
-                </div>
-                <div class="ps-thanks-detail-block">
-                  <h4 class="ps-thanks-detail-label">{{ _l_shipping }}</h4>
-                  <p class="ps-thanks-detail-value">
-                    {% if order.full_name and order.full_name != "" %}{{ order.full_name }}<br />{% endif %}
-                    {% if order.government and order.government != "" %}{{ order.government }}<br />{% endif %}
-                    {% if order.address and order.address != "" %}{{ order.address }}<br />{% endif %}
-                    {% if order.country and order.country != "" %}{{ order.country }}<br />{% endif %}
-                    {% if order.phone and order.phone != "" %}{{ order.phone }}{% endif %}
-                  </p>
-                </div>
-                <div class="ps-thanks-detail-block">
-                  <h4 class="ps-thanks-detail-label">{{ _l_billing }}</h4>
-                  <p class="ps-thanks-detail-value">
-                    {% if order.full_name and order.full_name != "" %}{{ order.full_name }}<br />{% endif %}
-                    {% if order.government and order.government != "" %}{{ order.government }}<br />{% endif %}
-                    {% if order.address and order.address != "" %}{{ order.address }}<br />{% endif %}
-                    {% if order.country and order.country != "" %}{{ order.country }}<br />{% endif %}
-                    {% if order.phone and order.phone != "" %}{{ order.phone }}{% endif %}
-                  </p>
-                </div>
-                <div class="ps-thanks-detail-block ps-thanks-detail-block--full">
-                  <h4 class="ps-thanks-detail-label">{{ _l_shipping_method }}</h4>
-                  <p class="ps-thanks-detail-value">{{ _l_shipping_value }}</p>
-                </div>
-              </div>
-            {% endif %}
-          </div>
-          {% if show_home_button %}
-            <button
-              class="ps-thanks-home-btn"
-              type="button"
-              onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
-              data-anim="slideInUp"
-              data-seq="4"
-            >{{ go_home_text | default: "Back To Home" }}</button>
-          {% endif %}
-        </div>
-      </div>
-
-      {% if offers_text and offers_text != "" %}
-        <p class="ps-thanks-offers" data-anim="fadeInScale" data-seq="5">{{ offers_text }}</p>
-      {% endif %}
-    {% endif %}
-  </div>
-</section>
-
+{% liquid
+  assign _panda = theme_data.thanks_panda_image_url | default: "https://files.easy-orders.net/1781174635785341599.webp"
+  assign _hero_title = thanks_title | default: theme_data.thanks_title_fallback | default: t_thank_you | default: "Thank you!"
+  assign _confirmed = theme_data.thanks_confirmed_heading | default: "Your order is confirmed"
+  assign _products_heading = theme_data.thanks_products_heading | default: "Products in your order"
+  assign _details_heading = theme_data.thanks_details_heading | default: "Order details"
+  assign _confirm_prefix = theme_data.thanks_confirmation_number_prefix | default: "Confirmation #"
+  assign _l_contact = theme_data.thanks_label_contact | default: "Contact information"
+  assign _l_payment = theme_data.thanks_label_payment | default: "Payment Method"
+  assign _l_shipping = theme_data.thanks_label_shipping_address | default: "Shipping address"
+  assign _l_billing = theme_data.thanks_label_billing_address | default: "Billing address"
+  assign _l_shipping_method = theme_data.thanks_label_shipping_method | default: "Shipping method"
+  assign _l_shipping_value = theme_data.thanks_label_shipping_value | default: "Shipping"
+  assign _cur = currency | default: "EGP"
+  assign _has_order_ssr = false
+  if order and order.cart_items and order.cart_items.size > 0
+    assign _has_order_ssr = true
+  endif
+  assign _confirm_id = ""
+  if order
+    assign _confirm_id = order.id | default: order.order_id | default: order.uuid | default: ""
+  endif
+  assign _payment = ""
+  if order
+    assign _payment = order.payment_method | default: order.payment_type | default: order.gateway | default: ""
+  endif
+  assign _grand_total = ""
+  if order
+    assign _grand_total = order.total_cost | default: order.total | default: ""
+  endif
+%}
+<section
+  class="ps-thanks ps-thanks--children ps-sr-scope"
+  data-liquid-thanks
+  data-ps-thanks
+  data-ps-thanks--figma
+  {% if _has_order_ssr %}data-thanks-order-ssr="1"{% endif %}
+  data-thanks-currency="{{ _cur }}"
+  data-thanks-confirm-prefix="{{ _confirm_prefix }}"
+  data-thanks-label-products="{{ _products_heading }}"
+  data-thanks-label-order-details="{{ _details_heading }}"
+  data-thanks-label-contact="{{ _l_contact }}"
+  data-thanks-label-payment="{{ _l_payment }}"
+  data-thanks-label-shipping="{{ _l_shipping }}"
+  data-thanks-label-billing="{{ _l_billing }}"
+  data-thanks-label-shipping-method="{{ _l_shipping_method }}"
+  data-thanks-label-shipping-value="{{ _l_shipping_value }}"
+>
+  <div class="ps-thanks__hero" aria-hidden="false">
+    <div class="ps-thanks__hero-band" aria-hidden="true">
+      <div class="ps-thanks__decor-layer" aria-hidden="true">
+        <img
+          class="ps-thanks__decor ps-thanks__decor--left"
+          src="https://files.easy-orders.net/1781013162249775272.webp"
+          alt=""
+          width="140"
+          height="120"
+          loading="eager"
+          decoding="async"
+        />
+        <img
+          class="ps-thanks__decor ps-thanks__decor--right"
+          src="https://files.easy-orders.net/1781013162597986859.webp"
+          alt=""
+          width="140"
+          height="120"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    </div>
+    <h1 class="ps-thanks__hero-title" data-anim="fadeInUp" data-seq="0">{{ _hero_title }}</h1>
+    <img
+      class="ps-thanks__panda"
+      src="{{ _panda }}"
+      alt=""
+      width="502"
+      height="491"
+      loading="eager"
+      decoding="async"
+      data-anim="zoomIn"
+      data-seq="1"
+    />
+    <div class="ps-thanks__curve" aria-hidden="true"></div>
+  </div>
+
+  <div class="ps-thanks__body">
+    {% if content and content != "" %}
+      <div class="ps-thanks-custom-content ql-editor leading-10" data-anim="fadeInScale" data-seq="0">{{ content }}</div>
+    {% else %}
+      <header class="ps-thanks__head" data-anim="fadeInUp" data-seq="2">
+        <h2 class="ps-thanks__confirmed">{{ _confirmed }}</h2>
+        {% if _confirm_id != blank %}
+          <p class="ps-thanks__confirm-id" data-thanks-confirm-slot>{{ _confirm_prefix }}{{ _confirm_id }}</p>
+        {% else %}
+          <p class="ps-thanks__confirm-id" data-thanks-confirm-slot hidden></p>
+        {% endif %}
+        {% if thanks_message and thanks_message != "" %}
+          <p class="ps-thanks-message">{{ thanks_message | default: t_order_received }}</p>
+        {% endif %}
+        {% if phone_message and phone_message != "" %}
+          <p class="ps-thanks-phone-msg">{{ phone_message }}</p>
+        {% endif %}
+      </header>
+
+      <div class="ps-thanks__grid" data-anim="fadeInUp" data-seq="3">
+        <div class="ps-thanks__col ps-thanks__col--products">
+          <div class="ps-thanks__card" data-thanks-order-products-slot>
+            {% if _has_order_ssr %}
+              <h3 class="ps-thanks-order-title">{{ _products_heading }}</h3>
+              <ul class="ps-thanks-order-list" role="list">
+                {% for item in order.cart_items %}
+                  {% assign _thumb = item.thumb | default: item.product_thumb | default: item.image %}
+                  {% assign _vars = item.variants | default: item.variant_string | default: "" | strip %}
+                  {% assign _line_price = item.total | default: item.price %}
+                  <li class="ps-thanks-order-item">
+                    {% if _thumb and _thumb != "" %}
+                      <div class="ps-thanks-order-item-image">
+                        <img class="ps-thanks-order-item-img" src="{{ _thumb }}" alt="{{ item.name }}" loading="lazy" decoding="async" />
+                      </div>
+                    {% endif %}
+                    <div class="ps-thanks-order-item-content">
+                      <p class="ps-thanks-order-item-name">{{ item.name }}</p>
+                      {% if _vars != blank %}
+                        <p class="ps-thanks-order-item-variant">{{ _vars }}</p>
+                      {% endif %}
+                      {% if _line_price != blank %}
+                        <p class="ps-thanks-order-item-price">{{ _line_price }} {{ _cur }}</p>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+        <div class="ps-thanks__col ps-thanks__col--details">
+          <div class="ps-thanks__card ps-thanks__card--details" data-thanks-order-details-slot>
+            {% if order %}
+              <h3 class="ps-thanks-order-title">{{ _details_heading }}</h3>
+              <div class="ps-thanks-details-grid">
+                <div class="ps-thanks-detail-block">
+                  <h4 class="ps-thanks-detail-label">{{ _l_contact }}</h4>
+                  {% if order.email and order.email != "" %}
+                    <p class="ps-thanks-detail-value">{{ order.email }}</p>
+                  {% endif %}
+                </div>
+                <div class="ps-thanks-detail-block">
+                  <h4 class="ps-thanks-detail-label">{{ _l_payment }}</h4>
+                  {% if _payment != blank %}
+                    <p class="ps-thanks-detail-value">{{ _payment }}</p>
+                  {% endif %}
+                  {% if _grand_total != blank %}
+                    <p class="ps-thanks-detail-value ps-thanks-detail-value--total">{{ _grand_total }} {{ _cur }}</p>
+                  {% endif %}
+                </div>
+                <div class="ps-thanks-detail-block">
+                  <h4 class="ps-thanks-detail-label">{{ _l_shipping }}</h4>
+                  <p class="ps-thanks-detail-value">
+                    {% if order.full_name and order.full_name != "" %}{{ order.full_name }}<br />{% endif %}
+                    {% if order.government and order.government != "" %}{{ order.government }}<br />{% endif %}
+                    {% if order.address and order.address != "" %}{{ order.address }}<br />{% endif %}
+                    {% if order.country and order.country != "" %}{{ order.country }}<br />{% endif %}
+                    {% if order.phone and order.phone != "" %}{{ order.phone }}{% endif %}
+                  </p>
+                </div>
+                <div class="ps-thanks-detail-block">
+                  <h4 class="ps-thanks-detail-label">{{ _l_billing }}</h4>
+                  <p class="ps-thanks-detail-value">
+                    {% if order.full_name and order.full_name != "" %}{{ order.full_name }}<br />{% endif %}
+                    {% if order.government and order.government != "" %}{{ order.government }}<br />{% endif %}
+                    {% if order.address and order.address != "" %}{{ order.address }}<br />{% endif %}
+                    {% if order.country and order.country != "" %}{{ order.country }}<br />{% endif %}
+                    {% if order.phone and order.phone != "" %}{{ order.phone }}{% endif %}
+                  </p>
+                </div>
+                <div class="ps-thanks-detail-block ps-thanks-detail-block--full">
+                  <h4 class="ps-thanks-detail-label">{{ _l_shipping_method }}</h4>
+                  <p class="ps-thanks-detail-value">{{ _l_shipping_value }}</p>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+          {% if show_home_button %}
+            <button
+              class="ps-thanks-home-btn"
+              type="button"
+              onclick="this.dispatchEvent(new CustomEvent('go-home',{bubbles:true}));"
+              data-anim="slideInUp"
+              data-seq="4"
+            >{{ go_home_text | default: "Back To Home" }}</button>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if offers_text and offers_text != "" %}
+        <p class="ps-thanks-offers" data-anim="fadeInScale" data-seq="5">{{ offers_text }}</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+

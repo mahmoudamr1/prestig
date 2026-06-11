@@ -189,6 +189,10 @@
     display: block;
     max-width: none;
     height: auto;
+    animation: ps-decor-swing var(--ps-decor-swing-dur, 4.2s) ease-in-out infinite;
+    animation-delay: var(--ps-decor-swing-delay, 0s);
+    transform-origin: var(--ps-decor-swing-origin, center);
+    will-change: transform;
   }
 
   /* Figma 19:1542 — top-right loop */
@@ -196,6 +200,8 @@
     top: clamp(24px, 4vw, 39px);
     right: clamp(-40px, -2vw, -23px);
     width: clamp(120px, 14vw, 182px);
+    --ps-decor-swing-origin: top right;
+    --ps-decor-swing-delay: 0.4s;
   }
 
   /* Figma 19:1543 — bottom-left wave */
@@ -203,6 +209,8 @@
     left: clamp(-40px, -2vw, -26px);
     bottom: clamp(48px, 8vw, 80px);
     width: clamp(140px, 18vw, 210px);
+    --ps-decor-swing-origin: bottom left;
+    --ps-decor-swing-delay: 1s;
   }
 
   .lbcm__inner {
@@ -375,6 +383,13 @@
     .lbcm__social {
       flex-direction: column;
       gap: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lbcm__decor-shape {
+      animation: none !important;
+      transform: none !important;
     }
   }
 </style>

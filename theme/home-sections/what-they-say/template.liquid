@@ -179,6 +179,12 @@
     height: auto;
     object-fit: contain;
     object-position: left top;
+    animation: ps-decor-swing var(--ps-decor-swing-dur, 4.2s) ease-in-out infinite;
+    animation-delay: var(--ps-decor-swing-delay, 0.8s);
+    transform-origin: top left;
+    will-change: transform;
+    --ps-decor-swing-origin: top left;
+    --ps-decor-swing-delay: 0.8s;
   }
 
   .wtts__inner {
@@ -454,6 +460,13 @@
     html.ps-app-lang-ar .wtts__quote-mark,
     [dir="rtl"] .wtts__quote-mark {
       right: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wtts__decor-shape--top {
+      animation: none !important;
+      transform: none !important;
     }
   }
 </style>

@@ -1,1 +1,37 @@
-{% if categories and categories.size > 0 %}{% for crumb in categories %}{% if forloop.last %}{% if crumb.name != blank %}<nav class="ab-breadcrumbs ab-breadcrumbs--category-only ps-sr-scope" aria-label="Collection">{% if crumb.slug != blank %}<a href="/collections/{{ crumb.slug }}" class="ab-breadcrumbs-cat-link" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</a>{% else %}<span class="ab-breadcrumbs-cat" data-anim="fadeInDown" data-seq="0">{{ crumb.name }}</span>{% endif %}</nav>{% endif %}{% endif %}{% endfor %}{% endif %}
+{% liquid
+  assign ps_bc_home = home_text | default: 'Home' | strip
+  if ps_bc_home == blank
+    assign ps_bc_home = 'Home'
+  endif
+%}
+<nav class="ab-breadcrumbs ab-breadcrumbs--pdp ps-sr-scope" aria-label="Breadcrumb" data-anim="fadeInDown" data-seq="0">
+  <ol class="ab-breadcrumbs-list">
+    <li class="ab-breadcrumbs-item">
+      <a href="/">{{ ps_bc_home }}</a>
+      {% if categories and categories.size > 0 or product_name != blank %}
+        <span class="ab-breadcrumbs-sep" aria-hidden="true">/</span>
+      {% endif %}
+    </li>
+    {% if categories and categories.size > 0 %}
+      {% for crumb in categories %}
+        {% if crumb.name != blank %}
+          <li class="ab-breadcrumbs-item">
+            {% if crumb.slug != blank %}
+              <a href="/collections/{{ crumb.slug }}">{{ crumb.name }}</a>
+            {% else %}
+              <span>{{ crumb.name }}</span>
+            {% endif %}
+            {% if product_name != blank or forloop.last == false %}
+              <span class="ab-breadcrumbs-sep" aria-hidden="true">/</span>
+            {% endif %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% if product_name != blank %}
+      <li class="ab-breadcrumbs-item ab-breadcrumbs-current" aria-current="page">
+        {{ product_name }}
+      </li>
+    {% endif %}
+  </ol>
+</nav>

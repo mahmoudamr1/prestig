@@ -75,7 +75,8 @@
   .newsletter-immersive {
     position: relative;
     isolation: isolate;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: clip;
     padding: clamp(3rem, 10vw, 5.25rem) 1.25rem;
     text-align: center;
     font-family: var(--ps-ff-ui, "Manrope"), system-ui, -apple-system, "Segoe UI", sans-serif;

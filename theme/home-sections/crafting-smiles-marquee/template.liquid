@@ -56,11 +56,21 @@
 </section>
 
 <style>
+  .content_container:has(.csm-marquee),
+  .product_container:has(.csm-marquee) {
+    max-width: none !important;
+    width: 100% !important;
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+  }
+
   .csm-marquee {
     box-sizing: border-box;
     width: 100%;
     max-width: none;
     margin-inline: 0;
+    overflow-x: clip;
+    overflow-y: clip;
     background: var(--csm-bg, transparent);
     color: var(--csm-color, #da3c24);
     padding: clamp(1.25rem, 3.5vw, 2.25rem) 0;

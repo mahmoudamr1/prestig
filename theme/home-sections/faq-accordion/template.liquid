@@ -123,6 +123,10 @@
     display: block;
     max-width: none;
     height: auto;
+    animation: ps-decor-swing var(--ps-decor-swing-dur, 4.2s) ease-in-out infinite;
+    animation-delay: var(--ps-decor-swing-delay, 0s);
+    transform-origin: var(--ps-decor-swing-origin, center);
+    will-change: transform;
   }
 
   /* Figma 19:1562 — top-right squiggle (% tracks section height/width) */
@@ -130,6 +134,8 @@
     top: 4%;
     right: -1.5%;
     width: clamp(100px, 17%, 223px);
+    --ps-decor-swing-origin: top right;
+    --ps-decor-swing-delay: 0.5s;
   }
 
   /* Figma 19:1563 — left curve (% from bottom so short/tall sections both show it) */
@@ -138,6 +144,10 @@
     bottom: 10%;
     top: auto;
     width: clamp(24px, 3%, 37px);
+    --ps-decor-swing-origin: bottom left;
+    --ps-decor-swing-delay: 1.2s;
+    --ps-decor-swing-min: -8deg;
+    --ps-decor-swing-max: 8deg;
   }
 
   .hs-faq__inner {
@@ -362,6 +372,13 @@
     html.ps-app-lang-ar .hs-faq__toggle,
     [dir="rtl"] .hs-faq__toggle {
       left: 8px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hs-faq__decor-shape {
+      animation: none !important;
+      transform: none !important;
     }
   }
 </style>
