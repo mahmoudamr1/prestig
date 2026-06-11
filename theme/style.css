@@ -405,12 +405,23 @@ html.ps-app-lang-ar .ps-announce-marquee-track, [dir="rtl"] .ps-announce-marquee
 .ps-header.ps-hidden {
   transform: translateY(-100%);
 }
+@keyframes ps-header-logo-glow-pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
 .ps-header.ps-header--logo-only {
   transform: translateY(0);
   padding-top: max(12px, env(safe-area-inset-top, 0));
   padding-bottom: 12px;
 }
 .ps-header.ps-header--logo-only .ps-header-inner {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -420,8 +431,20 @@ html.ps-app-lang-ar .ps-announce-marquee-track, [dir="rtl"] .ps-announce-marquee
   margin-inline: auto;
   padding: 12px 36px;
   border-radius: 999px;
-  box-shadow: 0 0 0 7px color-mix(in srgb, var(--hd-bg, #ffffff) 42%, transparent),
-    0 4px 18px color-mix(in srgb, var(--ps-ink, #101010) 10%, transparent);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--ps-ink, #101010) 10%, transparent);
+  transition: padding 0.24s ease,
+    min-height 0.24s ease,
+    border-radius 0.24s ease;
+}
+.ps-header.ps-header--logo-only .ps-header-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--hd-bg, #ffffff) 42%, transparent);
+  animation: ps-header-logo-glow-pulse 2.6s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 .ps-header.ps-header--logo-only .ps-logo img {
   height: min(var(--ps-logo-img-h, 36px), 36px);
@@ -10119,9 +10142,12 @@ body:has(#product-id [data-ps-pdp-gallery]) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ps-announce-marquee-track, .ps-footer__decor-shape, .ab-categories-decor, .ps-cl-hero__decor-shape {
+  .ps-announce-marquee-track, .ps-footer__decor-shape, .ab-categories-decor, .ps-cl-hero__decor-shape, .ps-header.ps-header--logo-only .ps-header-inner::before {
     animation: none !important;
     transform: none !important;
+  }
+  .ps-header.ps-header--logo-only .ps-header-inner::before {
+    opacity: 1 !important;
   }
   .will-animate {
     opacity: 1 !important;
