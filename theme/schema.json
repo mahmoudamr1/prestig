@@ -63,6 +63,13 @@
     "default": 46
   },
   {
+    "name": "header_more_menu_label",
+    "type": "string",
+    "group": "Header",
+    "description": "Header: label for the overflow menu when nav items do not fit on one line.",
+    "default": "More"
+  },
+  {
     "name": "footer_quick_links",
     "type": "string",
     "group": "Footer",

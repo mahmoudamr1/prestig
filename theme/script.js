@@ -661,6 +661,298 @@
     );
   }
 
+  var PS_NAV_OVERFLOW_DESKTOP_MQ = "(min-width: 1025px)";
+  var psNavOverflowGlobalBound = false;
+  var psNavOverflowResizeTimer = null;
+
+  function psIsDesktopNavViewport() {
+    try {
+      return window.matchMedia(PS_NAV_OVERFLOW_DESKTOP_MQ).matches;
+    } catch (eMq) {
+      return window.innerWidth >= 1025;
+    }
+  }
+
+  function psNavLayoutReady(nav) {
+    if (!nav) {
+      return false;
+    }
+    var style = window.getComputedStyle(nav);
+    if (style.display === "none" || style.visibility === "hidden") {
+      return false;
+    }
+    return nav.clientWidth > 0;
+  }
+
+  function psResetDesktopNavOverflow(inner, moreRoot, moreList) {
+    inner.querySelectorAll(".ps-nav-top-item.ps-nav-top-item--overflowed").forEach(function (item) {
+      item.classList.remove("ps-nav-top-item--overflowed");
+      item.removeAttribute("hidden");
+    });
+    if (moreList) {
+      moreList.innerHTML = "";
+    }
+    if (moreRoot) {
+      moreRoot.hidden = true;
+      moreRoot.removeAttribute("data-ps-nav-more-measure");
+    }
+  }
+
+  function psGetVisibleNavTopItems(inner) {
+    return Array.prototype.slice
+      .call(
+        inner.querySelectorAll(
+          ".ps-nav-top-item:not(.ps-nav-top-item--more):not(.ps-nav-top-item--overflowed)"
+        )
+      )
+      .filter(function (el) {
+        return !el.hidden && window.getComputedStyle(el).display !== "none";
+      });
+  }
+
+  function psNavFlexGap(inner) {
+    var style = window.getComputedStyle(inner);
+    var gap = parseFloat(style.columnGap || style.gap) || 0;
+    return isNaN(gap) ? 0 : gap;
+  }
+
+  function psMeasureNavItemsWidth(items, gap) {
+    if (!items.length) {
+      return 0;
+    }
+    var total = 0;
+    items.forEach(function (item, index) {
+      total += item.getBoundingClientRect().width;
+      if (index < items.length - 1) {
+        total += gap;
+      }
+    });
+    return total;
+  }
+
+  function psMeasureMoreButtonWidth(moreRoot) {
+    if (!moreRoot) {
+      return 0;
+    }
+    moreRoot.hidden = false;
+    moreRoot.setAttribute("data-ps-nav-more-measure", "1");
+    var width = moreRoot.getBoundingClientRect().width;
+    moreRoot.removeAttribute("data-ps-nav-more-measure");
+    moreRoot.hidden = true;
+    return width;
+  }
+
+  function psGetNavItemsTotalWidth(inner, moreRoot) {
+    var visible = psGetVisibleNavTopItems(inner);
+    var gap = psNavFlexGap(inner);
+    var total = psMeasureNavItemsWidth(visible, gap);
+    var hasOverflowed =
+      inner.querySelectorAll(".ps-nav-top-item.ps-nav-top-item--overflowed").length > 0;
+    if (hasOverflowed && moreRoot) {
+      total += gap + psMeasureMoreButtonWidth(moreRoot);
+    }
+    return { total: total, visible: visible };
+  }
+
+  function psAppendMoreDropdownLink(moreList, href, text, className) {
+    if (!href || !text) {
+      return;
+    }
+    var li = document.createElement("li");
+    li.setAttribute("role", "none");
+    var anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.textContent = text;
+    anchor.setAttribute("role", "menuitem");
+    if (className) {
+      anchor.className = className;
+    }
+    li.appendChild(anchor);
+    moreList.appendChild(li);
+  }
+
+  function psFlattenNavItemToMore(item, moreList) {
+    if (item.classList.contains("ps-nav-top-item--pages")) {
+      item
+        .querySelectorAll(".ps-pages-dropdown-link, .ps-nav-dropdown-panel--pages a[role='menuitem']")
+        .forEach(function (anchor) {
+          psAppendMoreDropdownLink(
+            moreList,
+            anchor.getAttribute("href"),
+            (anchor.textContent || "").trim(),
+            "ps-pages-dropdown-link"
+          );
+        });
+      return;
+    }
+
+    if (item.classList.contains("ps-nav-top-item--category")) {
+      var trigger = item.querySelector(".ps-nav-dropdown-trigger");
+      if (trigger) {
+        psAppendMoreDropdownLink(
+          moreList,
+          trigger.getAttribute("href") || "#",
+          (trigger.textContent || "").trim(),
+          ""
+        );
+      }
+      item.querySelectorAll(".ps-nav-dropdown-panel a").forEach(function (child) {
+        psAppendMoreDropdownLink(
+          moreList,
+          child.getAttribute("href"),
+          (child.textContent || "").trim(),
+          "ps-more-sublink"
+        );
+      });
+      return;
+    }
+
+    if (item.matches("a.ps-nav-top-item")) {
+      psAppendMoreDropdownLink(
+        moreList,
+        item.getAttribute("href"),
+        (item.textContent || "").trim(),
+        ""
+      );
+      return;
+    }
+
+    var fallback = item.querySelector("a.ps-desktop-nav-link");
+    if (fallback) {
+      psAppendMoreDropdownLink(
+        moreList,
+        fallback.getAttribute("href"),
+        (fallback.textContent || "").trim(),
+        ""
+      );
+    }
+  }
+
+  function psRebuildMoreDropdownList(inner, moreList) {
+    moreList.innerHTML = "";
+    var overflowed = inner.querySelectorAll(".ps-nav-top-item.ps-nav-top-item--overflowed");
+    var categoryItems = [];
+    var pageItems = [];
+    overflowed.forEach(function (item) {
+      if (item.classList.contains("ps-nav-top-item--pages")) {
+        pageItems.push(item);
+      } else {
+        categoryItems.push(item);
+      }
+    });
+    categoryItems.forEach(function (item) {
+      psFlattenNavItemToMore(item, moreList);
+    });
+    pageItems.forEach(function (item) {
+      psFlattenNavItemToMore(item, moreList);
+    });
+  }
+
+  function psBalanceDesktopNavOverflow(nav, retryCount) {
+    var inner = nav.querySelector(".ps-desktop-nav-inner");
+    var moreRoot = inner && inner.querySelector("[data-ps-nav-more]");
+    var moreList = inner && inner.querySelector("[data-ps-nav-more-list]");
+    if (!inner || !moreRoot || !moreList) {
+      return;
+    }
+
+    psResetDesktopNavOverflow(inner, moreRoot, moreList);
+
+    if (!psIsDesktopNavViewport()) {
+      return;
+    }
+
+    retryCount = retryCount || 0;
+    if (!psNavLayoutReady(nav)) {
+      if (retryCount < 8) {
+        window.requestAnimationFrame(function () {
+          psBalanceDesktopNavOverflow(nav, retryCount + 1);
+        });
+      }
+      return;
+    }
+
+    var navWidth = nav.clientWidth + 2;
+
+    while (true) {
+      var result = psGetNavItemsTotalWidth(inner, moreRoot);
+      if (result.total <= navWidth || !result.visible.length) {
+        break;
+      }
+      var last = result.visible[result.visible.length - 1];
+      last.classList.add("ps-nav-top-item--overflowed");
+      last.setAttribute("hidden", "");
+    }
+
+    psRebuildMoreDropdownList(inner, moreList);
+    moreRoot.hidden = moreList.children.length === 0;
+  }
+
+  function psBalanceAllDesktopNavOverflow() {
+    document.querySelectorAll(".ps-desktop-nav").forEach(function (nav) {
+      psBalanceDesktopNavOverflow(nav);
+    });
+  }
+
+  function initPrestigeDesktopNavOverflow() {
+    document.querySelectorAll(".ps-desktop-nav").forEach(function (nav) {
+      psBalanceDesktopNavOverflow(nav);
+
+      if (nav.getAttribute("data-ps-nav-overflow-bound")) {
+        return;
+      }
+      nav.setAttribute("data-ps-nav-overflow-bound", "1");
+
+      var inner = nav.querySelector(".ps-desktop-nav-inner");
+      var headerInner = nav.closest(".ps-header-inner");
+
+      try {
+        var observer = new ResizeObserver(function () {
+          psBalanceDesktopNavOverflow(nav);
+        });
+        observer.observe(nav);
+        if (inner) {
+          observer.observe(inner);
+        }
+        if (headerInner) {
+          observer.observe(headerInner);
+        }
+      } catch (eRo) {
+        /* ignore */
+      }
+    });
+
+    if (psNavOverflowGlobalBound) {
+      return;
+    }
+    psNavOverflowGlobalBound = true;
+
+    window.addEventListener("resize", function () {
+      window.clearTimeout(psNavOverflowResizeTimer);
+      psNavOverflowResizeTimer = window.setTimeout(psBalanceAllDesktopNavOverflow, 150);
+    });
+
+    try {
+      var mq = window.matchMedia(PS_NAV_OVERFLOW_DESKTOP_MQ);
+      var onMqChange = function () {
+        psBalanceAllDesktopNavOverflow();
+      };
+      if (mq.addEventListener) {
+        mq.addEventListener("change", onMqChange);
+      } else if (mq.addListener) {
+        mq.addListener(onMqChange);
+      }
+    } catch (eMqBind) {
+      /* ignore */
+    }
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(psBalanceAllDesktopNavOverflow).catch(function () {
+        /* ignore */
+      });
+    }
+  }
+
   /**
    * Header Pages tab: when SSR has no `pages` in header context, mirror footer page links
    * after the footer section hydrates (client-side).
@@ -702,7 +994,7 @@
         return (
           '<a href="' +
           escapeHtml(entry.href) +
-          '" role="menuitem">' +
+          '" class="ps-pages-dropdown-link" role="menuitem">' +
           escapeHtml(entry.text) +
           "</a>"
         );
@@ -710,7 +1002,8 @@
       .join("");
 
     var dropdown = document.createElement("div");
-    dropdown.className = "ps-nav-dropdown ps-nav-dropdown--pages";
+    dropdown.className =
+      "ps-nav-dropdown ps-nav-dropdown--pages ps-nav-top-item ps-nav-top-item--pages";
     dropdown.setAttribute("data-ps-pages-synced", "1");
     dropdown.innerHTML =
       '<button type="button" class="ps-desktop-nav-link ps-nav-dropdown-trigger ps-nav-pages-trigger" aria-haspopup="true" aria-expanded="false">' +
@@ -718,7 +1011,16 @@
       '</button><div class="ps-nav-dropdown-panel ps-nav-dropdown-panel--pages" role="menu">' +
       panelHtml +
       "</div>";
-    desktopNav.appendChild(dropdown);
+
+    var navInner = desktopNav.querySelector(".ps-desktop-nav-inner");
+    var moreRoot = navInner && navInner.querySelector("[data-ps-nav-more]");
+    if (navInner && moreRoot) {
+      navInner.insertBefore(dropdown, moreRoot);
+    } else if (navInner) {
+      navInner.appendChild(dropdown);
+    } else {
+      desktopNav.appendChild(dropdown);
+    }
 
     var mobileNav = document.querySelector(".ps-mobile-nav");
     if (!mobileNav || mobileNav.querySelector(".ps-mobile-accordion--pages")) {
@@ -3516,6 +3818,11 @@
       console.warn("[Prestige] Header pages nav sync error:", ePagesNav);
     }
     try {
+      initPrestigeDesktopNavOverflow();
+    } catch (eNavOverflow) {
+      console.warn("[Prestige] Desktop nav overflow error:", eNavOverflow);
+    }
+    try {
       syncPrestigeUnderNavFirst();
     } catch (eUn) {
       console.warn("[Prestige] Under-nav first sync error:", eUn);
@@ -3611,6 +3918,7 @@
       initPrestigeSearchRedirect();
       syncPrestigeAnnounceBar();
       initPrestigeMobileMenu();
+      initPrestigeDesktopNavOverflow();
     } catch (e) {
       console.warn("[Prestige] Header/menu init error:", e);
     }
