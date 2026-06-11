@@ -274,6 +274,12 @@
       if (spacer) {
         spacer.style.height = ah + hh + "px";
       }
+      if (document.querySelector("[data-ps-thanks--figma]")) {
+        var thanksSpacer = theme ? theme.querySelector(".ps-theme-layout-spacer") : null;
+        if (thanksSpacer) {
+          thanksSpacer.style.height = "0px";
+        }
+      }
     }
 
     measure();
@@ -2819,16 +2825,110 @@
 
   function normalizeThanksApiOrder(body) {
     if (!body || typeof body !== "object") return null;
+    var candidates = [body];
     if (body.data && typeof body.data === "object") {
-      var inner = body.data;
-      if (inner.cart_items || inner.total_cost !== undefined || inner.cost !== undefined) {
-        return inner;
+      candidates.push(body.data);
+      if (body.data.order && typeof body.data.order === "object") {
+        candidates.push(body.data.order);
       }
     }
-    if (body.cart_items || body.total_cost !== undefined || body.cost !== undefined) {
-      return body;
+    if (body.order && typeof body.order === "object") candidates.push(body.order);
+    if (body.result && typeof body.result === "object") candidates.push(body.result);
+    for (var i = 0; i < candidates.length; i++) {
+      var c = candidates[i];
+      if (
+        c &&
+        typeof c === "object" &&
+        (c.cart_items || c.total_cost !== undefined || c.cost !== undefined)
+      ) {
+        return c;
+      }
     }
     return null;
+  }
+
+  function thanksSlotsHaveContent(root) {
+    var productsSlot = root.querySelector("[data-thanks-order-products-slot]");
+    return !!(productsSlot && productsSlot.querySelectorAll(".ps-thanks-order-item").length > 0);
+  }
+
+  function thanksCfgFromRoot(root) {
+    return {
+      currency: root.getAttribute("data-thanks-currency") || "EGP",
+      labelProducts: root.getAttribute("data-thanks-label-products") || "Products in your order",
+      labelOrderDetails: root.getAttribute("data-thanks-label-order-details") || "Order details",
+      labelContact: root.getAttribute("data-thanks-label-contact") || "Contact information",
+      labelPayment: root.getAttribute("data-thanks-label-payment") || "Payment Method",
+      labelShipping: root.getAttribute("data-thanks-label-shipping") || "Shipping address",
+      labelBilling: root.getAttribute("data-thanks-label-billing") || "Billing address",
+      labelShippingMethod: root.getAttribute("data-thanks-label-shipping-method") || "Shipping method",
+      labelShippingValue: root.getAttribute("data-thanks-label-shipping-value") || "Shipping",
+      labelOrderSummary: root.getAttribute("data-thanks-label-order-summary") || "Order Summary",
+      labelQty: root.getAttribute("data-thanks-label-qty") || "Qty",
+      labelTotal: root.getAttribute("data-thanks-label-total") || "Total",
+      labelDelivery: root.getAttribute("data-thanks-label-delivery") || "Delivery details",
+    };
+  }
+
+  function parseThanksOrderFromInvoice(invoiceEl) {
+    if (!invoiceEl) return null;
+    var cart_items = [];
+    var itemEls = invoiceEl.querySelectorAll(".ps-invoice-item");
+    for (var i = 0; i < itemEls.length; i++) {
+      var el = itemEls[i];
+      var img = el.querySelector(".ps-invoice-item-img");
+      var nameEl = el.querySelector(".ps-invoice-item-name");
+      var varsEl = el.querySelector(".ps-invoice-item-variants");
+      var totalEl = el.querySelector(".ps-invoice-item-total");
+      var priceEl = el.querySelector(".ps-invoice-item-unit-price");
+      var totalText = totalEl ? totalEl.textContent.trim() : "";
+      var priceText = priceEl ? priceEl.textContent.trim() : "";
+      cart_items.push({
+        name: nameEl ? nameEl.textContent.trim() : "",
+        thumb: img ? img.getAttribute("src") || "" : "",
+        variants: varsEl ? varsEl.textContent.trim() : "",
+        price: priceText.replace(/[^\d.,]/g, "").trim(),
+        total: totalText.replace(/[^\d.,]/g, "").trim(),
+      });
+    }
+    if (!cart_items.length) return null;
+
+    var order = { cart_items: cart_items };
+    var shipRows = invoiceEl.querySelectorAll(".ps-invoice-shipping .ps-invoice-dl-row");
+    for (var r = 0; r < shipRows.length; r++) {
+      var row = shipRows[r];
+      var dt = row.querySelector("dt");
+      var dd = row.querySelector("dd");
+      if (!dt || !dd) continue;
+      var label = dt.textContent.trim().toLowerCase();
+      var val = dd.textContent.trim();
+      if (label.indexOf("email") >= 0) order.email = val;
+      else if (label.indexOf("name") >= 0) order.full_name = val;
+      else if (label.indexOf("phone") >= 0) order.phone = val;
+      else if (label.indexOf("address") >= 0) order.address = val;
+      else if (label.indexOf("payment") >= 0) order.payment_method = val;
+    }
+    var totalDd = invoiceEl.querySelector(".ps-invoice-total-row dd");
+    if (totalDd) {
+      var totalParts = totalDd.textContent.trim().split(/\s+/);
+      if (totalParts.length) order.total_cost = totalParts[0];
+    }
+    return order;
+  }
+
+  function hydrateThanksFromInvoice(root, cfg) {
+    if (thanksSlotsHaveContent(root)) return true;
+    var invoice = document.querySelector("[data-liquid-order-invoice]");
+    if (!invoice) return false;
+    var order = parseThanksOrderFromInvoice(invoice);
+    if (!order || !order.cart_items || !order.cart_items.length) return false;
+    var markup = buildThanksOrderMarkup(order, cfg);
+    var productsSlot = root.querySelector("[data-thanks-order-products-slot]");
+    var detailsSlot = root.querySelector("[data-thanks-order-details-slot]");
+    if (productsSlot && markup.products) productsSlot.innerHTML = markup.products;
+    if (detailsSlot && markup.details) detailsSlot.innerHTML = markup.details;
+    root.setAttribute("data-thanks-order-ssr", "1");
+    return true;
   }
 
   function getThanksOrderIdFromSearch() {
@@ -2840,162 +2940,211 @@
     }
   }
 
-  function buildThanksOrderMarkup(order, cfg) {
+  function thanksLineVariantText(line) {
+    if (line.variants && String(line.variants).trim()) return String(line.variants).trim();
+    if (line.variant_string && String(line.variant_string).trim()) return String(line.variant_string).trim();
+    var bits = [];
+    if (line.options && line.options.length) {
+      for (var o = 0; o < line.options.length; o++) {
+        var opt = line.options[o];
+        if (opt && opt.value) bits.push(String(opt.value));
+      }
+    } else if (line.variant && line.variant.variation_props && line.variant.variation_props.length) {
+      var vps = line.variant.variation_props;
+      for (var v = 0; v < vps.length; v++) {
+        var vp = vps[v];
+        if (vp && vp.variation_prop) bits.push(String(vp.variation_prop));
+      }
+    }
+    return bits.join(" ");
+  }
+
+  function thanksFormatAddress(order) {
+    var lines = [];
+    if (order.full_name) lines.push(String(order.full_name));
+    if (order.government) lines.push(String(order.government));
+    if (order.address) lines.push(String(order.address));
+    if (order.country) lines.push(String(order.country));
+    if (order.phone) lines.push(String(order.phone));
+    return lines.join("<br />");
+  }
+
+  function buildThanksProductsMarkup(order, cfg) {
     var items = order.cart_items;
     if (!items || !items.length) return "";
 
     var cur = cfg.currency || "EGP";
-    var lSummary = cfg.labelOrderSummary || "Order Summary";
-    var lQty = cfg.labelQty || "Qty";
-    var lTotal = cfg.labelTotal || "Total";
-    var lDelivery = cfg.labelDelivery || "Delivery details";
-
+    var lProducts = cfg.labelProducts || "Products in your order";
     var parts = [];
-    parts.push('<div class="ps-thanks-order-items">');
-    parts.push('<h3 class="ps-thanks-order-title">' + escapeHtml(lSummary) + "</h3>");
+    parts.push('<h3 class="ps-thanks-order-title">' + escapeHtml(lProducts) + "</h3>");
     parts.push('<ul class="ps-thanks-order-list" role="list">');
 
     for (var i = 0; i < items.length; i++) {
       var line = items[i];
-      var name = line.product_name;
+      var name = line.product_name || line.name || "";
       if (!name && line.product) name = line.product.name;
-      var thumb = line.product_thumb;
+      var thumb = line.product_thumb || line.thumb || line.image || "";
       if (!thumb && line.variant && line.variant.thumb) thumb = line.variant.thumb;
       if (!thumb && line.product && line.product.thumb) thumb = line.product.thumb;
-      thumb = thumb || "";
-      var qty = line.quantity != null ? line.quantity : "";
-      var price = line.price != null ? line.price : "";
+      var price =
+        line.total != null && line.total !== ""
+          ? line.total
+          : line.price != null
+            ? line.price
+            : "";
+      var variantText = thanksLineVariantText(line);
 
       parts.push('<li class="ps-thanks-order-item">');
-      parts.push('<div class="ps-thanks-order-item-image">');
-      parts.push(
-        '<img class="ps-thanks-order-item-img" src="' +
-          escapeHtml(thumb) +
-          '" alt="' +
-          escapeHtml(name || "") +
-          '" loading="lazy" />'
-      );
-      parts.push("</div>");
-      parts.push('<div class="ps-thanks-order-item-content">');
-      parts.push('<p class="ps-thanks-order-item-title">' + escapeHtml(name || "") + "</p>");
-
-      var hasOpts = line.options && line.options.length;
-      var hasVp = line.variant && line.variant.variation_props && line.variant.variation_props.length;
-      if (hasOpts) {
-        parts.push('<div class="ps-thanks-order-item-options">');
-        for (var o = 0; o < line.options.length; o++) {
-          var opt = line.options[o];
-          parts.push(
-            '<span class="ps-thanks-order-item-option"><strong>' +
-              escapeHtml(opt.variation || "") +
-              ":</strong> " +
-              escapeHtml(opt.value || "") +
-              "</span>"
-          );
-        }
-        parts.push("</div>");
-      } else if (hasVp) {
-        parts.push('<div class="ps-thanks-order-item-options">');
-        var vps = line.variant.variation_props;
-        for (var v = 0; v < vps.length; v++) {
-          var vp = vps[v];
-          parts.push(
-            '<span class="ps-thanks-order-item-option"><strong>' +
-              escapeHtml(vp.variation || "") +
-              ":</strong> " +
-              escapeHtml(vp.variation_prop || "") +
-              "</span>"
-          );
-        }
+      if (thumb) {
+        parts.push('<div class="ps-thanks-order-item-image">');
+        parts.push(
+          '<img class="ps-thanks-order-item-img" src="' +
+            escapeHtml(thumb) +
+            '" alt="' +
+            escapeHtml(name || "") +
+            '" loading="lazy" decoding="async" />'
+        );
         parts.push("</div>");
       }
-
-      parts.push('<div class="ps-thanks-order-item-bottom">');
-      parts.push(
-        '<span class="ps-thanks-order-item-qty">' +
-          escapeHtml(lQty) +
-          ": " +
-          escapeHtml(String(qty)) +
-          "</span>"
-      );
-      parts.push(
-        '<span class="ps-thanks-order-item-price">' +
-          escapeHtml(String(price)) +
-          " " +
-          escapeHtml(cur) +
-          "</span>"
-      );
-      parts.push("</div>");
+      parts.push('<div class="ps-thanks-order-item-content">');
+      parts.push('<p class="ps-thanks-order-item-name">' + escapeHtml(name || "") + "</p>");
+      if (variantText) {
+        parts.push('<p class="ps-thanks-order-item-variant">' + escapeHtml(variantText) + "</p>");
+      }
+      if (price !== "" && price != null) {
+        parts.push(
+          '<p class="ps-thanks-order-item-price">' + escapeHtml(String(price)) + " " + escapeHtml(cur) + "</p>"
+        );
+      }
       parts.push("</div>");
       parts.push("</li>");
     }
 
     parts.push("</ul>");
+    return parts.join("");
+  }
 
+  function buildThanksDetailsMarkup(order, cfg) {
+    var cur = cfg.currency || "EGP";
+    var lDetails = cfg.labelOrderDetails || "Order details";
+    var lContact = cfg.labelContact || "Contact information";
+    var lPayment = cfg.labelPayment || "Payment Method";
+    var lShipping = cfg.labelShipping || "Shipping address";
+    var lBilling = cfg.labelBilling || "Billing address";
+    var lShipMethod = cfg.labelShippingMethod || "Shipping method";
+    var lShipValue = cfg.labelShippingValue || "Shipping";
+
+    var email = order.email || "";
+    var payment =
+      order.payment_method || order.payment_type || order.gateway || "";
     var grand =
       order.total_cost != null && order.total_cost !== ""
         ? order.total_cost
         : order.cost != null && order.cost !== ""
           ? order.cost
           : "";
+    var addressHtml = thanksFormatAddress(order);
+
+    var parts = [];
+    parts.push('<h3 class="ps-thanks-order-title">' + escapeHtml(lDetails) + "</h3>");
+    parts.push('<div class="ps-thanks-details-grid">');
+
+    parts.push('<div class="ps-thanks-detail-block">');
+    parts.push('<h4 class="ps-thanks-detail-label">' + escapeHtml(lContact) + "</h4>");
+    if (email) parts.push('<p class="ps-thanks-detail-value">' + escapeHtml(email) + "</p>");
+    parts.push("</div>");
+
+    parts.push('<div class="ps-thanks-detail-block">');
+    parts.push('<h4 class="ps-thanks-detail-label">' + escapeHtml(lPayment) + "</h4>");
+    if (payment) parts.push('<p class="ps-thanks-detail-value">' + escapeHtml(payment) + "</p>");
     if (grand !== "" && grand != null) {
-      parts.push('<div class="ps-thanks-order-total-row">');
-      parts.push('<span class="ps-thanks-order-total-label">' + escapeHtml(lTotal) + "</span>");
       parts.push(
-        '<span class="ps-thanks-order-total-value">' +
+        '<p class="ps-thanks-detail-value ps-thanks-detail-value--total">' +
           escapeHtml(String(grand)) +
           " " +
           escapeHtml(cur) +
-          "</span>"
+          "</p>"
       );
-      parts.push("</div>");
     }
-
     parts.push("</div>");
 
-    var nm = order.full_name || "";
-    var ph = order.phone || "";
-    var ad = order.address || "";
-    if (nm || ph || ad) {
-      parts.push('<div class="ps-thanks-order-meta">');
-      parts.push('<div class="ps-thanks-delivery-card">');
-      parts.push('<h3 class="ps-thanks-delivery-title">' + escapeHtml(lDelivery) + "</h3>");
-      if (nm) parts.push('<p class="ps-thanks-delivery-line">' + escapeHtml(nm) + "</p>");
-      if (ph) parts.push('<p class="ps-thanks-delivery-line">' + escapeHtml(ph) + "</p>");
-      if (ad) parts.push('<p class="ps-thanks-delivery-line">' + escapeHtml(ad) + "</p>");
-      parts.push("</div>");
-      parts.push("</div>");
-    }
+    parts.push('<div class="ps-thanks-detail-block">');
+    parts.push('<h4 class="ps-thanks-detail-label">' + escapeHtml(lShipping) + "</h4>");
+    if (addressHtml) parts.push('<p class="ps-thanks-detail-value">' + addressHtml + "</p>");
+    parts.push("</div>");
 
+    parts.push('<div class="ps-thanks-detail-block">');
+    parts.push('<h4 class="ps-thanks-detail-label">' + escapeHtml(lBilling) + "</h4>");
+    if (addressHtml) parts.push('<p class="ps-thanks-detail-value">' + addressHtml + "</p>");
+    parts.push("</div>");
+
+    parts.push('<div class="ps-thanks-detail-block ps-thanks-detail-block--full">');
+    parts.push('<h4 class="ps-thanks-detail-label">' + escapeHtml(lShipMethod) + "</h4>");
+    parts.push('<p class="ps-thanks-detail-value">' + escapeHtml(lShipValue) + "</p>");
+    parts.push("</div>");
+
+    parts.push("</div>");
     return parts.join("");
+  }
+
+  function fillThanksConfirmation(root, orderId) {
+    var slot = root.querySelector("[data-thanks-confirm-slot]");
+    if (!slot || !orderId) return;
+    var prefix = root.getAttribute("data-thanks-confirm-prefix") || "Confirmation #";
+    slot.textContent = prefix + orderId;
+    slot.removeAttribute("hidden");
+  }
+
+  function buildThanksOrderMarkup(order, cfg) {
+    return {
+      products: buildThanksProductsMarkup(order, cfg),
+      details: buildThanksDetailsMarkup(order, cfg),
+    };
   }
 
   function initPrestigeThanksOrderFetch() {
     var orderId = getThanksOrderIdFromSearch();
-    if (!orderId) return;
 
     var sections = document.querySelectorAll("[data-liquid-thanks][data-ps-thanks]");
     for (var s = 0; s < sections.length; s++) {
       var root = sections[s];
       if (root.getAttribute("data-thanks-client-fetch") === "0") continue;
 
-      var slot = root.querySelector("[data-thanks-order-slot]");
-      if (!slot) continue;
+      var productsSlot = root.querySelector("[data-thanks-order-products-slot]");
+      var detailsSlot = root.querySelector("[data-thanks-order-details-slot]");
+      var legacySlot = root.querySelector("[data-thanks-order-slot]");
+      if (!productsSlot && !detailsSlot && !legacySlot) continue;
 
-      var prevFetched = root.getAttribute("data-thanks-fetched-order-id");
-      if (prevFetched && prevFetched !== orderId) {
-        slot.innerHTML = "";
-        root.removeAttribute("data-thanks-fetched-order-id");
-      }
+      var cfg = thanksCfgFromRoot(root);
 
-      if (slot.querySelector(".ps-invoice")) continue;
+      if (orderId) fillThanksConfirmation(root, orderId);
 
-      if (prevFetched === orderId && slot.querySelectorAll(".ps-thanks-order-item").length > 0) {
+      if (root.getAttribute("data-thanks-order-ssr") === "1" || thanksSlotsHaveContent(root)) {
         continue;
       }
 
-      var existingRows = slot.querySelectorAll(".ps-thanks-order-item").length;
-      if (existingRows > 0) continue;
+      if (hydrateThanksFromInvoice(root, cfg)) {
+        continue;
+      }
+
+      if (!orderId) continue;
+
+      var prevFetched = root.getAttribute("data-thanks-fetched-order-id");
+      if (prevFetched && prevFetched !== orderId) {
+        if (productsSlot) productsSlot.innerHTML = "";
+        if (detailsSlot) detailsSlot.innerHTML = "";
+        if (legacySlot) legacySlot.innerHTML = "";
+        root.removeAttribute("data-thanks-fetched-order-id");
+      }
+
+      if (prevFetched === orderId && thanksSlotsHaveContent(root)) {
+        continue;
+      }
+
+      if (legacySlot) {
+        if (legacySlot.querySelector(".ps-invoice")) continue;
+        if (legacySlot.querySelectorAll(".ps-thanks-order-item").length > 0) continue;
+      }
 
       if (root.getAttribute("data-thanks-fetch-inflight") === "1") continue;
 
@@ -3003,14 +3152,6 @@
       var url = apiRoot + "/orders/client/" + encodeURIComponent(orderId);
 
       root.setAttribute("data-thanks-fetch-inflight", "1");
-
-      var cfg = {
-        currency: root.getAttribute("data-thanks-currency") || "EGP",
-        labelOrderSummary: root.getAttribute("data-thanks-label-order-summary") || "Order Summary",
-        labelQty: root.getAttribute("data-thanks-label-qty") || "Qty",
-        labelTotal: root.getAttribute("data-thanks-label-total") || "Total",
-        labelDelivery: root.getAttribute("data-thanks-label-delivery") || "Delivery details",
-      };
 
       fetch(url, {
         method: "GET",
@@ -3024,18 +3165,23 @@
         .then(function (body) {
           var order = normalizeThanksApiOrder(body);
           if (!order || !order.cart_items || !order.cart_items.length) {
+            hydrateThanksFromInvoice(root, cfg);
             root.removeAttribute("data-thanks-fetch-inflight");
             return;
           }
-          var html = buildThanksOrderMarkup(order, cfg);
-          if (html) {
-            slot.innerHTML = html;
-            root.setAttribute("data-thanks-fetched-order-id", orderId);
+          var markup = buildThanksOrderMarkup(order, cfg);
+          if (productsSlot && markup.products) productsSlot.innerHTML = markup.products;
+          if (detailsSlot && markup.details) detailsSlot.innerHTML = markup.details;
+          if (legacySlot && !productsSlot && !detailsSlot) {
+            legacySlot.innerHTML = (markup.products || "") + (markup.details || "");
           }
+          fillThanksConfirmation(root, orderId);
+          root.setAttribute("data-thanks-fetched-order-id", orderId);
           root.removeAttribute("data-thanks-fetch-inflight");
         })
         .catch(function (err) {
           console.warn("[Prestige] Thanks order fetch:", err);
+          hydrateThanksFromInvoice(root, cfg);
           root.removeAttribute("data-thanks-fetch-inflight");
         });
     }

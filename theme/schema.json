@@ -313,5 +313,82 @@
     "group": "Thank you page",
     "description": "Thank-you page: text before customer email.",
     "default": "The order confirmation has been sent to"
+  },
+  {
+    "name": "thanks_panda_image_url",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: panda hero image URL.",
+    "default": "https://files.easy-orders.net/1781174635785341599.webp"
+  },
+  {
+    "name": "thanks_confirmed_heading",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: order confirmed heading below hero.",
+    "default": "Your order is confirmed"
+  },
+  {
+    "name": "thanks_products_heading",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: products column card title.",
+    "default": "Products in your order"
+  },
+  {
+    "name": "thanks_details_heading",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: order details column card title.",
+    "default": "Order details"
+  },
+  {
+    "name": "thanks_confirmation_number_prefix",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: prefix before order ID (e.g. Confirmation #).",
+    "default": "Confirmation #"
+  },
+  {
+    "name": "thanks_label_contact",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: contact information label.",
+    "default": "Contact information"
+  },
+  {
+    "name": "thanks_label_payment",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: payment method label.",
+    "default": "Payment Method"
+  },
+  {
+    "name": "thanks_label_shipping_address",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: shipping address label.",
+    "default": "Shipping address"
+  },
+  {
+    "name": "thanks_label_billing_address",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: billing address label.",
+    "default": "Billing address"
+  },
+  {
+    "name": "thanks_label_shipping_method",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: shipping method label.",
+    "default": "Shipping method"
+  },
+  {
+    "name": "thanks_label_shipping_value",
+    "type": "string",
+    "group": "Thank you page",
+    "description": "Thank-you page: default shipping method value.",
+    "default": "Shipping"
   }
 ]
