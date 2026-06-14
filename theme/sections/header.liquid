@@ -45,6 +45,33 @@
       endif
     endfor
   endif
+  assign ps_bottom_nav_on = true
+  if theme_data.enable_bottom_nav == false
+    assign ps_bottom_nav_on = false
+  endif
+  assign ps_bn_icon_home = theme_data.bottom_nav_icon_home | default: 'https://files.easy-orders.net/1781437240727064579toyo-u-demo.svg' | strip
+  assign ps_bn_icon_products = theme_data.bottom_nav_icon_products | default: 'https://files.easy-orders.net/1781437240706920851toyo-u-demo.svg' | strip
+  assign ps_bn_icon_cart = theme_data.bottom_nav_icon_cart | default: 'https://files.easy-orders.net/1781437240699805060Layer_1.svg' | strip
+  assign ps_bn_icon_search = theme_data.bottom_nav_icon_search | default: 'https://files.easy-orders.net/1781437240716272394toyo-u-demo.svg' | strip
+  assign ps_bn_icon_account = theme_data.bottom_nav_icon_account | default: 'https://files.easy-orders.net/1779172066420412752anchored-popover-component-buttondialog-account-svg.svg' | strip
+  assign ps_bn_link_products = theme_data.bottom_nav_link_products | default: '/collections' | strip
+  if ps_bn_link_products == blank
+    assign ps_bn_link_products = '/collections'
+  endif
+  assign ps_bn_label_home = theme_data.bottom_nav_home_label | default: store_name | default: 'Home' | strip
+  assign ps_bn_label_products = theme_data.bottom_nav_products_label | default: 'Products' | strip
+  assign ps_bn_label_cart = theme_data.bottom_nav_cart_label | default: 'Cart' | strip
+  assign ps_bn_label_search = theme_data.bottom_nav_search_label | default: 'Search' | strip
+  assign ps_bn_label_account = theme_data.bottom_nav_account_label | default: 'Account' | strip
+  assign ps_scroll_top_on = true
+  if theme_data.enable_scroll_top == false
+    assign ps_scroll_top_on = false
+  endif
+  assign ps_scroll_top_offset = theme_data.scroll_top_offset | default: 400 | plus: 0
+  if ps_scroll_top_offset < 1
+    assign ps_scroll_top_offset = 400
+  endif
+  assign ps_scroll_top_label = theme_data.scroll_top_label | default: 'Scroll to top' | strip
 %}
 <div class="ps-theme" data-ps-pages-label="{{ ps_nav_pages_label | escape }}" data-ps-more-label="{{ ps_nav_more_label | escape }}" data-ps-animations="{% if _ps_anim_on %}1{% else %}0{% endif %}" data-ps-gf-families="{{ theme_data.font_google_families | default: 'Instrument Sans' | escape }}" data-ps-gf-weights="{{ theme_data.font_google_weights | default: '400;500;600;700' | escape }}" data-ps-ff-primary="{{ theme_data.font_family_primary | default: 'Instrument Sans' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-ui="{{ theme_data.font_family_ui | default: 'Manrope' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-alt="{{ theme_data.font_family_alt | default: 'Nunito' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-display="{{ theme_data.font_family_display | default: 'Playfair Display' | strip | replace: '"', '' | replace: "'", '' | escape }}" data-ps-ff-arabic="{{ theme_data.font_family_arabic | default: 'Almarai' | strip | replace: '"', '' | replace: "'", '' | escape }}">
   {% if ann_count > 0 %}
@@ -164,4 +191,49 @@
       <a id="header-lang-mobile" href="#" class="ps-mobile-link ps-mobile-link--iconrow lang-btn" onclick="this.dispatchEvent(new CustomEvent('lang-click',{bubbles:true}));return false;"><span>Language</span><svg class="ps-mobile-row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg></a>
     </nav>
   </aside>
+  {% if ps_bottom_nav_on %}
+  <nav class="ps-bottom-nav" data-ps-bottom-nav aria-label="Mobile bottom navigation">
+    <ul class="ps-bottom-nav__list">
+      <li class="ps-bottom-nav__item">
+        <a href="/" class="ps-bottom-nav__link ps-bottom-nav__link--home" aria-label="{{ ps_bn_label_home | escape }}">
+          <svg class="ps-bottom-nav__icon ps-bottom-nav__icon--svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4.5 10.25V19a1.75 1.75 0 0 0 1.75 1.75H9.5v-5.5a1.25 1.25 0 0 1 1.25-1.25h2.5a1.25 1.25 0 0 1 1.25 1.25V20.75h3.25A1.75 1.75 0 0 0 19.5 19v-8.75L12 4.75 4.5 10.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </li>
+      <li class="ps-bottom-nav__item">
+        <a href="{{ ps_bn_link_products }}" class="ps-bottom-nav__link" aria-label="{{ ps_bn_label_products | escape }}">
+          <img src="{{ ps_bn_icon_products }}" alt="" class="ps-bottom-nav__icon" width="24" height="24" aria-hidden="true" />
+        </a>
+      </li>
+      <li class="ps-bottom-nav__item">
+        <button type="button" class="ps-bottom-nav__link ps-bottom-nav__link--cart cart-btn" aria-label="{{ ps_bn_label_cart | escape }}" onclick="this.dispatchEvent(new CustomEvent('cart-click',{bubbles:true}))">
+          <img src="{{ ps_bn_icon_cart }}" alt="" class="ps-bottom-nav__icon" width="24" height="24" aria-hidden="true" />
+          <span id="ps-bottom-nav-cart-count" class="ps-bottom-nav__cart-count" aria-hidden="true">({{ cart_count }})</span>
+        </button>
+      </li>
+      <li class="ps-bottom-nav__item">
+        <a href="/search" class="ps-bottom-nav__link search-btn" data-eo="search-btn" aria-label="{{ ps_bn_label_search | escape }}">
+          <img src="{{ ps_bn_icon_search }}" alt="" class="ps-bottom-nav__icon" width="24" height="24" aria-hidden="true" />
+        </a>
+      </li>
+      {% if is_register_active %}
+      <li class="ps-bottom-nav__item">
+        <button type="button" class="ps-bottom-nav__link register-btn" aria-label="{{ ps_bn_label_account | escape }}" onclick="this.dispatchEvent(new CustomEvent('register-click',{bubbles:true}))">
+          <img src="{{ ps_bn_icon_account }}" alt="" class="ps-bottom-nav__icon" width="24" height="24" aria-hidden="true" />
+        </button>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+  {% if ps_scroll_top_on %}
+  <div class="ps-scroll-top" data-ps-scroll-top data-ps-scroll-offset="{{ ps_scroll_top_offset }}">
+    <button type="button" class="ps-scroll-top__btn" aria-label="{{ ps_scroll_top_label | escape }}">
+      <svg class="ps-scroll-top__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M6.99825 0L5.76481 1.23375L10.6461 6.125H0V7.875H10.6461L5.76481 12.7663L6.99825 14L13.9965 7L6.99825 0Z" fill="currentColor" />
+      </svg>
+    </button>
+  </div>
+  {% endif %}
 </div>

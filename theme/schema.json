@@ -70,6 +70,111 @@
     "default": "More"
   },
   {
+    "name": "enable_bottom_nav",
+    "type": "boolean",
+    "group": "Navigation",
+    "description": "Show fixed bottom navigation bar on mobile.",
+    "default": true
+  },
+  {
+    "name": "bottom_nav_icon_home",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: home icon URL.",
+    "default": "https://files.easy-orders.net/1781437240727064579toyo-u-demo.svg"
+  },
+  {
+    "name": "bottom_nav_icon_products",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: products / grid icon URL.",
+    "default": "https://files.easy-orders.net/1781437240706920851toyo-u-demo.svg"
+  },
+  {
+    "name": "bottom_nav_icon_cart",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: cart icon URL.",
+    "default": "https://files.easy-orders.net/1781437240699805060Layer_1.svg"
+  },
+  {
+    "name": "bottom_nav_icon_search",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: search icon URL.",
+    "default": "https://files.easy-orders.net/1781437240716272394toyo-u-demo.svg"
+  },
+  {
+    "name": "bottom_nav_icon_account",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: account icon URL.",
+    "default": "https://files.easy-orders.net/1779172066420412752anchored-popover-component-buttondialog-account-svg.svg"
+  },
+  {
+    "name": "bottom_nav_link_products",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: products grid link (default all collections).",
+    "default": "/collections"
+  },
+  {
+    "name": "bottom_nav_home_label",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: home aria-label.",
+    "default": "Home"
+  },
+  {
+    "name": "bottom_nav_products_label",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: products aria-label.",
+    "default": "Products"
+  },
+  {
+    "name": "bottom_nav_cart_label",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: cart aria-label.",
+    "default": "Cart"
+  },
+  {
+    "name": "bottom_nav_search_label",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: search aria-label.",
+    "default": "Search"
+  },
+  {
+    "name": "bottom_nav_account_label",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Bottom nav: account aria-label.",
+    "default": "Account"
+  },
+  {
+    "name": "enable_scroll_top",
+    "type": "boolean",
+    "group": "Navigation",
+    "description": "Show scroll-to-top button after scrolling down.",
+    "default": true
+  },
+  {
+    "name": "scroll_top_offset",
+    "type": "number",
+    "group": "Navigation",
+    "description": "Scroll distance (px) before the back-to-top button appears.",
+    "default": 400
+  },
+  {
+    "name": "scroll_top_label",
+    "type": "string",
+    "group": "Navigation",
+    "description": "Scroll-to-top button aria-label.",
+    "default": "Scroll to top"
+  },
+  {
     "name": "footer_quick_links",
     "type": "string",
     "group": "Footer",

@@ -5,35 +5,53 @@
     <h2 class="ab-categories-title" data-anim="fadeInUp" data-seq="1">{{ theme_data.categories_header_title | default: 'Shop by Category' }}</h2>
   </header>
   <div class="ab-categories">
-    <div class="ab-categories-decor-layer" aria-hidden="true">
-      <img
-        class="ab-categories-decor ab-categories-decor--tr"
-        src="https://files.easy-orders.net/1780924644491443673.webp"
-        alt=""
-        width="105"
-        height="89"
-        loading="lazy"
-        decoding="async"
-      />
-      <img
-        class="ab-categories-decor ab-categories-decor--bl"
-        src="https://files.easy-orders.net/1780924644809535516.webp"
-        alt=""
-        width="112"
-        height="97"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
     <div class="ab-categories-bands">
       {% for category in categories %}
         {% assign cat_slot = forloop.index0 | modulo: 9 | plus: 1 %}
+        {% assign ab_wave_src = '' %}
+        {% if cat_slot == 2 %}
+          {% assign ab_wave_src = 'https://files.easy-orders.net/1781443436875099592.webp' %}
+        {% elsif cat_slot == 5 %}
+          {% assign ab_wave_src = 'https://files.easy-orders.net/1781443437045962228.webp' %}
+        {% elsif cat_slot == 7 %}
+          {% assign ab_wave_src = 'https://files.easy-orders.net/1781443436933829950.webp' %}
+        {% elsif cat_slot == 8 %}
+          {% assign ab_wave_src = 'https://files.easy-orders.net/1781443436997408591.webp' %}
+        {% endif %}
         {% if cat_slot == 1 %}
+          {% assign ab_band_total = categories.size | minus: forloop.index0 %}
+          {% if ab_band_total > 9 %}
+            {% assign ab_band_total = 9 %}
+          {% endif %}
           <div class="ab-categories-band">
             <div class="ab-categories-grid">
+              <div class="ab-categories-grid__decor" aria-hidden="true">
+                {% if ab_band_total >= 3 %}
+                  <img
+                    class="ab-categories-grid__decor-img ab-categories-grid__decor-img--tr"
+                    src="https://files.easy-orders.net/1780924644809535516.webp"
+                    alt=""
+                    width="112"
+                    height="97"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                {% endif %}
+                {% if ab_band_total >= 5 %}
+                  <img
+                    class="ab-categories-grid__decor-img ab-categories-grid__decor-img--bl"
+                    src="https://files.easy-orders.net/1780924644491443673.webp"
+                    alt=""
+                    width="105"
+                    height="89"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                {% endif %}
+              </div>
         {% endif %}
               <a
-                class="ab-cat-tile ab-cat-tile--slot-{{ cat_slot }}"
+                class="ab-cat-tile ab-cat-tile--slot-{{ cat_slot }}{% if ab_wave_src != '' %} ab-cat-tile--has-wave{% endif %}{% if cat_slot == 3 or cat_slot == 5 %} ab-cat-tile--arc-anchor{% endif %}"
                 href="/collections/{{ category.slug }}"
                 data-anim="cycle"
                 data-cycle="{{ forloop.index0 }}"
@@ -42,6 +60,19 @@
                 <span class="ab-cat-tile__media">
                   <img class="ab-cat-tile__img" src="{{ category.thumb }}" alt="{{ category.name }}" loading="lazy" />
                 </span>
+                {% if ab_wave_src != '' %}
+                  <span class="ab-cat-tile__wave" aria-hidden="true">
+                    <img
+                      class="ab-cat-tile__wave-img"
+                      src="{{ ab_wave_src }}"
+                      alt=""
+                      width="320"
+                      height="130"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                {% endif %}
               </a>
         {% if cat_slot == 9 or forloop.last %}
             </div>

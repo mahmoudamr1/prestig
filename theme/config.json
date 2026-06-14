@@ -138,7 +138,22 @@
     "font_family_display": "Asap",
     "font_family_arabic": "Almarai",
     "enable_theme_animations": true,
-    "header_logo_height": 43
+    "header_logo_height": 43,
+    "enable_bottom_nav": true,
+    "bottom_nav_icon_home": "https://files.easy-orders.net/1781437240727064579toyo-u-demo.svg",
+    "bottom_nav_icon_products": "https://files.easy-orders.net/1781437240706920851toyo-u-demo.svg",
+    "bottom_nav_icon_cart": "https://files.easy-orders.net/1781437240699805060Layer_1.svg",
+    "bottom_nav_icon_search": "https://files.easy-orders.net/1781437240716272394toyo-u-demo.svg",
+    "bottom_nav_icon_account": "https://files.easy-orders.net/1779172066420412752anchored-popover-component-buttondialog-account-svg.svg",
+    "bottom_nav_link_products": "/collections",
+    "bottom_nav_home_label": "Home",
+    "bottom_nav_products_label": "Products",
+    "bottom_nav_cart_label": "Cart",
+    "bottom_nav_search_label": "Search",
+    "bottom_nav_account_label": "Account",
+    "enable_scroll_top": true,
+    "scroll_top_offset": 400,
+    "scroll_top_label": "Scroll to top"
   },
   "announcement_config": {
     "text": ["it works", "Free shipping for 1000 EGP", "Genuine Quality"],
